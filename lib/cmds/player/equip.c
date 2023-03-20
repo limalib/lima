@@ -156,7 +156,7 @@ void main(string arg)
          slots = map_array(slots, ( : capitalize($1) :));
 
          content += sprintf(" %-24s  %-21s  %-3s  %-5s  %s\n", capitalize(a->short()), format_list(slots),
-                            "" + a->query_armor_class(), "" + a->durability_percent() + "%",
+                            "" + (a->query_armor_class() || "-"), a->query_armor_class() ? "" + a->durability_percent() + "%" : "-",
                             (a->query_stat_bonus() ? capitalize(a->query_stat_bonus()) + " " +
                                                          (a->query_stat_mod() >= 0 ? "+" : "") + a->query_stat_mod()
                              : a->stat_mods_string(1) ? a->stat_mods_string(1)
