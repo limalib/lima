@@ -80,9 +80,27 @@ object *query_armors(string s)
 nomask int wear_item(object what, string where)
 {
    class wear_info wi;
+   string orig_w = where;
    mixed *also;
 
-   wi = find_wi(where);
+   // Find the limb we want to use.
+   if (is_limb(where))
+      wi = find_wi(where);
+   else
+   {
+      if (is_limb("right " + where))
+      {
+         where = "right " + where;
+         wi = find_wi(where);
+         // If this is a primary slot item and we're already
+         // wearing something there, try left limb instead.
+         if (wi && wi->primary && !what->query_worn_under())
+         {
+            where = "left " + orig_w;
+            wi = find_wi(where);
+         }
+      }
+   }
 
    // Check if this is worn under other things.
    if (what->query_worn_under())
@@ -132,10 +150,21 @@ nomask int wear_item(object what, string where)
 nomask int remove_item(object what, string where)
 {
    class wear_info wi;
+   string orig_w = where;
    string *also;
 
-   if (!(wi = armors[where]) || wi->primary != what)
-      return 0;
+   if (!(wi = armors[where]) || (wi->primary != what && wi->secondary != what))
+   {
+      where = "left " + where;
+      if (!(wi = armors[where]) || (wi->primary != what && wi->secondary != what))
+      {
+         where = "right " + orig_w;
+         if (!(wi = armors[where]) || (wi->primary != what && wi->secondary != what))
+         {
+            return 0;
+         }
+      }
+   }
 
    wi->primary = 0;
    if (wi->others == 0)

@@ -303,10 +303,10 @@ mixed direct_wear_obj()
 
    if (who != this_body())
       return 0;
-   if (!this_body()->has_body_slot(slot))
-      return "You can't seem to find anywhere to put it on!\n";
+   if (!this_body()->has_body_slot(slot) && !this_body()->has_body_slot("right " + slot))
+      return "You cannot seem to find anywhere to put it on!\n";
    if (test_flag(F_WORN))
-      return "But you're already wearing it!\n";
+      return "But you are already wearing it!\n";
    return 1;
 }
 
@@ -317,7 +317,7 @@ mixed direct_remove_obj()
    if (who != this_body())
       return 0;
    if (environment() != this_body() || !test_flag(F_WORN))
-      return "But you aren't wearing it!\n";
+      return "But you are not wearing it!\n";
    return 1;
 }
 

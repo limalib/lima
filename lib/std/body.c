@@ -43,7 +43,6 @@ inherit __DIR__ "body/spacemud";
 #ifndef SAY_HISTORY_IN_ROOMS
 inherit __DIR__ "body/history";
 #endif
-
 #ifdef USE_SKILLS
 inherit __DIR__ "body/skills";
 #endif
