@@ -3,7 +3,7 @@
 /*
 ** M_WIDGETS (Tsath 2019-2020)
 **
-** This module returns nicely formatted ANSI type widgets that can be reused
+** This module returns nicely formatted ANSI/xterm type widgets that can be reused
 ** all over the MUD. The string return are not sprintf() compatible, so you
 ** need to write() or out() them.
 **
@@ -12,11 +12,11 @@
 inherit M_COLOURS;
 
 private
-int unicodetheme = member_array(this_user()->frames_theme(), ({"ascii", "lines", "none"})) == -1;
+nosave int unicodetheme = member_array(this_user()->frames_theme(), ({"ascii", "lines", "none"})) == -1;
 private
-string barchar = unicodetheme ? "▅" : "=";
+nosave string barchar = unicodetheme ? "▅" : "=";
 private
-string nobarchar = unicodetheme ? "▅" : ".";
+nosave string nobarchar = unicodetheme ? "▅" : ".";
 
 //: FUNCTION i_simplify
 // Returns TRUE if the current user (not the object receiving the message!)
