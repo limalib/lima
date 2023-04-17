@@ -16,7 +16,6 @@ inherit M_WIDGETS;
 #define LOG_SALDO 3
 #define LOG_TIME 4
 
-// ({ “Deposit in Abacus Bank, southside”,500,1850, timestamp })
 private
 mapping accounts = ([]);
 mapping transactions = ([]);
@@ -57,7 +56,7 @@ varargs mixed query_account(string bank, mixed player, string currency)
       name = player;
 
    if (!accounts[bank])
-      accounts[bank] = ([]);
+      return 0.0;
    if (!accounts[bank][name])
       accounts[bank][name] = ([]);
 
@@ -92,7 +91,6 @@ void transaction(mixed player, string bank, string what, string currency, float 
    transactions[currency][name] += ({({bank, what, money, saldo, time()})});
 }
 
-private
 string fake_account_id(string bank, object body)
 {
    string name = lower_case(body->query_name());
@@ -109,7 +107,7 @@ string bank_statement(string bank, string currency, object body)
    if (!valid_currency(currency))
       error("Unknown currency '" + currency + "'.");
 
-   if (!transactions[currency][name])
+   if (!transactions[currency] || !transactions[currency][name])
       return "You have no '" + currency + "' account with " + bank + " Bank.\n";
    foreach (mixed *ar in transactions[currency][name])
    {
@@ -187,6 +185,11 @@ varargs void deposit(string bank, mixed player, float amount, string type, strin
    save_me();
 }
 
+int coverage(string bank, mixed player, float amount, string denom)
+{
+   return query_account(bank, player, denom) >= amount * MONEY_D->query_factor(denom);
+}
+
 varargs void withdraw(string bank, mixed player, float amount, string currency, string what)
 {
    string name;
@@ -230,7 +233,6 @@ void stat_me()
          {
             if (member_array(currency, currencies) == -1)
                currencies += ({currency});
-            TBUG(currencies);
             amount += am;
             account++;
          }
