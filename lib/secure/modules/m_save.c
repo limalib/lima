@@ -77,6 +77,34 @@ varargs string save_to_string(int recursep)
    return save_variable(map);
 }
 
+//: FUNCTION save_things_to_string
+// saves an object into a string representation. You can skip an
+// object from being saved by adding::
+//    int do_not_restore() { return 1; }
+// in the object. This function is identical to save_to_string(),
+// but skips players and monsters (is_living()).
+varargs string save_things_to_string(int recursep)
+{
+   string *tmpsaved;
+   string var;
+   mapping map = ([]);
+
+   // ### setting a property based on a function arg?  Gross.
+   if (recursep)
+      set_save_recurse(1);
+
+   tmpsaved = decompose(map(saved, ( : functionp($1) ? evaluate($1, "saving") : $1:)));
+   tmpsaved -= ({0});
+   foreach (var in tmpsaved)
+      map[var] = fetch_variable(var);
+
+   map["#base_name#"] = base_name(this_object());
+   if (save_recurse)
+      map["#inventory#"] = filter(all_inventory(), ( : !$1->do_not_restore() && !$1->is_living() :))->save_to_string(1) - ({0});
+
+   return save_variable(map);
+}
+
 //: FUNCTION load_from_string
 // loads an object from a string representation.
 
