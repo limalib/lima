@@ -51,7 +51,7 @@ mixed can_go_str(string str)
 
    if (this_body()->query_capacity() >= this_body()->query_no_move_capacity())
    {
-      this_body()->simple_action("$N $vfail to move due to the load $n0 is carrying.");
+      this_body()->simple_action("$N $vfail to move due to the load $n0 $vare carrying.");
       return "You cannot move! What ARE you carrying?\n";
    }
 

@@ -133,7 +133,7 @@ nomask void incarnate(string name, int is_new, string new_fname)
    }
 }
 
-void sw_body_handle_existing_logon(int);
+void sw_body_handle_existing_logon(string,int);
 
 private
 nomask void rcv_try_to_boot(object who, string answer)
@@ -154,14 +154,14 @@ nomask void rcv_try_to_boot(object who, string answer)
          body->reconnect(this_object());
          return;
       }
-      sw_body_handle_existing_logon(0);
+      sw_body_handle_existing_logon(query_userid(),0);
       return;
    }
    if (answer == "n" || answer == "no")
    {
       if (wizardp(query_userid()))
       {
-         sw_body_handle_existing_logon(1);
+         sw_body_handle_existing_logon(query_userid(),1);
          return;
       }
 

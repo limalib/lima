@@ -5,7 +5,6 @@
 /secure/user
 /secure/obj/shell
 /std/body/cmd
-/std/body/bodyshell
 /std/body
 /daemons/xterm256_d
 /daemons/help_d
