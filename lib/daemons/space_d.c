@@ -41,7 +41,7 @@ nosave string *star_last_names = ({"", "", "Majoris", "A", "B", "Minor", "C", "D
 private // Small blackboard mapping for tracking temporary things for uniqueness.
 nosave mapping temp_map = ([]);
 
-// Return densite in kg/m3
+// Return density in kg/m3
 // https://nssdc.gsfc.nasa.gov/planetary/factsheet/ (Losely)
 private
 int planet_density(string type)
@@ -126,12 +126,32 @@ class planet *query_planets(string ssn)
 
    while (i < ss->planets_count)
    {
-      planets += ({random_planet(ss->name + "-" + (i + 1))});
+      class planet p = random_planet(ss->name + "-" + (i + 1));
+      if (ssn == "Omega" && i == 0)
+      {
+         class structure s = new (class structure);
+         s->name = "Omega Terminal";
+         s->beacon = 1;
+         s->distance = 400;
+         p->structures = ({s});
+      }
+      planets += ({p});
       i++;
    }
    starsystems[ssn]->planets = planets;
    save_me();
    return starsystems[ssn]->planets;
+}
+
+class structure *query_structures(string ssn, int planet)
+{
+   if (!starsystems[ssn])
+      return 0;
+   if (!starsystems[ssn]->planets)
+      return 0;
+   if (!starsystems[ssn]->planets[planet]->structures)
+      return 0;
+   return starsystems[ssn]->planets[planet]->structures;
 }
 
 string generate_star_name()
@@ -252,7 +272,7 @@ int set_planet_alt_name(string s, string p, string aname)
    class starsystem ss;
    class planet *planets;
    int i = 0;
-   if (strlen(aname) > 25 || strlen(aname)<5)
+   if (strlen(aname) > 25 || strlen(aname) < 5)
       error("Planet alt name must be between 5-25 letters.");
 
    if (player_planet_names[aname])
@@ -294,7 +314,6 @@ varargs void generate_starsystems()
       g->star = random_star();
       g->planets_count = MINIMUM_PLANETS + planets_count;
       starsystems[g->name] = g;
-      ss_count++;
       layer++;
    }
 

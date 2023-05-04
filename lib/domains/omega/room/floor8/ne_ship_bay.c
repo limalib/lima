@@ -1,7 +1,8 @@
-inherit INDOOR_ROOM;
+inherit ROOM_DOCKING;
 
 void setup()
 {
+   ::setup();
    set_area("omega_terminal", "bay_term");
    set_brief("Bay Terminal NE-1");
    set_long(
@@ -10,18 +11,5 @@ void setup()
        "vacuum of space and the breathable " +
        "atmosphere of the station, ensuring the safety of those who come and go from the ships. " +
        "One of the most striking features of the docking bay is a large panoramic window.");
-   add_item("window", (["look":"The windows provide " +
-                                   "a breathtaking view of space. These windows line the walls of the room and give a "
-                                   "clear view of the ships " +
-                                   "as they approach and depart from the station.",
-                          "read":"Someone wrote 'Killroy was here!' in the corner.", ]));
-
    set_exits((["northwest":"n_landing", "southeast":"ne_ship_bay1", ]));
-   set_objects((["^common/item/docking_terminal":1]));
-}
-
-string get_extra_long()
-{
-   return present("docking_terminal_id") ? present("docking_terminal_id")->ship_state()
-                                         : "The docking slot outside is under repair.";
 }

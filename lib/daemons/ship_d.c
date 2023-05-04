@@ -16,24 +16,33 @@ inherit SPACE_CLASSES;
 #define BILL_CYCLE_HOURS 2
 // Default bank used if nothing custom set for player
 #define DEFAULT_BANK "omega"
-// Number of seconds per wek
-#define WEEK 604800
+
+// We don't auto bill unless bill is over this amount.
+#define BILL_OVER 100.0
 // Ship states, don't touch
 #define SHIP_PERSISTED 1
 #define SHIP_DIRTY 2
 
+/* No save*/
+private
+nosave mapping ship_sizes = ([]);
+
+/* Saved*/
+private
 mapping ship_locations = ([]);
+private
 mapping owners = ([]);
+private
 mapping bank_connection = ([]);
-mapping last_payment = ([]);
-mapping debt = ([]);
+private
 int next_id = 0;
 int money_made;
 int money_lost;
 
 string ship_name(string type)
 {
-   return chr(random(25) + 65) + chr(random(25) + 65) + chr(random(25) + 65) + "-" + random(10000);
+   return chr(random(25) + 65) + chr(random(25) + 65) + chr(random(25) + 65) + chr(random(25) + 65) + "-" +
+          random(100000);
 }
 
 // This function begins a new lease. The file must the base_name of the file of
@@ -45,7 +54,7 @@ varargs int set_owner(object owner, string file, string sname, string ss, string
    object ship_object = load_object(file);
 
    if (!owners[name])
-      owners[name] = ({});
+      owners[name] = ([]);
 
    if (!ship_object)
       return 0;
@@ -56,10 +65,10 @@ varargs int set_owner(object owner, string file, string sname, string ss, string
    si->starsystem = ss || "Omega";
    si->location = loc || "Omega Terminal";
    si->docked_at = da;
-   si->long_term = lt || 1;
+   si->long_term = lt || time();
 
    next_id++;
-   owners[name] += ({si});
+   owners[name][si->name] = si;
    save_me();
    return 1;
 }
@@ -96,7 +105,7 @@ void notify_owner(mixed who, string s)
    object body = objectp(who) ? who : find_body(who);
    if (body && present("guild_vdu_ob", body))
    {
-      tell(body, "Your VDU says, \"<048>" + upper_case(s) + ".<res>\".\n");
+      tell(body, "Your VDU says, \"<048>" + upper_case(s) + "<res>\".\n");
    }
 }
 
@@ -137,7 +146,7 @@ varargs class ship_info *query_owned_ship(object owner, string location)
    if (!lcname || !owners[lcname])
       return 0;
 
-   foreach (class ship_info si in owners[lcname])
+   foreach (string name, class ship_info si in owners[lcname])
    {
       if (si && strsrch(si->location, location || owner->query_location()) == 0)
          infos += ({si});
@@ -178,25 +187,9 @@ void attempt_clean_up(object ship)
 // (permission denied).
 void save_ship_state(object ship)
 {
-   string ship_save = ship->save_to_string();
+   string ship_save = ship->save_things_to_string();
    ship->unguarded_save();
    call_out("attempt_clean_up", 60, ship);
-}
-
-// This functions saved that body paid his bill. The 'time' parameter is
-// optional, and if none given, NOW is assumed as time(). Can be given parameter
-// to back-date the payment.
-varargs void set_pay_bill(object body, int time)
-{
-   string name = lower_case(body->query_name());
-   last_payment[name] = time > 0 ? time : time();
-   save_me();
-}
-
-// Debug function for seeing what's inside the last payment mapping.
-mapping query_last_payments()
-{
-   return last_payment;
 }
 
 // When a player reenters their ship, we need to restore the state from disk.
@@ -206,50 +199,24 @@ void restore_ship_state(object ship)
 {
    string rfile;
 
-   rfile = read_file(ship->save_to());
+   rfile = unguarded(1, ( : read_file, ship->save_to() :));
    if (rfile)
       ship->restore_ship(rfile);
 }
 
-// Returns the mapping of owners and what they own. The key is the owner name in
-// lower case, and the value is an array of string ship IDs.
-// i.e. ({ "/domains/nuke/ship/small_apartment/tsath/42" })
 mapping query_owners()
 {
    return owners;
 }
 
-/*
-void clear_data()
+int docking_time(string type)
 {
-    owners = ([]);
-    next_id = 0;
-}
-*/
-
-// Returns a factor of how many fractional weeks we're missing payments for. So
-// 1.5 means we're missing payments for 1 week and 3.5 days.
-float missing_payments(string name)
-{
-   int last_pay = last_payment[name];
-   int now = time();
-   float diff = ((now - last_pay) * 1.0) / WEEK;
-   return diff;
+   int sz = ship_sizes[type] ? ship_sizes[type] : 1;
+   return time() + ((random(60) + random(60)) * sz);
 }
 
-/*
-    This function creates a mapping of name : amount pairs for all the money
-    owed by the leasers.
-
-    This only works if bills are settled before renting new ships or when
-    leaving the lease. It assumes all properties are held since last payment,
-    which means property changes must cause a settlement of some kind. Give it
-    the flag settle_all=1 to pay every last penny owned.
-*/
-varargs mapping create_bills(int settle_all)
+mapping update_ship_sizes()
 {
-   mapping ship_cost = ([]);
-   mapping bills = ([]);
    string *ship_files = get_dir("/domains/common/ship/*.c");
 
    foreach (string ship in ship_files)
@@ -258,30 +225,134 @@ varargs mapping create_bills(int settle_all)
       if (!ship_ob)
          continue;
 
-      ship_cost[base_name(ship_ob)] = ship_ob->query_ship_cost();
+      ship_sizes[ship_ob->query_ship_type()] = ship_ob->query_ship_size() || 1;
    }
+   return ship_sizes;
+}
 
-   foreach (string who, string * ships in owners)
+/*
+    This function creates a mapping of name : amount pairs for all the money
+    owed by the leasers.
+
+    This only works if bills are settled before renting new ships or when
+    leaving the lease. It assumes all properties are held since last payment,
+    which means property changes must cause a settlement of some kind.
+*/
+varargs mapping create_bills(int noCut)
+{
+   mapping bills = ([]);
+   update_ship_sizes();
+
+   foreach (string who, mapping ships in owners)
    {
-      float miss = missing_payments(who);
       // Postpone payments if a week didn't pass
-      if (miss < 1.0 && !settle_all)
-         continue;
-      foreach (class ship_info ship in ships)
+      foreach (string name, class ship_info si in ships)
       {
-         string ship_base;
-         int cost;
-         ship_base = "/" + implode(explode(ship->vfile, "/")[0.. < 3], "/");
-         cost = ship_cost[ship_base];
-         if (!cost)
-            TBUG("Missing cost for bill on " + ship->name + " for " + who);
-         bills[who] += cost;
+         float cost;
+         int ship_size = ship_sizes[si->type] ? ship_sizes[si->type] : 1;
+         class spacestation_config sc = SPACESTATION_D->query_config(si->location);
+         if (si->long_term)
+            cost = (ship_size * sc->storage_fee) * ((time() - si->long_term) / 86400.0);
+         bills[who] = bills[who] + cost;
       }
-      bills[who] *= miss;
-      if (!bills[who])
+
+      if (!noCut && bills[who] < BILL_OVER)
          map_delete(bills, who);
+
+      return bills;
    }
-   return bills;
+}
+
+int not_long_term_parked(string ship_name)
+{
+   string lcname = lower_case(this_body()->query_name());
+   if (owners[lcname] && owners[lcname][ship_name])
+   {
+      owners[lcname][ship_name]->long_term = 0;
+      save_me();
+      return 1;
+   }
+   return 0;
+}
+
+int long_term_parked(string ship_name)
+{
+   string lcname = lower_case(this_body()->query_name());
+   if (owners[lcname] && owners[lcname][ship_name])
+   {
+      owners[lcname][ship_name]->long_term = time();
+      save_me();
+      return 1;
+   }
+   return 0;
+}
+
+int dock_ship(string ship_name, string location)
+{
+   string lcname = lower_case(this_body()->query_name());
+   if (owners[lcname] && owners[lcname][ship_name])
+   {
+      owners[lcname][ship_name]->docked_at = location;
+      save_me();
+      return 1;
+   }
+   return 0;
+}
+
+int undock_ship(string ship_name)
+{
+   string lcname = lower_case(this_body()->query_name());
+   if (owners[lcname] && owners[lcname][ship_name])
+   {
+      owners[lcname][ship_name]->docked_at = 0;
+      save_me();
+      return 1;
+   }
+   return 0;
+}
+
+string query_docked(string ship_name)
+{
+   string lcname = lower_case(this_body()->query_name());
+   if (owners[lcname] && owners[lcname][ship_name])
+   {
+      return owners[lcname][ship_name]->docked_at;
+   }
+   return 0;
+}
+
+void settle_player(string name)
+{
+   foreach (string shipname, class ship_info si in owners[name])
+   {
+      owners[name][shipname]->long_term = time();
+   }
+}
+
+class ship_info find_ship(string vfile)
+{
+   string owner = explode(vfile, "/")[ < 2];
+   foreach (string ship_name, class ship_info si in owners[owner])
+   {
+      if (si->vfile == vfile)
+         return si;
+   }
+   return 0;
+}
+
+float outstanding_fees(string name)
+{
+   string lcname = lower_case(this_body()->query_name());
+   float credit;
+   class spacestation_config sc;
+   class ship_info si = owners[lcname][name];
+   int ship_size = ship_sizes[si->type] || 1;
+   string location = si->location;
+   if (!si->long_term)
+      return 0.0;
+   sc = SPACESTATION_D->query_config(location);
+   credit = (ship_size * sc->storage_fee) * ((time() - si->long_term) / 86400.0);
+   return credit;
 }
 
 // This function attempts to settle a bill for 'name' of 'amount'. It returns 0
@@ -300,16 +371,14 @@ int settle_bill(string name, int amount)
    }
 
    // How much do we have in the bank
-   account_value = ACCOUNT_D->query_account(bank, name, "credit");
-   if (account_value < amount)
-      return 0;
-
-   // Do the withdrawal and update our payment info.
-   ACCOUNT_D->withdraw(bank, name, amount, "Abacus Ship, rental");
-   money_made += amount;
-   last_payment[name] = time();
-   save_me();
-   return 1;
+   if (ACCOUNT_D->coverage(bank, name, amount, "credit"))
+   {
+      ACCOUNT_D->withdraw(bank, name, amount, "credit", "Docking services");
+      money_made += amount;
+      save_me();
+      return 1;
+   }
+   return 0;
 }
 
 //  This function runs every BILL_CYCLE_HOURS hours in a call_out. It collects
@@ -330,34 +399,26 @@ void schedule_bills()
 
       // Try to settle the bill
       if (settle_bill(who, amount))
-         notify_owner(who, "Abacus ship rentals paid $" + amount + ". All leases extended.");
+      {
+         notify_owner(who, "Ship services paid " + pround(amount, 2) + " crd. Long term services renewed");
+         settle_player(who);
+      }
       else
-         notify_owner(who, "Failed to pay $" + amount + " for leases. Find a ship terminal.");
+         notify_owner(who, "Failed to pay " + pround(amount, 2) + " crd for services. Find a docking terminal.");
    }
-}
-
-int late_payments(string who)
-{
-   // Simple create_bills(0) so we just get whoever needs to pay after this week.
-   mapping bills = create_bills();
-   int last_pay;
-   if (!bills[who])
-      return 0;
-
-   last_pay = (time() - last_payment[who]) / WEEK;
-   return last_pay;
 }
 
 string stat_me()
 {
    string retstr;
    retstr = "Ship daemon stats\n--------------------\n";
-   retstr +=
-       sprintf("%25s: %-5s %25s: %-5s\n", "Ships owned", sizeof(flatten_array(values(SHIP_D->query_owners()))) + "",
-               "Customers ever", sizeof(keys(SHIP_D->query_bank_connections())) + "");
-   retstr += sprintf("%25s: %-5s %25s: %-5s\n", "Money made", "$ " + money_made, "Money lost ", "" + "$ " + money_lost);
-   retstr += sprintf("%25s: %-5s %25s: %-5s\n", "Outstanding money", "$ " + array_sum(values(create_bills(1))),
-                     "Money lost ", "" + money_lost);
+   retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Ships owned",
+                     sizeof(flatten_array(values(SHIP_D->query_owners()))) + "", "Customers ever",
+                     sizeof(keys(SHIP_D->query_bank_connections())) + "");
+   retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Money made", "¤ " + money_made, "Money lost ",
+                     "" + "¤ " + pround(0.0+money_lost,2));
+   retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Outstanding money",
+                     "¤ " + pround(0.0+array_sum(values(create_bills(1))), 2), "", "");
 
    return retstr;
 }
@@ -368,11 +429,12 @@ void create()
    ::create();
    set_privilege("Mudlib:daemons");
    call_out("schedule_bills", (3600 * BILL_CYCLE_HOURS));
+   update_ship_sizes();
 }
 
 /*
-@filter_array(objects(),(: strsrch(base_name($1),"small_apartment/")!=-1 :))->remove()
-goto small_apartment/tsath/1
-more /data/ship/t/domains_nuke_ship_small_apartment_tsath_1.o
-ud `SHIP_D` small_apartment
+@filter_array(objects(),(: strsrch(base_name($1),"spacecruiser/")!=-1 :))
+goto /domains/omega/room/floor8/ne_ship_bay &&& dest /domains/common/ship/spacecruiser/tsath/0 &&& ud -R ^common/ship/spacecruiser &&& goto /domains/common/ship/spacecruiser/tsath/0
+more /data/ships/t/domains_common_ship_spacecruiser_tsath_0.o
+ud `SHIP_D`
 */

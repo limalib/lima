@@ -3,8 +3,7 @@ inherit M_VALUABLE;
 inherit SPACE_CLASSES;
 
 object body;
-string docked_ship;
-object ship_template;
+class ship_info docked_ship;
 int docking_completed;
 
 void refresh_docking();
@@ -31,14 +30,18 @@ void comms(string s)
    tell_environment(this_object(), s + "\n");
 }
 
+int is_docking_completed()
+{
+   return time() > docking_completed;
+}
+
 void refresh_docking()
 {
    class docking_info di = SPACESTATION_D->query_dock(base_name(environment()));
    if (di)
    {
       docking_completed = di->docking_time;
-      docked_ship = di->vfile;
-      ship_template = load_object(SHIP_D->ship_filename(di->vfile));
+      docked_ship = SHIP_D->find_ship(di->vfile);
       body = find_body(di->who);
    }
 }
@@ -49,12 +52,9 @@ string ship_state()
    refresh_docking();
    if (docking_completed && time_left > 0)
       return "The docking bay is opening the clamps, getting ready for docking.";
-   
-   if (ship_template)
-      return ship_template->query_ship_brief() + " is docked outside the window, ready to board.";
-   else
-      return docked_ship ? "A ship is docked outside the window, ready to board."
-                         : "The docking bay outside is available.";
+
+   return docked_ship ? capitalize(add_article(docked_ship->type)) + " is docked outside the window, ready to board."
+                      : "The docking bay outside is available.";
 }
 
 void clear_docking()
@@ -63,25 +63,26 @@ void clear_docking()
    refresh_docking();
    if (time_left > 0)
    {
-      comms(ship_template->query_ship_brief() + " changes direction and heads away from the docking bay.");
+      comms(capitalize(add_article(docked_ship->type)) + " changes direction and heads away from the docking bay.");
    }
    else
-      comms(ship_template->query_ship_brief() + " undocks and heads into space.");
+      comms(capitalize(add_article(docked_ship->type)) + " undocks and heads into space.");
 
+   SHIP_D->long_term_parked(docked_ship->name);
+   SHIP_D->undock_ship(docked_ship->name);
    if (!SPACESTATION_D->release_dock(base_name(environment())))
       TBUG("Failed to clear DOCK at " + base_name(environment()));
    docking_completed = 0;
    docked_ship = 0;
-   ship_template = 0;
 }
 
-void set_docking(string fname, int t)
+void set_docking(class ship_info si, int t)
 {
-   if (SPACESTATION_D->claim_dock(base_name(environment()), fname, t, body->query_name()))
+   if (SPACESTATION_D->claim_dock(base_name(environment()), si->vfile, t, body->query_name()))
    {
       docking_completed = t;
-      docked_ship = fname;
-      ship_template = load_object(SHIP_D->ship_filename(fname));
+      docked_ship = si;
+      SHIP_D->dock_ship(si->name, base_name(environment()));
    }
    else
    {
@@ -125,20 +126,20 @@ void do_docking_story()
 
    switch (time_left)
    {
-   case 0..10:
+   case -10..10:
       comms("The ship approaches the airlock, and completes the docking.");
       SHIP_D->notify_owner(body, "ship docked at " + environment()->short());
       return;
       break;
    case 11..20:
       if (random(2))
-         comms("You see " + lower_case(ship_template->query_ship_brief()) + " meeting the docking clamps.");
+         comms("You see " + add_article(docked_ship->type) + " meeting the docking clamps.");
       else
-         comms("The floor rumbles below you as " + lower_case(ship_template->query_ship_brief()) + " begins docking.");
+         comms("The floor rumbles below you as " + add_article(docked_ship->type) + " begins docking.");
       break;
    case 21..50:
       if (!random(6))
-         comms(ship_template->query_ship_brief() + " approaches the docking bay.");
+         comms(capitalize(add_article(docked_ship->type)) + " approaches the docking bay.");
       break;
    case 51..60:
       comms("You can see a ship approaching the station through the window.");

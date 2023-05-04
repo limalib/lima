@@ -3,23 +3,14 @@
 ** Interacts with SHIP_D.
 */
 
-#include <move.h>
-#define SHIP_PERSISTED 1
-#define SHIP_DIRTY 2
-
 inherit ROOM;
+inherit SPACE_CLASSES;
 inherit M_ACCESS;
+inherit __DIR__ "spaceship/persistence";
+inherit __DIR__ "spaceship/status";
 
-private
-string owner;
 private
 int unique_id;
-private
-int state = SHIP_PERSISTED;
-private
-string inventory;
-private
-nosave int restored = 0;
 private
 nosave string ship_brief;
 private
@@ -28,30 +19,34 @@ private
 nosave string ship_type;
 private
 nosave int weekly_cost = 10;
-private
-nosave object possible_owner;
 nosave object base_obj;
 private
+nosave int size = 1;
+private
 int room_on_ship = 10;
+private
+class ship_info ship_i;
 
-void object_arrived(object);
-void object_left(object);
+string query_owner();
 void set_owner(string str);
-void before_save();
-void init_room(object r);
-void reinit_room();
+void setup_persistence();
+void object_arrived(object ob);
+void object_left(object ob);
 
-void setup()
+void mudlib_setup()
 {
+   ::mudlib_setup();
    set_save_recurse(1);
    add_hook("object_left", ( : object_left:));
    add_hook("object_arrived", ( : object_arrived:));
+   set_privilege("Common:ships");
 }
 
 object *on_ship()
 {
    object *here = filter_array(all_inventory(),
-                               (: base_name($1)[0..21] != "/domains/common/ship/" &&
+                               (
+                                   : base_name($1)[0..21] != "/domains/common/ship/" &&
                                          base_name($1)[0..11] != "/obj/mudlib/" && base_name($1)[0..9] != "/std/race/"
                                    :));
    return here;
@@ -72,6 +67,16 @@ void set_ship_type(string st)
 string query_ship_type()
 {
    return ship_type;
+}
+
+void set_ship_size(int sz)
+{
+   size = sz;
+}
+
+int query_ship_size()
+{
+   return size;
 }
 
 void set_ship_brief(string b)
@@ -114,16 +119,6 @@ int query_ship_cost()
    return weekly_cost;
 }
 
-int query_state()
-{
-   return state;
-}
-
-string query_owner()
-{
-   return owner;
-}
-
 void set_relations()
 {
    object *on_ship;
@@ -146,43 +141,48 @@ void set_relations()
    }
 }
 
-void object_arrived(object ob)
+class ship_info query_ship_info()
 {
-   if (ob->is_body() && !owner)
+   return ship_i || ship_i = SHIP_D->find_ship(base_name(this_object()));
+}
+
+int is_docked()
+{
+   return SHIP_D->query_docked(query_ship_info()->name);
+}
+
+object virtual_create(string ship_file, string arg)
+{
+   object ship;
+   string owner;
+   if (sscanf(arg, "%s/%d", owner, unique_id) != 2)
+      return 0;
+   set_owner(owner);
+   ship = new (ship_file);
+   ship_i = 0;
+   return ship;
+}
+
+// Function to smash together all the sounds from all the furniture and comma separate them. The sounds should return
+// sentences not starting with a capital and ending with a punctuation.
+void do_listen()
+{
+   string *listens = ({});
+   foreach (object b in all_inventory())
    {
-      possible_owner = ob;
-      owner = lower_case(possible_owner->query_name());
+      string sound = b->furniture_sound();
+      if (sound)
+         listens += ({sound});
    }
-   if (!restored && owner)
-   {
-      SHIP_D->restore_ship_state(this_object());
-      this_object()->set_restored(1);
-      reinit_room();
-      set_relations();
-   }
-   state = SHIP_DIRTY;
+   if (sizeof(listens))
+      write(punctuate(capitalize(format_list(listens))));
+   else
+      ::do_listen();
 }
 
-void set_restored(int r)
+int is_ship()
 {
-   restored = r;
-}
-
-string save_to()
-{
-   return SHIP_PATH(query_owner()) + ".o";
-}
-
-void unguarded_save()
-{
-   before_save();
-   unguarded(1, ( : write_file, save_to(), save_to_string(), 1 :));
-   state = SHIP_PERSISTED;
-}
-
-int restore_ship(string save_str)
-{
-   load_from_string(save_str, 1);
+   return 1;
 }
 
 int is_ship_empty()
@@ -196,107 +196,4 @@ int count_objects(string file)
 {
    object *contents = all_inventory();
    return sizeof(filter(contents, ( : cannonical_form($1) == $(file) :)));
-}
-
-void set_saved_objects(mapping m)
-{
-   if (!restored)
-      return;
-   foreach (string file, mixed parameters in m)
-   {
-      int num = 1;
-      mixed *rest = ({});
-      int matches = 0;
-      file = absolute_path(file, this_object());
-      if (intp(parameters))
-         num = parameters;
-      else if (arrayp(parameters))
-      {
-         if (intp(parameters[0]))
-         {
-            num = parameters[0];
-            rest = parameters[1..];
-         }
-         else
-            rest = parameters;
-      }
-      else
-         continue;
-
-      matches = count_objects(file);
-      while (matches < num)
-      {
-         int ret;
-         object ob = new (absolute_path(file), rest...);
-         if (!ob)
-            error("Couldn't find file '" + file + "' to clone!\n");
-         ret = ob->move(this_object(), "#CLONE#");
-         if (ret != MOVE_OK)
-            error("Initial clone failed for '" + file + "': " + ret + "\n");
-
-         ob->on_clone(rest...);
-         matches++;
-      }
-   }
-}
-
-int is_ship()
-{
-   return 1;
-}
-
-void object_left(object ob)
-{
-   if (is_ship_empty() && state == SHIP_DIRTY)
-   {
-      object *obs = all_inventory();
-      if (obs)
-         inventory = save_to_string();
-      SHIP_D->save_ship_state(this_object());
-   }
-   else
-   {
-   }
-}
-
-void before_save()
-{
-   while (present("ship_furniture"))
-      present("ship_furniture")->remove();
-   restored = 0;
-}
-
-void init_room(object r)
-{
-   // Override to perform custom setup for person.
-}
-
-void reinit_room()
-{
-   string base_file = implode(explode(base_name(this_object()), "/")[0.. < 3], "/");
-   object base_obj = load_object(base_file);
-   if (base_obj)
-      base_obj->init_room(this_object());
-}
-
-object virtual_create(string arg)
-{
-   object room;
-   if (sscanf(arg, "%s/%d", owner, unique_id) != 2)
-      return 0;
-   room = new (__FILE__, owner, unique_id);
-   init_room(room);
-   return room;
-}
-
-void do_listen()
-{
-   string listen_str = "";
-   foreach (object b in all_inventory())
-   {
-      string sound = b->furniture_sound();
-      if (sound)
-         listen_str += sound + " ";
-   }
-   write(listen_str + "\n");
 }

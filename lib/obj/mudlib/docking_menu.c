@@ -61,6 +61,90 @@ void quit_menu_application(int booked)
    ::quit_menu_application();
 }
 
+void do_enter_ship()
+{
+   class docking_info di = terminal->query_docking();
+   if (di)
+   {
+      int result;
+      result = this_body()->move(di->vfile);
+
+      this_body()->force_look();
+      terminal->stop_using();
+      ::quit_menu_application();
+      return;
+   }
+   error_text("You fail to enter the ship.");
+}
+
+void do_dock_ship(mapping ships, float docking_fee, string bank, string number)
+{
+   int num = to_int(number);
+   int docking_completed;
+   float fee;
+
+   if (terminal->query_docking())
+   {
+      docking_completed = terminal->query_docking()->docking_time;
+   }
+
+   if (number == "q" || number="")
+   {
+      error_text("Docking procedure aborted.");
+      this_body()->simple_action("$N $vabort the procedure.");
+      return;
+   }
+   if (num <= 0 || num > sizeof(ships))
+   {
+      error_text("Invalid ship number '" + num + "'. Docking aborted.");
+      this_body()->simple_action("$N $vabort the procedure.");
+      return;
+   }
+
+   fee = SHIP_D->outstanding_fees(((class ship_info)ships[num])->name) + docking_fee;
+
+   if (!ACCOUNT_D->coverage(bank, this_body(), fee, "credit"))
+   {
+      error_text("Lacking coverage in your account to commence docking.");
+   }
+
+   docking_completed = SHIP_D->docking_time(((class ship_info)ships[num])->type);
+   terminal->set_docking(ships[num], docking_completed);
+   write("Your " + ((class ship_info)ships[num])->type + " callsign " + ((class ship_info)ships[num])->name +
+         " will be docked in " + time_to_string(docking_completed - time()) + ".");
+   ACCOUNT_D->withdraw(bank, this_body(), fee, "credit", "Docking at " + this_body()->query_location());
+   SHIP_D->notify_owner(this_body(), "Docking and storage paid: " + pround(fee, 2) + " ¤.");
+   SHIP_D->not_long_term_parked(((class ship_info)ships[num])->name);
+   terminal->start_story();
+   quit_menu_application(1);
+}
+
+mapping get_ship_list()
+{
+   float max_cost;
+   int count = 1;
+   mapping ships = ([]);
+   write(menu_text("Ship Inventory"));
+   printf(frame->accent("%-5.5s %-25.25s %-15.15s %-15.15s %-25.25s"), "[#]", "Ship Type", "Insignia", "Fees",
+          "Parked at");
+   foreach (class ship_info si in owned_ships)
+   {
+      object dock_room = si->docked_at ? load_object(si->docked_at) : 0;
+      float fee = SHIP_D->outstanding_fees(si->name);
+      ships[count] = si;
+      printf("<bld>%-5.5s %-25.25s<res> %-15.15s %-15.15s %-25.25s\n", "[" + count + "]", capitalize(si->type),
+             capitalize(si->name), pround(fee, 2) + " ¤",
+             (si->long_term ? "Long term (" + time_to_string(time() - si->long_term, 1) + ")"
+                            : (dock_room ? dock_room->short() : "Unknown")));
+      if (fee > max_cost)
+         max_cost = fee;
+      count++;
+   }
+   ships["max"] = max_cost;
+   write("\n\n");
+   return ships;
+}
+
 void show_ship_info()
 {
    if (!sizeof(owned_ships))
@@ -69,94 +153,17 @@ void show_ship_info()
       return;
    }
 
-   write(menu_text("Ship Inventory"));
-   printf(frame->accent("%-30.30s %-10.10s %-17.17s"), "Ship Type", "Insignia", "Docked at");
-   foreach (class ship_info si in owned_ships)
-   {
-      printf("<bld>%-30.30s<res> %-10.10s %-17.17s\n", si->type, si->name,
-             si->docked_at || (si->long_term ? "Long term parking" : "Unknown"));
-   }
-
-   if (sizeof(owned_ships))
-   {
-      write("\n\n");
-      accent_text("You currently pay storage fees at " + this_body()->query_location() + ".");
-      write("\n\n");
-   }
-}
-
-void do_enter_ship()
-{
-   int result;
-   object env = environment(this_body());
-   float behind = SHIP_D->missing_payments(lower_case(this_body()->query_name()));
-   if (behind > 2.0)
-   {
-      error_text("You are over " + to_int(behind) + " week" + (to_int(behind) == 1 ? "" : "s") +
-                 " behind on rent. Your access has been revoked until settled.");
-      error_text("Make sure you have money in the bank.");
-      error_text("Change your banking connection if you changed bank.\n\n");
-      return;
-   }
-   if (behind > 1.2)
-   {
-      error_text("You are over " + to_int(behind) + " week" + (to_int(behind) == 1 ? "" : "s") +
-                 " behind on rent. You will be locked out if this is not settled.");
-   }
-
-   // FIXME result = this_body()->move(owned_ship);
-
-   if (env && env->is_exo_frame())
-   {
-      write("You bring your exo frame.\n");
-      // FIXME
-      // env->move(owned_ship);
-   }
-
-   this_body()->force_look();
-   quit_menu_application(0);
-}
-
-void do_dock_ship(mapping ships, string number)
-{
-   int num = to_int(number);
-   string docked_ship;
-   int docking_completed;
-
-   if (terminal->query_docking())
-   {
-      docked_ship = terminal->query_docking()->vfile;
-      docking_completed = terminal->query_docking()->docking_time;
-   }
-
-   if (number == "q")
-   {
-      error_text("Docking procedure aborted.");
-      this_body()->simple_action("$N $vabort the procedure.");
-      return;
-   }
-   if (num <= 0 || num > sizeof(ships))
-   {
-      error_text("Invalid ship number. Docking aborted.");
-      this_body()->simple_action("$N $vabort the procedure.");
-      return;
-   }
-   TBUG(ships[num]);
-   docked_ship = ships[num]->vfile;
-   docking_completed = time() + random(60) + random(60);
-   terminal->set_docking(docked_ship, docking_completed);
-   write("Your " + ((class ship_info)ships[num])->type + " callsign " + ((class ship_info)ships[num])->name +
-         " will be docked in " + time_to_string(docking_completed - time()) + ".");
-   terminal->start_story();
-   quit_menu_application(1);
+   get_ship_list();
 }
 
 void dock_ship()
 {
-   int count = 1;
+   float max_cost;
    mapping ships = ([]);
    string docked_ship;
+   string bank = SHIP_D->query_bank(this_body());
    int docking_completed;
+   float docking_fee = SPACESTATION_D->query_config(this_body()->query_location())->docking_fee;
 
    if (terminal->query_docking())
    {
@@ -170,40 +177,47 @@ void dock_ship()
       return;
    }
 
-   this_body()->simple_action("$N $vbegin a docking procedure.");
-   write(menu_text("Ship Inventory"));
-   printf(frame->accent("%-5.5s %-30.30s %-10.10s %-17.17s"), "[#]", "Ship Type", "Insignia", "Docked at");
-   foreach (class ship_info si in owned_ships)
+   if (!bank)
    {
-      ships[count] = si;
-      printf("<bld>%-5.5s %-30.30s<res> %-10.10s %-17.17s\n", "[" + count + "]", si->type, si->name,
-             si->docked_at || (si->long_term ? "Long term parking" : "Unknown"));
-      count++;
+      error_text("You need to set a bank connection before docking.");
+      return;
    }
-   write("\n\n");
 
-   modal_simple(( : do_dock_ship, ships:), "Ship # to dock (q to quit): ", 1);
+   this_body()->simple_action("$N $vbegin a docking procedure.");
+   ships = get_ship_list();
+   max_cost = ships["max"];
+   accent_text(this_body()->query_location() + " charges a docking fee of " + pround(docking_fee, 2) +
+               " ¤ will be charged for docking.");
+   if (!ACCOUNT_D->coverage(bank, this_body(), docking_fee + max_cost, "credit"))
+      error_text("Your account is low on funds and docking may not be available.");
+
+   modal_simple(( : do_dock_ship, ships, docking_fee, bank:), "Ship # to dock (q to quit): ", 1);
 }
 
 void enter_ship()
 {
-   // FIXME
-   if (owned_ships)
+   if (!present("guild_vdu_ob", this_body()) || !present("guild_vdu_ob", this_body())->ob_state())
+   {
+      error_text(
+          "You need to wear a VDU to enter the ship. It needs to be scanned by the docking terminal upon entry.\n");
+      return;
+   }
+
+   if (terminal->query_docking())
    {
       this_body()->simple_action(
-          "$N $vpush a key on the docking terminal and the door opens briefly and $n $vslip into the building.");
+          "$N $vswipe $p VDU on the docking terminal and the door opens briefly and $n $vslip into the ship.");
       do_enter_ship();
    }
    else
    {
-      error_text("Wait, where did you rental just go?\n");
+      error_text("Wait, where did your rental just go?\n");
    }
 }
 
 void release_ship(string answer)
 {
    string name = lower_case(this_body()->query_name());
-   mapping bills = SHIP_D->create_bills(1);
    int outstanding = 0;
    answer = lower_case(answer);
    if (answer != "yes" && answer != "y")
@@ -213,27 +227,6 @@ void release_ship(string answer)
    }
    terminal->clear_docking();
    quit_menu_application(0);
-
-   /*
-   if (!bills[name])
-      outstanding = 0;
-   else
-      outstanding = bills[name];
-
-   if (SHIP_D->settle_bill(name, outstanding))
-   {
-      SHIP_D->notify_owner(name, "Parking and docking fees paid " + outstanding + "crd. Docking cancelled.");
-
-      FIXME SHIP_D->cancel_housing(this_body(), owned_ship);
-      quit_menu_application(0);
-   }
-   else
-   {
-      SHIP_D->notify_owner(name, "Failed to settle  $" + outstanding + ". Lease not cancelled.");
-      write("Not enough money in account to settle debts. Contact your bank.\n\nTry again later.\n");
-      error_text("Cancelled");
-   }
-   */
 }
 
 void confirm_release()
@@ -246,55 +239,11 @@ void confirm_release()
    modal_simple(( : release_ship:), "Send the ship away? (y/n) ", 1);
 }
 
-void rent_property()
-{
-   string name = lower_case(this_body()->query_name());
-   mapping bills = SHIP_D->create_bills(1);
-   int outstanding = 0;
-
-   if (!bills[name])
-      outstanding = 0;
-   else
-      outstanding = bills[name];
-
-   if (SHIP_D->settle_bill(name, outstanding))
-   {
-      SHIP_D->notify_owner(name, "Abacus housing rentals paid $" + outstanding + ". Ready for new leases.");
-      // FIXME SHIP_D->set_owner(this_body(), ship_filename);
-      write("All your bills have been settled.\nNew lease confirmed.\n\nHave a good day.\n");
-      quit_menu_application(0);
-   }
-   else
-   {
-      SHIP_D->notify_owner(name, "Failed to settle  " + outstanding + "credits. Cannot lease new property.");
-      write("Not enough money in account to settle debts. Contact your bank.\n\nTry again later.\n");
-      error_text("Cancelled");
-   }
-}
-
 void bank_statement()
 {
    string bank = SHIP_D->query_bank(this_body());
-   write("\n***You rental contract is tied to: " + upper_case(bank + " bank") + "\n\n");
-   write(ACCOUNT_D->bank_statement(bank, "credit", this_body()) + "\n\n");
-}
-
-void terms_and_cond()
-{
-   string bank = SHIP_D->query_bank(this_body());
-   error_text("TERMS & CONDITIONS FOR DOCKING AGREEMENTS FROM OMEGA DOCKS LTD.\n\n");
-   write("These terms and conditions apply to all rentals by OMEGA DOCKS LTD.\n" +
-         "towards the DOCKEE(user of the dock)\n\n" +
-         "\ta.   The dock lease is billed from when docking is ordered until the DOCKEE leaves the\n" +
-         "\t     docking area.\n\n" +
-         "\t1b.  Any panels or technical parts of the dock area must be returned in a similar state.\n" +
-         "\t    Damages will be assessed and added on top of rent.\n\n" +
-         "\t1c. DOCKEE will not be able to undock without paying outstanding fees.\n\n" +
-         "\t2.  The lease can be terminated at any time by the DOCKEE if remaining rent\n" +
-         "\t    is paid in full at that point in time.\n\n" +
-         "\t3.  A lease cannot be terminated by the DOCKEE if the remaining amount is not settled.\n\n" +
-         "\t4.  4 OR MORE weeks outstanding rent by DOCKEE may cause the termination of contract,\n" +
-         "\t    and contents of the dock will be sold to cover loss of rent.\n");
+   accent_text("You rental contract is tied to: " + upper_case(bank + " bank"));
+   write(replace_string(ACCOUNT_D->bank_statement(bank, "credit", this_body())," crd", " ¤  ") + "\n\n");
 }
 
 void change_bank(string *banks, string pick)
@@ -329,6 +278,15 @@ void pick_a_bank()
    modal_simple(( : change_bank, banks:), "Enter a number to pick that bank connection: ", 1);
 }
 
+void show_prices()
+{
+   class spacestation_config sc = SPACESTATION_D->query_config(this_body()->query_location());
+   write(menu_text("Prices at " + this_body()->query_location()) + "\n\n");
+   printf("%-35.35s %-10.10s\n", "Long Term Storage slot / day", pround(sc->storage_fee, 2) + " ¤");
+   printf("%-35.35s %-10.10s\n", "1-time Docking fee", pround(sc->docking_fee, 2) + " ¤");
+   write("\n");
+}
+
 void create(object t)
 {
    if (!clonep())
@@ -359,19 +317,16 @@ void create(object t)
       {
          dock_ship_item = new_menu_item("Enter a docked ship", ( : enter_ship:), "e");
          add_menu_item(toplevel, dock_ship_item);
+         release_ship_item = new_menu_item("Cancel your docking", ( : confirm_release:), "C");
+         add_menu_item(toplevel, release_ship_item);
       }
-      release_ship_item = new_menu_item("Cancel your docking", ( : confirm_release:), "C");
-      add_menu_item(toplevel, release_ship_item);
       statement_item = new_menu_item("Show Bank Statement", ( : bank_statement:), "b", 1);
       add_menu_item(toplevel, statement_item);
       change_bank_item = new_menu_item("Change Banking Connection", ( : pick_a_bank:), "c");
       add_menu_item(toplevel, change_bank_item);
    }
 
-   purchase_ship_item = new_menu_item("Purchase ship", ( : rent_property:), "p");
-   add_menu_item(toplevel, purchase_ship_item);
-
-   terms_item = new_menu_item("Terms & Conditions", ( : terms_and_cond:), "t", 1);
+   terms_item = new_menu_item(this_body()->query_location() + " Prices", ( : show_prices:), "p", 1);
    add_menu_item(toplevel, terms_item);
    add_menu_item(toplevel, quit_item);
    add_menu_item(toplevel, ship_info_item);

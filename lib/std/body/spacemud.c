@@ -11,6 +11,8 @@ private
 int *coordinates = ({0, 0, 0});
 private
 string location = "Omega Terminal";
+private
+int planet = 0;
 
 //: FUNCTION query_starsystem
 // Returns the star system the player is currently in
@@ -62,4 +64,14 @@ string query_location()
 void set_location(string l)
 {
    location = l;
+}
+
+int query_planet()
+{
+   return planet;
+}
+
+void set_planet(int p)
+{
+   planet=p;
 }

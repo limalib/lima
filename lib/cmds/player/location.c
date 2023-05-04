@@ -26,10 +26,14 @@ void main(string arg)
 {
    object frame = new (FRAME);
    string content = "";
+   int pcount = 0;
    object body = this_body();
+   int planet_location = body->query_planet();
    mixed vdu = filter(all_inventory(body), ( : $1->is_vdu() && $1->ob_state() :));
    class starsystem ss;
    class planet *planets;
+   class structure *structures;
+   class structure st = 0;
 
    if (!sizeof(vdu))
    {
@@ -41,7 +45,7 @@ void main(string arg)
 
    frame->set_title("VDU:: Location information");
    frame->set_left_header();
-   frame->set_header_content("Location\n\n\nStar\n\n\nPlanets");
+   frame->set_header_content("Location\n\n\n\nStar\n\n\nPlanets");
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
@@ -53,27 +57,34 @@ void main(string arg)
       }
       write("Location for " + capitalize(arg) + ":\n");
    }
-
    ss = SPACE_D->query_starsystem(body->query_starsystem());
    planets = SPACE_D->query_planets(ss->name);
+   structures = SPACE_D->query_structures(body->query_starsystem(), planet_location);
+   if (sizeof(structures))
+      st = filter(structures, ( : ((class structure)$1)->name == $(body)->query_location() :))[0];
 
-   content = sprintf("<bld>      Star System<res>: %-17.17s     <bld>Location<res>: %-17.17s\n" +
-                         "<bld>Omega Coordinates<res>: %-17.17s      <bld>Distance to Omega<res>: %-17.17s\n\n",
-                     body->query_starsystem(), body->query_location(), coord_str(body->query_coordinates()),
+
+   content = sprintf("<bld>      Star System<res>: %-17.17s\n" + "         <bld>Location<res>: %s\n" +
+                         "<bld>Omega Coordinates<res>: %-17.17s       <bld>Distance to Omega<res>: %-17.17s\n\n",
+                     body->query_starsystem(),
+                     body->query_location() + (st && st->distance ? (" ~" + st->distance + " km from ") : " near ") +
+                         (sizeof(planets) > planet_location ? planets[planet_location]->name : ""),
+                     coord_str(body->query_coordinates()),
                      body->query_starsystem() == "Omega"
                          ? "-"
                          : pround(SPACE_D->distance("Omega", body->query_starsystem()), 2) + " LY");
 
-   content += sprintf("<118>%-25.25s<res>\n<bld>Spectral Type<res>: %-18.18s <bld>  Kelvin<res>: %s <res>\n\n",
-                      ss->star->name, ss->star->spectral_type,
-                      ss->star->col + ss->star->temperature_min + "-" + ss->star->temperature_max);
+   content +=
+       sprintf("<118>%-25.25s<res>\n<bld>Spectral Type<res>: %-17.17s <bld>Kelvin<res>: %s <res>\n\n", ss->star->name,
+               ss->star->spectral_type, ss->star->col + ss->star->temperature_min + "-" + ss->star->temperature_max);
 
-   content += frame->accent(sprintf("%-25.25s    %-17.17s   %-17.17s   %-17.17s\n", "Planet Name", "Planet Type", "# of Moons",
-                             "Gravity force"));
+   content += frame->accent(sprintf("%-25.25s    %-17.17s   %-17.17s   %-17.17s\n", "Planet Name", "Planet Type",
+                                    "# of Moons", "Gravity force"));
    foreach (class planet p in planets)
    {
-      content += sprintf("%s%-25.25s<res>    %-17.17s   %-17.17s   %8.8s\n", p->col, p->player_name || p->name, p->type,
-                         "" + (p->moons || "None"), pround(p->gravity, 1) + " Gs");
+      content += sprintf("%s%-25.25s<res>    %-17.17s   %-17.17s   %8.8s\n", p->col, (p->player_name || p->name),
+                         p->type, "" + (p->moons || "None"), pround(p->gravity, 1) + " Gs");
+      pcount++;
    }
 
    frame->set_content(content);
