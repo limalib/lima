@@ -11,9 +11,12 @@ void obj_arrived(object ob)
                                                           "large splash as it hits the water.\n");
       return;
    }
-   receive_inside_msg(capitalize(ob->the_short()) +
-                      " sinks into the surf, and you quickly lose track of it in the violent crashing waves.\n");
-   destruct(ob);
+
+   if(!ob->is_living()) {
+      receive_inside_msg(capitalize(ob->the_short()) +
+         " sinks into the surf, and you quickly lose track of it in the violent crashing waves.\n");
+      destruct(ob);
+   }
 }
 
 void setup()
