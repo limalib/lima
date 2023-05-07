@@ -22,7 +22,7 @@
  *************************************************************************/
 
 /*
- * Combat options. 
+ * Combat options.
  */
 #include "combat_modules.h"
 
@@ -33,9 +33,9 @@
  ** 									                                                  **
  *************************************************************************/
 
-/* The players start room.  
+/* The players start room.
  * This is the default for where players start when they log in. */
-#define START		"/domains/std/Wizroom"	
+#define START		"/domains/std/Wizroom"
 
 /* NOTE: if you define this, you have to modify the lib to save the correct
  * variables.*/
@@ -47,7 +47,7 @@
 /* Players start where they log off */
 #define PLAYERS_START_WHERE_THEY_QUIT
 
-/* Do players keep their equipment when they die, or does 
+/* Do players keep their equipment when they die, or does
 ** it drop to the corpse.
 */
 #undef PLAYERS_DROP_EQUIPMENT_AT_DEATH
@@ -81,14 +81,14 @@
 
 
 /* Size or Mass?
- * One or the other of these should be defined, but not both.  They should 
+ * One or the other of these should be defined, but not both.  They should
  * do essentially the same thing. */
 #undef USE_SIZE
 #ifndef USE_SIZE
 # define USE_MASS
 #endif
 
-/* If you want weight to be calculated in metric (kilo) rather than imperial (lbs) 
+/* If you want weight to be calculated in metric (kilo) rather than imperial (lbs)
    Only works use USE_MASS is defined.
 */
 #define METRIC
@@ -119,7 +119,7 @@
 
 /* WELCOME_FILE is the file displayed when someone connects to the game before
  * the login promopt is displayed.
- * If WELCOME_DIR is defined it is assumed that there is a directory of 
+ * If WELCOME_DIR is defined it is assumed that there is a directory of
  * welcome screens and WELCOME_FILE will be ignored. */
 #define WELCOME_FILE "/data/config/WELCOME"
 #undef WELCOME_DIR "/data/config/welcome_files"
@@ -135,8 +135,8 @@
 /* File player referrals are written into */
 #define REFERRALS_LOG "/data/referrals"
 
-/* Define where the obvious exits should appear if at all. 
- * OBVIOUS_EXITS displays the exits above the long description, 
+/* Define where the obvious exits should appear if at all.
+ * OBVIOUS_EXITS displays the exits above the long description,
  * OBVIOUS_EXITS_BOTTOM displays them after the long description. */
 #undef OBVIOUS_EXITS
 #define OBVIOUS_EXITS_BOTTOM
@@ -144,8 +144,8 @@
 /* Define this if you wish closed doors to show up as an obvious exit */
 #undef CLOSED_DOORS_ARE_OBVIOUS_EXITS
 
-/* Define where the obvious exits should appear if at all. 
- * in the bodies.  If you save to rooms, then anyone can walk in and read the 
+/* Define where the obvious exits should appear if at all.
+ * in the bodies.  If you save to rooms, then anyone can walk in and read the
  * last part of a say conversation.  */
 #define SAY_HISTORY_IN_ROOMS
 
@@ -203,7 +203,7 @@
  * command to make the person a full wizard w/ a directory. */
 #define AUTO_WIZ
 
-/* Wizard Positions are merely a descriptive field to describe what the 
+/* Wizard Positions are merely a descriptive field to describe what the
  * wizard does.  Define this if you want to use it. */
 #define USE_WIZ_POSITION
 
@@ -245,7 +245,7 @@
 
 /* The administrator(s)' email address(es).
  * NOTE: This is required to be changed in order to have a working
- * I3 system. Must be changed for anything to work! 
+ * I3 system. Must be changed for anything to work!
  */
 #define ADMIN_EMAIL		"tsath@lima-rebean.themud.org"
 

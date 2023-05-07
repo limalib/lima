@@ -3,7 +3,7 @@ The entire(*) LIMA Mudlib has been formatted in VS Code by these rules:
 {
     "editor.accessibilitySupport": "off",
     "[c]": {
-        
+
         "editor.defaultFormatter": "ms-vscode.cpptools",
         "editor.wordBasedSuggestions": false,
         "editor.suggest.insertMode": "replace",
@@ -17,9 +17,10 @@ if you are using VS Code. The mudlib had been formatted by a range of different 
 over the years, so this change was made to make it consistent.
 
 (*) Entire mudlib:
-If you use VS Code you can use the "Format Files" extension to format the entire mudlib should you
-wish to do so. Take care not to format files containing this syntax for line formatting if doing so:
-@TEXT 
+If you use VS Code you can use the "Format Files" extension (https://github.com/jbockle/format-files)
+to format the entire mudlib should you wish to do so. Take care not to format files containing this
+syntax for line formatting if doing so:
+@TEXT
   Some text
 TEXT
 
