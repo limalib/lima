@@ -328,13 +328,6 @@ int is_wearable()
    return 1;
 }
 
-//: FUNCTION is_wearable
-// Returns 1 for wearables.
-int is_wearable()
-{
-   return 1;
-}
-
 mapping lpscript_attributes()
 {
    return (
