@@ -33,7 +33,7 @@
 #undef RECEIVE_ED
 #define RESTRICTED_ED
 #define SENSIBLE_MODIFIERS
-
+#undef PROFILE_FUNCTIONS
 /****************************************************************************
  *                           MISCELLANEOUS                                  *
  ****************************************************************************/
