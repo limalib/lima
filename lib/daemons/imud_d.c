@@ -163,12 +163,12 @@ void return_error(string mudname, string username, string errcode, string errmsg
 private
 nomask void handle_router_read(object socket, mixed *message)
 {
+   if (!message) return;
    if (message[0] != "mudlist")
    {
       string s = sprintf("%O", message);
       if (sizeof(s) > 200)
          s[200..] = "...";
-      //    TBUG(s);
    }
 
    if (!dispatch[message[0]])
@@ -185,7 +185,6 @@ nomask void handle_router_read(object socket, mixed *message)
 private
 nomask void handle_router_close(object socket)
 {
-   //    TBUG("router closed");
    router_socket = 0;
 
    /* mark all the muds as down. when we reconnect we'll get new data */
@@ -215,8 +214,6 @@ nomask void reconnect()
 
    if (err)
    {
-      //	TBUG(err);
-
       if (router_socket)
       {
          router_socket->remove();

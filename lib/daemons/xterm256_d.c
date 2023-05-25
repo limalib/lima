@@ -166,11 +166,16 @@ varargs string substitute_ansi(string text, string mode)
    // If the previous object was a user, we will pick the custom colour
    // mapping from the previous object. Otherwise, we'll go for this_user().
    // This should allow each user to receive their own colours, and not the
-   // colours someone else picked.
+   // colours someone else picked. If we don't even have this user, lastly
+   // use the call_stack() to find the user.
    if (previous_object()->is_user())
       user = previous_object()->query_colour_mapping();
-   else
+   else if (this_user())
       user = this_user()->query_colour_mapping();
+   else
+   {
+      user = filter(call_stack(1), ( : $1->is_user() :))[0];
+   }
 
    assoc = pcre_assoc(text, ({PINKFISH_COLOURS}), ({1}));
    parts = assoc[0];

@@ -35,7 +35,7 @@
 #pragma warnings
 
 #define CHANNEL_FORMAT(chan)                                                                                           \
-   (chan[0..4] == "imud_" ? "%%^CHANNEL_IMUD%%^[%s]%%^RESET%%^ %s\n" : "%%^CHANNEL%%^[%s]%%^RESET%%^ %s\n")
+   (chan[0..4] == "imud_" ? "%%^CHANNEL_IMUD%%^[%s]<res> %s\n" : "%%^CHANNEL%%^[%s]<res> %s\n")
 
 #include <channel.h>
 #include <security.h>
@@ -297,7 +297,7 @@ nomask void deliver_string(string channel_name, string str)
    class channel_info ci = info[channel_name];
    if (!ci || sizeof(ci->listeners) == 0)
       return;
-
+ 
    ci->history += ({str});
    if (sizeof(ci->history) > CHANNEL_HISTORY_SIZE)
       ci->history[0..0] = ({});
@@ -342,7 +342,6 @@ private
 nomask void deliver_data(string channel_name, string sender_name, string type, mixed data)
 {
    class channel_info ci = info[channel_name];
-
    if (!ci || sizeof(ci->listeners) == 0)
       return;
 
@@ -359,8 +358,7 @@ nomask void deliver_tell(string channel_name, string sender_name, string message
    sender_name = find_sender_name(sender_name);
 
    deliver_data(channel_name, sender_name, "tell", message);
-   deliver_string(channel_name, sprintf(CHANNEL_FORMAT(channel_name), user_channel_name(channel_name),
-                                        sender_name + ": " + punctuate(message)));
+   deliver_string(channel_name, sprintf(CHANNEL_FORMAT(channel_name), user_channel_name(channel_name), sender_name + ": " + punctuate(message)));
 }
 
 /*
