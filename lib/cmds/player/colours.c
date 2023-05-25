@@ -31,6 +31,16 @@ void do_print(string which)
    mapping null = ANSI_D->query_translations()[1];
    int longest;
 
+   if (which == "help")
+   {
+      write("USAGE:\n");
+      write("To change a value:\n\t\"colours <name> <value>\"\n");
+      write("For all says to appear in magenta:\n\t\"colours say magenta\" \n");
+      write("Find colours on 'palette' cmd:\n\t\"colours say 216\"\n");
+      write("To use default value:\n\t\"colours remove <name>\"\n");
+      return;
+   }
+
    if (wizardp(this_user()))
       irrelevant = ({});
    else
@@ -72,17 +82,13 @@ void do_print(string which)
        },
        longest);
    write(colour_table(colours, this_user()->query_screen_width()) + "\n");
-   write("USAGE:\n");
-   write("\"colours <name> <value>\" to change a value\n");
-   write("eg \"colours say magenta\" for all says to appear in magenta\n");
-   write("\"colours remove <name>\" to remove a value\n");
-   write("eg \"colours remove say\" to remove the setting for say\n");
-   write("and all says will then revert to the global default colour\n");
+   write("(Use 'colours help' for quick help)\n");
 }
 
 nomask private void main(string str)
 {
    string which, what;
+   string *ansi_names = ({"bold", "green", "yellow", "red", "blue", "magenta", "cyan", "none"});
    int what_int;
 
    if (!str)
@@ -105,7 +111,7 @@ nomask private void main(string str)
    }
 
    what_int = to_int(what);
-   if (XTERM256_D->colour_code(what) == 0)
+   if (XTERM256_D->colour_code(what) == 0 && member_array(what, ansi_names) == -1)
    {
       printf("Illlegal colour value %s, check colour 'palette' for options.\n", what);
       return;
