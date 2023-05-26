@@ -505,7 +505,7 @@ string parse_headers(string text, object socket)
    {
       string *request_line = explode(lines[0], " ");
       request_line -= ({"\r"});
-      if (sizeof(request_line) == 0)
+      if (sizeof(request_line) < 3)
          return;
       req->method = request_line[0];
       req->request = request_line[1];
