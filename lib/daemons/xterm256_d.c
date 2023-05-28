@@ -163,20 +163,6 @@ varargs string substitute_ansi(string text, string mode)
    if (nullp(text))
       return "";
 
-   // If the previous object was a user, we will pick the custom colour
-   // mapping from the previous object. Otherwise, we'll go for this_user().
-   // This should allow each user to receive their own colours, and not the
-   // colours someone else picked. If we don't even have this user, lastly
-   // use the call_stack() to find the user.
-   if (previous_object()->is_user())
-      user = previous_object()->query_colour_mapping();
-   else if (this_user())
-      user = this_user()->query_colour_mapping();
-   else
-   {
-      user = filter(call_stack(1), ( : $1->is_user() :))[0];
-   }
-
    assoc = pcre_assoc(text, ({PINKFISH_COLOURS}), ({1}));
    parts = assoc[0];
    matched = assoc[1];
@@ -204,7 +190,25 @@ varargs string substitute_ansi(string text, string mode)
             continue;
          part = parts[sz][2.. < 3];
 
-         if (user[part])
+         // If the previous object was a user, we will pick the custom colour
+         // mapping from the previous object.
+         if (previous_object()->is_user())
+            user = previous_object()->query_colour_mapping();
+         // Otherwise, we'll go for this_user().
+         //  This should allow each user to receive their own colours, and not the
+         //  colours someone else picked.
+         else if (this_user())
+            user = this_user()->query_colour_mapping();
+         // If we don't even have this user, lastly
+         //  use the call_stack() to find the user.
+         else
+         {
+            object *u = filter(call_stack(1), ( : $1->is_user() :));
+            if (sizeof(u))
+               user = u[0]->query_colour_mapping();
+         }
+
+         if (user && user[part])
          {
             part = upper_case(user[part]);
          }

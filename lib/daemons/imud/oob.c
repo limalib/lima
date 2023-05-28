@@ -163,7 +163,6 @@ nomask void oob_cleanup_map(mapping conn_map)
 }
 
 /* cleanup timed-out connections */
-private
 nomask void oob_cleanup()
 {
    oob_cleanup_map(oob_mudname_map);
