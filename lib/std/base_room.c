@@ -97,18 +97,14 @@ void create(mixed *args...)
    // ###
    // ### BTW, contrary to the above, it appears this is *NOT* already done for cloned rooms
 
-#if 0
-    if( !clonep() )
-    {
-#endif
-   // initialize the mudlib (default) stuff, then the area coder's
-   mudlib_setup();
-   this_object()->internal_setup();
+   if (!clonep())
+   {
+      // initialize the mudlib (default) stuff, then the area coder's
+      mudlib_setup();
+      this_object()->internal_setup();
 
-   setup(args...);
-#if 0
-    }
-#endif
+      setup(args...);
+   }
 }
 
 void mudlib_setup()

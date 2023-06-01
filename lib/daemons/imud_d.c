@@ -163,7 +163,8 @@ void return_error(string mudname, string username, string errcode, string errmsg
 private
 nomask void handle_router_read(object socket, mixed *message)
 {
-   if (!message) return;
+   if (!message)
+      return;
    if (message[0] != "mudlist")
    {
       string s = sprintf("%O", message);
@@ -199,7 +200,6 @@ nomask void handle_router_close(object socket)
 }
 
 /* (re)connect to the router */
-private
 nomask void reconnect()
 {
    string err;

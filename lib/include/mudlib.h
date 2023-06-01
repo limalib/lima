@@ -87,6 +87,7 @@
 ** M_ENTERABLE
 ** M_FLOW_ROOM
 ** M_GUILD_MASTER	act as a "guild master"
+** M_GUILD_MEMBER   functions for guild members
 ** M_SIBLING          objects that exist in two rooms;
 **
 ** M_LIB_LOCKABLE	arbitrates "locked" state of multiple instances
@@ -245,6 +246,7 @@
 #define M_FOLLOW          "/std/modules/m_follow"
 #define M_GETTABLE        "/std/modules/m_gettable"
 #define M_GUILD_MASTER    "/std/modules/m_guild_master"
+#define M_GUILD_MEMBER    "/std/modules/m_guild_member"
 #define M_KNOCKABLE       "/std/modules/m_knockable"
 #define M_LIGHT_SOURCE    "/std/modules/m_light_source"
 #define M_LIGHTABLE       "/std/modules/m_lightable"

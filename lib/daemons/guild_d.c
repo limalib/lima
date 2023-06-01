@@ -1,12 +1,20 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-//: MODULE
-// guild_d.c -- daemon for recording guild information
-
-// Ohara: Design and original implementation
-//  951224, Deathblade: updated, installed, etc.
+/*
+** guild_d.c -- daemon for recording guild information2
+**
+** Ohara: Design and original implementation
+** Deathblade: updated, installed, etc
+** Tsath: Updated, rearranged, extended and wrangled.
+*/
 
 inherit M_DAEMON_DATA;
+inherit M_STATEFUL;
+
+#define GUILD_DIR "/domains/common/"
+#define MISSION_DIR GUILD_DIR "mission/"
+#define FAVOR_DIR GUILD_DIR "favor/"
+#define GUILD_LOG_HISTORY_SIZE 50
 
 class guild_defn
 {
@@ -22,9 +30,44 @@ class guild_defn
    int guild_sees_secret;    /* can see other guilds' attrs */
    int guild_is_secret;      /* attrs are (generally) secret */
    int guild_need_all;       /* need ALL prereq guilds */
+   int guild_tier;           /* The tier of guild this is */
 }
 
 private mapping guilds = ([]);
+private
+mapping guild_assets = ([]);
+private
+mapping materials = ([]);
+private
+mapping guild_contribution = ([]);
+private
+mapping guild_favor_score = ([]);
+private
+mapping guild_log = ([]);
+private
+mapping buff_list = ([]);
+private
+mapping guild_favors = ([]);
+private
+mapping guild_skills = ([]);
+private
+mapping guild_abbrevs = ([]);
+
+/* No saves */
+private
+nosave object *active_missions = ({});
+private
+nosave object *active_buffs = ({});
+private
+nosave mapping mission_ctrl = ([]);
+private
+nosave mapping guild_missions = ([]);
+private
+nosave mapping guild_mission_obs = ([]);
+private
+nosave mapping guild_favors = ([]);
+private
+nosave mapping guild_favor_obs = ([]);
 
 #define DEFN(name) ((class guild_defn)guilds[name])
 
@@ -43,6 +86,7 @@ void set_guild_prospectus(string name, string prospectus);
 void set_guild_sees_secret(string name, int sees_secret);
 void set_guild_is_secret(string name, int is_secret);
 void set_guild_need_all(string name, int need_all);
+void set_guild_tier(string name, int tier);
 
 string query_guild_title(string name);
 string *query_guild_banned(string name);
@@ -56,6 +100,68 @@ string query_guild_prospectus(string name);
 int query_guild_sees_secret(string name);
 int query_guild_is_secret(string name);
 int query_guild_need_all(string name);
+int query_guild_tier(string name);
+void add_log(string guild, string log);
+
+void load_missions();
+void load_favors();
+varargs int start_favor(int tier, string name, string guild, int end_at);
+
+void create()
+{
+   set_privilege(1);
+   restore_me();
+   call_out("internal_add_to_queue", 1);
+   load_missions();
+   load_favors();
+
+   foreach (int tier, mapping guilds in buff_list)
+      foreach (string guild, mapping buffs in guilds)
+      {
+         foreach (string buff, int end_at in buffs)
+         {
+            TBUG("buff: " + buff + " end_at: " + end_at);
+            if (time() < end_at - 30)
+            {
+               if (guild_favor_obs[tier] && guild_favor_obs[tier][buff])
+                  start_favor(tier, buff, guild, end_at);
+               else
+               {
+                  map_delete(buff_list[tier][guild], buff);
+               }
+            }
+            else
+            {
+               map_delete(buff_list[tier][guild], buff);
+            }
+         }
+      }
+   save_me();
+}
+
+void set_guild_abbrev(string guild, string abbrev)
+{
+   guild_abbrevs[guild] = abbrev;
+   save_me();
+}
+
+string query_guild_abbrev(string guild)
+{
+   if (!guild_abbrevs[guild])
+      return guild;
+   return guild_abbrevs[guild];
+}
+
+void clear_buff_list()
+{
+   buff_list = ([]);
+   save_me();
+}
+
+object *belongs_to(string guild)
+{
+   return filter_array(bodies(), ( : member_array($(guild), $1->guilds_belong()) != -1 :));
+}
 
 int check_previous(string needed)
 {
@@ -64,6 +170,62 @@ int check_previous(string needed)
    if (base_name(previous_object()) == "/obj/admtool/daemons/guild")
       return 1;
    return 0;
+}
+
+private
+int check_guild_skill_values(string guild, string skill)
+{
+   if (!SKILL_D->valid_skill(skill))
+   {
+      error("Invalid skill '" + skill + "'");
+      return 0;
+   }
+   if (member_array(guild, keys(guilds)) == -1)
+   {
+      error("Invalid guild '" + guild + "'");
+      return 0;
+   }
+   return 1;
+}
+
+void add_guild_skill(string guild, string skill)
+{
+   if (!check_guild_skill_values(guild, skill))
+      return;
+   if (!guild_skills[guild])
+      guild_skills[guild] = ({});
+
+   if (member_array(skill, guild_skills[guild]) == -1)
+   {
+      guild_skills[guild] += ({skill});
+      save_me();
+   }
+}
+
+void remove_guild_skill(string guild, string skill)
+{
+   if (!check_guild_skill_values(guild, skill))
+      return;
+   if (!guild_skills[guild])
+      return;
+   guild_skills[guild] -= ({skill});
+   save_me();
+}
+
+mixed query_guild_skills(mixed guild)
+{
+   if (arrayp(guild))
+   {
+      string *skills = ({});
+      foreach (string g in guild)
+      {
+         skills += guild_skills[g];
+      }
+      return skills;
+   }
+   if (stringp(guild))
+      return guild_skills[guild];
+   return guild_skills;
 }
 
 void guild_add(string name)
@@ -227,6 +389,16 @@ void set_guild_need_all(string name, int need_all)
    save_me();
 }
 
+void set_guild_tier(string name, int tier)
+{
+   if (!check_previous(PRIV_NEEDED))
+      error("insufficient privilege");
+
+   guild_check(name);
+   DEFN(name)->guild_tier = tier;
+   save_me();
+}
+
 string query_guild_title(string name)
 {
    guild_check(name);
@@ -299,6 +471,12 @@ int query_guild_need_all(string name)
    return DEFN(name)->guild_need_all;
 }
 
+int query_guild_tier(string name)
+{
+   guild_check(name);
+   return DEFN(name)->guild_tier;
+}
+
 /* given the player's current guilds, can they join the new one? */
 mixed guild_is_ok(string name, string *player_guilds)
 {
@@ -362,12 +540,12 @@ mixed guild_is_ok(string name, string *player_guilds)
       }
 
       /* if the guild in question has secret attrs and we can't see them,
-         then skip it and go on to the next guild */
+     then skip it and go on to the next guild */
       if (!sees_secret && DEFN(item)->guild_is_secret)
          continue;
 
       /* if any attributes are in common between the excluded list and
-         the guild's attributes, then punt */
+     the guild's attributes, then punt */
       attributes = DEFN(item)->guild_attributes;
       if (exclusive && attributes && sizeof(exclusive & attributes) > 0)
       {
@@ -462,3 +640,470 @@ string *query_guilds()
 {
    return keys(guilds);
 }
+
+/***************************************************************
+ * *************** * * ********* * * * ********************* ***
+ ***************************************************************/
+
+int state_update()
+{
+   active_missions -= ({0});
+   foreach (object mis_ob in active_missions)
+   {
+      if (mis_ob && !mis_ob->run_mission())
+         mis_ob->end_mission();
+   }
+   active_buffs -= ({0});
+   foreach (object buff in active_buffs)
+   {
+      if (buff && !buff->apply_favor())
+         buff->end_favor();
+   }
+   foreach (int tier, mapping guilds in buff_list)
+   {
+      foreach (string guild, mapping buffs in guilds)
+      {
+         foreach (string buff, int end_at in buffs)
+         {
+            if (time() > end_at - 30)
+            {
+               map_delete(buffs, buff);
+               buff_list[tier][guild] = buffs;
+            }
+         }
+         if (!sizeof(values(buff_list[tier][guild])))
+            map_delete(buff_list[tier], guild);
+      }
+      if (!sizeof(values(buff_list[tier])))
+         map_delete(buff_list, tier);
+   }
+   return 1;
+}
+
+void add_favor(object body, string guild, int favor)
+{
+   string who;
+   if (!body)
+      return;
+   who = body->query_name();
+
+   if (!guild_favor_score[guild])
+      guild_favor_score[guild] = 0;
+
+   guild_favor_score[guild] += favor;
+
+   if (!guild_contribution[guild])
+      guild_contribution[guild] = ([]);
+
+   if (!guild_contribution[guild][who])
+      guild_contribution[guild][who] = 0;
+   guild_contribution[guild][who] += favor;
+   save_me();
+}
+
+/*
+void set_favor_score(mapping m)
+{
+    guild_favor_score =m;
+    save_me();
+}
+*/
+
+int query_favor_score(string guild)
+{
+   if (!guild_favor_score[guild])
+      return 0;
+   return guild_favor_score[guild];
+}
+
+int spend_favor(string guild, int f)
+{
+   if (!guild_favor_score[guild])
+      return 0;
+   if (guild_favor_score[guild] >= f)
+   {
+      guild_favor_score[guild] -= f;
+      return 1;
+   }
+   return 0;
+}
+
+mapping query_favor_contribution(string guild)
+{
+   if (!guild_contribution[guild])
+      return ([]);
+   return guild_contribution[guild] || ([]);
+}
+
+void load_missions()
+{
+   string *files = get_dir(MISSION_DIR "*.c");
+   string contents;
+   string *ar_contents;
+   string err;
+
+   foreach (string item in files)
+   {
+      int tier, favor;
+      string description, name, materials;
+
+      object obj;
+      if (item == "std_mission.c")
+         continue;
+      if (err = catch (obj = load_object(MISSION_DIR + item)))
+      {
+         write("Error while loading mission:\n" + err + "\n");
+         continue;
+      }
+
+      tier = obj->query_tier();
+      favor = obj->query_favor();
+      description = obj->query_description();
+      materials = obj->query_materials();
+
+      contents = read_file(MISSION_DIR + item);
+      if (strlen(contents))
+      {
+         int found = 0;
+         ar_contents = explode(contents, "\n");
+         foreach (string line in ar_contents)
+         {
+            if (line[0..9] == "//MISSION:")
+            {
+               name = trim(line[10..]);
+            }
+         }
+      }
+
+      if (!name)
+      {
+         write("Missing //MISSION: string for '" + item + "'.\n");
+         continue;
+      }
+
+      //        guild_favors[name] = item;
+      if (!guild_mission_obs[tier])
+      {
+         guild_mission_obs[tier] = ([]);
+      }
+      guild_mission_obs[tier][name] = obj;
+
+      if (!guild_missions[tier])
+      {
+         guild_missions[tier] = ([]);
+      }
+
+      guild_missions[tier][name] = ([]);
+      guild_missions[tier][name]["description"] = description;
+      guild_missions[tier][name]["materials"] = materials;
+      guild_missions[tier][name]["favor"] = favor;
+   }
+}
+
+void load_favors()
+{
+   string *files = get_dir(FAVOR_DIR "*.c");
+   string contents;
+   string *ar_contents;
+   string err;
+
+   foreach (string item in files)
+   {
+      int tier, favor, length;
+      string description, name;
+
+      object obj;
+      if (item == "std_favor.c")
+         continue;
+      if (err = catch (obj = load_object(FAVOR_DIR + item)))
+      {
+         write("Error while favor object:\n" + err + "\n");
+         continue;
+      }
+
+      tier = obj->query_tier();
+      favor = obj->query_favor();
+      description = obj->query_description();
+      length = obj->query_length();
+
+      contents = read_file(FAVOR_DIR + item);
+      if (strlen(contents))
+      {
+         int found = 0;
+         ar_contents = explode(contents, "\n");
+         foreach (string line in ar_contents)
+         {
+            if (line[0..7] == "//FAVOR:")
+            {
+               name = trim(line[8..]);
+            }
+         }
+      }
+
+      if (!name)
+      {
+         write("Missing //FAVOR: string for '" + item + "'.\n");
+         continue;
+      }
+
+      //        guild_favors[name] = item;
+      if (!guild_favor_obs[tier])
+      {
+         guild_favor_obs[tier] = ([]);
+      }
+      guild_favor_obs[tier][name] = obj;
+
+      if (!guild_favors[tier])
+      {
+         guild_favors[tier] = ([]);
+      }
+
+      guild_favors[tier][name] = ([]);
+      guild_favors[tier][name]["description"] = description;
+      guild_favors[tier][name]["length"] = length;
+      guild_favors[tier][name]["favor"] = favor;
+   }
+}
+
+mapping query_guild_favor_obs()
+{
+   return guild_favor_obs;
+}
+
+mapping query_favors(int tier)
+{
+   return guild_favors[tier || 1];
+}
+
+mapping query_favor(int tier, string name)
+{
+   return guild_favors[tier][name];
+}
+
+mapping query_missions(int tier)
+{
+   if (!tier)
+      return copy(guild_missions);
+   else
+      return copy(guild_missions[tier]);
+}
+
+mapping query_mission(int tier, string name)
+{
+   return copy(guild_missions[tier][name]);
+}
+
+object mission_ctrl_npc(string guild)
+{
+   object room_mis = load_object(GUILD_DIR + guild + "/room/mission");
+   object room_lead = load_object(GUILD_DIR + guild + "/room/lead");
+   object npc = present("mission_ctrl_npc_guild", room_mis);
+
+   // Give it another try
+   if (!npc)
+   {
+      object *a = all_inventory(room_mis);
+      a->move(room_lead);
+      destruct(room_mis);
+      room_mis = load_object(GUILD_DIR + guild + "/room/mission");
+      npc = present("mission_ctrl_npc_guild", room_mis);
+   }
+
+   return npc;
+}
+
+void load_guild_area(string guild)
+{
+   TBUG(GUILD_DIR + guild + "/backroom");
+   load_object(GUILD_DIR + guild + "/room/lead");
+   load_object(GUILD_DIR + guild + "/room/mission");
+}
+
+mapping query_buff_list()
+{
+   return buff_list;
+}
+
+int run_mission(int tier, string name, string guild)
+{
+   if (guild_mission_obs[tier] && guild_mission_obs[tier][name])
+   {
+      object mission_ob = new (base_name(guild_mission_obs[tier][name]), guild);
+      add_log(guild, "Tier " + tier + " mission '" + name + "'");
+      TBUG("Mission: " + base_name(guild_mission_obs[tier][name]));
+      if (mission_ob)
+         active_missions += ({mission_ob});
+   }
+}
+
+varargs int start_favor(int tier, string name, string guild, int end_time)
+{
+   int favor_cost;
+   object favor_ob;
+   TBUG("Starting buff: " + name + " tier: " + tier + " for " + guild);
+   if (guild_favor_obs[tier] && guild_favor_obs[tier][name])
+   {
+      string filename;
+      int favor_length;
+      object buff_ob;
+      favor_ob = guild_favor_obs[tier][name];
+      favor_cost = favor_ob->query_favor();
+      filename = base_name(favor_ob);
+      favor_length = favor_ob->query_length();
+      buff_ob = new (filename, guild);
+      if (end_time)
+         buff_ob->set_ends_at(end_time);
+      if (!buff_list[tier])
+         buff_list[tier] = ([]);
+      if (!buff_list[tier][guild])
+         buff_list[tier][guild] = ([]);
+      buff_list[tier][guild][name] = end_time ? end_time : time() + (60 * buff_ob->query_length());
+      active_buffs += ({buff_ob});
+      save_me();
+   }
+}
+
+object *query_active_missions()
+{
+   return active_missions;
+}
+
+object *query_active_buffs()
+{
+   return active_buffs;
+}
+
+mapping query_mission_ctrl()
+{
+   return mission_ctrl;
+}
+
+mapping query_materials(string guild)
+{
+   return materials[guild];
+}
+
+void empty_materials(string guild)
+{
+   materials[guild] = ([]);
+}
+
+//: FUNCTION add_material
+// int add_material(mixed m)
+// Adds a material (object) to the pouch and detroys it from inventory.
+// If m is a string, it's added directly under that ID.
+// The function returns 1 on success or 0 on failure.
+varargs int add_material(string guild, mixed m, int c)
+{
+   string m_id;
+   if (!m)
+      return 0;
+   if (c <= 0 && stringp(m))
+      c = 1;
+   if (objectp(m))
+   {
+      m_id = m->short();
+      c = 1;
+   }
+   else
+      m_id = m;
+   if (!CRAFTING_D->valid_material(m_id) && m_id != "dollars")
+      return 0;
+
+   if (!materials[guild])
+      materials[guild] = ([]);
+
+   if (materials[guild][m_id])
+      materials[guild][m_id] += c;
+   else
+      materials[guild][m_id] = c;
+   if (objectp(m))
+      destruct(m);
+   if (m_id == "dollar" || m_id == "dollars")
+      add_log(guild, "Added money " + c + " " + m_id + ".");
+   else
+      add_log(guild, "Added materials " + c + " " + m_id + ".");
+   save_me();
+   return 1;
+}
+
+//: FUNCTION has_material
+// int has_material(string m, int count)
+// Checks for count material from the pouch if available (return 1),
+// otherwise return 0. Material could also be in inventory, which is
+// also checked.
+int has_material(string guild, string m, int count)
+{
+   object ims;
+   if (materials[guild][m] >= count)
+   {
+      return 1;
+   }
+
+   return 0;
+}
+
+//: FUNCTION remove_material
+// int remove_material(string m, int count)
+// Removes count material from the pouch if available (return 1),
+// otherwise it does nothing (return 0).
+int remove_material(string guild, string m, int count)
+{
+   object *ims;
+
+   if (!CRAFTING_D->valid_material(m))
+   {
+      map_delete(materials[guild], m);
+      return 0;
+   }
+
+   if (materials[guild][m] >= count)
+   {
+      materials[guild][m] -= count;
+      if (!materials[guild][m])
+         map_delete(materials[guild], m);
+      return 1;
+   }
+   save_me();
+
+   return 0;
+}
+
+void add_log(string guild, string log)
+{
+   int size;
+
+   if (log[ < 1] == '\n')
+      log = log[0.. < 2];
+
+   if (!guild_log[guild])
+      guild_log[guild] = ({});
+
+   guild_log[guild] += ({ctime(time()) + ": <" + this_body()->query_name() + "> " + log});
+   size = sizeof(guild_log[guild]);
+   if (size > GUILD_LOG_HISTORY_SIZE)
+   {
+      guild_log[guild] = guild_log[guild][(size - GUILD_LOG_HISTORY_SIZE)..];
+   }
+}
+
+string *guild_log(string guild)
+{
+   return copy(guild_log[guild]);
+}
+
+int clear_guild_log(string guild)
+{
+   map_delete(guild_log, guild);
+   return 1;
+}
+
+/*
+Testing calls:
+@GUILD_D->query_missions()
+@GUILD_D->run_mission(1,"Wood gathering","yakitori")
+@GUILD_D->start_favor(1,"XP Buff Small","yakitori")
+@filter_array(objects(),(: base_name($1)=="/domains/gangs/missions/wood_gathering" && clonep($1) :))->remove()
+@GUILD_D->add_guild_skill("yakitori","combat/special/roundhouse")
+
+*/

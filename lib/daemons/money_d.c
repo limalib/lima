@@ -55,6 +55,7 @@ nosave mapping singulars = ([]);
 // e.g. lover case, without spaces and singular.
 string singular_name(string name)
 {
+   if (!name) return;
    name = lower_case(trim(name));
    if (singulars[name])
       name = singulars[name];
@@ -134,7 +135,7 @@ nomask string query_plural(string name)
 nomask float query_factor(string name)
 {
    name = singular_name(name);
-   if (!denomination[name])
+   if (!name || !denomination[name])
       error("unknown denomination: " + name + ".\n");
    return denomination[name]->factor;
 }
@@ -422,6 +423,7 @@ mapping *handle_subtract_money(object player, float f_amount, string type)
 create()
 {
    ::create();
+   restore_me();
    foreach (string type, string plural in plurals)
    {
       singulars[plural] = type;
