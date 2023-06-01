@@ -30,6 +30,15 @@ void comms(string s)
    tell_environment(this_object(), s + "\n");
 }
 
+void ship_comms(string s)
+{
+   if (docked_ship && docked_ship->vfile)
+   {
+      if (find_object(docked_ship->vfile))
+         tell_from_outside(find_object(docked_ship->vfile), s + "\n");
+   }
+}
+
 int is_docking_completed()
 {
    return time() > docking_completed;
@@ -60,6 +69,8 @@ string ship_state()
 void clear_docking()
 {
    int time_left = docking_completed - time();
+   if (!docked_ship)
+      return;
    refresh_docking();
    if (time_left > 0)
    {
@@ -78,6 +89,8 @@ void clear_docking()
 
 void set_docking(class ship_info si, int t)
 {
+   if (!body)
+      body = this_body();
    if (SPACESTATION_D->claim_dock(base_name(environment()), si->vfile, t, body->query_name()))
    {
       docking_completed = t;
@@ -122,20 +135,31 @@ void do_docking_story()
    if (!docked_ship)
    {
       comms("You see a ship heading to long term docking in the far distance.");
+      ship_comms("You feel the ship turn around and move away from the station.");
    }
 
    switch (time_left)
    {
-   case -10..10:
-      comms("The ship approaches the airlock, and completes the docking.");
-      SHIP_D->notify_owner(body, "ship docked at " + environment()->short());
-      return;
+   case -20..10:
+      if (is_docking_completed())
+      {
+         comms("The ship approaches the airlock, and completes the docking.");
+         ship_comms("The airlock meets the station and docking is completed.");
+         SHIP_D->notify_owner(body, "ship docked at " + environment()->short());
+         return;
+      }
       break;
    case 11..20:
       if (random(2))
+      {
+         ship_comms("The ship meets the docking clamps.");
          comms("You see " + add_article(docked_ship->type) + " meeting the docking clamps.");
+      }
       else
+      {
+         ship_comms("A final bit of wobbling, but then the ship meets the docking clamps.");
          comms("The floor rumbles below you as " + add_article(docked_ship->type) + " begins docking.");
+      }
       break;
    case 21..50:
       if (!random(6))
@@ -143,6 +167,7 @@ void do_docking_story()
       break;
    case 51..60:
       comms("You can see a ship approaching the station through the window.");
+      ship_comms("You see the terminal approaching through the ship windows.");
       break;
    case 90..100:
       comms("A ship can be seen through the window leaving the long term docking.");

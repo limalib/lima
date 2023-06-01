@@ -24,3 +24,7 @@
 #/secure/daemons/ftp_d
 #/secure/daemons/rcp_d
 
+#SpaceMUD daemons
+/daemons/space_d
+/daemons/ship_d
+/daemons/spacestation_d

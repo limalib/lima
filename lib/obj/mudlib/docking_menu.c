@@ -88,7 +88,7 @@ void do_dock_ship(mapping ships, float docking_fee, string bank, string number)
       docking_completed = terminal->query_docking()->docking_time;
    }
 
-   if (number == "q" || number="")
+   if (number == "q" || number == "")
    {
       error_text("Docking procedure aborted.");
       this_body()->simple_action("$N $vabort the procedure.");
@@ -243,7 +243,7 @@ void bank_statement()
 {
    string bank = SHIP_D->query_bank(this_body());
    accent_text("You rental contract is tied to: " + upper_case(bank + " bank"));
-   write(replace_string(ACCOUNT_D->bank_statement(bank, "credit", this_body())," crd", " ¤  ") + "\n\n");
+   write(replace_string(ACCOUNT_D->bank_statement(bank, "credit", this_body()), " crd", " ¤  ") + "\n\n");
 }
 
 void change_bank(string *banks, string pick)

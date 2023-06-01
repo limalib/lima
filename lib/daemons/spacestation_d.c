@@ -3,7 +3,7 @@
 //: MODULE
 // Daemon for space station controlling.
 
-#define MAX_DOCKING_MINUTES 10
+#define MAX_DOCKING_MINUTES 2
 
 inherit M_DAEMON_DATA;
 inherit SPACE_CLASSES;
@@ -16,6 +16,16 @@ private
 mapping stations = ([]);
 private
 mapping docks = ([]);
+
+string find_ship(string docked_ship)
+{
+   foreach (string room, class docking_info di in docked_ships)
+   {
+      if (di->vfile == docked_ship)
+         return room;
+   }
+   return 0;
+}
 
 void update_docks(string station, string filename)
 {
@@ -48,6 +58,9 @@ void update_docking_status()
 int claim_dock(string room_file, string docked_ship, int docking_time, string who)
 {
    class docking_info di = new (class docking_info);
+   string docked_already = find_ship(docked_ship);
+   if (docked_already)
+      room_file = docked_already;
 
    di->vfile = docked_ship;
    di->docking_time = docking_time;
@@ -125,10 +138,12 @@ void attempt_undock(string docked_at, class docking_info di)
    if (!ship || (ship && ship->is_ship_empty()))
    {
       if (terminal)
+      {
          terminal->clear_docking();
-      map_delete(docked_ships, docked_at);
-      SHIP_D->notify_owner(di->who, "Your idle ship has been undocked");
-      save_me();
+         map_delete(docked_ships, docked_at);
+         SHIP_D->notify_owner(di->who, "Your idle ship has been undocked");
+         save_me();
+      }
    }
 }
 

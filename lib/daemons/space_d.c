@@ -12,6 +12,7 @@
 #define EARTHS_WEIGHT 5.97
 #define EARTHS_RADIUS 6378
 #define PRIV_NEEDED "Mudlib:daemons"
+#define MAP_VERTICAL_COMPRESSION 3
 
 inherit M_DAEMON_DATA;
 inherit SPACE_CLASSES;
@@ -248,7 +249,7 @@ mapping query_planet_alt_names()
    return player_planet_names;
 }
 
-string starsystem_name(class starsystem ss)
+private string starsystem_name(class starsystem ss)
 {
    string s = ss->name;
    return player_starsystem_names[s] ? player_starsystem_names[s] + " [" + s + "]" : s;
@@ -310,7 +311,7 @@ varargs void generate_starsystems()
       g = new (class starsystem);
       g->name = "Omega";
       g->named_by_player = "Omega";
-      g->coordinates = ({0, 0, 0});
+      g->coordinates = ({1, 1, 1});
       g->star = random_star();
       g->planets_count = MINIMUM_PLANETS + planets_count;
       starsystems[g->name] = g;
@@ -342,13 +343,13 @@ varargs void generate_starsystems()
    save_me();
 }
 
-string coord_str(int *coords)
+private string coord_str(int *coords)
 {
    return "<228>[" + to_int(coords[0]) + "," + to_int(coords[1]) + "," + to_int(coords[2]) + "]<res>";
 }
 
 // Calculate the distance between two starsystems given by name.
-int distance(string p1, string p2)
+private int distance(string p1, string p2)
 {
    string s1 = player_starsystem_names[p1];
    string s2 = player_starsystem_names[p2];
@@ -357,27 +358,174 @@ int distance(string p1, string p2)
    return sqrt(pow((c2[0] - c1[0]), 2) + pow((c2[1] - c1[1]), 2) + pow((c2[2] - c1[2]), 2));
 }
 
-void near(string p1, int lyears)
+class starsystem *near(string p1, int lyears)
 {
    class starsystem s = starsystems[p1] || starsystems[player_starsystem_names[p1]];
+   class starsystem *systems = ({});
    foreach (string name, class starsystem ss in starsystems)
    {
       float dist = distance(s->name, ss->name);
-      if (ss == s || dist > lyears)
-         continue;
-      printf("   Starsystem: <118>%-25.25s<res>@ %s is %s light years away\n", starsystem_name(ss),
-             coord_str(ss->coordinates), pround(dist, 2));
-      printf("   Planet Cnt: %-25.25sPlanets generated: %s", "" + ss->planets_count,
-             (arrayp(ss->planets) ? "Yes" : "Not yet"));
-      printf("         Star: <118>%-25.25s<res>Spectral Type: %-10.10s Kelvin: %s <res>\n\n", ss->star->name,
-             ss->star->spectral_type, ss->star->col + ss->star->temperature_min + "-" + ss->star->temperature_max);
+      if (ss != s && dist <= lyears)
+         systems += ({ss});
    }
+   return systems;
+}
+
+void print_near(string p1, int lyears)
+{
+   object frame = new (FRAME);
+   string out = "";
+   class starsystem s = starsystems[p1] || starsystems[player_starsystem_names[p1]];
+   class starsystem *systems = near(p1, lyears);
+
+   foreach (class starsystem ss in systems)
+   {
+      float dist = distance(s->name, ss->name);
+      out += sprintf("   Starsystem: <118>%-25.25s<res>@ %s is %s light years away\n", starsystem_name(ss),
+                     coord_str(ss->coordinates), pround(dist, 2));
+      out += sprintf("   Planet Cnt: %-25.25sSystem discovered: %s\n", "" + ss->planets_count,
+                     (arrayp(ss->planets) ? "Yes" : "Not yet"));
+      out +=
+          sprintf("         Star: <118>%-25.25s<res>Spectral Type: %-10.10s Kelvin: %s <res>\n\n", ss->star->name,
+                  ss->star->spectral_type, ss->star->col + ss->star->temperature_min + "-" + ss->star->temperature_max);
+   }
+
+   frame->set_title("Star system details");
+   frame->set_content(out);
+   frame->set_header_content("Showing systems within <bld>" + lyears + "<res> light-year" + (lyears == 1 ? "" : "s") +
+                             ".");
+   write(frame->render());
 }
 
 class starsystem query_starsystem(string ssn)
 {
    class starsystem ss = starsystems[ssn] || starsystems[player_starsystem_names[ssn]];
    return ss;
+}
+
+private int *pcord(int *coord)
+{
+   int *e1 = this_body()->query_coordinates();
+   int *e2 = copy(e1);
+   int *coords = ({});
+   e2[2] = e2[2] * -1;
+   coords += ({coord[0] * e1[0] + coord[1] * e1[1] + coord[2] * e1[2]});
+   coords += ({coord[0] * e2[0] + coord[1] * e2[1] + coord[2] * e2[2]});
+   return coords;
+}
+
+private mapping sized_coordinates(string system, int dist)
+{
+   class starsystem *systems = near(system, dist);
+   mapping map_coords = ([]);
+   mapping fit_coords = ([]);
+   int *x_coords = ({});
+   int *y_coords = ({});
+   int x_max, x_min, y_max, y_min, max, min;
+   int scale;
+   int width = this_user()->query_screen_width() - 40;
+
+   map_coords["*"] = pcord(this_body()->query_coordinates());
+   x_coords += ({1.0 * pcord(this_body()->query_coordinates())[0]});
+   y_coords += ({1.0 * pcord(this_body()->query_coordinates())[1]});
+
+   foreach (class starsystem ss in systems)
+   {
+      map_coords[ss->name] = pcord(ss->coordinates);
+      x_coords += ({pcord(ss->coordinates)[0]});
+      y_coords += ({pcord(ss->coordinates)[1]});
+   }
+   // TBUG(x_coords);
+   x_max = max(x_coords);
+   x_min = min(x_coords);
+   y_max = max(y_coords);
+   y_min = min(y_coords);
+   if (x_max > y_max)
+      max = x_max;
+   else
+      max = y_max;
+   if (x_min < y_min)
+      min = x_min;
+   else
+      min = y_min;
+
+   // TBUG(map_coords);
+   scale = to_int(floor(width / (abs(max) + abs(min))));
+   // TBUG("Scale: " + scale + " Max: " + max + " Min: " + min);
+   foreach (string name, int *coords in map_coords)
+   {
+      int x = coords[0];
+      int y = coords[1];
+      // TBUG("X: " + x + " x_min: " + x_min + " x*scale: " + (x * scale));
+      x += abs(x_min);
+      y += abs(y_min);
+      fit_coords[name] = ({to_int(x * scale), to_int(y * scale)});
+   }
+   return fit_coords;
+}
+
+private string dist_color(int min, int max, int dist)
+{
+   string *distances = ({"046", "049", "051", "045", "039", "033", "027", "021", "057", "056", "053"});
+   int width = ((this_user()->query_screen_width() - 10) / 11);
+   dist -= min;
+   max -= min - 0.01;
+   if (min == -1.0)
+      return "<" + implode(distances, ">" + repeat_string("▅", width) + "<") + ">" + repeat_string("▅", width) +
+             "<res>";
+   if (dist < 0)
+      return "bld";
+   return distances[(to_int(floor(dist / max * 11)))];
+}
+
+void print_map(string ss, int d)
+{
+   object frame = new (FRAME);
+   int width = this_user()->query_screen_width();
+   string *map = allocate(width / MAP_VERTICAL_COMPRESSION, repeat_string(" ", width));
+   mapping scoords = sized_coordinates(ss, d);
+   int shortest_dist = 1000, longest_dist;
+   int top = 600, bottom = 0;
+
+   foreach (string name in keys(scoords) - ({"*"}))
+   {
+      int dist = distance(ss, name);
+      if (dist > longest_dist)
+         longest_dist = dist;
+      if (dist < shortest_dist)
+         shortest_dist = dist;
+   }
+
+   // TBUG(scoords);
+   for (int i = 0; i < 2 * d; i++)
+   {
+      int row = random(sizeof(map));
+      int pos = random(strlen(map[0]));
+      map[row][pos..pos] = random(4) ? "¤" : ".";
+   }
+
+   foreach (string name, int *coords in scoords)
+   {
+      int end_pos = (coords[0] + strlen(name));
+      if (end_pos > width)
+         end_pos = width - 1;
+      // TBUG("Width: " + width + " Start: " + (coords[0]) + " ... " + end_pos);
+      map[coords[1] / MAP_VERTICAL_COMPRESSION][(coords[0])..end_pos] =
+          "<" + dist_color(shortest_dist, longest_dist, name == "*" ? 0 : distance(ss, name)) + ">" + name + "";
+      if (coords[1] / MAP_VERTICAL_COMPRESSION < top)
+         top = coords[1] / MAP_VERTICAL_COMPRESSION;
+      if (coords[1] / MAP_VERTICAL_COMPRESSION > bottom)
+         bottom = coords[1] / MAP_VERTICAL_COMPRESSION;
+      map[coords[1] / MAP_VERTICAL_COMPRESSION] = map[coords[1] / MAP_VERTICAL_COMPRESSION][0..width];
+   }
+   // TBUG("Top: " + top + " Bottom: " + bottom);
+
+   frame->set_title("Star system scan");
+   frame->set_content(replace_string(implode(map[top..bottom], "\n"), "*", "<011>*<res>"));
+   frame->set_header_content("Showing systems within <bld>" + d + "<res> light-year" + (d == 1 ? "" : "s") + ".");
+   frame->set_footer_content(dist_color(-1.0, 0, 0) + "\n" + "Close" + repeat_string(" ", width - 28) +
+                             "Far\n<011>*<res> = Your position.");
+   write(frame->render());
 }
 
 void ss_stat(string ssn)
@@ -394,14 +542,14 @@ void ss_stat(string ssn)
       printf("  Planet Name: %-25.25s<res>        Type: %-20.20s Gravity: %-20.20s", p->col + p->name, p->type,
              pround(p->gravity, 2) + " G");
       printf("    Radius in: %-25.25sSurface: %-20.20s    Mass: %-20.20s\n", pround(p->radius, 2) + " km",
-             pround(p->surface, 2) + " km2", pround(p->mass, 2) + " SPT kg");
+             pround(p->surface, 2) + " km2", pround(p->mass, 2) + " SPT");
       if (p->moons)
          printf("        Moons: %-25.25s", "" + p->moons);
       write("\n\n");
    }
-   write("\n  (1 SPT kg = 10^24 kg)");
+   write("\n  (1 SPT = 10^24 kg)");
    write("\n\n<bld>--Other systems within 5 light years-----------------------------------------------<res>\n\n");
-   near(ss->name, 5);
+   print_near(ss->name, 5);
 }
 
 void create()

@@ -8,6 +8,7 @@ inherit SPACE_CLASSES;
 inherit M_ACCESS;
 inherit __DIR__ "spaceship/persistence";
 inherit __DIR__ "spaceship/status";
+inherit __DIR__ "spaceship/capabilities";
 
 private
 int unique_id;
@@ -148,7 +149,15 @@ class ship_info query_ship_info()
 
 int is_docked()
 {
-   return SHIP_D->query_docked(query_ship_info()->name);
+   string room_file = SPACESTATION_D->find_ship(base_name());
+   object room_ob = room_file ? load_object(room_file) : 0;
+   object terminal;
+   if (!room_ob)
+      return 0;
+   terminal = present("docking_terminal_id", room_ob);
+   if (!objectp(terminal))
+      error("Failed to find docking terminal in " + room_file + " for docking for " + this_object() + ".");
+   return terminal->is_docking_completed() ? room_file : 0;
 }
 
 object virtual_create(string ship_file, string arg)
@@ -178,6 +187,11 @@ void do_listen()
       write(punctuate(capitalize(format_list(listens))));
    else
       ::do_listen();
+}
+
+void intercom(string s)
+{
+   tell_from_outside(this_object(), "The ship intercom says, \"<039>" + s + "<res>\".\n");
 }
 
 int is_ship()

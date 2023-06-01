@@ -36,8 +36,8 @@ private
 mapping bank_connection = ([]);
 private
 int next_id = 0;
-int money_made;
-int money_lost;
+int money_made = 0;
+int money_lost = 0;
 
 string ship_name(string type)
 {
@@ -86,7 +86,8 @@ int cancel_ship(object owner, string ship)
       map_delete(owners, name);
    save_file = sprintf("/data/ship/%c/%s.o", name[0], replace_string(ship[1..], "/", "_"));
    TBUG(save_file);
-   unguarded(1, ( : rm, save_file:));
+   unguarded(1, (
+                    : rm, save_file:));
    save_me();
    return 1;
 }
@@ -199,7 +200,9 @@ void restore_ship_state(object ship)
 {
    string rfile;
 
-   rfile = unguarded(1, ( : read_file, ship->save_to() :));
+   rfile = unguarded(1, (
+                            : read_file, ship->save_to()
+                            :));
    if (rfile)
       ship->restore_ship(rfile);
 }
@@ -265,7 +268,10 @@ varargs mapping create_bills(int noCut)
 
 int not_long_term_parked(string ship_name)
 {
-   string lcname = lower_case(this_body()->query_name());
+   string lcname;
+   if (!this_body())
+      return;
+   lcname = lower_case(this_body()->query_name());
    if (owners[lcname] && owners[lcname][ship_name])
    {
       owners[lcname][ship_name]->long_term = 0;
@@ -277,7 +283,10 @@ int not_long_term_parked(string ship_name)
 
 int long_term_parked(string ship_name)
 {
-   string lcname = lower_case(this_body()->query_name());
+   string lcname;
+   if (!this_body())
+      return;
+   lcname = lower_case(this_body()->query_name());
    if (owners[lcname] && owners[lcname][ship_name])
    {
       owners[lcname][ship_name]->long_term = time();
@@ -301,7 +310,10 @@ int dock_ship(string ship_name, string location)
 
 int undock_ship(string ship_name)
 {
-   string lcname = lower_case(this_body()->query_name());
+   string lcname;
+   if (!this_body())
+      return;
+   lcname = lower_case(this_body()->query_name());
    if (owners[lcname] && owners[lcname][ship_name])
    {
       owners[lcname][ship_name]->docked_at = 0;
@@ -313,7 +325,10 @@ int undock_ship(string ship_name)
 
 string query_docked(string ship_name)
 {
-   string lcname = lower_case(this_body()->query_name());
+   string lcname;
+   if (!this_body())
+      return;
+   lcname = lower_case(this_body()->query_name());
    if (owners[lcname] && owners[lcname][ship_name])
    {
       return owners[lcname][ship_name]->docked_at;
@@ -416,9 +431,9 @@ string stat_me()
                      sizeof(flatten_array(values(SHIP_D->query_owners()))) + "", "Customers ever",
                      sizeof(keys(SHIP_D->query_bank_connections())) + "");
    retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Money made", "¤ " + money_made, "Money lost ",
-                     "" + "¤ " + pround(0.0+money_lost,2));
+                     "" + "¤ " + pround(0.0 + money_lost, 2));
    retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Outstanding money",
-                     "¤ " + pround(0.0+array_sum(values(create_bills(1))), 2), "", "");
+                     "¤ " + pround(0.0 + array_sum(values(create_bills(1))), 2), "", "");
 
    return retstr;
 }

@@ -18,8 +18,6 @@
 #define SHIP_NAV_MENU   "/obj/mudlib/ship_nav_menu"
 
 //Modules
-#define M_GUILD_MASTER  "/std/modules/m_guild_master"
-#define M_GUILD_MEMBER  "/std/modules/m_guild_member"
 
 #include "/domains/common/include/common.h"
 

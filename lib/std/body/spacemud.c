@@ -8,7 +8,7 @@
 private
 string starsystem = "Omega";
 private
-int *coordinates = ({0, 0, 0});
+int *coordinates = ({1, 1, 1});
 private
 string location = "Omega Terminal";
 private
