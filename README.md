@@ -1,23 +1,14 @@
-Lima Mudlib that work with latest FluffOS
+A Space themed mudlib that uses the LIMA Mudlib without modifying it. 
 
-# Documentation
-Please see https://limamudlib.readthedocs.io/en/latest/
-
-# Current status
-- [X] Boot
-- [X] Basic functions
-- [ ] Error free
+This MUD is inspired by games like Mass Effect, Elite and other multiplayer Space exploration games. 
+It works on 3 layers of interaction.
+# Our 3 layers
+- Person (classic MUD)
+- Spacecraft
+- Planet management
 
 # How to test and contribute
-```
-git clone --recurse-submodules https://github.com/fluffos/lima
-cd lima
-./build.sh
-./run.sh
-```
-
-# Proof
-![image](https://user-images.githubusercontent.com/1256464/78710559-61566400-78ca-11ea-8479-cb87e319aab4.png)
+Join us on 139.144.35.74 port 7878 via Mudlet and let's have a chat!
 
 # License
 same as original Lima Lib.
