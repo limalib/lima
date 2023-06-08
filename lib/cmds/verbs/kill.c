@@ -27,6 +27,8 @@ void do_kill_liv(object ob)
          this_body()->targetted_action("$N $vattack $t.", ob);
       }
    }
+   else
+      write(capitalize(ob->short()) + " cannot be attacked here.\n");
 }
 
 void do_kill_liv_with_obj(object liv, object ob)
@@ -44,6 +46,8 @@ void do_kill_liv_with_obj(object liv, object ob)
          this_body()->targetted_action("$N $vattack $t.", liv);
       }
    }
+   else
+      write(capitalize(liv->short()) + " cannot be attacked here.\n");
 }
 
 void do_kill()
