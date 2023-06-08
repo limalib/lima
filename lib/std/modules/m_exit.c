@@ -102,6 +102,11 @@ int has_default_error()
    return !!default_error;
 }
 
+void bad_exit_message(string direction)
+{
+   error("Trying to add message to non-existing exit direction '" + direction + "'.");
+}
+
 //: FUNCTION query_default_error
 // Returns the error default error message.
 string query_default_error()
@@ -177,6 +182,9 @@ string query_enter_msg(string direction)
 void set_enter_msg(string direction, mixed *message...)
 {
    object which = present(direction);
+   if (!exits[direction])
+      bad_exit_message(direction);
+
    if (which && which->is_exit())
    {
       which->set_method_enter_messages("go", message...);
@@ -192,6 +200,9 @@ void set_enter_msg(string direction, mixed *message...)
 void add_enter_msg(string direction, mixed *message...)
 {
    object which = present(direction);
+   if (!exits[direction])
+      bad_exit_message(direction);
+
    if (which && which->is_exit())
    {
       which->add_method_enter_messages("go", message...);
@@ -205,6 +216,9 @@ void add_enter_msg(string direction, mixed *message...)
 void remove_enter_msg(string direction, mixed *message...)
 {
    object which = present(direction);
+   if (!exits[direction])
+      bad_exit_message(direction);
+
    if (which && which->is_exit())
    {
       which->remove_method_enter_messages("go", message...);
@@ -245,6 +259,9 @@ string query_exit_msg(string direction)
 void set_exit_msg(string direction, mixed *message...)
 {
    object which = present(direction);
+   if (!exits[direction])
+      bad_exit_message(direction);
+
    if (which && which->is_exit())
    {
       which->set_method_exit_messages("go", message...);
@@ -259,6 +276,9 @@ void set_exit_msg(string direction, mixed *message...)
 void add_exit_msg(string direction, mixed *message...)
 {
    object which = present(direction);
+   if (!exits[direction])
+      bad_exit_message(direction);
+
    if (which && which->is_exit())
    {
       which->add_method_exit_messages("go", message...);
@@ -342,6 +362,9 @@ string query_exit_description(string direction)
 void set_exit_description(string direction, mixed description)
 {
    object which = present(direction);
+   if (!exits[direction])
+      bad_exit_message(direction);
+
    if (which && which->is_exit())
    {
       which->set_long(description);
