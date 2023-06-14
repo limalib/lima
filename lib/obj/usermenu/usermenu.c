@@ -401,8 +401,8 @@ void auto_login()
 {
    string selected;
    string fname;
-   
-   //Stop auto login here if user has disappeared.
+
+   // Stop auto login here if user has disappeared.
    if (!this_user() || !this_user()->query_selected_body())
       return;
 
@@ -412,7 +412,9 @@ void auto_login()
    {
       modal_pop();
       write("(Auto login with " + capitalize(selected) + " after " + AUTO_LOGIN_AFTER + " seconds ...)\n");
-      this_user()->enter_game(selected, fname);
+      //In case they went away here ...
+      if (this_user())
+         this_user()->enter_game(selected, fname);
    }
 }
 

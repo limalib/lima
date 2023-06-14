@@ -201,15 +201,19 @@ varargs void set_method(string method, mixed destination, mixed checks, mixed *e
       new_method->checks = checks;
    else
       new_method->checks = 1;
+
+   // Exit messages
    if (arrayp(exit_messages))
       new_method->exit_messages = exit_messages;
    else if (stringp(exit_messages))
       new_method->exit_messages = ({exit_messages});
    else
       new_method->exit_messages = ({});
+
+   // Enter messages
    if (arrayp(enter_messages))
       new_method->enter_messages = enter_messages;
-   else if (stringp(exit_messages))
+   else if (stringp(enter_messages))
       new_method->enter_messages = ({enter_messages});
    else
       new_method->enter_messages = ({});
