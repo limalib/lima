@@ -159,13 +159,13 @@ string get_who_string(string arg)
             if (!wizardp(this_user()))
                break;
             if (first_run)
-               header += sprintf("%-30s ", "Path");
+               header += sprintf("%-20s ", "Path");
             content += sprintf(
-                "%-30s ",
+                "%-20s ",
                 environment(body)
                     ? filepath_ellipsis(
                           replace_string(replace_string(file_name(environment(body)), "/domains/", "^"), "/wiz/", "~"),
-                          30)
+                          20)
                     : "(lost?)");
             break;
          case "t":
@@ -202,7 +202,7 @@ string get_who_string(string arg)
                break;
             DEBUG("Idle times");
             if (first_run)
-               header += sprintf("%-8.8s ", "Idle");
+               header += sprintf("%-8.8s", "Idle");
             content += sprintf("%-8.8s ",
                                query_idle(body->query_link()) ? convert_time(query_idle(body->query_link()), 2) : "");
             break;
@@ -219,7 +219,7 @@ string get_who_string(string arg)
                break;
             if (first_run)
                header += sprintf("%-5.5s  ", "Level");
-            content += body ? sprintf("%-5.5s  ", "" + body->query_level()) : "";
+            content += body ? sprintf("%-5.5s ", "" + body->query_level()) : "";
             break;
          case "F":
             if (!wizardp(this_user()))
@@ -242,7 +242,7 @@ string get_who_string(string arg)
       content += frame->warning("Bad flags: " + bad_flags);
 
    frame->set_title(implode(explode(mud_name(), ""), " "));
-   frame->set_header_content(header);
+   frame->set_header_content(trim(header));
    frame->set_content(rtrim(content));
    return frame->render();
 }
