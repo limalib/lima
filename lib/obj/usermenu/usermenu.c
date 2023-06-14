@@ -399,15 +399,15 @@ void user_is_active()
 
 void auto_login()
 {
-   string select;
+   string selected;
    string fname;
    
    //Stop auto login here if user has disappeared.
-   if (!this_user() && !this_user()->query_selected_body())
+   if (!this_user() || !this_user()->query_selected_body())
       return;
-      
+
    selected = this_user()->query_selected_body();
-   fname = = this_user()->query_body_fname(selected);
+   fname = this_user()->query_body_fname(selected);
    if (selected)
    {
       modal_pop();
