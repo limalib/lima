@@ -14,7 +14,7 @@
 // m_vendor is used to create vendor objects that buy and sell stuff
 // they work as traditional shopkeepers and also bartenders.
 // See: /domains/std/shopkeeper.c
-// See: M_VALUABLE for possible interactions.
+// See: M_VALUABLE for possible interactions and notes about generic items.
 
 /* TODO
 compatibility of buying and selling vehicles
@@ -54,6 +54,7 @@ class item
    int value;
    string *ids;
    int amount;
+   mixed *args;
    object *objects;
 }
 
@@ -111,35 +112,61 @@ float buying_cost(float cost)
 }
 
 private
-class item init_item(object ob)
+class item init_item(object ob, mixed *setup_args)
 {
    class item item;
    item = new (class item, short
                : ob->short(), long
                : ob->long(), ids
                : ob->query_id() + ({ob->short(), ob->plural_short()}), value
-               : ob->query_value(), amount : 1);
+               : ob->query_value(), amount : 1, args
+               : setup_args);
    if (item->long[ < 1] != '\n')
       item->long += "\n";
    return item;
 }
 
+private
+int find_item(string file, mixed *setup_args)
+{
+   foreach (int indx, class item item in stored_items)
+   {
+      if (item->file == file && cmp(item->args, setup_args))
+         return indx;
+   }
+   return -1;
+}
+
 //: FUNCTION add_sell
 // enables you to add items to the vendors stored_item's mapping
-void add_sell(string file, int amt)
+varargs void add_sell(string file, int amt, mixed *setup_args)
 {
    object ob;
    class item item;
+   int indx = find_item(file, setup_args);
 
+   if (!arrayp(setup_args))
+      setup_args = ({});
    file = evaluate_path(file, 0, 1);
+
+   // If we already have this item in store with same setup_args,
+   // just increase the amount of these in store.
+   if (indx != -1)
+   {
+      item = stored_items[indx];
+      if (item->amount > 0)
+         item->amount = item->amount + 1;
+      stored_items[indx] = item;
+      return;
+   }
 
    if (!amt)
       amt = 1;
    if (file)
    {
-      if (ob = new (file))
+      if (ob = new (file, setup_args...))
       {
-         item = init_item(ob);
+         item = init_item(ob, setup_args);
          item->amount = amt;
          item->file = base_name(ob);
          stored_items[++max_item_number] = item;
@@ -152,13 +179,20 @@ void add_sell(string file, int amt)
 
 //: FUNCTION set_sell
 // with a mapping you can set many items into the vendor's to sell list
+// Two formats are support:
+//   set_sell((["^std/apple":-1, "^std/weapon/sword":3, "^std/ale":-1, ]));
+// and another format supporting custom setup() arguments.
+//   set_sell((["^std/generic_item": ({-1,({"test object",15})}),"^std/weapon/sword":3]));
+// First argument is still count (or -1 for infinite), seconds argument is args for setup().
 void set_sell(mapping items)
 {
-   string item;
-   int amt;
-
-   foreach (item, amt in items)
-      add_sell(item, amt);
+   foreach (string item, mixed amt in items)
+   {
+      if (!arrayp(amt))
+         add_sell(item, amt);
+      else
+         add_sell(item, amt[0], amt[1]);
+   }
 }
 
 //: FUNCTION add_sell_object
@@ -176,7 +210,7 @@ void add_sell_object(object ob)
          return;
       }
    }
-   item = init_item(ob);
+   item = init_item(ob, 0);
    item->objects = ({ob});
    stored_items[++max_item_number] = item;
 }
@@ -299,7 +333,7 @@ int test_buy(object ob)
 }
 
 // FUNCTION: buy_object
-// gets called from the verb sell. Addes bought object to the list of
+// gets called from the verb sell. Adds bought object to the list of
 // stored_items depending on check_uniqueness()
 void buy_object(object ob)
 {
@@ -350,17 +384,8 @@ void buy_object(object ob)
    {
    case 0: /* object is not unique, so just keep the filename. */
       file = base_name(ob);
+      add_sell(file, 1, ob->setup_args());
       destruct(ob);
-      foreach (item in values(stored_items))
-      {
-         if (item->file && item->file == file)
-         {
-            if (item->amount != -1)
-               item->amount++;
-            return;
-         }
-      }
-      add_sell(file, 1);
       break;
    case 1: /* object is unique */
       add_sell_object(ob);
@@ -414,6 +439,7 @@ int query_items(string item, int flag)
       write("Nothing in this shop matches that!\n");
       return 0;
    }
+   TBUG(stored_items);
    keys = sort_array(keys, 1);
    if (get_user_variable("simplify") != 1)
       printf(">----------------------------------------------------------------------<\n");
@@ -537,7 +563,7 @@ void sell_items(int key, int amount)
       if (item->objects)
          ob = item->objects[0];
       else
-         ob = new (item->file);
+         ob = new (item->file, item->args...);
       if (sell_object(ob))
       {
          if (item->objects)
