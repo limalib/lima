@@ -361,7 +361,7 @@ void buy_object(object ob)
    if (this_body()->test_skill("misc/life/haggle", to_int(cost), train_limit))
    {
       int increase = to_int(this_body()->query_cha() * CHA_MULT * cost / 100);
-      TBUG("Selling " + ob->the_short() + " for " + cost + " increased by " + increase);
+      //TBUG("Selling " + ob->the_short() + " for " + cost + " increased by " + increase);
       cost += increase;
       money = MONEY_D->calculate_denominations(cost, currency_type);
       if (increase)
@@ -439,7 +439,6 @@ int query_items(string item, int flag)
       write("Nothing in this shop matches that!\n");
       return 0;
    }
-   TBUG(stored_items);
    keys = sort_array(keys, 1);
    if (get_user_variable("simplify") != 1)
       printf(">----------------------------------------------------------------------<\n");
@@ -505,7 +504,7 @@ int sell_object(object ob)
    if (this_body()->test_skill("misc/life/haggle", to_int(cost), train_limit))
    {
       int decrease = to_int(this_body()->query_cha() * CHA_MULT_SELL * cost / 100);
-      TBUG("Buying " + ob->the_short() + " for " + cost + " decreased by " + decrease);
+      //TBUG("Buying " + ob->the_short() + " for " + cost + " decreased by " + decrease);
       cost -= decrease;
       money = MONEY_D->calculate_denominations(decrease, currency_type);
       if (decrease)
