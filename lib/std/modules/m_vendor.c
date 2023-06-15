@@ -361,7 +361,7 @@ void buy_object(object ob)
    if (this_body()->test_skill("misc/life/haggle", to_int(cost), train_limit))
    {
       int increase = to_int(this_body()->query_cha() * CHA_MULT * cost / 100);
-      //TBUG("Selling " + ob->the_short() + " for " + cost + " increased by " + increase);
+      // TBUG("Selling " + ob->the_short() + " for " + cost + " increased by " + increase);
       cost += increase;
       money = MONEY_D->calculate_denominations(cost, currency_type);
       if (increase)
@@ -410,10 +410,12 @@ string random_item_short()
 // If flag is set the it will show the long() too
 int query_items(string item, int flag)
 {
+   object frame = new (FRAME);
    int *keys = ({});
    int key, num;
-   string cost;
+   string cost,out="";
    float exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
+   frame->set_title("For sale");
 
    if (sizeof(stored_items) == 0 || !for_sale)
    {
@@ -440,26 +442,23 @@ int query_items(string item, int flag)
       return 0;
    }
    keys = sort_array(keys, 1);
-   if (get_user_variable("simplify") != 1)
-      printf(">----------------------------------------------------------------------<\n");
-   printf("%|-7s%|-13s %-30s %s\n", " List #", "Amount", "Name/id", capitalize(currency_type));
-   if (get_user_variable("simplify") != 1)
-      printf(">----------------------------------------------------------------------<\n");
+   frame->set_header_content(sprintf("%|-7s%|-13s %-30s %s\n", " List #", "Amount", "Name/id", capitalize(currency_type)));
+   
    foreach (key in keys)
    {
       cost =
           MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key]->value)) / exchange_rate, currency_type);
       num = stored_items[key]->amount;
       if (num != -1)
-         printf("  %-7d %-10d %-30s %s\n", key, num, stored_items[key]->short, cost);
+         out+=sprintf("   %-7d %-10d %-30s %s\n", key, num, stored_items[key]->short, cost);
       else
-         printf("  %-7d %-10s %-30s %s\n", key, "Many", stored_items[key]->short, cost);
+         out+=sprintf("   %-7d %-10s %-30s %s\n", key, "Many", stored_items[key]->short, cost);
       if (flag)
-         write(stored_items[key]->long);
+         out+=stored_items[key]->long;
    }
-   if (get_user_variable("simplify") != 1)
-      printf(">----------------------------------------------------------------------<\n");
-   printf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n");
+   frame->set_content(out);
+   frame->set_footer_content(sprintf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n"));
+   write(frame->render());
    return 1;
 }
 
@@ -504,7 +503,7 @@ int sell_object(object ob)
    if (this_body()->test_skill("misc/life/haggle", to_int(cost), train_limit))
    {
       int decrease = to_int(this_body()->query_cha() * CHA_MULT_SELL * cost / 100);
-      //TBUG("Buying " + ob->the_short() + " for " + cost + " decreased by " + decrease);
+      // TBUG("Buying " + ob->the_short() + " for " + cost + " decreased by " + decrease);
       cost -= decrease;
       money = MONEY_D->calculate_denominations(decrease, currency_type);
       if (decrease)
