@@ -17,7 +17,7 @@ inherit CMD;
 inherit CLASS_LIMB;
 inherit M_WIDGETS;
 
-object frame = new (FRAME,this_object());
+object frame;
 
 // orders our limbs a bit, if we get more weird limbs extend this function
 private
@@ -49,6 +49,8 @@ void main(string arg)
    string ansi_colour = "GREEN";
    string m_pinkfish_colour = "CYAN";
    string content = "";
+   if (!frame)
+      frame = new (FRAME, this_object());
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {

@@ -39,7 +39,7 @@ class wear_info
 }
 
 mapping short_names = DAMAGE_D->query_short_names();
-object frame = new (FRAME,this_object());
+object frame;
 
 string abbreviate(string s)
 {
@@ -55,6 +55,8 @@ void main(string arg)
    object body = this_body();
    int nothing_worn = 1;
    int nothing_wielded = 1;
+   if (!frame)
+      frame = new (FRAME, this_object());
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {

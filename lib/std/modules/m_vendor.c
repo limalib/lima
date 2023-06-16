@@ -84,11 +84,21 @@ private
 string haggle_sell = "$T $v1think $n deserve to pay $o less for $o1.";
 private
 object vendor_frame;
+private
+int clear_numbers = 0;
 
 //: FUNCTION set_cost_multiplicator
 float set_cost_multiplicator(float m)
 {
    cost_mult = m;
+}
+
+//: FUNCTION set_clear_numbers
+// Sets numbers to be clear fractions (1) in the vendor list,
+// or lists of denominations (0) - default.
+void set_clear_numbers(int cn)
+{
+   clear_numbers = cn;
 }
 
 void set_haggle_buy(string s)
@@ -413,7 +423,9 @@ string random_item_short()
 int query_items(string item, int flag)
 {
    int *keys = ({});
-   int key, num;
+   string *item_names = ({});
+   string *cost_names = ({});
+   int num, item_lng, cost_lng, i;
    string cost, out = "";
    float exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
    if (!vendor_frame)
@@ -432,7 +444,7 @@ int query_items(string item, int flag)
    }
    else
    {
-      foreach (key in keys(stored_items))
+      foreach (int key in keys(stored_items))
       {
          if (member_array(item, stored_items[key]->ids) != -1)
          {
@@ -446,20 +458,40 @@ int query_items(string item, int flag)
       return 0;
    }
    keys = sort_array(keys, 1);
-   vendor_frame->set_header_content(
-       sprintf("%|-7s%|-13s %-30s %s\n", " List #", "Amount", "Name/id", capitalize(currency_type)));
 
-   foreach (key in keys)
+   foreach (int key in keys)
    {
-      cost =
-          MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key]->value)) / exchange_rate, currency_type);
+      if (clear_numbers)
+         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key]->value)) / exchange_rate, 2)});
+      else
+         cost_names += ({MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key]->value)) / exchange_rate,
+                                                     currency_type)});
+
+      if (cost_lng < strlen(cost_names[ < 1]))
+         cost_lng = strlen(cost_names[ < 1]);
+
+      item_names += ({stored_items[key]->short});
+      if (item_lng < strlen(cost_names[ < 1]))
+         item_lng = strlen(cost_names[ < 1]);
+   }
+
+   item_lng += 3;
+
+   vendor_frame->set_header_content(sprintf("%|-7s%|-13s %-" + item_lng + "s %-" + cost_lng + "s\n", " List #",
+                                            "Amount", "Name/id", capitalize(currency_type)));
+
+   foreach (int key in keys)
+   {
       num = stored_items[key]->amount;
       if (num != -1)
-         out += sprintf("   %-7d %-10d %-30s %s\n", key, num, stored_items[key]->short, cost);
+         out +=
+             sprintf("   %-7d %-10d %-" + item_lng + "s %-" + cost_lng + "s\n", key, num, item_names[i], cost_names[i]);
       else
-         out += sprintf("   %-7d %-10s %-30s %s\n", key, "Many", stored_items[key]->short, cost);
+         out += sprintf(
+             "   %-7d %-10s %-" + item_lng + "s %-" + cost_lng + "s\n", key, "Many", item_names[i], cost_names[i]);
       if (flag)
          out += stored_items[key]->long;
+      i++;
    }
    vendor_frame->set_content(out);
    vendor_frame->set_footer_content(

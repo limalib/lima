@@ -20,7 +20,7 @@
 
 inherit CMD;
 
-object frame = new (FRAME, this_object());
+object frame;
 
 string get_who_string(string arg)
 {
@@ -31,6 +31,8 @@ string get_who_string(string arg)
    // If we have bodies() and they have a level>1, the MUD must use levels.
    // This is not set by a DEFINE but a result of implementation in adversary/body.
    int use_levels_guess = sizeof(bodies()) ? bodies()[0]->query_level() > 0 : 0;
+   if (!frame)
+      frame = new (FRAME, this_object());
    frame->init_user();
 
    if (uptime == "")

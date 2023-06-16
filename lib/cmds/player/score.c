@@ -20,7 +20,7 @@ inherit M_WIDGETS;
 
 #define FC "<bld>%-10.10s<res>"
 
-object frame = new (FRAME, this_object());
+object frame;
 
 // Always returns a strlen 6.
 string pretty_bonus(int b)
@@ -59,6 +59,8 @@ void main(string arg)
    int i;
    int width = default_user_width() - 11;
    body = this_body();
+   if (!frame)
+      frame = new (FRAME, this_object());
    frame->init_user();
    frame->set_left_header();
    frame->set_title("Score");

@@ -23,7 +23,7 @@ inherit CMD;
 inherit CLASS_SKILL;
 inherit M_WIDGETS;
 
-object frame = new (FRAME, this_object());
+object frame;
 
 private
 void main(string arg)
@@ -37,6 +37,8 @@ void main(string arg)
    string contbend = is_unicodetheme() ? "├" : " ";
    string content;
    string *names;
+   if (!frame)
+      frame = new (FRAME, this_object());
 
    if (strlen(arg) && arg != "combat" && arg != "magic" && arg != "misc")
    {
