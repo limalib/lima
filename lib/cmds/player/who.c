@@ -20,16 +20,18 @@
 
 inherit CMD;
 
+object frame = new (FRAME, this_object());
+
 string get_who_string(string arg)
 {
    object *u;
    int i;
    string name, extra, retval;
    string uptime = time_to_string(uptime() - (uptime() % 3600));
-   object frame = new (FRAME);
    // If we have bodies() and they have a level>1, the MUD must use levels.
    // This is not set by a DEFINE but a result of implementation in adversary/body.
    int use_levels_guess = sizeof(bodies()) ? bodies()[0]->query_level() > 0 : 0;
+   frame->init_user();
 
    if (uptime == "")
       uptime = "less then an hour";
@@ -116,4 +118,10 @@ void player_menu_entry()
    bare_init();
    main(0);
    done_outputing();
+}
+
+int clean_up(int instances)
+{
+   frame->clean_up();
+   ::clean_up(instances);
 }

@@ -161,12 +161,12 @@ string show_in_room()
 protected
 void set_in_room_desc(string arg)
 {
-   in_room_desc = arg;
+   in_room_desc = punctuate(arg);
 }
 
 void set_plural_in_room_desc(string arg)
 {
-   plural_in_room_desc = arg;
+   plural_in_room_desc = punctuate(arg);
 }
 
 string query_possessive()
@@ -180,7 +180,7 @@ string query_possessive()
 void set_untouched_desc(string arg)
 {
    if (stringp(arg))
-      untouched_long = arg;
+      untouched_long = punctuate(arg);
 }
 
 string query_in_room_desc()

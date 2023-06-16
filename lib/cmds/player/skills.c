@@ -23,6 +23,8 @@ inherit CMD;
 inherit CLASS_SKILL;
 inherit M_WIDGETS;
 
+object frame = new (FRAME, this_object());
+
 private
 void main(string arg)
 {
@@ -35,7 +37,6 @@ void main(string arg)
    string contbend = is_unicodetheme() ? "├" : " ";
    string content;
    string *names;
-   object frame = new (FRAME);
 
    if (strlen(arg) && arg != "combat" && arg != "magic" && arg != "misc")
    {
@@ -65,6 +66,7 @@ void main(string arg)
          int percentage = SKILL_D->percent_for_next_rank(this_body(), name);
          int green = skill_bar * percentage / 100;
          int red = skill_bar - green;
+         frame->init_user();
          if (strlen(arg) && strsrch(name, arg) != 0)
             continue;
 
@@ -76,7 +78,6 @@ void main(string arg)
                out(frame->render());
             }
             content = "";
-            frame = new (FRAME);
             frame->set_title(pretty_name);
          }
          else
@@ -113,4 +114,10 @@ void main(string arg)
                  sizeof(parts) > 1 ? skill->training_points + "" : "-");
       }
    }
+}
+
+int clean_up(int instances)
+{
+   frame->clean_up();
+   ::clean_up(instances);
 }

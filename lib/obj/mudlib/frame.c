@@ -60,6 +60,9 @@ int add_header, add_footer, left_header;
 private
 string *hcolours;
 
+private
+string owner;
+
 void select_theme(string t)
 {
    theme = t;
@@ -68,19 +71,6 @@ void select_theme(string t)
       bits = themes[theme];
    else
       bits = themes[FALLBACK_THEME];
-}
-
-void create()
-{
-   object shell = this_user()->query_shell_ob();
-   width = (this_user()->query_screen_width() ? this_user()->query_screen_width() - 2 : 79);
-   hcolours = (this_user()->frames_colour() != "none" ? colours[this_user()->frames_colour()] : 0);
-   select_theme(this_user()->frames_theme());
-   title_margin = 2;
-   text_margin = 1;
-   add_header = 0;
-   add_footer = 0;
-   left_header = 0;
 }
 
 string *query_colour_themes()
@@ -144,6 +134,18 @@ void set_text_margin(int tm)
    text_margin = tm;
 }
 
+void init_user()
+{
+   width = (this_user()->query_screen_width() ? this_user()->query_screen_width() - 2 : 79);
+   hcolours = (this_user()->frames_colour() != "none" ? colours[this_user()->frames_colour()] : 0);
+   select_theme(this_user()->frames_theme());
+   title_margin = 2;
+   text_margin = 1;
+   add_header = 0;
+   add_footer = 0;
+   left_header = 0;
+}
+
 void set_header_content(string hc)
 {
    string *header_lines = explode(hc, "\n");
@@ -152,9 +154,9 @@ void set_header_content(string hc)
    {
       string line = header_lines[i];
       if (!XTERM256_D->colourp(line))
-         line = "<" + hcolours[COL_ACCENT] + ">" + line + "<res>";
+         line = "<" + hcolours[COL_ACCENT] + ">" + rtrim(line) + "<res>";
       else
-         line = line;
+         line = rtrim(line);
       header_lines[i] = line;
       i++;
    }
@@ -186,10 +188,15 @@ string simple_header()
    return out;
 }
 
+void remove()
+{
+   destruct();
+}
+
 private
 string create_header()
 {
-   string out = "";
+   string out="";
    int i = 0;
    int simple_header = theme == "lines" || theme == "none";
    int header_width = colour_strlen(title) + (text_margin * 2);
@@ -198,12 +205,11 @@ string create_header()
    if (!title)
       return simple_header();
 
-   if (add_header)
-      title_margin++;
+   if (add_header && title_margin == 1)
+      title_margin = 2;
 
    if (!simple_header)
    {
-
       out += repeat_string(" ", title_margin) + bits[RD];
       while (i < header_width)
       {
@@ -214,14 +220,18 @@ string create_header()
       out += bits[LD] + "\n";
    }
 
-   out += bits[RD] + (add_header ? bits[HD] : "") + repeat_string(bits[H], title_margin - (add_header ? 2 : 1)) +
-          bits[DL] + repeat_string(" ", text_margin) + title + repeat_string(" ", text_margin) + bits[DR] +
-          repeat_string(bits[H], width - header_width - title_margin - (add_header ? 4 : 3)) +
-          (add_header ? bits[HD] : "") + bits[LD] + "\n";
+   add_header=1;
+
+   out += bits[RD] + (add_header ? bits[HD] : "") +
+                      repeat_string(bits[H], title_margin - (add_header ? 2 : 1)) + bits[DL] +
+                      repeat_string(" ", text_margin) + title + repeat_string(" ", text_margin) + bits[DR] +
+                      repeat_string(bits[H], width - header_width - title_margin - (add_header ? 4 : 3)) +
+                      (add_header ? bits[HD] : "") + bits[LD] + "\n";
 
    if (!simple_header)
    {
-      out += bits[D] + (add_header ? bits[D] : "") + repeat_string(" ", title_margin - (add_header ? 2 : 1)) + bits[RU];
+      out +=
+          bits[D] + (add_header ? bits[D] : "") + repeat_string(" ", title_margin - (add_header ? 2 : 1)) + bits[RU];
 
       i = 0;
       while (i < header_width)
@@ -230,7 +240,7 @@ string create_header()
          i++;
       }
       out += bits[LU] + repeat_string(" ", width - header_width - title_margin - (add_header ? 4 : 3)) +
-             (add_header ? bits[D] : "") + bits[D] + "\n"; // End of Title box section
+                         (add_header ? bits[D] : "") + bits[D] + "\n"; // End of Title box section
    }
 
    foreach (string h in headers)
@@ -239,16 +249,15 @@ string create_header()
       int content_width = width - 6 + col_lendiff;
       if (title_margin > 0)
          out += bits[D] + (add_header && !simple_header ? bits[D] : " ") + " " +
-                sprintf("%-" + content_width + "." + content_width + "s", h) + " " + (add_header ? bits[D] : "") +
-                bits[D] + "\n";
+                            sprintf("%-" + content_width + "." + content_width + "s", h) + " " +
+                            (add_header ? bits[D] : "") + bits[D] + "\n";
    }
 
    if (simple_header)
       out += "";
    else if (add_header)
-      out += bits[D] + (add_header ? bits[RU] : "") + repeat_string(bits[H], width - 4) + (add_header ? bits[LU] : "") +
-             bits[D] + "\n";
-
+      out += bits[D] + (add_header ? bits[RU] : "") + repeat_string(bits[H], width - 4) +
+                         (add_header ? bits[LU] : "") + bits[D] + "\n";
    return out;
 }
 
@@ -437,6 +446,21 @@ string colour_demo(string theme, string colour, int w)
    if (member_array(theme, keys(themes)) == -1)
       theme = "single";
    return h_colours(demo_string(theme, w), colours[colour]);
+}
+
+int clean_up(int i)
+{
+   destruct();
+}
+
+string short()
+{
+   return owner ? owner + "'s frame" : "Orphaned frame";
+}
+
+void create(object ob)
+{
+   owner=base_name(ob);
 }
 
 string render()

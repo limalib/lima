@@ -82,6 +82,8 @@ private
 string haggle_buy = "$T $v1think $n deserve $o more for $o1.";
 private
 string haggle_sell = "$T $v1think $n deserve to pay $o less for $o1.";
+private
+object vendor_frame;
 
 //: FUNCTION set_cost_multiplicator
 float set_cost_multiplicator(float m)
@@ -410,12 +412,14 @@ string random_item_short()
 // If flag is set the it will show the long() too
 int query_items(string item, int flag)
 {
-   object frame = new (FRAME);
    int *keys = ({});
    int key, num;
-   string cost,out="";
+   string cost, out = "";
    float exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
-   frame->set_title("For sale");
+   if (!vendor_frame)
+      vendor_frame = new (FRAME, this_object());
+   vendor_frame->init_user();
+   vendor_frame->set_title("For sale");
 
    if (sizeof(stored_items) == 0 || !for_sale)
    {
@@ -442,23 +446,25 @@ int query_items(string item, int flag)
       return 0;
    }
    keys = sort_array(keys, 1);
-   frame->set_header_content(sprintf("%|-7s%|-13s %-30s %s\n", " List #", "Amount", "Name/id", capitalize(currency_type)));
-   
+   vendor_frame->set_header_content(
+       sprintf("%|-7s%|-13s %-30s %s\n", " List #", "Amount", "Name/id", capitalize(currency_type)));
+
    foreach (key in keys)
    {
       cost =
           MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key]->value)) / exchange_rate, currency_type);
       num = stored_items[key]->amount;
       if (num != -1)
-         out+=sprintf("   %-7d %-10d %-30s %s\n", key, num, stored_items[key]->short, cost);
+         out += sprintf("   %-7d %-10d %-30s %s\n", key, num, stored_items[key]->short, cost);
       else
-         out+=sprintf("   %-7d %-10s %-30s %s\n", key, "Many", stored_items[key]->short, cost);
+         out += sprintf("   %-7d %-10s %-30s %s\n", key, "Many", stored_items[key]->short, cost);
       if (flag)
-         out+=stored_items[key]->long;
+         out += stored_items[key]->long;
    }
-   frame->set_content(out);
-   frame->set_footer_content(sprintf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n"));
-   write(frame->render());
+   vendor_frame->set_content(out);
+   vendor_frame->set_footer_content(
+       sprintf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n"));
+   write(vendor_frame->render());
    return 1;
 }
 

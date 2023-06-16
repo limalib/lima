@@ -17,6 +17,8 @@ inherit CMD;
 inherit CLASS_LIMB;
 inherit M_WIDGETS;
 
+object frame = new (FRAME,this_object());
+
 // orders our limbs a bit, if we get more weird limbs extend this function
 private
 int sortLimbs(string limb)
@@ -37,7 +39,6 @@ private
 void main(string arg)
 {
    int width = this_user()->query_screen_width();
-   object frame = new (FRAME);
    string *names;
    object body = this_body();
    mapping limbs;
@@ -70,6 +71,7 @@ void main(string arg)
 
    names = sort_by_value(keys(limbs), ( : sortLimbs($1) :));
 
+   frame->init_user();
    frame->set_title("HP");
    frame->set_header_content(
        sprintf("%14s %6-s %5s/%5-s %5-s %s", "Limb", "Type", "HP", "Max", "Armor", i_simplify() ? "" : "Bar"));
@@ -126,3 +128,9 @@ void main(string arg)
    write("Current HP: " + this_body()->query_health() + "/" + this_body()->query_max_health() + "\n");
 }
 #endif
+
+int clean_up(int instances)
+{
+   frame->clean_up();
+   ::clean_up(instances);
+}

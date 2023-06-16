@@ -64,12 +64,12 @@ inherit M_WIDGETS;
    msgs += ({arg})
 
 string *msgs = ({});
+object frame;
 
 string get_who_string(string arg)
 {
    string content = " ";
    string header = "";
-   object frame = new (FRAME);
    int first_run = 1;
    int debug;
    object *b = bodies() - ({0});
@@ -236,15 +236,29 @@ string get_who_string(string arg)
          }
       }
       first_run = 0;
+      content = rtrim(content);
       content += "\n ";
    }
    if (strlen(bad_flags))
       content += frame->warning("Bad flags: " + bad_flags);
 
-   frame->set_title(implode(explode(mud_name(), ""), " "));
-   frame->set_header_content(trim(header));
+   frame->init_user();
+   frame->set_header_content(header);
    frame->set_content(rtrim(content));
    return frame->render();
+}
+
+private
+init_frame()
+{
+   frame = new (FRAME, this_object());
+   frame->set_title(implode(explode(mud_name(), ""), " "));
+}
+
+int clean_up(int instances)
+{
+   frame->clean_up();
+   ::clean_up(instances);
 }
 
 private
@@ -253,6 +267,8 @@ void main(string arg)
    string outtie;
    if (arg == "")
       arg = 0;
+   if (!frame)
+      init_frame();
    msgs = 0;
    msgs = ({});
    outtie = get_who_string(arg);

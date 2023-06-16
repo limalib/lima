@@ -69,6 +69,7 @@ void enter_game()
    }
    modal_pop();
    this_user()->enter_game(selected, fname);
+   destruct();
 }
 
 private
@@ -365,6 +366,7 @@ void quit_game()
 {
    this_user()->save_me();
    this_user()->quit();
+   destruct();
 }
 
 void create()

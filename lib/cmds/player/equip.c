@@ -39,6 +39,7 @@ class wear_info
 }
 
 mapping short_names = DAMAGE_D->query_short_names();
+object frame = new (FRAME,this_object());
 
 string abbreviate(string s)
 {
@@ -51,7 +52,6 @@ void main(string arg)
    int width = this_user()->query_screen_width() - 7;
    object *weapons = ({});
    object *armors = ({});
-   object frame = new (FRAME);
    object body = this_body();
    int nothing_worn = 1;
    int nothing_wielded = 1;
@@ -87,6 +87,7 @@ void main(string arg)
    {
       string *props = ({});
       string content = "";
+      frame->init_user();
       frame->set_title("Weapons");
       frame->set_header_content(
           sprintf("%-24s  %-7s  %-5s %-11s   %s", "Weapon", "WC", "Dura", "Damage Type", "Properties"));
@@ -112,7 +113,6 @@ void main(string arg)
    if (sizeof(armors))
    {
       string content = "";
-      frame = new (FRAME);
       frame->set_title("Armours");
       frame->set_header_content(sprintf("%-25s %-21s  %-3s  %-5s  %s", "Item", "Worn on", "AC", "Dura", "Stat mod."));
       foreach (object a in armors)
@@ -156,7 +156,8 @@ void main(string arg)
          slots = map_array(slots, ( : capitalize($1) :));
 
          content += sprintf(" %-24s  %-21s  %-3s  %-5s  %s\n", capitalize(a->short()), format_list(slots),
-                            "" + (a->query_armor_class() || "-"), a->query_armor_class() ? "" + a->durability_percent() + "%" : "-",
+                            "" + (a->query_armor_class() || "-"),
+                            a->query_armor_class() ? "" + a->durability_percent() + "%" : "-",
                             (a->query_stat_bonus() ? capitalize(a->query_stat_bonus()) + " " +
                                                          (a->query_stat_mod() >= 0 ? "+" : "") + a->query_stat_mod()
                              : a->stat_mods_string(1) ? a->stat_mods_string(1)
@@ -173,4 +174,10 @@ void main(string arg)
       printf("\n\n(You are wearing nothing)\n");
    else if (nothing_wielded)
       printf("\n\n(You are wielding nothing)\n");
+}
+
+int clean_up(int instances)
+{
+   frame->clean_up();
+   ::clean_up(instances);
 }
