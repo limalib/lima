@@ -446,7 +446,7 @@ int query_items(string item, int flag)
    {
       foreach (int key in keys(stored_items))
       {
-         if (member_array(item, stored_items[key]->ids) != -1)
+         if (member_array(item, stored_items[key]->ids) != -1 || strsrch(stored_items[key]->short, item) != -1)
          {
             keys += ({key});
          }
@@ -477,8 +477,8 @@ int query_items(string item, int flag)
 
    item_lng += 3;
 
-   vendor_frame->set_header_content(sprintf("%|-7s%|-13s %-" + item_lng + "s %" + cost_lng + "s\n", " List #",
-                                            "Amount", "Name/id", capitalize(currency_type)));
+   vendor_frame->set_header_content(sprintf("%|-7s%|-13s %-" + item_lng + "s %" + cost_lng + "s\n", " List #", "Amount",
+                                            "Name/id", capitalize(currency_type)));
 
    foreach (int key in keys)
    {
@@ -487,8 +487,8 @@ int query_items(string item, int flag)
          out +=
              sprintf("   %-7d %-10d %-" + item_lng + "s %" + cost_lng + "s\n", key, num, item_names[i], cost_names[i]);
       else
-         out += sprintf(
-             "   %-7d %-10s %-" + item_lng + "s %" + cost_lng + "s\n", key, "Many", item_names[i], cost_names[i]);
+         out += sprintf("   %-7d %-10s %-" + item_lng + "s %" + cost_lng + "s\n", key, "Many", item_names[i],
+                        cost_names[i]);
       if (flag)
          out += stored_items[key]->long;
       i++;
