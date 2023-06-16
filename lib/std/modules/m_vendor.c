@@ -471,8 +471,8 @@ int query_items(string item, int flag)
          cost_lng = strlen(cost_names[ < 1]);
 
       item_names += ({stored_items[key]->short});
-      if (item_lng < strlen(cost_names[ < 1]))
-         item_lng = strlen(cost_names[ < 1]);
+      if (item_lng < strlen(item_names[ < 1]))
+         item_lng = strlen(item_names[ < 1]);
    }
 
    item_lng += 3;
