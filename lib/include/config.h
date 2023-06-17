@@ -26,7 +26,6 @@
  */
 #include "combat_modules.h"
 
-
 /*************************************************************************
  ** 									                                                  **
  **  Options which affect gameplay.					                            **
@@ -35,14 +34,14 @@
 
 /* The players start room.
  * This is the default for where players start when they log in. */
-#define START		"/domains/std/Wizroom"
+#define START "/domains/std/Wizroom"
 
 /* NOTE: if you define this, you have to modify the lib to save the correct
  * variables.*/
 #define EVERYTHING_SAVES
 
 /* The default level of light for a room. */
-#define DEFAULT_LIGHT_LEVEL	1
+#define DEFAULT_LIGHT_LEVEL 1
 
 /* Players start where they log off */
 #define PLAYERS_START_WHERE_THEY_QUIT
@@ -70,17 +69,23 @@
  * which body slots you want to support.*/
 #undef USE_BODYSLOTS
 
-/* Levelling up, how does that happen.*/
+/* Levelling up, how does that happen.
+**  define AUTO_LEVEL to level up automatically.
+**  define TRAIN_FOR_LEVEL to halt levelling when next one is reached
+**  define XP_FACTOR to suit for appetite for speed (default 250)
+**  define CAN_LOSE_LEVELS if people can lose experience that levels them down
+*/
 #define AUTO_LEVEL
 #undef TRAIN_FOR_LEVEL
 #define XP_FACTOR 250
+#define CAN_LOSE_LEVELS
 
 /* Size or Mass?
  * One or the other of these should be defined, but not both.  They should
  * do essentially the same thing. */
 #undef USE_SIZE
 #ifndef USE_SIZE
-# define USE_MASS
+#define USE_MASS
 #endif
 
 /* If you want weight to be calculated in metric (kilo) rather than imperial (lbs)
@@ -102,9 +107,7 @@
  * is simply an aid for players to measure progress against (setting it to
  * the maximum would mean that players wouldn't really ever budge anywhere).
  */
-#define EVALUATION_SKILL_LEVEL	50000
-
-
+#define EVALUATION_SKILL_LEVEL 50000
 
 /*************************************************************************
  ** 									                                                  **
@@ -144,10 +147,8 @@
  * last part of a say conversation.  */
 #define SAY_HISTORY_IN_ROOMS
 
-
 /* Define the message that playes see when they run into an error. */
-#define BUG_MSG \
-"You have just encountered a bug.  Please use the bug command to report it.\n"
+#define BUG_MSG "You have just encountered a bug.  Please use the bug command to report it.\n"
 
 /*************************************************************************
  **                                                   									**
@@ -157,7 +158,7 @@
 
 /* Define the character which allows you to call up previous command history.
  * ! will give you problems since it's used as input escape. */
-#define HISTORY_CHAR		'%'
+#define HISTORY_CHAR '%'
 
 /* Define this if players are allowed to have a plan as well as wizards. */
 #define EVERYONE_HAS_A_PLAN
@@ -168,19 +169,18 @@
 
 /* These defines are the maximum number of seconds to wait at their respective
  * prompts. */
-#define LOGIN_NAME_WAIT		300
-#define LOGIN_PASSWORD_WAIT	180
+#define LOGIN_NAME_WAIT 300
+#define LOGIN_PASSWORD_WAIT 180
 
 /* Disallow new character creation */
 #undef NO_NEW_PLAYERS
 
 /* Define this next one to limit how many aliases a person can have. */
-#undef MAX_NUMBER_OF_ALIASES	30
+#undef MAX_NUMBER_OF_ALIASES 30
 
 /* Define the max number of entries in the channel history (the /last command)
  * This will also be used in say and tell histories */
-#define CHANNEL_HISTORY_SIZE	20
-
+#define CHANNEL_HISTORY_SIZE 20
 
 /*************************************************************************
  ** 									                                                  **
@@ -192,7 +192,7 @@
 #undef HANDLE_MANY_WIZARDS
 
 /* Define where your wizards start in the game by default. */
-#define WIZARD_START		"/domains/std/Wizroom"
+#define WIZARD_START "/domains/std/Wizroom"
 
 /* Auto wiz means guest wizard only.  You still have to use the admtool
  * command to make the person a full wizard w/ a directory. */
@@ -204,7 +204,6 @@
 
 /* Allow wizards to see hidden exits? */
 #define WIZARDS_SEE_HIDDEN_EXITS
-
 
 /*************************************************************************
  ** 									                                                  **
@@ -233,16 +232,16 @@
 #define MAX_FILE_SIZE 1000000
 
 /* The status of your game.*/
-#define lib_status()		"mudlib development"
+#define lib_status() "mudlib development"
 
 /* What's the IP of your game?*/
-#define __HOST__		"localhost"
+#define __HOST__ "localhost"
 
 /* The administrator(s)' email address(es).
  * NOTE: This is required to be changed in order to have a working
  * I3 system. Must be changed for anything to work!
  */
-#define ADMIN_EMAIL		"tsath@lima-rebean.themud.org"
+#define ADMIN_EMAIL "tsath@lima-rebean.themud.org"
 
 /* If this is undefined, anonymous ftp is allowed - undef it to prevent.
   Anon ftp users are limited to /ftp/pub.*/
@@ -271,23 +270,23 @@
 
 /* Where do you want your wizard's shell files to save? */
 #ifdef HANDLE_MANY_WIZARDS
-#define WSHELL_PATH(x)		sprintf("/data/wshells/%c/%s",x[0],x)
+#define WSHELL_PATH(x) sprintf("/data/wshells/%c/%s", x[0], x)
 #else
-#define WSHELL_PATH(x)		sprintf("/data/wshells/%s",x)
+#define WSHELL_PATH(x) sprintf("/data/wshells/%s", x)
 #endif
 
 /* Define the location of wizards home directories. */
-#define WIZ_DIR			"/wiz"
+#define WIZ_DIR "/wiz"
 
 /* Define this if you want expanded wizard directories (i.e. /wiz/f/foo) */
 #undef EXPANDED_WIZ_DIR
 
 /* Any files listed in this file will be loaded when the game starts. */
-#define PRELOAD_FILE		"/data/config/preload"
+#define PRELOAD_FILE "/data/config/preload"
 
 /* It's probably not a good idea to change these. */
-#define LINK_PATH(x)		sprintf("/data/links/%c/%s",x[0],x)
-#define USER_PATH(x)		sprintf("/data/players/%c/%s",x[0],x)
-#define PSHELL_PATH(x)		sprintf("/data/pshells/%c/%s",x[0],x)
+#define LINK_PATH(x) sprintf("/data/links/%c/%s", x[0], x)
+#define USER_PATH(x) sprintf("/data/players/%c/%s", x[0], x)
+#define PSHELL_PATH(x) sprintf("/data/pshells/%c/%s", x[0], x)
 
 #endif __CONFIG_H__

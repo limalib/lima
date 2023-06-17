@@ -87,7 +87,11 @@ void remove_experience(int x)
 {
    int old_level, min_xp, old_xp;
    old_level = query_level();
+#ifdef CAN_LOSE_LEVELS
+   min_xp = 0;
+#elif
    min_xp = query_xp_for_level(old_level);
+#endif
    old_xp = experience;
 
    experience -= x;
@@ -96,6 +100,16 @@ void remove_experience(int x)
 
    if ((old_xp - experience) > 0)
       tell(this_object(), "%^RED%^You lost " + (old_xp - experience) + " xp.%^RESET%^\n");
+
+#ifdef CAN_LOSE_LEVELS
+   level = query_level_for_xp();
+   if (level != old_level)
+   {
+      tell(this_object(), "\n>>>>> %^B_RED%^LEVEL LOST!%^RESET%^ You're now just level " + level + "! <<<<<\n");
+      do_game_command("pout");
+   }
+#endif
+
    if (this_object()->query_link())
       save_me();
 }
