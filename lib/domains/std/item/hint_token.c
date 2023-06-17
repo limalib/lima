@@ -45,13 +45,12 @@ string get_extra_long()
 void mudlib_setup()
 {
    ::mudlib_setup();
-   set_id("hint wand", "wand");
-   set_proper_name("a hint wand");
-   set_in_room_desc("An ivory hinting wand");
+   set_id("hint token", "token");
+   set_proper_name("a hint token");
    set_weight(0.01);
-   set_long("This foot long ivory wand will provide hints whereever you go. The wand will "
-            "magically disappear if you drop it. The wand will automatically give you hints "
-            "as you explore the world.\n\nYou can use 'hints on' to get a new one should you "
+   set_long("This small hint token will provide hints whereever you go. The token will "
+            "disappear if you drop it. The token will automatically give you hints "
+            "as you explore.\n\nYou can use 'hints on' to get a new one should you "
             "lose this one.\n");
    this_body()->add_hook("move", ( : hook_func:));
    add_hook("move", ( : dropped:));

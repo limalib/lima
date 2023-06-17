@@ -28,15 +28,15 @@ void main(string arg)
   if (arg == "on")
   {
     this_user()->query_shell_ob()->set_variable("hints", 1);
-    new ("/domains/std/item/hint_wand")->move(this_body());
-    out("Turning hints on - you received a hint wand.\n");
+    new ("/domains/std/item/hint_token")->move(this_body());
+    out("Turning hints on - you received a hint token.\n");
   }
   else if (arg == "off")
   {
     this_user()->query_shell_ob()->unset_variable("hints");
-    if (present("hint wand", this_body()))
+    if (present("hint token", this_body()))
     {
-      this_body()->do_game_command("drop wand");
+      this_body()->do_game_command("drop hint token");
     }
     out("Turning hints off.\n");
   }
