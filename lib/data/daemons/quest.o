@@ -1,2 +1,3 @@
-#mudos.py
-quests (["pirate:secretPsg":({"/domains/std/objects/dock_wall",10,0,0,}),"pirate:foundCave":({"/domains/std/rooms/beach/Sandy_Beach",10,0,0,}),"pirate":({"/domains/std/objects/sand_with_treasure",20,0,"Congratulations! You completed the sample Pirate quest.",}),])
+#/daemons/quest_d.c
+quests (["std":(["pirate:secretPsg":({"/domains/std/objects/dock_wall",5,0,0,}),"pirate:treasure":({"/domains/std/objects/sand_with_treasure",10,0,"Congratulations! You completed the sample Pirate quest.",}),"pirate:foundCave":({"/domains/std/rooms/beach/Sandy_Beach",10,0,0,}),]),])
+quest_names ([])
