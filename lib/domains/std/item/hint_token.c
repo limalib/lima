@@ -13,7 +13,7 @@ void hook_func()
 {
    object *items;
    string *hints = ({});
-   items = all_inventory(environment(environment(this_object())));
+   items = all_inventory(environment(environment(this_object())))+({environment(environment(this_object()))});
    foreach (object item in items)
    {
       hints += ({punctuate(item->query_hint(environment()->query_level()))});
