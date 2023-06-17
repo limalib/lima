@@ -16,7 +16,7 @@ void hook_func()
    items = all_inventory(environment(environment(this_object())));
    foreach (object item in items)
    {
-      hints += ({punctuate(item->query_hint())});
+      hints += ({punctuate(item->query_hint(environment()->query_level()))});
    }
    hints = filter_array(hints, ( : $1 && strlen($1) > 1 :));
    if (sizeof(hints))
