@@ -119,6 +119,11 @@ mixed ob_state()
    return internal_short;
 }
 
+void names_restore()
+{
+    resync();
+}
+
 //: FUNCTION short
 // Return the 'short' description of a object, which is the name by which
 // it should be refered to

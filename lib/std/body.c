@@ -133,6 +133,7 @@ nomask void init_stuff()
 {
    foreach (object inv in all_inventory())
    {
+      inv->restore_to_game();
 #ifdef WIELD_SINGLE
       if (inv->test_flag(F_WIELDED))
          do_wield(inv);
