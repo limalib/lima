@@ -97,7 +97,6 @@ void restore_to_game()
 {
 #ifdef EVERYTHING_SAVES
    names_restore();
-   TBUG("restore to game"+this_object());
 #endif
 }
 
