@@ -70,15 +70,10 @@
  * which body slots you want to support.*/
 #undef USE_BODYSLOTS
 
-/* Parties support */
-#define USE_PARTIES
-
-/* Use a simple experience scheme for players. */
-#undef USE_SIMPLE_EXP
-
-/* Monster race support */
-#undef USE_MON_RACES
-
+/* Levelling up, how does that happen.*/
+#define AUTO_LEVEL
+#undef TRAIN_FOR_LEVEL
+#define XP_FACTOR 250
 
 /* Size or Mass?
  * One or the other of these should be defined, but not both.  They should

@@ -90,7 +90,7 @@ void main(string arg)
    content =
        sprintf("%s  (%s) - Level %d\n", name, wizardp(body->query_link()) ? "Wizard" : "Mortal", body->query_level());
 
-   content += green_bar(xp - body->xp_for_level(body->query_level()),
+   content += green_bar(xp - body->query_xp_for_level(body->query_level()),
                         body->query_next_xp() - body->query_xp_for_level(body->query_level()), width - 2) +
               "\n";
    if (body->query_next_xp() - body->query_experience() > 0)

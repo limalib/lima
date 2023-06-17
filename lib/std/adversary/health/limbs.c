@@ -267,6 +267,11 @@ int update_body_style(string bstyle)
    return 1;
 }
 
+string query_body_style()
+{
+   return body_style;
+}
+
 int is_vital_limb(string limb)
 {
    return ((class limb)health[limb])->flags & LIMB_VITAL;

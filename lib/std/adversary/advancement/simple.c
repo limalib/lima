@@ -1,33 +1,55 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-#define XP_FACTOR 250
+#define AUTO_LEVEL
+#undef TRAIN_FOR_LEVEL
 
 void save_me();
+varargs int query_level_for_xp(int xp);
+int query_xp_for_level(int lev);
+string query_body_style();
+void update_body_style(string);
+void do_game_command(string str);
 
 private
-int level = 1;
+int level;
 private
 int experience = 0;
 private
 int xp_modifier;
 private
 nosave int guild_xp_buff;
+#ifdef USE_KARMA
+int karma = 100; // Karma goes from -1000 to 1000.
+#endif
 
 void set_level(int x)
 {
+#ifdef TRAIN_FOR_LEVEL
    level = x;
+#endif
+#ifdef AUTO_LEVEL
+   experience = query_xp_for_level(x);
+   level = x;
+   // Refresh the body with new abilities after changing level.
+   update_body_style(query_body_style());
+#endif
 }
 
 int query_level()
 {
-   return level;
+#ifdef AUTO_LEVEL
+   level = query_level_for_xp();
+#endif
+   return level == 0 ? 1 : level;
 }
 
+#ifdef TRAIN_FOR_LEVEL
 void raise_level()
 {
    set_level(query_level() + 1);
    write("Congratulations! You gained a level!\n");
 }
+#endif
 
 int query_experience()
 {
@@ -65,7 +87,7 @@ void remove_experience(int x)
 {
    int old_level, min_xp, old_xp;
    old_level = query_level();
-   min_xp = 0;
+   min_xp = query_xp_for_level(old_level);
    old_xp = experience;
 
    experience -= x;
@@ -80,12 +102,20 @@ void remove_experience(int x)
 
 void add_experience(int x)
 {
-   int old_level, new_level;
+   int old_level;
    old_level = query_level();
    //   TBUG("Adding XP to" + this_object() + ": " + x + " / Link: " + this_object()->query_link());
    experience += x;
-
    tell(this_object(), "%^YELLOW%^You gained " + x + " xp.%^RESET%^\n");
+
+#ifdef AUTO_LEVEL
+   level = query_level_for_xp();
+   if (level != old_level)
+   {
+      tell(this_object(), "\n>>>>> %^B_GREEN%^LEVEL UP!%^RESET%^ You're now level " + level + "! <<<<<\n");
+      do_game_command("flex");
+   }
+#endif
 
    if (this_object()->query_link())
       save_me();
@@ -158,7 +188,7 @@ int query_next_xp()
    return query_xp_for_level(query_level() + 1);
 }
 
-int query_level_for_xp(int xp)
+varargs int query_level_for_xp(int xp)
 {
    if (!xp)
       xp = experience;
@@ -168,4 +198,35 @@ int query_level_for_xp(int xp)
 int query_could_be_level()
 {
    return (this_object()->is_body() ? query_level_for_xp(experience) : query_level());
+}
+
+//: FUNCTION query_karma
+// int query_karma()
+// Returns the raw karma between -1000 and 1000.
+int query_karma()
+{
+   return CLAMP(karma, -1000, 1000);
+}
+
+void set_karma(int k)
+{
+   karma = k;
+}
+
+//: FUNCTION modify_karma
+// int modify_karma(int modifier)
+// Modifies karma with a modifer from -5 to 5.
+// The closer to 0 the more impact the karma modification will have.
+// This also means that the more good or evil you are, the harder
+// it will become to change it.
+// Returns the new karma. Karma is between -1000 and 1000.
+int modify_karma(int modifier)
+{
+   float karma_mod = 0;
+   modifier = CLAMP(modifier, -5, 5);
+   karma_mod = modifier * ((1100 / (200.0 + abs(karma))));
+   karma = karma + karma_mod;
+
+   karma = CLAMP(karma, -1000, 1000);
+   return karma;
 }
