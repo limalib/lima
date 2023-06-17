@@ -120,6 +120,7 @@ void main(string arg)
 
 int clean_up(int instances)
 {
-   frame->clean_up();
+   if (frame)
+      frame->clean_up();
    ::clean_up(instances);
 }
