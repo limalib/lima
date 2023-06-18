@@ -53,6 +53,7 @@ string refer_to_object(object ob)
 
 mixed try_to_acquire(object ob)
 {
+   string out;
    /* for things that can be used in certain conditions without
     * actually being in the player's inventory
     */
@@ -61,17 +62,20 @@ mixed try_to_acquire(object ob)
 
    if (environment(ob) == this_body())
       return 1;
-   write("(Taking " + ob->the_short());
+   out = "(Taking " + trim(ob->the_short());
    if (!environment(ob))
    {
-      write(" first)\n");
+      out += " first).\n";
+      write(out);
       write("What a quaint idea.\n");
       return 0;
    }
 
    if (environment(ob) != environment(this_body()))
-      write(" from " + environment(ob)->the_short());
-   write(" first)\n");
+      out += " from " + environment(ob)->the_short() + " first).";
+   else
+      out += " first)";
+   write(out);
    this_body()->do_game_command("get " + refer_to_object(ob));
    return environment(ob) == this_body();
 }
