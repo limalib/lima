@@ -307,7 +307,8 @@ void check_anybody_here()
 {
    if (listeners())
    {
-      tag = call_out("room_chat", chat_period, chat_msg);
+      if (find_call_out("room_chat") == -1)
+         tag = call_out("room_chat", chat_period, chat_msg);
    }
    else
    {
@@ -337,7 +338,7 @@ void departure(object who)
 
 void arrival(object who)
 {
-   if (!listeners())
+   if (!listeners() && find_call_out("room_chat") == -1)
       tag = call_out("room_chat", chat_period, chat_msg);
 }
 

@@ -97,7 +97,6 @@ void add_to_queue(string where)
 {
    if (member_array(where, queue) != -1)
    {
-      error("Trying to call elevator to destination '" + where + "' that is unknown.");
       return;
    }
    queue += ({where});

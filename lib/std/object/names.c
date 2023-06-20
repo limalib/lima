@@ -129,8 +129,8 @@ void names_restore()
 // it should be refered to
 string short()
 {
-   if (!is_visible())
-      return invis_name();
+   if (!this_object()->is_visible())
+      return this_object()->invis_name();
    return evaluate(internal_short);
 }
 

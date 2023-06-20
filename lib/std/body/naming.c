@@ -106,6 +106,7 @@ string query_formatted_desc(int num_chars)
 
 string adjust_name(string name)
 {
+   if (!name) return "Nothing";
    if (invis_name == capitalize(name) || !invis_name)
       invis_name = "Someone";
    if (!is_visible())
