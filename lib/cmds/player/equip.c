@@ -84,12 +84,12 @@ void main(string arg)
 
    weapons = filter_array(weapons, ( : $1:));
    armors = filter_array(armors, ( : $1:));
+   frame->init_user();
 
    if (sizeof(weapons))
    {
       string *props = ({});
       string content = "";
-      frame->init_user();
       frame->set_title("Weapons");
       frame->set_header_content(
           sprintf("%-24s  %-7s  %-5s %-11s   %s", "Weapon", "WC", "Dura", "Damage Type", "Properties"));

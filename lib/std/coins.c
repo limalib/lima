@@ -17,7 +17,6 @@ string long_descr()
    foreach (string currency in keys(coins))
    {
       mapping denom = MONEY_D->calculate_denominations(coins[currency], currency);
-      TBUG(denom);
       foreach (string denom_name, int value in denom)
       {
          descr += ({MONEY_D->denomination_to_string(value, denom_name)});
@@ -105,10 +104,7 @@ void merge_coins(float amount, string type)
 
 void setup(float amount, string type)
 {
-   TBUG(amount);
-
    coins[type] = amount;
-   TBUG(coins);
    set_id("coins", type, "money", "coin", "pile", "pile of coins");
    add_adj(type);
    set_in_room_desc("A pile of coins");
