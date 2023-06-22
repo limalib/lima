@@ -105,7 +105,16 @@ mixed direct_get_obj(object ob)
    if (this_object() == this_body())
       return "#You make an advance on yourself.\n";
    if (environment(this_object()) != environment(this_body()))
+   {
+      // Experimental feature to allow people to take things from containers without having
+      // to specify "take torch from test", but this will allow "take torch" to work.
+      if (environment(this_object())->is_container())
+      {
+         write("(From " + (environment(this_object())->the_short()) + ")");
+         return 1;
+      }
       return "#You cannot get that.";
+   }
    if (!default_object_checks())
       return 0;
 
