@@ -1,6 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 #include <move.h>
+#include <verbs.h>
 
 inherit VERB_OB;
 
@@ -115,5 +116,6 @@ void do_drop_wrd_str(string amount_str, string type)
 
 void create()
 {
+   clear_flag(NEED_TO_SEE);
    add_rules(({"OBS", "WRD STR"}), ({"put down"}));
 }

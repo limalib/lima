@@ -27,9 +27,12 @@ void main(string arg)
 
   if (arg == "on")
   {
+    object tmp;
     this_user()->query_shell_ob()->set_variable("hints", 1);
-    new ("/domains/std/item/hint_token")->move(this_body());
+    tmp= new ("/domains/std/item/hint_token");
+    tmp->move(this_body());
     out("Turning hints on - you received a hint token.\n");
+    tmp->hook_func();
   }
   else if (arg == "off")
   {

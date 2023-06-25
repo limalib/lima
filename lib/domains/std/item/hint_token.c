@@ -6,20 +6,34 @@ inherit M_GRAMMAR;
 
 void show_hints(string *hints)
 {
-   tell(environment(this_object()), "%^HINTS%^Hints%^RESET%^:\n  " + implode(hints, "\n  ") + "\n");
+   int w = this_user()->query_screen_width() - 5;
+   for (int i = 0; i < sizeof(hints); i++)
+   {
+      hints[i] = XTERM256_D->xterm256_wrap(hints[i], w, 5);
+   }
+   tell(environment(this_object()), "%^HINTS%^Hints%^RESET%^:\n   - " + implode(hints, "\n   - ") + "\n");
 }
 
 void hook_func()
 {
    object *items;
    string *hints = ({});
-   items = all_inventory(environment(environment(this_object())))+({environment(environment(this_object()))});
+   if (!environment() || !environment(environment()))
+      return;
+   items = all_inventory(environment(environment(this_object()))) + ({environment(environment(this_object()))});
    foreach (object item in items)
    {
-      hints += ({punctuate(item->query_hint(environment()->query_level()))});
+      mixed hint = item->query_hint(environment()->query_level());
+      if (arrayp(hint))
+      {
+         map(hint, ( : punctuate:));
+         hints += hint;
+      }
+      else
+         hints += ({punctuate(hint)});
    }
    hints = filter_array(hints, ( : $1 && strlen($1) > 1 :));
-   if (sizeof(hints))
+   if (sizeof(hints) && find_call_out("show_hints") == -1)
       call_out("show_hints", 0, hints);
 }
 
