@@ -31,6 +31,7 @@ mapping info;
 #define is_dir(x) (size(x) == -2)
 
 // We don't do this for everyone to save LOTS of processing.
+
 private
 string make_ansi_string(string file, string path)
 {
@@ -38,8 +39,10 @@ string make_ansi_string(string file, string path)
 
    if (is_dir(fname))
       return "%^LS_DIR%^" + file + "%^RESET%^/";
-   if (info[fname] && sizeof(info[fname]) == 3 && intp(info[fname][2]) && info[fname][2])
+   if (info[fname] && sizeof(info[fname]) == 4 && intp(info[fname][2]) && info[fname][2])
+   {
       return "%^LS_LOADED%^" + file + "%^RESET%^*";
+   }
    return "%^LS_DEFAULT%^" + file + "%^RESET%^";
 }
 
