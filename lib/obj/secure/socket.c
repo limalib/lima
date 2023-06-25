@@ -9,6 +9,8 @@
 ** 09-Feb-95. Deathblade. Created.
 ** 05-Jan-96. Cowl. Added STREAM BINARY connect and listen styles
 ** 12-Jul-96. Rust. Added write callback.
+** 25-Jun-23. Tsath. changed stat_me to return string. The rest of the mudlib
+**            expects this, who knows why it returned int.
 */
 
 #include <driver/socket_err.h>
@@ -42,45 +44,46 @@ void set_write_callback(function f)
    write_func = f;
 }
 
-int stat_me()
+string stat_me()
 {
+   string out="";
    switch (style)
    {
    case SKT_STYLE_LISTEN:
-      printf("%O: listening at %O\n", this_object(), addr);
-      printf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out+=sprintf("%O: listening at %O\n", this_object(), addr);
+      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_CONNECT:
-      printf("%O: connected to %O\n", this_object(), socket_address(fdOwned));
-      printf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out+=sprintf("%O: connected to %O\n", this_object(), socket_address(fdOwned));
+      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_UDP:
-      printf("%O: UDP at %O\n", this_object(), socket_address(fdOwned));
-      printf("    read_func=%O\n", read_func);
+      out+=sprintf("%O: UDP at %O\n", this_object(), socket_address(fdOwned));
+      out+=sprintf("    read_func=%O\n", read_func);
       break;
 
    case SKT_STYLE_LISTEN_M:
-      printf("%O: (mud) listening at %O\n", this_object(), addr);
-      printf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out+=sprintf("%O: (mud) listening at %O\n", this_object(), addr);
+      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_CONNECT_M:
-      printf("%O: (mud) connected to %O\n", this_object(), socket_address(fdOwned));
-      printf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out+=sprintf("%O: (mud) connected to %O\n", this_object(), socket_address(fdOwned));
+      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_INT_ACQUIRE:
-      printf("%O: accepted connection from %s\n", this_object(), socket_address(fdOwned));
-      printf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out+=sprintf("%O: accepted connection from %s\n", this_object(), socket_address(fdOwned));
+      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
    }
 
    if (sizeof(write_queue))
-      printf("queue: %O\n", write_queue);
+      out+=sprintf("queue: %O\n", write_queue);
 
-   return 1;
+   return out;
 }
 
 // ### socket_connect() doesn't take funcptr yet...
