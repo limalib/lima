@@ -8,13 +8,13 @@
  * essential considering the nature of M_READABLE's entries. --Tigran
  */
 inherit OBJ;
-inherit M_OPENABLE;
 inherit M_READABLE;
 inherit M_GETTABLE;
 
 void close_hook_func();
 void open_hook_func();
 string extra_long_hook_func();
+string synonym_index();
 
 string current_page;
 string title;
@@ -111,6 +111,7 @@ mixed direct_read_obj(object ob)
 
    if (o && o != this_body())
       return sprintf("#Try asking %s nicely if you can read it.\n", o->query_name());
+   current_page = page_first();
    return 1;
 }
 
@@ -287,36 +288,35 @@ int is_book()
    return 1;
 }
 
-void open_hook_func()
-{
-   current_page = page_first();
-}
-
-void close_hook_func()
-{
-   current_page = 0;
-}
-
 string extra_long_hook_func()
 {
    string ret = "";
    string auth = query_author();
    string tit = query_title();
-   if (query_closed())
+   if (!current_page)
+      current_page = page_first();
+   if (title)
    {
-      if (title)
-      {
-         if (auth)
-            ret = sprintf("'%s' written by %s.  ", tit, auth);
-         else
-            ret = tit;
-      }
+      if (auth)
+         ret = sprintf("'%s' written by %s.  ", tit, auth);
+      else
+         ret = sprintf("The title of the book is '%s'. ", tit);
    }
-   else
-   {
-      ret = sprintf("It is turned to a page marked '%s'.  ", current_page);
-   }
+   ret = sprintf("It is turned to a page marked '%s'.  ", current_page);
+   if (synonym_index())
+      ret += "\n" + synonym_index();
+
    return ret;
+}
+
+mixed direct_open_obj()
+{
+   return "A trivial matter. It's open.";
+}
+
+mixed direct_close_obj()
+{
+   return "A trivial matter. Consider it closed.";
 }
 
 string a_short()

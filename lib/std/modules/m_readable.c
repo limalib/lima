@@ -9,6 +9,7 @@ mapping entries;
 mapping synonyms;
 private
 string read_text;
+string synonym_index();
 
 /* Parser interaction */
 mixed direct_read_obj(object ob)
@@ -85,10 +86,12 @@ string read_entry(string entry)
 {
    string filename;
    string entry_contents = entries[entry];
+   if (entry == "index")
+      return synonym_index();
    if (!entry_contents)
       entry_contents = entries[synonyms[entry]];
    if (!entry_contents)
-      return ("Nothing there\n");
+      return ("Nothing there.\n");
    if (functionp(entry_contents))
    {
       this_body()->simple_action("$N $vread the $o.", this_object());
@@ -197,6 +200,21 @@ string *list_entries()
 mapping dump_entries()
 {
    return entries;
+}
+
+//: FUNCTION synonym_index
+// Returns a text containing an index of page numbers and synonyms
+string synonym_index()
+{
+   string ret = "Book Index:\n";
+   if (!mapp(synonyms) || !sizeof(keys(synonyms)))
+      return 0;
+
+   foreach (string syn, string entry in synonyms)
+   {
+      ret += "   [" + sprintf("%2.2s", entry) + "] - " + syn + "\n";
+   }
+   return ret + "\n('read " + choice(keys(synonyms)) + " in book')\n";
 }
 
 //: FUNCTION set_synonyms
