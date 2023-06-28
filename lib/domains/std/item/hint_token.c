@@ -28,7 +28,8 @@ void hint_from(mixed something)
    {
       show_hints(something->query_hint(environment()->query_level()));
    }
-   show_hints(something);
+   else
+      show_hints(something);
 }
 
 void hook_func()
