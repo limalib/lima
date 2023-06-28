@@ -4,9 +4,11 @@ inherit OBJ;
 inherit M_GETTABLE;
 inherit M_GRAMMAR;
 
-void show_hints(string *hints)
+void show_hints(mixed hints)
 {
    int w = this_user()->query_screen_width() - 5;
+   if (stringp(hints))
+      hints = ({hints});
    for (int i = 0; i < sizeof(hints); i++)
    {
       hints[i] = XTERM256_D->xterm256_wrap(hints[i], w, 5);
@@ -23,11 +25,10 @@ object *find_hint_items()
 void hint_from(mixed something)
 {
    if (objectp(something))
-      show_hints(({something->query_hint(environment()->query_level())}));
-   if (arrayp(something) && stringp(something[0]))
-      show_hints(something);
-   if (stringp(something))
-      show_hints(({something}));
+   {
+      show_hints(something->query_hint(environment()->query_level()));
+   }
+   show_hints(something);
 }
 
 void hook_func()
