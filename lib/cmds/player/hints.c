@@ -17,12 +17,11 @@ void main(string arg)
    {
       string hintstate;
       if (get_user_variable("hints") == 1)
-         hintstate = "on";
+         hintstate = "<010>on<res>";
       else
-         hintstate = "off";
+         hintstate = "<009>off<res>";
 
-      out("Hints is " + hintstate + ".\n");
-      return;
+      out("Hints are " + hintstate + ".\n");
    }
 
    if (arg == "on")
@@ -43,7 +42,7 @@ void main(string arg)
       }
       out("Turning hints off.\n");
    }
-   else if (present(arg, this_body()))
+   else if (arg && present(arg, this_body()))
    {
       object tmp = present("hint_token", this_body());
       if (get_user_variable("hints") == 0)
