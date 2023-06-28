@@ -14,13 +14,29 @@ void show_hints(string *hints)
    tell(environment(this_object()), "%^HINTS%^Hints%^RESET%^:\n   - " + implode(hints, "\n   - ") + "\n");
 }
 
+object *find_hint_items()
+{
+   return all_inventory(environment(environment(this_object()))) + // Everything in the room
+          ({environment(environment(this_object()))});             // The room itself
+}
+
+void hint_from(mixed something)
+{
+   if (objectp(something))
+      show_hints(({something->query_hint(environment()->query_level())}));
+   if (arrayp(something) && stringp(something[0]))
+      show_hints(something);
+   if (stringp(something))
+      show_hints(({something}));
+}
+
 void hook_func()
 {
    object *items;
    string *hints = ({});
    if (!environment() || !environment(environment()))
       return;
-   items = all_inventory(environment(environment(this_object()))) + ({environment(environment(this_object()))});
+   items = find_hint_items();
    foreach (object item in items)
    {
       mixed hint = item->query_hint(environment()->query_level());
