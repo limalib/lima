@@ -10,6 +10,7 @@ mapping synonyms;
 private
 string read_text;
 string synonym_index();
+string *query_id();
 
 /* Parser interaction */
 mixed direct_read_obj(object ob)
@@ -206,7 +207,7 @@ mapping dump_entries()
 // Returns a text containing an index of page numbers and synonyms
 string synonym_index()
 {
-   string ret = "Book Index:\n";
+   string ret = capitalize(query_id()[0])+" Index:\n";
    if (!mapp(synonyms) || !sizeof(keys(synonyms)))
       return 0;
 
@@ -214,7 +215,7 @@ string synonym_index()
    {
       ret += "   [" + sprintf("%2.2s", entry) + "] - " + syn + "\n";
    }
-   return ret + "\n('read " + choice(keys(synonyms)) + " in book')\n";
+   return ret + "\n('read " + choice(keys(synonyms)) + " in "+query_id()[0]+"')\n";
 }
 
 //: FUNCTION set_synonyms
