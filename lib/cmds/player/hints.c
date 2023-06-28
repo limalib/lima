@@ -59,7 +59,7 @@ void main(string arg)
    {
       out("Usage:\n"
           "  hints <on/off> - to turn hints on and off\n"
-          "  hints <item> - to check for hints on a specific item near you\n");
+          "  hints <item>   - to check for hints on a specific item near you\n");
       return;
    }
 }
