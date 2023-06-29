@@ -30,7 +30,7 @@ void main(string arg)
       this_user()->query_shell_ob()->set_variable("hints", 1);
       tmp = new ("/domains/std/item/hint_token");
       tmp->move(this_body());
-      out("Turning hints on - you received a hint token.\n");
+      out("Turning hints <010>on<res> - you received a hint token.\n");
       tmp->hook_func();
    }
    else if (arg == "off")
@@ -40,7 +40,7 @@ void main(string arg)
       {
          this_body()->do_game_command("drop hint token");
       }
-      out("Turning hints off.\n");
+      out("Turning hints <009>off<res>.\n");
    }
    else if (arg && present(arg, this_body()))
    {
@@ -51,7 +51,7 @@ void main(string arg)
       tmp = present(arg, this_body());
       if (!tmp->query_hint())
       {
-         write("No hints on that item, sorry.");
+         out("No hints on that item, sorry.");
          return;
       }
       token->hint_from(tmp);

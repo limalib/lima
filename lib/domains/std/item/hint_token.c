@@ -9,7 +9,7 @@ void show_hints(mixed hints)
    int w = this_user()->query_screen_width() - 5;
    if (stringp(hints))
       hints = ({hints});
-   if (!sizeof(hints)) 
+   if (!sizeof(hints))
       return;
    for (int i = 0; i < sizeof(hints); i++)
    {
@@ -79,13 +79,14 @@ string get_extra_long()
 void mudlib_setup()
 {
    ::mudlib_setup();
-   set_id("hint token", "token","hint_token");
+   set_id("hint token", "token", "hint_token");
    set_proper_name("a hint token");
    set_weight(0.01);
    set_long("This small hint token will provide hints whereever you go. The token will "
-            "disappear if you drop it. The token will automatically give you hints "
-            "as you explore.\n\nYou can use 'hints on' to get a new one should you "
-            "lose this one.\n");
+            "disappear if you drop it. The hints may change as you level up. Using 'hints <item>' to check a specific "
+            "item you "
+            "carry for hints.\n\n"
+            "You can use 'hints on' to get a new one should you lose this one.");
    this_body()->add_hook("move", ( : hook_func:));
    add_hook("move", ( : dropped:));
 }
