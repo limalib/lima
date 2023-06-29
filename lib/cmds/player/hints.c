@@ -44,15 +44,17 @@ void main(string arg)
    }
    else if (arg && present(arg, this_body()))
    {
-      object tmp = present("hint_token", this_body());
-      if (get_user_variable("hints") == 0)
+      object tmp,token;
+      token=present("hint_token", this_body());
+      if (!token)
          main("on");
+      tmp = present(arg, this_body());
       if (!tmp->query_hint())
       {
          write("No hints on that item, sorry.");
          return;
       }
-      tmp->hint_from(present(arg, this_body()));
+      token->hint_from(tmp);
    }
    else
    {
