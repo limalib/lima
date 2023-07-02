@@ -866,17 +866,6 @@ varargs string identify(mixed a)
    return "UNKNOWN";
 }
 
-void tc(string mess)
-{
-   object crat = find_body("cratylus");
-   string sauce = base_name((previous_object() || this_object()));
-   // if(crat) tell(crat, sauce +": "+mess+"\n");
-   if (crat)
-      crat->receive_private_msg(sauce + ": " + mess, PRIVATE_MSG);
-   debug_message(sauce + ": " + mess);
-   flush_messages();
-}
-
 varargs string get_stack(int x)
 {
    int i, s;

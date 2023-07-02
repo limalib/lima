@@ -155,7 +155,6 @@ nomask varargs void userinfo_handle_logon(int state, mixed extra, string arg)
       real_name = arg;
 
       modal_func(( : userinfo_handle_logon, GOT_URL, 0 :), "Your home page address (if any): ");
-      // tc("hmm");
       break;
 
    case GOT_URL:

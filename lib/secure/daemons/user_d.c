@@ -68,6 +68,13 @@ class var_info
 void create()
 {
    set_privilege(1);
+   call_out("user_keepalive", 45);
+}
+
+private void user_keepalive()
+{
+  users()->send_telnet_nop();
+  call_out("user_keepalive", 45);
 }
 
 private

@@ -109,3 +109,8 @@ nomask void net_dead()
       remove();
    }
 }
+
+void send_telnet_nop()
+{
+  telnet_nop();
+}

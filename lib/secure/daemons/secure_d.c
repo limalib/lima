@@ -480,7 +480,6 @@ nomask string remove_domain_member(string domain, string member)
 nomask string create_wizard(string wizard)
 {
    string bad;
-   // tc("create_wizard("+identify(wizard)+")");
 
    if (!valid_name(wizard))
       bad = "invalid character name";
@@ -492,14 +491,11 @@ nomask string create_wizard(string wizard)
    // for (;;);
    if (bad)
    {
-      // tc("create_wizard("+identify(wizard)+"): "+bad);
       return bad;
    }
    wizards[wizard] = 1;
    privileges[wizard] = (["":({}), ":":({})]);
-   // tc("good");
    save_data();
-   // tc("good2");
    syslog("Created wizard " + wizard);
    return 0;
 }
