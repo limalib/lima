@@ -20,6 +20,10 @@ inherit M_DAEMON_DATA;
 
 private
 mapping lastdata = ([]);
+private
+mapping logins_from_ip = ([]);
+private
+mapping ips_for_login = ([]);
 
 nomask void register_last(string userid, string addr)
 {
@@ -35,6 +39,15 @@ nomask void register_last(string userid, string addr)
    {
       s = sprintf("%s enters the mud from %s [%s]\n", userid, addr, ctime(time()));
       LOG_D->log(LOG_LOGIN, s);
+      if (!ips_for_login[userid])
+         ips_for_login[userid] = ({});
+      if (!logins_from_ip[addr])
+         logins_from_ip[addr] = ({});
+
+      if (member_array(addr, ips_for_login[userid]) == -1)
+         ips_for_login[userid] += ({addr});
+      if (member_array(userid, logins_from_ip[addr]) == -1)
+         logins_from_ip[addr] += ({userid});
 
       if (!lastdata[userid])
       {
@@ -45,6 +58,16 @@ nomask void register_last(string userid, string addr)
       lastdata[userid] = ({time(), addr});
    }
    save_me();
+}
+
+string *logins_from_ip(string addr)
+{
+   return logins_from_ip[addr] ? logins_from_ip[addr] : ({});
+}
+
+string ips_for_login(string userid)
+{
+   return ips_for_login[userid] ? ips_for_login[userid] : ({});
 }
 
 nomask mixed *query_last(string userid)

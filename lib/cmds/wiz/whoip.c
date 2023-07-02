@@ -48,6 +48,9 @@ void main(string arg)
    object ob;
    string *n, ip, str;
    object *userlist;
+   string *users;
+   string *ips;
+   int output = 0;
 
    if (!arg)
    {
@@ -74,19 +77,23 @@ void main(string arg)
    {
       ip = query_ip_number(ob);
       userlist = filter(users(), ( : query_ip_number($1) == $2:), ip);
+      ips = LAST_LOGIN_D->ips_for_login(arg);
    }
    else if (sscanf(implode(explode(arg, "."), ""), "%d", x) == 1)
    {
       userlist = filter(users(), ( : query_ip_number($1) == $2:), arg);
+      users = LAST_LOGIN_D->logins_from_ip(arg);
    }
    else if (sscanf(implode(explode(arg, "."), ""), "%s", x) == 1)
    {
       userlist = filter(users(), ( : query_ip_name($1) == $2:), arg);
+      users = LAST_LOGIN_D->logins_from_ip(arg);
    }
    else
    {
       arg = lower_case(arg);
       userlist = filter(users(), ( : query_ip_number($1) == $2:), arg);
+      users = LAST_LOGIN_D->logins_from_ip(arg);
    }
 
    if ((x = sizeof(userlist)) > 0)
@@ -96,9 +103,31 @@ void main(string arg)
       if (str != query_ip_number(userlist[0]))
          str += " (" + query_ip_number(userlist[0]) + ")";
 
-      outf("There %s %d user%s from %s:\n", (x > 1 ? "are" : "is"), x, (x > 1 ? "s" : ""), str);
+      outf("There %s %d user%s from %s right now:\n", (x > 1 ? "are" : "is"), x, (x > 1 ? "s" : ""), str);
       outf("%-=78s", implode(n, ", ") + ".\n");
+      output = 1;
    }
-   else
-      out("Nobody is connected from that address.\n");
+
+   if ((x = sizeof(users)) > 0)
+   {
+      outf("\nThe following " + x + " users have been logged in from %s:\n", arg);
+      foreach (string u in users)
+      {
+         outf("%-=78s", u + "\n");
+      }
+      output = 1;
+   }
+
+   if ((x = sizeof(ips)) > 0)
+   {
+      outf("\nThe following "+x+" IPs have been used by %s:\n", arg);
+      foreach (string i in ips)
+      {
+         outf("%-=78s", i + "\n");
+      }
+      output = 1;
+   }
+
+   if (!output)
+      out("No login data returned based on '"+arg+"'.\n");
 }

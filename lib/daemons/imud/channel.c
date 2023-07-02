@@ -100,8 +100,6 @@ nomask void rcv_chanlist_reply(string orig_mud, string orig_user, string targ_us
    int i;
    string *added_channels = keys(message[1]) - keys(chanlist);
    string *removed_channels = keys(chanlist) - keys(message[1]);
-   // tc("orig_mud: "+orig_mud+", orig_user: "+orig_user+", targ_user: "+
-   // targ_user+", message: "+identify(message)+" ...");
 
    chanlist_id = message[0];
    chanlist = message[1];
@@ -308,7 +306,6 @@ nomask void listen_to_channel(string channel_name)
    //    if ( !check_privilege(PRIV_REQUIRED) )
    //      error("security: illegal attempt to add a listened intermud channel\n");
    //  }
-   // tc("wheew! "+channel_name);
    if (member_array(channel_name, listened_channels) == -1)
       listened_channels += ({channel_name});
 
