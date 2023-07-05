@@ -151,3 +151,14 @@ maximum byte transfer : 10000
 # Reserve an extra memory area from malloc(), to free when we run out
 # of memory.   If this value is 0, no area will be reserved.
 reserved size : 0
+
+# If you set this, the driver doesn't do any handling of runtime errors,
+# other than to turn the heartbeats of objects off.  Information about the
+# error is passed in a mapping to the error_handler() function in the master
+# object.  Whatever is returned is put in the debug.log.
+#
+# A good mudlib error handler is one of the best tools for tracking down
+# errors.  Unfortunately, you need to have one.  Check the testsuite or other
+# libs for an example.
+mudlib error handler : 1
+
