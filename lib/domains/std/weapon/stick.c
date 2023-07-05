@@ -26,3 +26,9 @@ mixed *setup_args()
 {
    return ({colour});
 }
+
+//This hints can be read by cloning the stick and doing 'hints stick'.
+string query_hint(int level)
+{
+   return "Yes, it's a stick.";
+}

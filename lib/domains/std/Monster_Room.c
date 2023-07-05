@@ -12,3 +12,8 @@ void setup()
    set_exits((["north":"Wizroom.c"]));
    set_objects((["/domains/std/guild_guard":({"sorcery"})]));
 }
+
+string *query_hint(int level)
+{
+   return ({"This room is often used to test combat system mechanics.", "Also an example of returning more hints."});
+}
