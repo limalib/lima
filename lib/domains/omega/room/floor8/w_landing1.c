@@ -5,7 +5,7 @@ void setup()
     set_area("omega_terminal", "landing_term");
     // set_weather(1);
     set_light(1);
-    set_brief("Landing Terminal");
+    set_brief("Landing Terminal West 1");
     set_long("Ship Landing for visitors and deliveries. You must speak with the coordinaotor for extended stay.");
     set_state_description("electronic_door_off", "closed");
     set_state_description("electronic_door_on", "open");

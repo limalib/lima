@@ -249,7 +249,8 @@ mapping query_planet_alt_names()
    return player_planet_names;
 }
 
-private string starsystem_name(class starsystem ss)
+private
+string starsystem_name(class starsystem ss)
 {
    string s = ss->name;
    return player_starsystem_names[s] ? player_starsystem_names[s] + " [" + s + "]" : s;
@@ -343,13 +344,15 @@ varargs void generate_starsystems()
    save_me();
 }
 
-private string coord_str(int *coords)
+private
+string coord_str(int *coords)
 {
    return "<228>[" + to_int(coords[0]) + "," + to_int(coords[1]) + "," + to_int(coords[2]) + "]<res>";
 }
 
 // Calculate the distance between two starsystems given by name.
-private int distance(string p1, string p2)
+private
+int distance(string p1, string p2)
 {
    string s1 = player_starsystem_names[p1];
    string s2 = player_starsystem_names[p2];
@@ -371,9 +374,8 @@ class starsystem *near(string p1, int lyears)
    return systems;
 }
 
-void print_near(string p1, int lyears)
+string *print_near(string p1, int lyears)
 {
-   object frame = new (FRAME);
    string out = "";
    class starsystem s = starsystems[p1] || starsystems[player_starsystem_names[p1]];
    class starsystem *systems = near(p1, lyears);
@@ -390,11 +392,8 @@ void print_near(string p1, int lyears)
                   ss->star->spectral_type, ss->star->col + ss->star->temperature_min + "-" + ss->star->temperature_max);
    }
 
-   frame->set_title("Star system details");
-   frame->set_content(out);
-   frame->set_header_content("Showing systems within <bld>" + lyears + "<res> light-year" + (lyears == 1 ? "" : "s") +
-                             ".");
-   write(frame->render());
+   return (({"Star system details",
+             "Showing systems within <bld>" + lyears + "<res> light-year" + (lyears == 1 ? "" : "s") + ".", out}));
 }
 
 class starsystem query_starsystem(string ssn)
@@ -403,7 +402,8 @@ class starsystem query_starsystem(string ssn)
    return ss;
 }
 
-private int *pcord(int *coord)
+private
+int *pcord(int *coord)
 {
    int *e1 = this_body()->query_coordinates();
    int *e2 = copy(e1);
@@ -414,7 +414,8 @@ private int *pcord(int *coord)
    return coords;
 }
 
-private mapping sized_coordinates(string system, int dist)
+private
+mapping sized_coordinates(string system, int dist)
 {
    class starsystem *systems = near(system, dist);
    mapping map_coords = ([]);
@@ -464,7 +465,8 @@ private mapping sized_coordinates(string system, int dist)
    return fit_coords;
 }
 
-private string dist_color(int min, int max, int dist)
+private
+string dist_color(int min, int max, int dist)
 {
    string *distances = ({"046", "049", "051", "045", "039", "033", "027", "021", "057", "056", "053"});
    int width = ((this_user()->query_screen_width() - 10) / 11);
@@ -478,9 +480,8 @@ private string dist_color(int min, int max, int dist)
    return distances[(to_int(floor(dist / max * 11)))];
 }
 
-void print_map(string ss, int d)
+string *print_map(string ss, int d)
 {
-   object frame = new (FRAME);
    int width = this_user()->query_screen_width();
    string *map = allocate(width / MAP_VERTICAL_COMPRESSION, repeat_string(" ", width));
    mapping scoords = sized_coordinates(ss, d);
@@ -520,12 +521,11 @@ void print_map(string ss, int d)
    }
    // TBUG("Top: " + top + " Bottom: " + bottom);
 
-   frame->set_title("Star system scan");
-   frame->set_content(replace_string(implode(map[top..bottom], "\n"), "*", "<011>*<res>"));
-   frame->set_header_content("Showing systems within <bld>" + d + "<res> light-year" + (d == 1 ? "" : "s") + ".");
-   frame->set_footer_content(dist_color(-1.0, 0, 0) + "\n" + "Close" + repeat_string(" ", width - 28) +
-                             "Far\n<011>*<res> = Your position.");
-   write(frame->render());
+   return ({"Star system scan", // Header
+            "Showing systems within <bld>" + d + "<res> light-year" + (d == 1 ? "" : "s") + ".",
+            replace_string(implode(map[top..bottom], "\n"), "*", "<011>*<res>"),
+            dist_color(-1.0, 0, 0) + "\n" + "Close" + repeat_string(" ", width - 28) +
+                "Far\n<011>*<res> = Your position."});
 }
 
 void ss_stat(string ssn)

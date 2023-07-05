@@ -9,8 +9,8 @@ void setup()
     set_long("A waiting room, more to come :).");
     set_state_description("electronic_door_off", "closed");
     set_state_description("electronic_door_on", "open");
-    set_exits(([]));
-    set_objects((["/std/elevator_call_button":({"1/waiting1",
+    set_exits((["north":"n_hall3"]));
+    set_objects((["/std/elevator_call_button":({"1/Living Quarters",
                                                 "^omega/room/elevator_center"}),
                          "/std/elevator_door":({"northwest", "^omega/room/elevator_center"}),
     ]));

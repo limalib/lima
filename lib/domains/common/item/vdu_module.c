@@ -5,13 +5,12 @@ inherit M_VALUABLE;
 string guild;
 string letter;
 
-void setup(string g)
+void mudlib_setup(string g)
 {
    if (g)
       guild = g;
    set_id("vdu module", "module");
    set_adj(guild);
-   add_save(({"guild", "letter"}));
    set_value(50);
 }
 
@@ -52,4 +51,9 @@ string query_module_name()
 mixed direct_put_obj_wrd_obj(object ob1, string wrd, object ob2)
 {
    return 1;
+}
+
+void internal_setup()
+{
+   this_object()->add_save(({"guild", "letter"}));
 }

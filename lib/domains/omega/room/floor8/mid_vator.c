@@ -5,7 +5,7 @@ void setup()
     set_area("omega_terminal", "landing_term");
     // set_weather(1);
     set_light(1);
-    set_brief("Terminal Center Elevator Room");
+    set_brief("Terminal Center Elevator");
     set_long("A waiting room with an elevator on the north west wall. $lamp");
     set_state_description("electronic_door_off", "closed");
     set_state_description("electronic_door_on", "open");

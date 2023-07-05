@@ -86,8 +86,7 @@ int cancel_ship(object owner, string ship)
       map_delete(owners, name);
    save_file = sprintf("/data/ship/%c/%s.o", name[0], replace_string(ship[1..], "/", "_"));
    TBUG(save_file);
-   unguarded(1, (
-                    : rm, save_file:));
+   unguarded(1, ( : rm, save_file:));
    save_me();
    return 1;
 }
@@ -200,16 +199,14 @@ void restore_ship_state(object ship)
 {
    string rfile;
 
-   rfile = unguarded(1, (
-                            : read_file, ship->save_to()
-                            :));
+   rfile = unguarded(1, ( : read_file, ship->save_to() :));
    if (rfile)
       ship->restore_ship(rfile);
 }
 
 mapping query_owners()
 {
-   return owners;
+   return copy(owners);
 }
 
 int docking_time(string type)
@@ -230,7 +227,7 @@ mapping update_ship_sizes()
 
       ship_sizes[ship_ob->query_ship_type()] = ship_ob->query_ship_size() || 1;
    }
-   return ship_sizes;
+   return copy(ship_sizes);
 }
 
 /*
@@ -396,6 +393,14 @@ int settle_bill(string name, int amount)
    return 0;
 }
 
+void pay_dock_ship(object body, int fee, class ship_info si, string bank)
+{
+   ACCOUNT_D->withdraw(bank, body, fee, "credit", "Docking at " + this_body()->query_location());
+   money_made += fee;
+   notify_owner(this_body(), "Docking and storage paid: " + pround(fee, 2) + " ¤.");
+   not_long_term_parked(si->name);
+}
+
 //  This function runs every BILL_CYCLE_HOURS hours in a call_out. It collects
 //  money if people are above 1 week and sends them a pager notification on what
 //  happened.
@@ -426,13 +431,13 @@ void schedule_bills()
 string stat_me()
 {
    string retstr;
-   retstr = "Ship daemon stats\n--------------------\n";
-   retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Ships owned",
+   retstr = "Ship daemon stats\n-----------------\n";
+   retstr += sprintf("%-25.25s: %-16.16s %-25.25s: %-10.10s\n", "Ships owned",
                      sizeof(flatten_array(values(SHIP_D->query_owners()))) + "", "Customers ever",
                      sizeof(keys(SHIP_D->query_bank_connections())) + "");
-   retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Money made", "¤ " + money_made, "Money lost ",
+   retstr += sprintf("%-25.25s: %-16.16s %-25.25s: %-10.10s\n", "Money made", "¤ " + money_made, "Money lost ",
                      "" + "¤ " + pround(0.0 + money_lost, 2));
-   retstr += sprintf("%-25.25s: %-10.10s %-25.25s: %-10.10s\n", "Outstanding money",
+   retstr += sprintf("%-25.25s: %-16.16s %-25.25s: %-10.10s\n", "Outstanding money",
                      "¤ " + pround(0.0 + array_sum(values(create_bills(1))), 2), "", "");
 
    return retstr;
@@ -449,7 +454,5 @@ void create()
 
 /*
 @filter_array(objects(),(: strsrch(base_name($1),"spacecruiser/")!=-1 :))
-goto /domains/omega/room/floor8/ne_ship_bay &&& dest /domains/common/ship/spacecruiser/tsath/0 &&& ud -R ^common/ship/spacecruiser &&& goto /domains/common/ship/spacecruiser/tsath/0
-more /data/ships/t/domains_common_ship_spacecruiser_tsath_0.o
 ud `SHIP_D`
 */

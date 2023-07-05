@@ -7,9 +7,9 @@
 
 inherit MENUS;
 inherit SPACE_CLASSES;
+inherit M_FRAME;
 
 class ship_info *owned_ships;
-object frame = new (FRAME);
 object terminal;
 
 MENU toplevel;
@@ -43,7 +43,7 @@ void error_text(string s)
 
 void accent_text(string s)
 {
-   write(sprintf("[" + frame->accent("<162>%-s<res>]\n"), s));
+   write(sprintf("[" + accent("<162>%-s<res>]\n"), s));
 }
 
 void quit_menu_application(int booked)
@@ -112,9 +112,7 @@ void do_dock_ship(mapping ships, float docking_fee, string bank, string number)
    terminal->set_docking(ships[num], docking_completed);
    write("Your " + ((class ship_info)ships[num])->type + " callsign " + ((class ship_info)ships[num])->name +
          " will be docked in " + time_to_string(docking_completed - time()) + ".");
-   ACCOUNT_D->withdraw(bank, this_body(), fee, "credit", "Docking at " + this_body()->query_location());
-   SHIP_D->notify_owner(this_body(), "Docking and storage paid: " + pround(fee, 2) + " ¤.");
-   SHIP_D->not_long_term_parked(((class ship_info)ships[num])->name);
+   SHIP_D->pay_dock_ship(this_body(), fee, ships[num], bank);
    terminal->start_story();
    quit_menu_application(1);
 }
@@ -124,9 +122,9 @@ mapping get_ship_list()
    float max_cost;
    int count = 1;
    mapping ships = ([]);
+   frame_init_user();
    write(menu_text("Ship Inventory"));
-   printf(frame->accent("%-5.5s %-25.25s %-15.15s %-15.15s %-25.25s"), "[#]", "Ship Type", "Insignia", "Fees",
-          "Parked at");
+   printf(accent("%-5.5s %-25.25s %-15.15s %-15.15s %-25.25s"), "[#]", "Ship Type", "Insignia", "Fees", "Parked at");
    foreach (class ship_info si in owned_ships)
    {
       object dock_room = si->docked_at ? load_object(si->docked_at) : 0;

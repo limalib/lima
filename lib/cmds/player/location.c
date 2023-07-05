@@ -14,6 +14,7 @@
 
 inherit CMD;
 inherit SPACE_CLASSES;
+inherit M_FRAME;
 
 private
 string coord_str(int *coords)
@@ -24,7 +25,6 @@ string coord_str(int *coords)
 private
 void main(string arg)
 {
-   object frame = new (FRAME);
    string content = "";
    int pcount = 0;
    object body = this_body();
@@ -43,9 +43,10 @@ void main(string arg)
    else
       vdu = vdu[0];
 
-   frame->set_title("VDU:: Location information");
-   frame->set_left_header();
-   frame->set_header_content("Location\n\n\n\nStar\n\n\nPlanets");
+   frame_init_user();
+   set_frame_title("VDU:: Location information");
+   set_frame_left_header();
+   set_frame_header("Location\n\n\n\nStar\n\n\nPlanets");
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
@@ -63,7 +64,6 @@ void main(string arg)
    if (sizeof(structures))
       st = filter(structures, ( : ((class structure)$1)->name == $(body)->query_location() :))[0];
 
-
    content = sprintf("<bld>      Star System<res>: %-17.17s\n" + "         <bld>Location<res>: %s\n" +
                          "<bld>Omega Coordinates<res>: %-17.17s       <bld>Distance to Omega<res>: %-17.17s\n\n",
                      body->query_starsystem(),
@@ -78,8 +78,8 @@ void main(string arg)
        sprintf("<118>%-25.25s<res>\n<bld>Spectral Type<res>: %-17.17s <bld>Kelvin<res>: %s <res>\n\n", ss->star->name,
                ss->star->spectral_type, ss->star->col + ss->star->temperature_min + "-" + ss->star->temperature_max);
 
-   content += frame->accent(sprintf("%-25.25s    %-17.17s   %-17.17s   %-17.17s\n", "Planet Name", "Planet Type",
-                                    "# of Moons", "Gravity force"));
+   content += accent(sprintf("%-25.25s    %-17.17s   %-17.17s   %-17.17s\n", "Planet Name", "Planet Type", "# of Moons",
+                             "Gravity force"));
    foreach (class planet p in planets)
    {
       content += sprintf("%s%-25.25s<res>    %-17.17s   %-17.17s   %8.8s\n", p->col, (p->player_name || p->name),
@@ -87,7 +87,7 @@ void main(string arg)
       pcount++;
    }
 
-   frame->set_content(content);
+   set_frame_content(content);
 
-   write(frame->render());
+   write(frame_render());
 }
