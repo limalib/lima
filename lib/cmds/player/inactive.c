@@ -20,6 +20,7 @@ nomask void become_active(int start_time, string str)
 {
    int num;
    int hours, minutes;
+   string out;
 
    num = time() - start_time;
    if (num > 359)
@@ -28,12 +29,13 @@ nomask void become_active(int start_time, string str)
    if (num > 59)
       minutes = num / 60;
    num -= minutes * 60;
-   printf("You return to ACTIVE status after ");
+   out = sprintf("You return to ACTIVE status after ");
    if (hours)
-      printf("%d hours, ", hours);
+      out += sprintf("%d hours, ", hours);
    if (minutes)
-      printf("%d minutes, ", minutes);
-   printf("%d seconds.\n", num);
+      out += sprintf("%d minutes, ", minutes);
+   out += sprintf("%d seconds.\n", num);
+   write(out);
    this_body()->other_action("$N $vreturn to ACTIVE status.");
    this_body()->clear_flag(F_INACTIVE);
 }
@@ -51,7 +53,7 @@ nomask int help()
    printf("USAGE:  inactive\n" +
           "This is the best way for you to let people that you are away from your keyboard.  You just have to hit the "
           "enter key when you return, and you will leave off where you left off, unless you, of course, exceed the "
-          "limit for idling.  In which case, you won't.  =->" +
+          "limit for idling.  In which case, you won't." +
           "\n");
    return 1;
 }

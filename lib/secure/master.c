@@ -11,6 +11,8 @@
 #include <mudlib.h>
 #include <security.h>
 
+inherit __DIR__ "error_handler.c";
+
 private
 mapping errors = ([]);
 
@@ -160,6 +162,7 @@ varargs string standard_trace(mapping mp, int flag)
  *
  * -Beek
  */
+/*
 string error_handler(mapping mp, int caught)
 {
    string ret;
@@ -170,8 +173,8 @@ string error_handler(mapping mp, int caught)
    ret = "---\n" + standard_trace(mp);
    write_file(logfile, ret);
 
-   /* If an object didn't load, they get compile errors.  Don't spam
-      or confuse them */
+   // If an object didn't load, they get compile errors.  Don't spam
+   // or confuse them 
    if (what[0..23] == "*Error in loading object")
       return 0;
 
@@ -196,14 +199,14 @@ string error_handler(mapping mp, int caught)
                capitalize(userid), logfile, what, trace_line(mp["object"], mp["program"], mp["file"], mp["line"])));
    return 0;
 }
-
-mapping query_error(string name)
-{
-   /* This MUST be secure */
-   if (!check_privilege(1))
-      return 0;
-   return errors[name];
-}
+*/
+// mapping query_error(string name)
+// {
+   // /* This MUST be secure */
+   // if (!check_privilege(1))
+      // return 0;
+   // return errors[name];
+// }
 
 string ws = " \t\n";
 

@@ -2,7 +2,7 @@
 
 /*
 ** 25-Jul-96    Valentino.     Created.
-** 17-Jan-23	Tsath		   Updated and framed.
+** 17-Jan-23    Tsath		    Updated and framed.
 */
 
 //: COMMAND
@@ -56,7 +56,8 @@
 #include <playerflags.h>
 
 inherit CMD;
-inherit M_WIDGETS;
+inherit M_FRAME;
+// inherit M_WIDGETS;
 
 #define WHO_FORMAT "%s:  (Local Time is: %s) %28s\n%s"
 #define DEBUG(arg)                                                                                                     \
@@ -64,7 +65,6 @@ inherit M_WIDGETS;
    msgs += ({arg})
 
 string *msgs = ({});
-object frame;
 
 string get_who_string(string arg)
 {
@@ -127,7 +127,7 @@ string get_who_string(string arg)
       DEBUG("Header");
       footer += "There are " + sizeof(b) + " users connected ";
       footer += "at " + ctime(time()) + "" + "\n";
-      frame->set_footer_content(footer);
+      set_frame_footer(footer);
    }
    else if (member_array("H", args) != -1)
    {
@@ -240,27 +240,15 @@ string get_who_string(string arg)
       content += "\n ";
    }
    if (strlen(bad_flags))
-      content += frame->warning("Bad flags: " + bad_flags);
+      content += warning("Bad flags: " + bad_flags);
 
-   frame->init_user();
-   frame->set_header_content(header);
-   frame->set_content(rtrim(content));
-   return frame->render();
+   frame_init_user();
+   set_frame_title(implode(explode(mud_name(), ""), " "));
+   set_frame_header(header);
+   set_frame_content(rtrim(content));
+   return frame_render();
 }
 
-private
-init_frame()
-{
-   frame = new (FRAME, this_object());
-   frame->set_title(implode(explode(mud_name(), ""), " "));
-}
-
-int clean_up(int instances)
-{
-   if (frame)
-      frame->clean_up();
-   ::clean_up(instances);
-}
 
 private
 void main(string arg)
@@ -268,8 +256,6 @@ void main(string arg)
    string outtie;
    if (arg == "")
       arg = 0;
-   if (!frame)
-      init_frame();
    msgs = 0;
    msgs = ({});
    outtie = get_who_string(arg);

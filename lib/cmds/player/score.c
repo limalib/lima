@@ -17,10 +17,9 @@
 
 inherit CMD;
 inherit M_WIDGETS;
+inherit M_FRAME;
 
 #define FC "<bld>%-10.10s<res>"
-
-object frame;
 
 // Always returns a strlen 6.
 string pretty_bonus(int b)
@@ -59,11 +58,9 @@ void main(string arg)
    int i;
    int width = default_user_width() - 11;
    body = this_body();
-   if (!frame)
-      frame = new (FRAME, this_object());
-   frame->init_user();
-   frame->set_left_header();
-   frame->set_title("Score");
+   frame_init_user();
+   set_frame_left_header();
+   set_frame_title("Score");
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
@@ -77,7 +74,7 @@ void main(string arg)
             return;
          }
       }
-      frame->set_title("Score for " + capitalize(arg));
+      set_frame_title("Score for " + capitalize(arg));
    }
 
    xp = body->query_experience();
@@ -123,7 +120,7 @@ void main(string arg)
             j++;
          }
          if (sizeof(curr) > 1)
-            o_info += sprintf("%s: %s", frame->accent(capitalize(curr[i])), format_list(money_str) + "\n");
+            o_info += sprintf("%s: %s", accent(capitalize(curr[i])), format_list(money_str) + "\n");
          else
             o_info += sprintf("%s", format_list(money_str) + "\n");
       }
@@ -262,19 +259,11 @@ void main(string arg)
                  weight_to_string(enc_capa, get_user_variable("metric") != 1) + " - " + capa_string + ".";
    }
 
-   frame->set_header_content(" \nExp\n\n\nMoney" + repeat_string("\n", sizeof(curr) || 1) +
-                             "\nStats\n\n\nPoints\n\nOther\n\n" +
+   set_frame_header(" \nExp\n\n\nMoney" + repeat_string("\n", sizeof(curr) || 1) + "\nStats\n\n\nPoints\n\nOther\n\n" +
 #ifdef USE_KARMA
-                             "Karma\n\n" +
+                    "Karma\n\n" +
 #endif
-                             "\nWeight");
-   frame->set_content(content);
-   write(frame->render());
-}
-
-int clean_up(int instances)
-{
-   if (frame)
-      frame->clean_up();
-   ::clean_up(instances);
+                    "\nWeight");
+   set_frame_content(content);
+   write(frame_render());
 }

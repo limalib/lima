@@ -4,6 +4,7 @@
 /* Changed from command to verb 6-Feb-98 by MonicaS */
 
 inherit VERB_OB;
+inherit M_FRAME;
 
 mixed test_vendor()
 {
@@ -47,24 +48,34 @@ mixed can_list_str()
    return test_vendor();
 }
 
+private show_frame(string *parts)
+{
+   frame_init_user();
+   set_frame_title(find_vendor()->query_named_possessive()+" shop");
+   set_frame_header(parts[0]);
+   set_frame_content(parts[1]);
+   set_frame_footer(parts[2]);
+   write(frame_render());
+}
+
 void do_list()
 {
-   find_vendor()->query_items("all", 0);
+   show_frame(find_vendor()->query_items("all", 0));
 }
 
 void do_list_str(string item)
 {
-   find_vendor()->query_items(item, 0);
+   show_frame(find_vendor()->query_items(item, 0));
 }
 
 void do_list_from_liv(object vendor)
 {
-   vendor->query_items("all", 0);
+   show_frame(vendor->query_items("all", 0));
 }
 
 void do_list_str_from_liv(string item, object vendor)
 {
-   vendor->query_items(item, 0);
+   show_frame(vendor->query_items(item, 0));
 }
 
 void create()

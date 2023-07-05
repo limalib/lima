@@ -11,6 +11,7 @@
 
 inherit CMD;
 inherit M_WIDGETS;
+inherit M_FRAME;
 
 string frames_help()
 {
@@ -21,26 +22,25 @@ string frames_help()
 private
 void main(string arg)
 {
-   object frame = load_object(FRAME);
-   string *themes = frame->query_themes();
-   string *colours = frame->query_colour_themes();
+   string *themes = query_frame_themes();
+   string *colours = query_frame_colour_themes();
    string col;
    string usertheme = this_user()->frames_theme();
    string usercoltheme = this_user()->frames_colour();
+   frame_init_user();
 
    if (!arg || arg == "")
    {
       string simplestate;
-      object demoframe = new (FRAME);
-      demoframe->set_title("Frame settings");
-      demoframe->set_header_content("<bld>Frame style is:<res> " + (usertheme || "ascii") + ".\n" +
+      set_frame_title("Frame settings");
+      set_frame_header("<bld>Frame style is:<res> " + (usertheme || "ascii") + ".\n" +
                                     "<bld>Frame theme is:<res> " + (usercoltheme || "none") + ".\n" +
                                     (i_simplify() ? "Frames are off, since you have simplify on.\n" : ""));
 
-      demoframe->set_content(frames_help());
-      demoframe->set_footer_content("<bld>These settings will change most UI on " + mud_name() +
+      set_frame_content(frames_help());
+      set_frame_footer("<bld>These settings will change most UI on " + mud_name() +
                                     " to this style.<res>");
-      out(demoframe->render());
+      out(frame_render());
       return;
    }
 
@@ -72,14 +72,14 @@ void main(string arg)
 
       foreach (string c in colours)
       {
-         string titlec = frame->query_title(c);
-         string accent = frame->query_accent(c);
-         string warning = frame->query_warning(c);
+         string titlec = query_frame_title(c);
+         string accent = query_frame_accent(c);
+         string warning = query_frame_warning(c);
 
          printf("  %-10.10s %s %s %s %s\n", c, (titlec != "" ? "#" + titlec + "#  <res>" : "  ") + "   ",
                 (accent != "" ? "#" + accent + "#  <res>" : "  ") + "    ",
                 (warning != "" ? "#" + warning + "#  <res>" : "  ") + "  ",
-                (c != "none" ? frame->colour_demo(usertheme, c, 67) : ""));
+                (c != "none" ? frame_colour_demo(usertheme, c, 67) : ""));
       }
       printf("\n\n");
    }
@@ -90,7 +90,7 @@ void main(string arg)
 
       foreach (string t in themes)
       {
-         printf("\t%-15.15s %s\n", t, frame->demo_string(t));
+         printf("\t%-15.15s %s\n", t, frame_demo_string(t,20));
       }
       printf("\n\n");
    }

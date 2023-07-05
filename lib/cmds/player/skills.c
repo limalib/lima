@@ -22,8 +22,8 @@
 inherit CMD;
 inherit CLASS_SKILL;
 inherit M_WIDGETS;
+inherit M_FRAME;
 
-object frame;
 
 private
 void main(string arg)
@@ -37,8 +37,6 @@ void main(string arg)
    string contbend = is_unicodetheme() ? "├" : " ";
    string content;
    string *names;
-   if (!frame)
-      frame = new (FRAME, this_object());
 
    if (strlen(arg) && arg != "combat" && arg != "magic" && arg != "misc")
    {
@@ -68,7 +66,7 @@ void main(string arg)
          int percentage = SKILL_D->percent_for_next_rank(this_body(), name);
          int green = skill_bar * percentage / 100;
          int red = skill_bar - green;
-         frame->init_user();
+         frame_init_user();
          if (strlen(arg) && strsrch(name, arg) != 0)
             continue;
 
@@ -76,23 +74,23 @@ void main(string arg)
          {
             if (content)
             {
-               frame->set_content(content);
-               out(frame->render());
+               set_frame_content(content);
+               out(frame_render());
             }
             content = "";
-            frame->set_title(pretty_name);
+            set_frame_title(pretty_name);
          }
          else
             content += sprintf("%-15s %4s [<040>%s<238>%s<res>] %-5s\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
                                percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
-                               frame->accent(skill->training_points), );
+                               accent(skill->training_points), );
          i++;
       }
       if (content)
       {
-         frame->set_content(content);
-         out(frame->render());
+         set_frame_content(content);
+         out(frame_render());
       }
    }
    else
@@ -116,11 +114,4 @@ void main(string arg)
                  sizeof(parts) > 1 ? skill->training_points + "" : "-");
       }
    }
-}
-
-int clean_up(int instances)
-{
-   if (frame)
-      frame->clean_up();
-   ::clean_up(instances);
 }

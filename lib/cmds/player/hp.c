@@ -16,8 +16,7 @@ inherit CMD;
 #ifdef HEALTH_USES_LIMBS
 inherit CLASS_LIMB;
 inherit M_WIDGETS;
-
-object frame;
+inherit M_FRAME;
 
 // orders our limbs a bit, if we get more weird limbs extend this function
 private
@@ -49,8 +48,6 @@ void main(string arg)
    string ansi_colour = "GREEN";
    string m_pinkfish_colour = "CYAN";
    string content = "";
-   if (!frame)
-      frame = new (FRAME, this_object());
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
@@ -73,9 +70,9 @@ void main(string arg)
 
    names = sort_by_value(keys(limbs), ( : sortLimbs($1) :));
 
-   frame->init_user();
-   frame->set_title("HP");
-   frame->set_header_content(
+   frame_init_user();
+   set_frame_title("HP");
+   set_frame_header(
        sprintf("%14s %6-s %5s/%5-s %5-s %s", "Limb", "Type", "HP", "Max", "Armor", i_simplify() ? "" : "Bar"));
 
    foreach (string name in names)
@@ -120,8 +117,8 @@ void main(string arg)
    content += sprintf("%15s %6-s %8.8s    %5-s %s\n", "System Abuse", "%", "" + body->query_abuse_percent() + "%", "-",
                       reverse_critical_bar(body->query_abuse(), body->query_max_abuse(), hp_bar));
 
-   frame->set_content(content);
-   out(frame->render());
+   set_frame_content(content);
+   out(frame_render());
 }
 #else
 private
@@ -130,10 +127,3 @@ void main(string arg)
    write("Current HP: " + this_body()->query_health() + "/" + this_body()->query_max_health() + "\n");
 }
 #endif
-
-int clean_up(int instances)
-{
-   if (frame)
-      frame->clean_up();
-   ::clean_up(instances);
-}

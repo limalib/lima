@@ -83,8 +83,6 @@ string haggle_buy = "$T $v1think $n deserve $o more for $o1.";
 private
 string haggle_sell = "$T $v1think $n deserve to pay $o less for $o1.";
 private
-object vendor_frame;
-private
 int clear_numbers = 0;
 
 //: FUNCTION set_cost_multiplicator
@@ -420,18 +418,15 @@ string random_item_short()
 // The player commands buy and list use it too.
 // This function shows the players what items the shopkeeper has.
 // If flag is set the it will show the long() too
-int query_items(string item, int flag)
+mixed query_items(string item, int flag)
 {
+   string *frame_content = ({});
    int *keys = ({});
    string *item_names = ({});
    string *cost_names = ({});
    int num, item_lng, cost_lng, i;
    string cost, out = "";
    float exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
-   if (!vendor_frame)
-      vendor_frame = new (FRAME, this_object());
-   vendor_frame->init_user();
-   vendor_frame->set_title("For sale");
 
    if (sizeof(stored_items) == 0 || !for_sale)
    {
@@ -477,8 +472,8 @@ int query_items(string item, int flag)
 
    item_lng += 3;
 
-   vendor_frame->set_header_content(sprintf("%|-7s%|-13s %-" + item_lng + "s %" + cost_lng + "s\n", " List #", "Amount",
-                                            "Name/id", capitalize(currency_type)));
+   frame_content += ({sprintf("%|-7s%|-13s %-" + item_lng + "s %" + cost_lng + "s\n", " List #", "Amount", "Name/id",
+                              capitalize(currency_type))});
 
    foreach (int key in keys)
    {
@@ -493,11 +488,9 @@ int query_items(string item, int flag)
          out += stored_items[key]->long;
       i++;
    }
-   vendor_frame->set_content(out);
-   vendor_frame->set_footer_content(
-       sprintf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n"));
-   write(vendor_frame->render());
-   return 1;
+   frame_content+=({out});
+   frame_content+=({sprintf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n")});
+   return frame_content;
 }
 
 int test_sell(object ob)

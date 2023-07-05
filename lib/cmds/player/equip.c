@@ -31,6 +31,7 @@
 #include <config.h>
 
 inherit CMD;
+inherit M_FRAME;
 
 class wear_info
 {
@@ -39,7 +40,6 @@ class wear_info
 }
 
 mapping short_names = DAMAGE_D->query_short_names();
-object frame;
 
 string abbreviate(string s)
 {
@@ -55,8 +55,6 @@ void main(string arg)
    object body = this_body();
    int nothing_worn = 1;
    int nothing_wielded = 1;
-   if (!frame)
-      frame = new (FRAME, this_object());
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
@@ -84,14 +82,14 @@ void main(string arg)
 
    weapons = filter_array(weapons, ( : $1:));
    armors = filter_array(armors, ( : $1:));
-   frame->init_user();
+   frame_init_user();
 
    if (sizeof(weapons))
    {
       string *props = ({});
       string content = "";
-      frame->set_title("Weapons");
-      frame->set_header_content(
+      set_frame_title("Weapons");
+      set_frame_header(
           sprintf("%-24s  %-7s  %-5s %-11s   %s", "Weapon", "WC", "Dura", "Damage Type", "Properties"));
       foreach (object w in weapons)
       {
@@ -107,16 +105,16 @@ void main(string arg)
                                      : (w->query_to_hit_bonus() < 0 ? "(" + w->query_to_hit_bonus() + ")" : "")),
                             "" + w->durability_percent() + "%", implode(types, ","), format_list(props));
       }
-      frame->set_content(content);
-      write(frame->render());
+      set_frame_content(content);
+      write(frame_render());
       nothing_wielded = 0;
    }
 
    if (sizeof(armors))
    {
       string content = "";
-      frame->set_title("Armours");
-      frame->set_header_content(sprintf("%-25s %-21s  %-3s  %-5s  %s", "Item", "Worn on", "AC", "Dura", "Stat mod."));
+      set_frame_title("Armours");
+      set_frame_header(sprintf("%-25s %-21s  %-3s  %-5s  %s", "Item", "Worn on", "AC", "Dura", "Stat mod."));
       foreach (object a in armors)
       {
          string *slots = ({a->query_slot()});
@@ -165,8 +163,8 @@ void main(string arg)
                              : a->stat_mods_string(1) ? a->stat_mods_string(1)
                                                       : ""), );
       }
-      frame->set_content(content);
-      write(frame->render());
+      set_frame_content(content);
+      write(frame_render());
       nothing_worn = 0;
    }
 
@@ -176,11 +174,4 @@ void main(string arg)
       printf("\n\n(You are wearing nothing)\n");
    else if (nothing_wielded)
       printf("\n\n(You are wielding nothing)\n");
-}
-
-int clean_up(int instances)
-{
-   if (frame)
-      frame->clean_up();
-   ::clean_up(instances);
 }

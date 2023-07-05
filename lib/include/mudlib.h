@@ -208,6 +208,7 @@
 
 /* for mudlib objects */
 #define M_COLOURS         "/std/modules/m_colours"
+#define M_FRAME           "/std/modules/m_frame"
 #define M_BODY_STATS      "/std/modules/m_bodystats"
 #define M_COMPLETE        "/std/modules/m_complete"
 #define M_GLOB            "/std/modules/m_glob"
@@ -298,7 +299,6 @@
 #define NEWSREADER        "/obj/mudlib/newsreader"
 #define NNTP_OB           "/obj/mudlib/nntp"
 #define PLAYER_MENU       "/obj/mudlib/plmenu"
-#define FRAME             "/obj/mudlib/frame"
 #define PLYR_SHELL        "/obj/mudlib/pshell"
 #define SIMPLE_OB         "/obj/mudlib/simple_ob"
 #define PARTY_MENU         "/obj/mudlib/party_menu"

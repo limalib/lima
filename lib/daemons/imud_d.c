@@ -271,6 +271,14 @@ void create()
 
    trigger_reconnect("router");
    set_privilege("Mudlib:daemons");
+   
+   call_out("imud_socket_keepalive", 120);
+}
+
+private void imud_socket_keepalive()
+{
+  router_socket->send_telnet_nop();
+  call_out("imud_socket_keepalive", 120);
 }
 
 void remove(int coming_back_soon)
