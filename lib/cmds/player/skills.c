@@ -30,7 +30,7 @@ void main(string arg)
 {
    mapping skills = this_body()->query_skills();
    int width = this_user()->query_screen_width() - 6;
-   int skill_bar = width - 25;
+   int skill_bar = width - 35;
    string barchar = is_unicodetheme() ? "▅" : "=";
    string nobarchar = is_unicodetheme() ? "▅" : ".";
    string bend = is_unicodetheme() ? "└" : " ";
@@ -81,10 +81,10 @@ void main(string arg)
             set_frame_title(pretty_name);
          }
          else
-            content += sprintf("%-15s %4s [<040>%s<238>%s<res>] %-5s\n",
+            content += sprintf("%-25s %4s [<040>%s<238>%s<res>] %-5s\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
                                percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
-                               accent(skill->training_points), );
+                               accent(skill.training_points), );
          i++;
       }
       if (content)
@@ -111,7 +111,7 @@ void main(string arg)
          }
          else
             outf("%-30s %-12s  %-8s\n", SKILL_D->skill_rank_simple(this_body(), name), percentage + "%",
-                 sizeof(parts) > 1 ? skill->training_points + "" : "-");
+                 sizeof(parts) > 1 ? skill.training_points + "" : "-");
       }
    }
 }
