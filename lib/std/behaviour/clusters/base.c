@@ -139,8 +139,8 @@ void reset_tree()
 {
    foreach (string name, class node node in node_list)
    {
-      node->status = EVAL_NONE;
-      node->node_num = 0;
+      node.status = EVAL_NONE;
+      node.node_num = 0;
    }
    queue = ({});
 }
@@ -152,7 +152,7 @@ class node front()
 
 class node parent(class node node)
 {
-   return node && parents[node->name] ? node_list[parents[node->name]] : 0;
+   return node && parents[node.name] ? node_list[parents[node.name]] : 0;
 }
 
 class node pop()
@@ -169,7 +169,7 @@ string discover_parent(string node)
    int i = 0;
    while (!parent && i < sizeof(names))
    {
-      if (member_array(node, node_list[names[i]]->children) != -1)
+      if (member_array(node, node_list[names[i]].children) != -1)
          parent = names[i];
       i++;
    }
@@ -464,10 +464,10 @@ void add_child(string node, string child)
 {
    if (!child)
       error("Cannot add empty child.");
-   if (!arrayp(node_list[node]->children))
-      node_list[node]->children = ({child});
+   if (!arrayp(node_list[node].children))
+      node_list[node].children = ({child});
    else
-      node_list[node]->children += ({child});
+      node_list[node].children += ({child});
    parents[child] = node;
 }
 

@@ -26,8 +26,8 @@ mapping get_body_size(string type)
    mapping sizes = ([]);
    foreach (string limb, class limb l in body)
    {
-      if (l->max_health > 0)
-         sizes[limb] = l->max_health;
+      if (l.max_health > 0)
+         sizes[limb] = l.max_health;
    }
    return sizes;
 }

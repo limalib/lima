@@ -332,12 +332,12 @@ mixed smart_arg_parsing(mixed argv, string *path, string *implode_info)
 
    // Remove "'s for:  "word1 word2"
    argv = map(argv, ( : (stringp($1) && $1[0] == '"' && $1[ < 1] == '"') ? $1[1.. < 2] : $1:));
-   USAGE = pstuff->proto_string;
+   USAGE = pstuff.proto_string;
 
    if (sizeof(argv) > 1)
    {
       argv = argv[1..];
-      if ((opstr = pstuff->options))
+      if ((opstr = pstuff.options))
       {
          info = getopt(argv, opstr);
          if (!arrayp(info))
@@ -354,17 +354,17 @@ mixed smart_arg_parsing(mixed argv, string *path, string *implode_info)
       ops = ([]);
 
    argcounter = 0;
-   resv = allocate(sizeof(pstuff->prototype));
-   for (i = 0; i < sizeof(pstuff->prototype); i++)
+   resv = allocate(sizeof(pstuff.prototype));
+   for (i = 0; i < sizeof(pstuff.prototype); i++)
    {
       if (argcounter == sizeof(argv))
       {
-         if (i >= pstuff->first_optional_arg && pstuff->first_optional_arg != -1)
+         if (i >= pstuff.first_optional_arg && pstuff.first_optional_arg != -1)
             break;
          printf("Too few arguments.\nUsage: %s\n", USAGE);
          return 1;
       }
-      expanded_arg = parse_arg(pstuff->prototype[i], argv[argcounter++]);
+      expanded_arg = parse_arg(pstuff.prototype[i], argv[argcounter++]);
       if (intp(expanded_arg))
       {
          // error
@@ -382,7 +382,7 @@ mixed smart_arg_parsing(mixed argv, string *path, string *implode_info)
          }
          return 1;
       }
-      plural = pstuff->prototype[i] & PLURAL;
+      plural = pstuff.prototype[i] & PLURAL;
       this_arg = expanded_arg[0];
       resv[i] = expanded_arg[1];
       if (!plural)
@@ -402,9 +402,9 @@ mixed smart_arg_parsing(mixed argv, string *path, string *implode_info)
          expanded_arg = parse_arg(this_arg, argv[argcounter]);
          if (!arrayp(expanded_arg))
             break;
-         if (sizeof(expanded_arg[1]) == 1 && i + 1 != sizeof(pstuff->prototype) &&
-             !(pstuff->prototype[i + 1] & PLURAL) && (pstuff->prototype[i + 1] & expanded_arg[0]) &&
-             (argcounter + 1 == sizeof(argv) || intp(parse_arg(pstuff->prototype[i + 1], argv[argcounter + 1]))))
+         if (sizeof(expanded_arg[1]) == 1 && i + 1 != sizeof(pstuff.prototype) &&
+             !(pstuff.prototype[i + 1] & PLURAL) && (pstuff.prototype[i + 1] & expanded_arg[0]) &&
+             (argcounter + 1 == sizeof(argv) || intp(parse_arg(pstuff.prototype[i + 1], argv[argcounter + 1]))))
             break;
          resv[i] += expanded_arg[1];
          argcounter++;
@@ -412,7 +412,7 @@ mixed smart_arg_parsing(mixed argv, string *path, string *implode_info)
    }
    if (argcounter != sizeof(argv))
    {
-      if (pstuff->prototype[i - 1] & PLURAL)
+      if (pstuff.prototype[i - 1] & PLURAL)
          printf("%s: not found.\n", argv[argcounter]);
       else
          printf("Too many arguments.\nUsage: %s\n", USAGE);

@@ -14,7 +14,7 @@ int filter_removed(object brd, int elem)
 {
    class news_msg msg = NEWS_D->get_message(brd->query_group(), elem);
 
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0;
 
    return 1;
@@ -61,7 +61,7 @@ void main(string arg)
    }
    msg = NEWS_D->get_message(brd->query_group(), ids[id - 1]);
 
-   if (msg->poster != this_body()->query_name())
+   if (msg.poster != this_body()->query_name())
    {
       write("You can only delete your own posts.\n");
       return;

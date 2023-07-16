@@ -128,7 +128,7 @@ int skill_rank(object player, string skill_name)
    skill = player->query_skill(skill_name);
    if (!skill)
       return 0;
-   while (skill->skill_points > SKILL_RANKS[rank])
+   while (skill.skill_points > SKILL_RANKS[rank])
    {
       rank++;
    }

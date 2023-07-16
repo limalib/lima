@@ -78,14 +78,14 @@ nomask void handle_l(string cmd)
    foreach (a in sort_array(keys(aliases), 1))
    {
       val = aliases[a];
-      output += sprintf("%-14s %-38s ", a, val->template);
-      if (sizeof(val->defaults) == 1 && val->defaults[0] == "")
+      output += sprintf("%-14s %-38s ", a, val.template);
+      if (sizeof(val.defaults) == 1 && val.defaults[0] == "")
          output += "\n";
       else
       {
-         output += "$*: " + val->defaults[0] + "\n";
-         for (i = 1; i < sizeof(val->defaults); i++)
-            output += sprintf("%54s$%d: %s\n", "", i, val->defaults[i]);
+         output += "$*: " + val.defaults[0] + "\n";
+         for (i = 1; i < sizeof(val.defaults); i++)
+            output += sprintf("%54s$%d: %s\n", "", i, val.defaults[i]);
       }
    }
    more(output);

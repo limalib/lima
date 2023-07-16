@@ -522,8 +522,8 @@ varargs private nomask string format_message_line(int short_fmt, int id, int all
    return sprintf(short_fmt ? "%s%s%d. %s  [%s on %s]%%^RESET%%^" : "%s%s%4d. %-35s [%-10s on %s]%%^RESET%%^",
                   member_set(id, SAVE_OB->get_news_id_read(current_group)) ? "%^NEWS_MSG_READ%^"
                                                                            : "%^NEWS_MSG_UNREAD%^",
-                  i ? ">" : " ", all ? id : member_array(id, message_queue) + 1, msg->subject[0..34], msg->poster,
-                  intp(msg->time) ? ctime(msg->time)[4..9] : msg->time);
+                  i ? ">" : " ", all ? id : member_array(id, message_queue) + 1, msg.subject[0..34], msg.poster,
+                  intp(msg.time) ? ctime(msg.time)[4..9] : msg.time);
 }
 
 private
@@ -613,7 +613,7 @@ nomask void receive_reply_text(string *text)
    }
    wrap_post(text);
 
-   this_user()->query_mailer()->send_news_reply("Re: " + msg->subject, text, lower_case(msg->poster));
+   this_user()->query_mailer()->send_news_reply("Re: " + msg.subject, text, lower_case(msg.poster));
 }
 
 private
@@ -638,9 +638,9 @@ nomask void reply_with_message()
       write("You may not reply to that message -- it was removed.\n");
       return;
    }
-   lines = ({sprintf("On %s %s wrote post %s in %s:", intp(msg->time) ? ctime(msg->time) : msg->time, msg->poster,
-                     msg->subject, current_group)});
-   lines += map_array(explode(msg->body, "\n"), ( : "> " + $1:));
+   lines = ({sprintf("On %s %s wrote post %s in %s:", intp(msg.time) ? ctime(msg.time) : msg.time, msg.poster,
+                     msg.subject, current_group)});
+   lines += map_array(explode(msg.body, "\n"), ( : "> " + $1:));
    new (EDIT_OB, EDIT_TEXT, lines, ( : receive_reply_text:));
 }
 
@@ -666,7 +666,7 @@ private
 nomask void followup_to_message()
 {
    class news_msg msg = ((class news_msg)NEWS_D->get_message(current_group, current_id));
-   if (!msg->body)
+   if (!msg.body)
    {
       write("You may not followup to that message -- it was removed.\n");
       return;
@@ -684,7 +684,7 @@ nomask void followup_with_message()
 {
    class news_msg msg = ((class news_msg)NEWS_D->get_message(current_group, current_id));
    string *lines;
-   if (!msg->body)
+   if (!msg.body)
    {
       write("You may not followup to that message -- it was removed.\n");
       return;
@@ -694,10 +694,10 @@ nomask void followup_with_message()
       write("You may not post to " + current_group + ".\n");
       return;
    }
-   lines = ({sprintf("On %s %s wrote post %s:", intp(msg->time) ? ctime(msg->time) : msg->time, msg->poster,
-                     msg->subject)});
+   lines = ({sprintf("On %s %s wrote post %s:", intp(msg.time) ? ctime(msg.time) : msg.time, msg.poster,
+                     msg.subject)});
 
-   lines += map_array(explode(msg->body, "\n"), ( : "> " + $1:));
+   lines += map_array(explode(msg.body, "\n"), ( : "> " + $1:));
 
    new (EDIT_OB, EDIT_TEXT, lines, ( : receive_followup_text:));
 }
@@ -720,8 +720,8 @@ nomask void read_message(string group, int id)
                      "Subject: %%^NEWS_SUBJECT%%^%s%%^RESET%%^\n"
                      "\n"
                      "%s",
-                     intp(msg->time) ? ctime(msg->time) : msg->time, id, NEWS_D->get_group_last_id(current_group),
-                     msg->poster, msg->subject, msg->body ? msg->body : "*** REMOVED ***");
+                     intp(msg.time) ? ctime(msg.time) : msg.time, id, NEWS_D->get_group_last_id(current_group),
+                     msg.poster, msg.subject, msg.body ? msg.body : "*** REMOVED ***");
    }
    else
    {
@@ -975,7 +975,7 @@ nomask void remove_message()
       write("This post has already been removed.\n");
       return;
    }
-   if (!adminp(this_user()) && msg->userid != this_user()->query_userid())
+   if (!adminp(this_user()) && msg.userid != this_user()->query_userid())
    {
       write("You are not allowed to remove that post.\n");
       return;

@@ -246,7 +246,7 @@ nomask void rcv_chan_user_req(string orig_mud, string orig_user, string target_u
 
       /* map to I3's concept of gender: male(0), female(1), neuter(2)
          ours is: neuter(0), male(1), female(2) */
-      gender = (gender + 2) % 3; /* Lima -> I3 */
+      gender = (gender + 2) % 3; /* Lima.I3 */
 
       send_to_mud("chan-user-reply", orig_mud, ({message[0], p->query_name(), gender}));
    }
@@ -255,7 +255,7 @@ nomask void rcv_chan_user_req(string orig_mud, string orig_user, string target_u
 protected
 nomask void rcv_chan_user_reply(string orig_mud, string orig_user, string target_user, mixed *message)
 {
-   int gender = (message[2] + 1) % 3; /* I3 -> Lima */
+   int gender = (message[2] + 1) % 3; /* I3.Lima */
 
    add_cache_entry(orig_mud, message[0], message[1], gender);
 

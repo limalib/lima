@@ -47,7 +47,7 @@ protected
 nomask int validate_auth(string mudname, int provided_key)
 {
    class auth_data data = auth_info[mudname];
-   int result = data && data->session_key == provided_key;
+   int result = data && data.session_key == provided_key;
 
    map_delete(auth_info, mudname);
 
@@ -59,11 +59,11 @@ nomask void rcv_auth_mud_req(string orig_mud, string orig_user, string target_us
 {
    class auth_data auth = new (class auth_data);
 
-   auth->session_key = random(2000000000);
-   auth->timestamp = time();
+   auth.session_key = random(2000000000);
+   auth.timestamp = time();
    auth_info[orig_mud] = auth;
 
-   send_to_mud("auth-mud-reply", orig_mud, ({auth->session_key}));
+   send_to_mud("auth-mud-reply", orig_mud, ({auth.session_key}));
 
    if (!auth_cleanup_running)
    {
@@ -88,7 +88,7 @@ nomask void auth_cleanup()
 {
    auth_info = filter(
        auth_info,
-       function(string mudname, class auth_data auth) { return auth->timestamp + AUTH_EXPIRE_TIME > time(); });
+       function(string mudname, class auth_data auth) { return auth.timestamp + AUTH_EXPIRE_TIME > time(); });
 
    if (sizeof(auth_info))
       call_out(auth_cleanup_func, AUTH_CLEANUP_TIME);

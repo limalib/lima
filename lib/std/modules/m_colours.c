@@ -95,7 +95,7 @@ varargs string colour_table(string *items, int width, int num_horiz)
        * E.g.
        * (n=13,p=6)      (l=3,p=5)
        * X X X X X X     X X X X X
-       * X X X X X X  -> X X X X X
+       * X X X X X X.X X X X X
        * X               X X X X
        *
        */

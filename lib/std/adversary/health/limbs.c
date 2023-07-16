@@ -224,7 +224,7 @@ void update_max_health()
    foreach (string name, class limb l in health)
    {
       class limb std_limb = (class limb)new_body[name];
-      l->max_health = hp_adjustment(std_limb->max_health, query_level());
+      l.max_health = hp_adjustment(std_limb.max_health, query_level());
    }
 
    // TBUG("HP_cap: " + hp_cap);
@@ -259,8 +259,8 @@ int update_body_style(string bstyle)
 
    foreach (string name, class limb l in health)
    {
-      l->max_health = hp_adjustment(l->max_health, query_level());
-      l->health = hp_adjustment(l->max_health, query_level());
+      l.max_health = hp_adjustment(l.max_health, query_level());
+      l.health = hp_adjustment(l.max_health, query_level());
    }
 
    update_health();
@@ -450,13 +450,13 @@ void set_max_limb_health(string limb, int x)
 
    if (!tmp)
       error("Bad limb.\n");
-   if (tmp->max_health == -1 || x < 0)
+   if (tmp.max_health == -1 || x < 0)
       return;
 
    update_health();
 
-   tmp->max_health = x;
-   tmp->health = x;
+   tmp.max_health = x;
+   tmp.health = x;
 }
 
 //: FUNCTION set_max_health
@@ -474,13 +474,13 @@ void set_max_health(int x)
       hp_cap = x;
 
    foreach (string l, class limb d in health)
-      if (d->max_health > max)
-         max = d->max_health;
+      if (d.max_health > max)
+         max = d.max_health;
 
    foreach (string l, class limb d in health)
    {
-      d->max_health = d->max_health * x / max;
-      d->health = d->max_health;
+      d.max_health = d.max_health * x / max;
+      d.health = d.max_health;
    }
 }
 
@@ -501,7 +501,7 @@ int can_move()
    // Do we have limbs that can move us?
    foreach (string l, class limb lb in health)
    {
-      if ((lb->flags & LIMB_MOBILE) && (lb->health > 0))
+      if ((lb.flags & LIMB_MOBILE) && (lb.health > 0))
          can_move = 1;
    }
 
@@ -575,7 +575,7 @@ void disable_limb(string limb)
 {
    int dont_kill_me_now = 0;
 
-   if (health[limb]->health == -1)
+   if (health[limb].health == -1)
       return;
 
    ((class limb)health[limb])->health = 0;
@@ -624,8 +624,8 @@ void enable_limb(string limb)
 {
    class limb tmp = health[limb];
 
-   if (tmp->health == 0)
-      tmp->health = 1;
+   if (tmp.health == 0)
+      tmp.health = 1;
    health[limb] = tmp;
 }
 
@@ -639,13 +639,13 @@ varargs void set_health(string limb, int x)
       error("Bad limb.\n");
    update_health();
 
-   if (x > tmp->max_health)
+   if (x > tmp.max_health)
       error("Attempt to set health > max_health.\n");
-   if (tmp->health < 1 || dead)
+   if (tmp.health < 1 || dead)
       return;
 
-   tmp->health = x;
-   if (tmp->health <= 0)
+   tmp.health = x;
+   if (tmp.health <= 0)
       disable_limb(limb);
 }
 
@@ -663,14 +663,14 @@ varargs int hurt_us(int x, string limb)
       error("Bad limb '" + limb + "'.\n");
    update_health();
 
-   if (tmp->health < 1 || dead)
+   if (tmp.health < 1 || dead)
       return 0;
 
-   tmp->health -= x;
-   if (tmp->health <= 0)
+   tmp.health -= x;
+   if (tmp.health <= 0)
    {
-      x += tmp->health; /* negative */
-      tmp->health = 0;
+      x += tmp.health; /* negative */
+      tmp.health = 0;
       disable_limb(limb);
    }
 
@@ -688,15 +688,15 @@ void heal_limb(string limb, int x)
    if (!tmp)
       error("Bad limb.\n");
 
-   if (tmp->health == -1)
+   if (tmp.health == -1)
       return;
 
-   if (tmp->health == 0 || dead)
+   if (tmp.health == 0 || dead)
       x = fuzzy_divide(x, 10);
 
-   tmp->health += x;
-   if (tmp->health > tmp->max_health)
-      tmp->health = tmp->max_health;
+   tmp.health += x;
+   if (tmp.health > tmp.max_health)
+      tmp.health = tmp.max_health;
 }
 
 //: FUNCTION is_limb
@@ -718,8 +718,8 @@ varargs int query_max_health(string limb)
       return is_limb(limb) ? ((class limb)health[limb])->max_health : 0;
 
    foreach (string l in keys(health))
-      if (health[l]->max_health > x)
-         x = health[l]->max_health;
+      if (health[l].max_health > x)
+         x = health[l].max_health;
    return x;
 }
 
@@ -744,7 +744,7 @@ varargs void heal_us(int x, string limb)
 void heal_all()
 {
    foreach (string l in keys(health))
-      if (!health[l]->health)
+      if (!health[l].health)
          enable_limb(l);
    heal_us(query_max_health());
    set_drunk(0);
@@ -832,10 +832,10 @@ varargs mixed *query_worst_limb(int vital)
    foreach (string limb in keys(health))
    {
       class limb lb = health[limb];
-      if (vital && !(lb->flags & LIMB_VITAL) || !lb->max_health)
+      if (vital && !(lb.flags & LIMB_VITAL) || !lb.max_health)
          continue;
 
-      hp_percent = (100 * lb->health) / lb->max_health;
+      hp_percent = (100 * lb.health) / lb.max_health;
       if (hp_percent < min)
       {
          min = hp_percent;
@@ -864,9 +864,9 @@ string badly_wounded()
    {
       class limb lb = health[limb];
 
-      if ((lb->flags & LIMB_VITAL) && (lb->health < ((lb->max_health * wimpy_at) / 100)))
+      if ((lb.flags & LIMB_VITAL) && (lb->health < ((lb.max_health * wimpy_at) / 100)))
       {
-         banner_wounded(limb, lb->health);
+         banner_wounded(limb, lb.health);
          return limb;
       }
    }
@@ -881,9 +881,9 @@ string very_wounded()
    {
       class limb lb = health[limb];
 
-      if ((lb->flags & LIMB_VITAL) && (lb->health < ((lb->max_health * 50) / 100)))
+      if ((lb.flags & LIMB_VITAL) && (lb->health < ((lb.max_health * 50) / 100)))
       {
-         banner_wounded(limb, lb->health);
+         banner_wounded(limb, lb.health);
          return limb;
       }
    }
@@ -907,9 +907,9 @@ string diagnose()
    else
       ret = "";
 
-   damaged_limbs = filter(query_limbs(), ( : query_health($1) < health[$1]->max_health:));
+   damaged_limbs = filter(query_limbs(), ( : query_health($1) < health[$1].max_health:));
    foreach (string limb in damaged_limbs)
-      ret += diagnose_limb_msg(health[limb]->health * 100 / health[limb]->max_health, limb);
+      ret += diagnose_limb_msg(health[limb].health * 100 / health[limb].max_health, limb);
 
    if (drunk_diagnose())
    {

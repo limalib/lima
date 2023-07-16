@@ -78,7 +78,7 @@ int initiate_ranks()
    {
       foreach (string skill_name in keys(skills))
       {
-         skill_ranks[skill_name] = SKILL_D->rank_name_from_pts(skills[skill_name]->skill_points);
+         skill_ranks[skill_name] = SKILL_D->rank_name_from_pts(skills[skill_name].skill_points);
       }
       return 1;
    }
@@ -156,8 +156,8 @@ class skill set_skill(string skill, int skill_points, int training_points)
    }
    else
    {
-      cs->skill_points = skill_points;
-      cs->training_points = training_points;
+      cs.skill_points = skill_points;
+      cs.training_points = training_points;
    }
 
    return cs;
@@ -174,7 +174,7 @@ class skill clear_training_points(string skill)
    if (!cs)
       error("Cannot clear training points in non-existing skill " + skill + ".\n");
 
-   cs->training_points = 0;
+   cs.training_points = 0;
 
    return cs;
 }
@@ -224,7 +224,7 @@ class skill query_skill(string skill)
 int query_skill_pts(string skill)
 {
    if (skills[skill])
-      return skills[skill]->skill_points;
+      return skills[skill].skill_points;
    return -1;
 }
 
@@ -245,7 +245,7 @@ int aggregate_skill(string skill)
       my_skill = skills[skill];
       if (my_skill)
       {
-         total_skill += fuzzy_divide(my_skill->skill_points, coef);
+         total_skill += fuzzy_divide(my_skill.skill_points, coef);
       }
 
       coef = coef * AGGREGATION_FACTOR;
@@ -285,16 +285,16 @@ void learn_skill(string skill, int value)
 
       /* as a person's skill increases, the amount they learn decreases */
       divisor = ((LEARNING_FACTOR - 1) * s * s) / (MAX_SKILL_VALUE * MAX_SKILL_VALUE / 4) + 1;
-      my_skill->skill_points += fuzzy_divide(value, divisor);
-      check_rank(skill, my_skill->skill_points);
+      my_skill.skill_points += fuzzy_divide(value, divisor);
+      check_rank(skill, my_skill.skill_points);
       // TBUG("Skill: "+skill+" s: "+s+" Divisor: "+divisor+" Value: "+value+" Points gained: "+fuzzy_divide(value,
       // divisor)+" Prop: "+fuzzy_divide(value, PROPAGATION_FACTOR));
 
-      if (my_skill->skill_points > MAX_SKILL_VALUE)
-         my_skill->skill_points = MAX_SKILL_VALUE;
+      if (my_skill.skill_points > MAX_SKILL_VALUE)
+         my_skill.skill_points = MAX_SKILL_VALUE;
 
       /* accum training points */
-      my_skill->training_points += fuzzy_divide(value, divisor * TRAINING_FACTOR);
+      my_skill.training_points += fuzzy_divide(value, divisor * TRAINING_FACTOR);
 
       /* as skill moves up (<-) the tree, it decreases */
       value = fuzzy_divide(value, PROPAGATION_FACTOR);

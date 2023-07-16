@@ -334,8 +334,8 @@ nomask void output_error(string header, string text, object socket)
 private
 nomask void handle_post_request(class client_request req, object sock)
 {
-   mapping form_info = form_parse(req->content);
-   string file = convert_to_actual_path(req->request);
+   mapping form_info = form_parse(req.content);
+   string file = convert_to_actual_path(req.request);
    string result, err;
 
    if (file_size(file) < 1)
@@ -344,7 +344,7 @@ nomask void handle_post_request(class client_request req, object sock)
       return;
    }
 
-   err = catch (result = file->main(form_info, req->headers));
+   err = catch (result = file->main(form_info, req.headers));
    if (!result)
    {
       output_error("502 Bad Gateway", err, sock);
@@ -358,10 +358,10 @@ nomask void handle_get_request(class client_request req, object socket)
    string extention, args;
    string file;
 
-   sscanf(req->request, "%s?%s", file, args);
+   sscanf(req.request, "%s?%s", file, args);
    if (!file)
    {
-      file = req->request;
+      file = req.request;
    }
    file = convert_to_actual_path(file);
    if (file_size(file) < 1)
@@ -404,13 +404,13 @@ mapping requests = ([]);
 class client_request alloc_request(object socket)
 {
    class client_request req = new (class client_request);
-   req->keepalive = 0;
-   req->headers = ([]);
-   req->reached_end_of_headers = 0;
-   req->any_input_yet_p = 0;
-   req->end_of_input = 0;
-   req->remaining_content_length = 0;
-   req->content = "";
+   req.keepalive = 0;
+   req.headers = ([]);
+   req.reached_end_of_headers = 0;
+   req.any_input_yet_p = 0;
+   req.end_of_input = 0;
+   req.remaining_content_length = 0;
+   req.content = "";
    requests[socket] = req;
    return req;
 }
@@ -421,19 +421,19 @@ nomask void handle_request(object socket)
    class client_request req;
 
    req = requests[socket];
-   if (!req || req->end_of_input)
+   if (!req || req.end_of_input)
    {
       // A read sometimes gets called after we've groked everything...
       return;
    }
-   if (!req->reached_end_of_headers)
+   if (!req.reached_end_of_headers)
       return;
-   req->end_of_input = 1;
+   req.end_of_input = 1;
    //  BBUG(req);
-   // uncommenting this will cause the req->method in the next line of
+   // uncommenting this will cause the req.method in the next line of
    // code to bug.
    //  map_delete(requests, socket);
-   switch (req->method)
+   switch (req.method)
    {
    case "GET":
       handle_get_request(req, socket);
@@ -452,14 +452,14 @@ void add_text_to_request(string text, object socket)
 
    req = requests[socket];
 
-   req->remaining_content_length -= strlen(text);
-   req->content += text;
+   req.remaining_content_length -= strlen(text);
+   req.content += text;
 
-   if (req->remaining_content_length < 0)
+   if (req.remaining_content_length < 0)
    {
-      req->content = req->content[0.. < (-(req->remaining_content_length)) + 1];
+      req.content = req->content[0.. < (-(req.remaining_content_length)) + 1];
    }
-   if (req->remaining_content_length <= 0)
+   if (req.remaining_content_length <= 0)
    {
       handle_request(socket);
    }
@@ -471,23 +471,23 @@ void look_for_useful_header_info(object socket)
 
    req = requests[socket];
 
-   if (!req->keepalive)
+   if (!req.keepalive)
    {
       string connection_type;
 
-      connection_type = req->headers["connection"];
+      connection_type = req.headers["connection"];
       if (connection_type && lower_case(connection_type) == "keep-alive")
       {
-         req->keepalive = -1;
+         req.keepalive = -1;
       }
    }
-   if (req->keepalive)
+   if (req.keepalive)
    {
       string content_length_header;
-      content_length_header = req->headers["content-length"];
+      content_length_header = req.headers["content-length"];
       if (content_length_header)
       {
-         req->remaining_content_length = to_int(content_length_header);
+         req.remaining_content_length = to_int(content_length_header);
       }
    }
 }
@@ -501,17 +501,17 @@ string parse_headers(string text, object socket)
 
    req = requests[socket];
    lines = explode(text, "\n");
-   if (!req->any_input_yet_p)
+   if (!req.any_input_yet_p)
    {
       string *request_line = explode(lines[0], " ");
       request_line -= ({"\r"});
       if (sizeof(request_line) < 3)
          return;
-      req->method = request_line[0];
-      req->request = request_line[1];
-      req->http_version = request_line[2][0.. < 2];
+      req.method = request_line[0];
+      req.request = request_line[1];
+      req.http_version = request_line[2][0.. < 2];
       i = 1;
-      req->any_input_yet_p = 1;
+      req.any_input_yet_p = 1;
    }
    for (; i < sizeof(lines); i++)
    {
@@ -521,7 +521,7 @@ string parse_headers(string text, object socket)
       if (!strlen(line))
       {
          look_for_useful_header_info(socket);
-         req->reached_end_of_headers = 1;
+         req.reached_end_of_headers = 1;
          if (sizeof(lines) != i + 1)
          {
             return implode(lines[i + 1..], "\n");
@@ -534,13 +534,13 @@ string parse_headers(string text, object socket)
       colon_index = strsrch(lines[i], ':');
       header_name = lower_case(trim(lines[i][0..(colon_index - 1)]));
       header_value = trim(lines[i][colon_index + 1..]);
-      req->headers[header_name] = header_value;
+      req.headers[header_name] = header_value;
    }
    look_for_useful_header_info(socket);
    /*
-   if (!req->keepalive)
+   if (!req.keepalive)
    {
-   req->reached_end_of_headers = 1;
+   req.reached_end_of_headers = 1;
    }
    */
    return 0;
@@ -557,7 +557,7 @@ nomask void add_to_request(object socket, string text)
       req = alloc_request(socket);
    }
    // We haven't gotten to the end of headers yet.
-   if (!(req->reached_end_of_headers))
+   if (!(req.reached_end_of_headers))
    {
       text = parse_headers(text, socket);
    }
@@ -565,7 +565,7 @@ nomask void add_to_request(object socket, string text)
    {
       add_text_to_request(text, socket);
    }
-   if (req->remaining_content_length <= 0 && req->reached_end_of_headers)
+   if (req.remaining_content_length <= 0 && req.reached_end_of_headers)
    {
       handle_request(socket);
    }

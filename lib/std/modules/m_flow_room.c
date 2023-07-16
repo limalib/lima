@@ -38,13 +38,13 @@ void fall_through(object obj)
    // sort by delay or something.
    foreach (class flow_set fs in flow_arr)
    {
-      if (!evaluate(fs->cond, obj))
+      if (!evaluate(fs.cond, obj))
          continue;
 
-      if (fs->delay)
-         call_out(( : flow($(obj), $(fs->msg_here), $(fs->msg_there), $(fs->to)) :), fs->delay);
+      if (fs.delay)
+         call_out(( : flow($(obj), $(fs.msg_here), $(fs.msg_there), $(fs.to)) :), fs.delay);
       else
-         flow(obj, fs->msg_here, fs->msg_there, fs->to);
+         flow(obj, fs.msg_here, fs.msg_there, fs.to);
    }
 }
 
@@ -54,16 +54,16 @@ void set_flow(mapping *flows)
    {
       class flow_set fl;
       fl = new (class flow_set);
-      if (undefinedp(fl->cond = fs["cond"]))
+      if (undefinedp(fl.cond = fs["cond"]))
          error("cond undefined");
-      if (undefinedp(fl->to = fs["to"]))
+      if (undefinedp(fl.to = fs["to"]))
          error("to undefined");
-      if (undefinedp(fl->msg_here = fs["msg_here"]))
+      if (undefinedp(fl.msg_here = fs["msg_here"]))
          error("msg_here undefined");
-      if (undefinedp(fl->msg_there = fs["msg_there"]))
+      if (undefinedp(fl.msg_there = fs["msg_there"]))
          error("msg_there undefined");
-      if (undefinedp(fl->delay = fs["delay"]))
-         fl->delay = 0;
+      if (undefinedp(fl.delay = fs["delay"]))
+         fl.delay = 0;
       flow_arr += ({fl});
    }
    add_hook("object_arrived", ( : fall_through:));

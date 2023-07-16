@@ -27,8 +27,8 @@ nomask void add_cache_entry(string mudname, string username, string visname, int
       ucache[mudname] = ([]);
 
    user = new (class user_info);
-   user->visname = visname;
-   user->gender = gender;
+   user.visname = visname;
+   user.gender = gender;
 
    ucache[mudname][username] = user;
 }
@@ -36,7 +36,7 @@ nomask void add_cache_entry(string mudname, string username, string visname, int
 protected
 nomask void rcv_ucache_update(string orig_mud, string orig_user, string target_user, mixed *message)
 {
-   int gender = (message[2] + 1) % 3; /* I3 -> Lima */
+   int gender = (message[2] + 1) % 3; /* I3.Lima */
 
    add_cache_entry(orig_mud, message[0], message[1], gender);
 }
@@ -52,7 +52,7 @@ nomask string get_visname(string mudname, string username)
    if (!user)
       return 0;
 
-   return user->visname;
+   return user.visname;
 }
 nomask int get_gender(string mudname, string username)
 {
@@ -65,5 +65,5 @@ nomask int get_gender(string mudname, string username)
    if (!user)
       return -1;
 
-   return user->gender;
+   return user.gender;
 }

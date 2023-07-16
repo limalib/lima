@@ -66,7 +66,7 @@ nomask int get_flags(int set_key)
    if (!set_info)
       set_info = new (class flag_set_info);
 
-   if (set_info->is_non_persistent)
+   if (set_info.is_non_persistent)
       return non_persist_flags[set_key];
    return persist_flags[set_key];
 }
@@ -102,7 +102,7 @@ void set_flags(int which, int state)
    ** Use the set_closure if provided; otherwise, set the flags
    ** in the appropriate in the appropriate mapping.
    */
-   if (set_info->is_non_persistent)
+   if (set_info.is_non_persistent)
       non_persist_flags[set_key] = value;
    else
       persist_flags[set_key] = value;
@@ -110,8 +110,8 @@ void set_flags(int which, int state)
    /*
    ** Call the change notification function
    */
-   if (set_info->change_func)
-      evaluate(set_info->change_func, which, state);
+   if (set_info.change_func)
+      evaluate(set_info.change_func, which, state);
 }
 
 //: FUNCTION configure_set

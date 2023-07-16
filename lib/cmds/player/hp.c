@@ -83,18 +83,18 @@ void main(string arg)
       string name2 = repeat_string("   ", sizeof(parts) - 1) + parts[ < 1];
       int ac_total = 0;
       int level = sizeof(parts);
-      if (limb->max_health <= 0)
+      if (limb.max_health <= 0)
          continue;
 
-      if (LIMB_VITAL & limb->flags)
+      if (LIMB_VITAL & limb.flags)
          type += ({"vital"});
-      if (LIMB_WIELDING & limb->flags)
+      if (LIMB_WIELDING & limb.flags)
          type += ({"wield"});
-      if (LIMB_MOBILE & limb->flags)
+      if (LIMB_MOBILE & limb.flags)
          type += ({"move"});
-      if (LIMB_SYSTEM & limb->flags)
+      if (LIMB_SYSTEM & limb.flags)
          type += ({"system"});
-      if (LIMB_ATTACKING & limb->flags)
+      if (LIMB_ATTACKING & limb.flags)
          type += ({"attack"});
 
       if (arrayp(body->query_armors(name)))
@@ -105,8 +105,8 @@ void main(string arg)
          }
 
       content += sprintf("%15s %6-s %5s/%5-s %5-s %s\n", capitalize(name),
-                         (sizeof(type) ? capitalize(implode(type, ",")) : ""), "" + limb->health, "" + limb->max_health,
-                         "" + ac_total, critical_bar(limb->health, limb->max_health, hp_bar));
+                         (sizeof(type) ? capitalize(implode(type, ",")) : ""), "" + limb.health, "" + limb.max_health,
+                         "" + ac_total, critical_bar(limb.health, limb.max_health, hp_bar));
    }
    content += sprintf("\n%15s %6-s %5s/%5-s %5-s %s\n", "Reflex", "Pool", "" + body->query_reflex(),
                       "" + body->max_reflex(), "-", green_bar(body->query_reflex(), body->max_reflex(), hp_bar));

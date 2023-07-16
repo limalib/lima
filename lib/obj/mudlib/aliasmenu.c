@@ -96,16 +96,16 @@ varargs nomask void display_one_alias(string alias_name, object shell_to_use)
       return;
    }
 
-   output += sprintf("Alias: %-15s Expansion: %s\n", alias_name, this_alias->template);
+   output += sprintf("Alias: %-15s Expansion: %s\n", alias_name, this_alias.template);
 
-   if (sizeof(this_alias->defaults) > 1 || this_alias->defaults[0] != "")
+   if (sizeof(this_alias.defaults) > 1 || this_alias.defaults[0] != "")
    {
       output += sprintf("\tDefaults:\n"
                         "  $*: %s\n",
-                        this_alias->defaults[0]);
-      if (sizeof(this_alias->defaults) > 1)
-         for (i = 1; i < sizeof(this_alias->defaults); i++)
-            output += sprintf("  $%d: %s\n", i, this_alias->defaults[i]);
+                        this_alias.defaults[0]);
+      if (sizeof(this_alias.defaults) > 1)
+         for (i = 1; i < sizeof(this_alias.defaults); i++)
+            output += sprintf("  $%d: %s\n", i, this_alias.defaults[i]);
    }
 
    if (shell_to_use->is_xalias(alias_name))
@@ -130,14 +130,14 @@ void display_all_aliases()
    {
       val = shell_ob->query_one_alias(a);
 
-      output += sprintf("%-14s %-38s ", a, val->template);
-      if (sizeof(val->defaults) == 1 && val->defaults[0] == "")
+      output += sprintf("%-14s %-38s ", a, val.template);
+      if (sizeof(val.defaults) == 1 && val.defaults[0] == "")
          output += "\n";
       else
       {
-         output += "$*: " + val->defaults[0] + "\n";
-         for (i = 1; i < sizeof(val->defaults); i++)
-            output += sprintf("%54s$%d: %s\n", "", i, val->defaults[i]);
+         output += "$*: " + val.defaults[0] + "\n";
+         for (i = 1; i < sizeof(val.defaults); i++)
+            output += sprintf("%54s$%d: %s\n", "", i, val.defaults[i]);
       }
    }
 
@@ -257,7 +257,7 @@ private
 void set_arg_default(string s)
 {
    default_index++;
-   new_alias_in_progress->defaults[default_index] = s;
+   new_alias_in_progress.defaults[default_index] = s;
    if (default_index == num_defaults)
    {
       ask_for_xverb_status();
@@ -267,9 +267,9 @@ void set_arg_default(string s)
 private
 void set_star_default(string s)
 {
-   new_alias_in_progress->defaults[0] = s;
+   new_alias_in_progress.defaults[0] = s;
    default_index = 0;
-   num_defaults = new_alias_in_progress->num_args;
+   num_defaults = new_alias_in_progress.num_args;
    if (!num_defaults)
    {
       ask_for_xverb_status();
@@ -319,16 +319,16 @@ void new_template(string s)
    if (strsrch(s, "$*") == -1)
       s = s + " $*";
 
-   new_alias_in_progress->template = s;
+   new_alias_in_progress.template = s;
 
-   new_alias_in_progress->num_args = max(map(
+   new_alias_in_progress.num_args = max(map(
        explode(s[strsrch(s, "$")..], "$"), function(string s) {
           int d;
           sscanf(s, "%d%s", d, s);
           return d;
        }));
 
-   new_alias_in_progress->defaults = allocate(new_alias_in_progress->num_args + 1);
+   new_alias_in_progress.defaults = allocate(new_alias_in_progress.num_args + 1);
 
    modal_func(( : set_star_default:), "What's the default for $* (enter for none)? ");
 }

@@ -262,7 +262,7 @@ void create()
 
    mudlist_reset_entries();
 
-   reconn_func = ( : reconnect:);
+   reconn_func = (: reconnect :);
 
    oob_startup();
    chan_startup();

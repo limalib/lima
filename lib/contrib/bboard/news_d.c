@@ -159,7 +159,7 @@ nomask void convert_news()
                     : post[MSG_SUBJECT], poster
                     : post[MSG_POSTER], body
                     : post[MSG_MESSAGE]);
-         msg->userid = lower_case(msg->poster);
+         msg.userid = lower_case(msg.poster);
 
          contents[id] = msg;
       }
@@ -225,7 +225,7 @@ nomask void create()
       {
          foreach (string key2, class news_msg msg in value)
          {
-            if (classp(msg) && !msg->body)
+            if (classp(msg) && !msg.body)
                map_delete(value, key2);
          }
       }
@@ -247,7 +247,7 @@ nomask int get_new_id(string group)
 private
 nomask void notify_users(string group, class news_msg msg)
 {
-   CHANNEL_D->deliver_channel("news", sprintf("%s: %s [%s]", group, msg->subject[0..39], msg->poster));
+   CHANNEL_D->deliver_channel("news", sprintf("%s: %s [%s]", group, msg.subject[0..39], msg.poster));
 }
 
 nomask int post(string group, string subject, string message)
@@ -264,7 +264,7 @@ nomask int post(string group, string subject, string message)
               : subject, userid
               : this_user()->query_userid(), body
               : message);
-   msg->poster = capitalize(msg->userid);
+   msg.poster = capitalize(msg.userid);
 
    data[group][post_id] = msg;
    recent_changes[group][post_id] = msg;
@@ -291,24 +291,24 @@ varargs nomask int system_post(string group, string subject, string message, str
    msg = new (class news_msg, time : time(), thread_id : post_id, subject : subject);
    if (poster)
    {
-      msg->poster = poster;
-      msg->userid = base_name(previous_object());
+      msg.poster = poster;
+      msg.userid = base_name(previous_object());
    }
    else if (this_body())
    {
-      msg->userid = this_user()->query_userid();
-      msg->poster = capitalize(msg->userid);
+      msg.userid = this_user()->query_userid();
+      msg.poster = capitalize(msg.userid);
    }
    else if (this_user())
    {
-      msg->userid = this_user()->query_userid();
-      msg->poster = capitalize(msg->userid);
+      msg.userid = this_user()->query_userid();
+      msg.poster = capitalize(msg.userid);
    }
    else
    {
-      msg->poster = msg->userid = mud_name();
+      msg.poster = msg.userid = mud_name();
    }
-   msg->body = message;
+   msg.body = message;
 
    data[group][post_id] = msg;
    recent_changes[group][post_id] = msg;
@@ -367,7 +367,7 @@ nomask int followup(string group, int id, string message)
               : subject, userid
               : this_user()->query_userid(), body
               : message);
-   msg->poster = capitalize(msg->userid);
+   msg.poster = capitalize(msg.userid);
 
    data[group][post_id] = msg;
    recent_changes[group][post_id] = msg;
@@ -403,16 +403,16 @@ nomask int remove_post(string group, int id)
       return 0;
 
    msg = data[group][id];
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0;
 
-   if ((this_user() && !adminp(this_user()) && msg->userid != this_user()->query_userid()) &&
-       (msg->userid != base_name(previous_object())))
+   if ((this_user() && !adminp(this_user()) && msg.userid != this_user()->query_userid()) &&
+       (msg.userid != base_name(previous_object())))
    {
       return 0;
    }
 
-   msg->body = 0;
+   msg.body = 0;
    recent_changes[group][id] = msg;
    save_recent();
    return 1;
@@ -495,11 +495,11 @@ nomask void dump_to_file(string group, string fname)
    {
       class news_msg msg = contents[id];
 
-      if (!msg->body)
+      if (!msg.body)
          continue;
 
-      write_file(fname, sprintf("---\nposter: %s\nsubject: %s\ndate: %s\n\n%s\n", msg->poster, msg->subject,
-                                intp(msg->time) ? ctime(msg->time) : msg->time, msg->body));
+      write_file(fname, sprintf("---\nposter: %s\nsubject: %s\ndate: %s\n\n%s\n", msg.poster, msg.subject,
+                                intp(msg.time) ? ctime(msg.time) : msg.time, msg.body));
    }
 }
 
@@ -510,8 +510,8 @@ nomask void archive_post(string group, int id)
 
    unguarded(1, (
                     : write_file, sprintf("%s/%s", ARCHIVE_DIR, group),
-                      sprintf("---\nposter: %s\nsubject: %s\ndate: %s\n%s\n\n", msg->poster, msg->subject,
-                              intp(msg->time) ? ctime(msg->time) : msg->time, msg->body)
+                      sprintf("---\nposter: %s\nsubject: %s\ndate: %s\n%s\n\n", msg.poster, msg.subject,
+                              intp(msg.time) ? ctime(msg.time) : msg.time, msg.body)
                     :));
 
    /* This doesn't give w/ the newsreader. */
@@ -547,7 +547,7 @@ nomask void archive_posts()
             continue;
          // ### how to archive posts with strings as times?
          // There don't seem to be any.
-         if (intp(msg->time) && msg->time < archive_time)
+         if (intp(msg.time) && msg.time < archive_time)
             archive_post(group, id);
       }
    }
@@ -564,7 +564,7 @@ nomask void move_post(string curr_group, int curr_id, string to_group)
    int new_id;
 
    msg = copy(data[curr_group][curr_id]);
-   if (!adminp(this_user()) && msg->userid != this_user()->query_userid())
+   if (!adminp(this_user()) && msg.userid != this_user()->query_userid())
    {
       write("You cannot move posts which don't belong to you.\n");
       return;
@@ -580,7 +580,7 @@ nomask void move_post(string curr_group, int curr_id, string to_group)
       return;
    }
    new_id = get_new_id(to_group);
-   msg->body = "(Originally in " + curr_group + ")\n" + msg->body;
+   msg.body = "(Originally in " + curr_group + ")\n" + msg.body;
    data[to_group][new_id] = msg;
    recent_changes[to_group][new_id] = msg;
    remove_post(curr_group, curr_id);
@@ -599,7 +599,7 @@ nomask void change_header(string group, int id, string header)
    object tu = this_user();
 
    msg = data[group][id];
-   if (!adminp(tu) && tu->query_userid() != msg->userid)
+   if (!adminp(tu) && tu->query_userid() != msg.userid)
    {
       write("You cannot change the subjects of posts that don't belong to you\n");
    }
@@ -619,10 +619,10 @@ mixed *search_for(string what)
    {
       foreach (mixed id, class news_msg post in contents)
       {
-         if (id == "next_id" || !post->body)
+         if (id == "next_id" || !post.body)
             continue;
 
-         if (regexp(post->body, what) && query_write_to_group(group))
+         if (regexp(post.body, what) && query_write_to_group(group))
             ret += ({({group, id})});
       }
    }
@@ -638,10 +638,10 @@ mixed *search_for_author(string who)
    {
       foreach (mixed id, class news_msg post in contents)
       {
-         if (id == "next_id" || !post->body)
+         if (id == "next_id" || !post.body)
             continue;
 
-         if (lower_case(post->poster) == lower_case(who) && query_write_to_group(group))
+         if (lower_case(post.poster) == lower_case(who) && query_write_to_group(group))
             ret += ({({group, id})});
       }
    }

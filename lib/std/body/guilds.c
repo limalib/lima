@@ -33,10 +33,10 @@ int add_guild(string name, int level)
 
    if ((gi = guilds[name]))
    {
-      if (gi->member_level)
+      if (gi.member_level)
          return -1;
 
-      gi->member_level = level;
+      gi.member_level = level;
       return 1;
    }
    else
@@ -44,7 +44,7 @@ int add_guild(string name, int level)
       gi = guilds[name] = new (class guild_info);
    }
 
-   gi->member_level = level;
+   gi.member_level = level;
 
    return 1;
 }
@@ -60,12 +60,12 @@ int revoke_guild(string name)
    {
       return -1;
    }
-   if (!(gi->member_level))
+   if (!(gi.member_level))
    {
       return 0;
    }
-   gi->member_level = 0;
-   if (!gi->suspend_level && !gi->banned_level)
+   gi.member_level = 0;
+   if (!gi.suspend_level && !gi.banned_level)
       map_delete(guilds, name);
    return 1;
 }
@@ -81,11 +81,11 @@ int suspend_guild(string name, int level)
    {
       return -1;
    }
-   if (gi->suspend_level)
+   if (gi.suspend_level)
    {
       return 0;
    }
-   gi->suspend_level = level;
+   gi.suspend_level = level;
    return 1;
 }
 
@@ -100,11 +100,11 @@ int unsuspend_guild(string name)
    {
       return -1;
    }
-   if (!gi->suspend_level)
+   if (!gi.suspend_level)
    {
       return 0;
    }
-   gi->suspend_level = 0;
+   gi.suspend_level = 0;
    return 1;
 }
 
@@ -119,11 +119,11 @@ int ban_guild(string name, int level)
    {
       return -1;
    }
-   if (gi->banned_level)
+   if (gi.banned_level)
    {
       return 0;
    }
-   gi->banned_level = level;
+   gi.banned_level = level;
    return 1;
 }
 
@@ -135,7 +135,7 @@ int query_member_guild(string name)
    {
       return 0;
    }
-   return gi->member_level;
+   return gi.member_level;
 }
 
 int query_suspend_guild(string name)
@@ -146,7 +146,7 @@ int query_suspend_guild(string name)
    {
       return 0;
    }
-   return gi->suspend_level;
+   return gi.suspend_level;
 }
 
 int query_banned_guild(string name)
@@ -157,7 +157,7 @@ int query_banned_guild(string name)
    {
       return 0;
    }
-   return gi->banned_level;
+   return gi.banned_level;
 }
 
 string *guilds_belong()

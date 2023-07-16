@@ -13,7 +13,7 @@ class event_info
 int
 event_damage(class event_info evt)
 {
-   return evt->data[sizeof(evt->data) - 1];
+   return evt->data[sizeof(evt.data) - 1];
 }
 
 //: FUNCTION event_to_str
@@ -25,33 +25,33 @@ string event_to_str(class event_info evt)
    string data = "";
    string out = "Event:\n"
                 " target=" +
-                evt->target +
+                evt.target +
                 "\n"
                 " target_extra=" +
-                evt->target_extra +
+                evt.target_extra +
                 "\n"
                 " weapon=" +
-                evt->weapon + "\n";
+                evt.weapon + "\n";
 
-   if (arrayp(evt->data))
+   if (arrayp(evt.data))
    {
       int count = 0;
-      foreach (mixed ele in evt->data)
+      foreach (mixed ele in evt.data)
       {
          if (arrayp(ele))
          {
             string ar = "[";
             foreach (mixed e in ele)
                ar += e + ", ";
-            data += " evt->data[" + count + "]=" + ar + "]\n";
+            data += " evt.data[" + count + "]=" + ar + "]\n";
          }
          else
-            data += " evt->data[" + count + "]=" + ele + "\n";
+            data += " evt.data[" + count + "]=" + ele + "\n";
          count++;
       }
    }
-   else if (stringp(evt->data))
-      data += " " + evt->data;
+   else if (stringp(evt.data))
+      data += " " + evt.data;
 
    return out + data;
 }

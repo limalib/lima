@@ -236,9 +236,9 @@ void guild_add(string name)
       error("insufficient privilege");
 
    gi = new (class guild_defn);
-   gi->guild_title = "Title Error";
-   gi->guild_prospectus = "We Have Nothing To Offer";
-   gi->guild_suspend_level = 1;
+   gi.guild_title = "Title Error";
+   gi.guild_prospectus = "We Have Nothing To Offer";
+   gi.guild_suspend_level = 1;
    guilds[name] = gi;
    save_me();
 }

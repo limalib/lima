@@ -34,17 +34,17 @@ nomask void print_body(string cmd, string bodytype)
       foreach (string key, class limb val in body_info)
       {
          string *type = ({});
-         if (LIMB_VITAL & val->flags)
+         if (LIMB_VITAL & val.flags)
             type += ({"vital"});
-         if (LIMB_WIELDING & val->flags)
+         if (LIMB_WIELDING & val.flags)
             type += ({"wielding"});
-         if (LIMB_MOBILE & val->flags)
+         if (LIMB_MOBILE & val.flags)
             type += ({"mobile"});
-         if (LIMB_SYSTEM & val->flags)
+         if (LIMB_SYSTEM & val.flags)
             type += ({"system"});
-         if (LIMB_ATTACKING & val->flags)
+         if (LIMB_ATTACKING & val.flags)
             type += ({"attacking"});
-         output += sprintf("%-20s %-15d %-15s %-15s\n", key, val->health, val->parent ? val->parent : "None",
+         output += sprintf("%-20s %-15d %-15s %-15s\n", key, val.health, val.parent ? val.parent : "None",
                            implode(type, ", "));
       }
    else

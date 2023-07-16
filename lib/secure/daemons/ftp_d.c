@@ -166,15 +166,15 @@ void FTP_handle_idlers()
       return;
    foreach (object socket, class ftp_session info in sessions)
    {
-      if (info->dataPipe) /* Data connections are still active. */
+      if (info.dataPipe) /* Data connections are still active. */
       {
-         info->idleTime = 0;
+         info.idleTime = 0;
          continue;
       }
-      info->idleTime += 60;
-      if (info->idleTime >= MAX_IDLE_TIME + 60)
+      info.idleTime += 60;
+      if (info.idleTime >= MAX_IDLE_TIME + 60)
       {
-         FTPLOGF("%s idled out at %s.\n", capitalize(info->user), ctime(time()));
+         FTPLOGF("%s idled out at %s.\n", capitalize(info.user), ctime(time()));
          socket->send(sprintf("421 Timeout. (%i seconds): closing control connection.\n", MAX_IDLE_TIME));
          map_delete(sessions, socket);
          destruct(socket);
@@ -190,7 +190,7 @@ void FTP_addSession(object socket)
    class ftp_session newSession;
 
    newSession = new (class ftp_session);
-   newSession->cmdPipe = socket;
+   newSession.cmdPipe = socket;
 #ifdef ALLOW_ANON_FTP
    socket->send(FTP_get_welcome_msg());
 #else
@@ -241,25 +241,25 @@ void FTP_read(object socket, string data)
 
    /* Check to make sure that the time idle is not greater than the maximum
     * idle time.  If it is remove the session and everything attached to it */
-   /*   if(thisSession->idleTime>MAX_IDLE_TIME) { */
+   /*   if(thisSession.idleTime>MAX_IDLE_TIME) { */
 
    /*     //    call_out((:destruct($(socket) ):),5); */
    /*     return; */
    /*   } */
 
-   thisSession->idleTime = 0;
+   thisSession.idleTime = 0;
 
-   if (!thisSession->command)
-      thisSession->command = "";
+   if (!thisSession.command)
+      thisSession.command = "";
 
    data = replace_string(data, "\r", "");
-   thisSession->command += data;
-   if ((i = strsrch(thisSession->command, "\n")) == -1)
+   thisSession.command += data;
+   if ((i = strsrch(thisSession.command, "\n")) == -1)
       return;
-   data = thisSession->command[0..i - 1];
-   thisSession->command = thisSession->command[i + 1..];
+   data = thisSession.command[0..i - 1];
+   thisSession.command = thisSession.command[i + 1..];
 
-   thisSession->command = trim(thisSession->command);
+   thisSession.command = trim(thisSession.command);
 
    /* get the command and argument. */
    if (!sscanf(data, "%s %s", cmd, arg))
@@ -271,7 +271,7 @@ void FTP_read(object socket, string data)
    cmd = lower_case(cmd);
 
    /* If we're not connected, these are valid commands... */
-   if (!thisSession->connected)
+   if (!thisSession.connected)
    {
       switch (cmd)
       {
@@ -302,7 +302,7 @@ void FTP_read(object socket, string data)
    }
    if (err = catch (evaluate(dispatchTo, thisSession, arg)))
    {
-      FTPLOGF("%s caused a FAILURE with command '%s'.\n", capitalize(thisSession->user), data);
+      FTPLOGF("%s caused a FAILURE with command '%s'.\n", capitalize(thisSession.user), data);
       FTPLOGF("Error caught was '%O'\n", err);
       socket->send("550 Unknown failure.  Please report what you were doing "
                    "to the mud admin.\n");
@@ -317,24 +317,24 @@ void FTP_PASV_read_kobol(object socket, string text)
 
    info = passives[socket->local_port()];
 
-   info->dataPipe = socket;
+   info.dataPipe = socket;
 
    info->dataPipe->set_write_callback(( : FTP_write:));
 
-   destruct(passives[info->cmdPipe]);
+   destruct(passives[info.cmdPipe]);
 
-   dataports[info->dataPipe] = info->cmdPipe;
+   dataports[info.dataPipe] = info.cmdPipe;
    if (!text)
       return;
-   switch (info->binary)
+   switch (info.binary)
    {
    case 0:
       text = replace_string(text, "\r", "");
-      unguarded(info->priv, ( : write_file($(info->targetFile), $(text)) :));
+      unguarded(info.priv, ( : write_file($(info.targetFile), $(text)) :));
       return;
    case 1:
-      unguarded(info->priv, ( : write_buffer($(info->targetFile), $(info->filepos), $(text)) :));
-      info->filepos += sizeof(text);
+      unguarded(info.priv, ( : write_buffer($(info.targetFile), $(info.filepos), $(text)) :));
+      info.filepos += sizeof(text);
       return;
    default:
       ENSURE(0);
@@ -344,29 +344,29 @@ void FTP_PASV_read_kobol(object socket, string text)
 private
 void FTP_PASV_read(class ftp_session info, object socket, string text)
 {
-   info->dataPipe = socket;
+   info.dataPipe = socket;
    /* I'm not sure I like this...but it shouldn't hurt anything resetting
     * the callback function */
    info->dataPipe->set_write_callback(( : FTP_write:));
 
    /* We now know that the passive connection worked, so the listening socket
     * can be destroyed */
-   destruct(passives[info->cmdPipe]);
+   destruct(passives[info.cmdPipe]);
 
-   // TODO ?? REMOVE passuves[info->cmdPipe] ??
+   // TODO ?? REMOVE passuves[info.cmdPipe] ??
 
-   dataports[info->dataPipe] = info->cmdPipe;
+   dataports[info.dataPipe] = info.cmdPipe;
    if (!text)
       return;
-   switch (info->binary)
+   switch (info.binary)
    {
    case 0:
       text = replace_string(text, "\r", "");
-      unguarded(info->priv, ( : write_file($(info->targetFile), $(text)) :));
+      unguarded(info.priv, ( : write_file($(info.targetFile), $(text)) :));
       return;
    case 1:
-      unguarded(info->priv, ( : write_buffer($(info->targetFile), $(info->filepos), $(text)) :));
-      info->filepos += sizeof(text);
+      unguarded(info.priv, ( : write_buffer($(info.targetFile), $(info.filepos), $(text)) :));
+      info.filepos += sizeof(text);
       return;
    default:
       ENSURE(0);
@@ -391,15 +391,15 @@ void FTP_DATA_read(object socket, mixed text)
 {
    class ftp_session info;
    info = sessions[dataports[socket]];
-   switch (info->binary)
+   switch (info.binary)
    {
    case 0:
       text = replace_string(text, "\r", "");
-      unguarded(info->priv, ( : write_file($(info->targetFile), $(text)) :));
+      unguarded(info.priv, ( : write_file($(info.targetFile), $(text)) :));
       return;
    case 1:
-      unguarded(info->priv, ( : write_buffer($(info->targetFile), $(info->filepos), $(text)) :));
-      info->filepos += sizeof(text);
+      unguarded(info.priv, ( : write_buffer($(info.targetFile), $(info.filepos), $(text)) :));
+      info.filepos += sizeof(text);
       return;
    default:
       ENSURE(0);
@@ -420,12 +420,12 @@ void FTP_CMD_user(class ftp_session info, string arg)
 {
    NEEDS_ARG();
    arg = lower_case(arg);
-   if (info->connected)
+   if (info.connected)
    {
       info->cmdPipe->send(sprintf("530 User %s access denied.\n", arg));
       return;
    }
-   info->user = arg;
+   info.user = arg;
 
 #ifdef ALLOW_ANON_FTP
    if (member_array(arg, anon_logins) != -1)
@@ -447,7 +447,7 @@ void FTP_CMD_pass(class ftp_session info, string arg)
    mixed *userinfo;
 
    NEEDS_ARG();
-   if (info->connected || !info->user)
+   if (info.connected || !info.user)
    {
       info->cmdPipe->send("503 Login with USER first.\n");
       return;
@@ -457,15 +457,15 @@ void FTP_CMD_pass(class ftp_session info, string arg)
    if (ANON_USER())
    {
       info->cmdPipe->send("230 guest login ok, access restrictions apply.\n");
-      info->connected = 1;
-      info->priv = 0;
-      info->pwd = ANON_PREFIX;
+      info.connected = 1;
+      info.priv = 0;
+      info.pwd = ANON_PREFIX;
       FTPLOGF("Anomymous login from %s (email = %s)\n", info->cmdPipe->address()[0], arg);
       return;
    }
 #endif
 
-   userinfo = unguarded(1, ( : USER_D->query_variable($(info->user), ({"password"})) :));
+   userinfo = unguarded(1, ( : USER_D->query_variable($(info.user), ({"password"})) :));
    if (arrayp(userinfo) && sizeof(userinfo))
       password = userinfo[0];
    else
@@ -473,23 +473,23 @@ void FTP_CMD_pass(class ftp_session info, string arg)
       info->cmdPipe->send("530 Login incorrect.\n");
       return;
    }
-   if (crypt(arg, password) != password || !wizardp(info->user))
+   if (crypt(arg, password) != password || !wizardp(info.user))
    {
       info->cmdPipe->send("530 Login incorrect.\n");
       return;
    }
-   info->cmdPipe->send(sprintf("230 User %s logged in.\n", info->user));
-   info->connected = 1;
-   FTPLOGF("%s connected from %s.\n", capitalize(info->user), info->cmdPipe->address()[0]);
+   info->cmdPipe->send(sprintf("230 User %s logged in.\n", info.user));
+   info.connected = 1;
+   FTPLOGF("%s connected from %s.\n", capitalize(info.user), info->cmdPipe->address()[0]);
 
-   if (adminp(info->user))
-      info->priv = 1;
+   if (adminp(info.user))
+      info.priv = 1;
    else
-      info->priv = info->user;
+      info.priv = info.user;
 
-   info->pwd = join_path(WIZ_DIR, info->user);
-   if (!is_directory(info->pwd))
-      info->pwd = "/";
+   info.pwd = join_path(WIZ_DIR, info.user);
+   if (!is_directory(info.pwd))
+      info.pwd = "/";
    return;
 }
 
@@ -497,16 +497,16 @@ private
 void FTP_CMD_quit(class ftp_session info, string arg)
 {
    info->cmdPipe->send("221 Goodbye.\n");
-   if (info->dataPipe)
-      destruct(info->dataPipe);
-   if (member_array(info->cmdPipe, keys(passives)) > -1)
+   if (info.dataPipe)
+      destruct(info.dataPipe);
+   if (member_array(info.cmdPipe, keys(passives)) > -1)
    {
-      destruct(passives[info->cmdPipe]);
-      map_delete(passives, info->cmdPipe);
+      destruct(passives[info.cmdPipe]);
+      map_delete(passives, info.cmdPipe);
    }
-   FTPLOGF("%s QUIT at %s.\n", capitalize(info->user), ctime(time()));
-   map_delete(sessions, info->cmdPipe);
-   destruct(info->cmdPipe);
+   FTPLOGF("%s QUIT at %s.\n", capitalize(info.user), ctime(time()));
+   map_delete(sessions, info.cmdPipe);
+   destruct(info.cmdPipe);
 }
 
 int next_port()
@@ -528,17 +528,17 @@ void FTP_CMD_pasv(class ftp_session info, string arg)
    int *port;
    int listen_socket;
    int tries;
-   FTPLOGF("PASV rec'd %O\n", info->cmdPipe);
+   FTPLOGF("PASV rec'd %O\n", info.cmdPipe);
    if (arg)
    {
       info->cmdPipe->send("500 command not understood.\n");
       return;
    }
 
-   if (info->dataPipe)
-      destruct(info->dataPipe);
+   if (info.dataPipe)
+      destruct(info.dataPipe);
 
-   switch (info->binary)
+   switch (info.binary)
    {
    case 0:
       while (!listen_socket && tries < MAX_TRIES)
@@ -578,8 +578,8 @@ void FTP_CMD_pasv(class ftp_session info, string arg)
    default:
       return;
    }
-   if (member_array(info->cmdPipe, keys(passives)) > -1)
-      destruct(passives[info->cmdPipe]);
+   if (member_array(info.cmdPipe, keys(passives)) > -1)
+      destruct(passives[info.cmdPipe]);
 
    // ### ALSO KILL OFF OLD SESSIONS OF SAME USER ...??
 
@@ -587,7 +587,7 @@ void FTP_CMD_pasv(class ftp_session info, string arg)
    {
       foreach (object skt, class ftp_session session in sessions)
       {
-         if (session && (session->user == info->user) && (skt != info->cmdPipe))
+         if (session && (session.user == info.user) && (skt != info.cmdPipe))
          {
             if (passives[skt])
                destruct(passives[skt]);
@@ -597,7 +597,7 @@ void FTP_CMD_pasv(class ftp_session info, string arg)
          }
       }
    }
-   passives[info->cmdPipe] = listen_socket;
+   passives[info.cmdPipe] = listen_socket;
    port_dec = listen_socket->local_port();
    port = ({port_dec >> 8, port_dec % 256});
    /* passives[port_dec] = listen_socket; */
@@ -617,7 +617,7 @@ void FTP_CMD_port(class ftp_session info, string arg)
    if (sizeof(parts) != 6)
    {
       info->cmdPipe->send("550 Failed command.\n");
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
    ip = implode(parts[0..3], ".");
@@ -625,13 +625,13 @@ void FTP_CMD_port(class ftp_session info, string arg)
    port = (to_int(parts[4]) << 8) + to_int(parts[5]);
 
    // tell_user("loriel", sprintf("info %O", info));
-   if (info->dataPipe)
-      destruct(info->dataPipe);
+   if (info.dataPipe)
+      destruct(info.dataPipe);
 
-   switch (info->binary)
+   switch (info.binary)
    {
    case 0:
-      info->dataPipe = unguarded(1, (
+      info.dataPipe = unguarded(1, (
                                         : new (SOCKET, SKT_STYLE_CONNECT, sprintf("%s %d", $(ip), $(port)),
                                                (
                                                    : FTP_DATA_read:),
@@ -640,7 +640,7 @@ void FTP_CMD_port(class ftp_session info, string arg)
                                         :));
       break;
    case 1:
-      info->dataPipe = unguarded(1, (
+      info.dataPipe = unguarded(1, (
                                         : new (SOCKET, SKT_STYLE_CONNECT_B, sprintf("%s %d", $(ip), $(port)),
                                                (
                                                    : FTP_DATA_read:),
@@ -653,7 +653,7 @@ void FTP_CMD_port(class ftp_session info, string arg)
    }
    /* map the data port to the cmd port so we can find the cmd port when
     * we're given the data port. */
-   dataports[info->dataPipe] = info->cmdPipe;
+   dataports[info.dataPipe] = info.cmdPipe;
    info->dataPipe->set_write_callback(( : FTP_write:));
    info->cmdPipe->send("200 PORT command successful.\n");
    // tell_user("loriel", sprintf("info %O", info));
@@ -680,24 +680,24 @@ void do_list(class ftp_session info, string arg, int ltype)
       if (is_file(arg[0.. < 3]))
          isfile = 1;
 
-   arg = evaluate_path(arg, info->pwd);
+   arg = evaluate_path(arg, info.pwd);
    ANON_CHECK(arg);
    if (unguarded(1, ( : is_directory($(arg)) :)))
       arg = join_path(arg, "*");
-   if (unguarded(info->priv, ( : file_size(base_path($(arg))) :)) == -1)
+   if (unguarded(info.priv, ( : file_size(base_path($(arg))) :)) == -1)
    {
       info->cmdPipe->send(sprintf("550 %s: No such file OR directory.\n", arg));
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
    if (isfile)
       files = ({});
    else
-      files = unguarded(info->priv, ( : get_dir($(arg), -1) :));
+      files = unguarded(info.priv, ( : get_dir($(arg), -1) :));
    if (!files && !isfile)
    {
       info->cmdPipe->send(sprintf("550 %s: Permission denied.\n", arg));
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
    if (flags)
@@ -706,7 +706,7 @@ void do_list(class ftp_session info, string arg, int ltype)
    if (!sizeof(files) && !isfile)
    {
       info->cmdPipe->send("550 No files found.\n");
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
 
@@ -751,7 +751,7 @@ void do_list(class ftp_session info, string arg, int ltype)
       if ((strsrch(flags, 'l') > -1) || (strsrch(flags, '1') > -1))
       {
          info->cmdPipe->send("550: LIST -C flag is incompatible with -1 or -l.\n");
-         destruct(info->dataPipe);
+         destruct(info.dataPipe);
          return;
       }
       lines = ((size = sizeof(files)) / 3) + 1;
@@ -777,7 +777,7 @@ void do_list(class ftp_session info, string arg, int ltype)
       if (strsrch(flags, '1') > -1)
       {
          info->cmdPipe->send("550: LIST -l and -1 flags incompatible.\n");
-         destruct(info->dataPipe);
+         destruct(info.dataPipe);
          return;
       }
 
@@ -804,7 +804,7 @@ private
 void FTP_CMD_list(class ftp_session info, string arg)
 {
    /* Make sure the dataPort is connected, otherwise this will error */
-   if (!info->dataPipe)
+   if (!info.dataPipe)
    {
       call_out(( : FTP_CMD_list:), 2, info, arg);
       return;
@@ -816,7 +816,7 @@ private
 void FTP_CMD_nlst(class ftp_session info, string arg)
 {
    /* Make sure the dataPort is connected, otherwise this will error */
-   if (!info->dataPipe)
+   if (!info.dataPipe)
    {
       call_out(( : FTP_CMD_nlst:), 2, info, arg);
       return;
@@ -832,64 +832,64 @@ void FTP_CMD_retr(class ftp_session info, string arg)
    int i;
 
    /* Make sure the dataPort is connected, otherwise this will error */
-   if (!info->dataPipe)
+   if (!info.dataPipe)
    {
       call_out(( : FTP_CMD_retr:), 2, info, arg);
       return;
    }
    NEEDS_ARG();
 
-   target_file = evaluate_path(arg, info->pwd);
+   target_file = evaluate_path(arg, info.pwd);
 
    ANON_CHECK(target_file);
 
-   if (unguarded(info->priv, ( : is_directory($(target_file)) :)))
+   if (unguarded(info.priv, ( : is_directory($(target_file)) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: Can't retrieve (it's a directory)."
                                   "\n",
                                   target_file));
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
-   if (!unguarded(info->priv, ( : is_file($(target_file)) :)))
+   if (!unguarded(info.priv, ( : is_file($(target_file)) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: No such file OR directory.\n", target_file));
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
-   if (!unguarded(info->priv, ( : file_size($(target_file)) :)))
+   if (!unguarded(info.priv, ( : file_size($(target_file)) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: File contains nothing.\n", target_file));
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
 
-   switch (info->binary)
+   switch (info.binary)
    {
    case 0:
       i = file_size(target_file);
-      FTPLOGF("%s GOT %s.\n", capitalize(info->user), target_file);
+      FTPLOGF("%s GOT %s.\n", capitalize(info.user), target_file);
 
-      outfile[info->dataPipe] = ({target_file, 0, 0, info->cmdPipe});
+      outfile[info.dataPipe] = ({target_file, 0, 0, info.cmdPipe});
       info->dataPipe->set_write_callback(( : FTP_CMD_retr_callback:));
 
       info->cmdPipe->send(sprintf("150 Opening ascii mode data connection for "
                                   "%s (%d bytes).\n",
                                   target_file, i));
 
-      info->dataPipe->send(FTP_CMD_retr_callback(info->dataPipe));
+      info->dataPipe->send(FTP_CMD_retr_callback(info.dataPipe));
       break;
    case 1:
       i = file_size(target_file);
 
-      outfile[info->dataPipe] = ({target_file, 1, 0, info->cmdPipe});
+      outfile[info.dataPipe] = ({target_file, 1, 0, info.cmdPipe});
       info->dataPipe->set_write_callback(( : FTP_CMD_retr_callback:));
 
       info->cmdPipe->send(sprintf("150 Opening binary mode data connection "
                                   "for %s (%d bytes).\n",
                                   target_file, i));
 
-      info->dataPipe->send(FTP_CMD_retr_callback(info->dataPipe));
+      info->dataPipe->send(FTP_CMD_retr_callback(info.dataPipe));
       break;
    default:
       ENSURE(0);
@@ -898,7 +898,7 @@ void FTP_CMD_retr(class ftp_session info, string arg)
 
 void FTP_CMD_pwd(class ftp_session info, string arg)
 {
-   info->cmdPipe->send(sprintf("257 \"%s\" is current directory.\n", info->pwd));
+   info->cmdPipe->send(sprintf("257 \"%s\" is current directory.\n", info.pwd));
 }
 
 void FTP_CMD_noop(class ftp_session info, string arg)
@@ -910,7 +910,7 @@ private
 void FTP_CMD_stor(class ftp_session info, string arg)
 {
    /* Make sure the dataPort is connected, otherwise this will error */
-   if (!info->dataPipe)
+   if (!info.dataPipe)
    {
       call_out(( : FTP_CMD_stor:), 2, info, arg);
       return;
@@ -918,14 +918,14 @@ void FTP_CMD_stor(class ftp_session info, string arg)
 
    NEEDS_ARG();
 
-   arg = evaluate_path(arg, info->pwd);
+   arg = evaluate_path(arg, info.pwd);
 
 #ifndef ANON_CAN_PUT
 #ifdef ALLOW_ANON_FTP
    if (ANON_USER())
    {
       info->cmdPipe->send("550 Permission denied.\n");
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
 #endif
@@ -933,34 +933,34 @@ void FTP_CMD_stor(class ftp_session info, string arg)
    ANON_CHECK(arg);
 #endif
 
-   if (!unguarded(info->priv, ( : is_directory(base_path($(arg))) :)))
+   if (!unguarded(info.priv, ( : is_directory(base_path($(arg))) :)))
    {
       info->cmdPipe->send("553 No such directory to store into.\n");
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
-   info->targetFile = arg;
-   if (unguarded(info->priv, ( : is_file($(arg)) :)))
+   info.targetFile = arg;
+   if (unguarded(info.priv, ( : is_file($(arg)) :)))
    {
-      if (!unguarded(info->priv, ( : rm($(arg)) :)))
+      if (!unguarded(info.priv, ( : rm($(arg)) :)))
       {
          info->cmdPipe->send(sprintf("550 %s: Permission denied.\n", arg));
-         destruct(info->dataPipe);
+         destruct(info.dataPipe);
          return;
       }
    }
-   else if (!unguarded(info->priv, ( : write_file($(arg), "") :)))
+   else if (!unguarded(info.priv, ( : write_file($(arg), "") :)))
    {
       info->cmdPipe->send(sprintf("550 %s: Permission denied.\n", arg));
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
-   FTPLOGF("%s PUT %s.\n", capitalize(info->user), arg);
+   FTPLOGF("%s PUT %s.\n", capitalize(info.user), arg);
 
    /* Reset the file position flag. */
-   info->filepos = 0;
+   info.filepos = 0;
    info->cmdPipe->send(
-       sprintf("150 Opening %s mode data connection for %s.\n", info->binary ? "binary" : "ascii", arg));
+       sprintf("150 Opening %s mode data connection for %s.\n", info.binary ? "binary" : "ascii", arg));
 }
 
 private
@@ -975,16 +975,16 @@ void FTP_CMD_cwd(class ftp_session info, string arg)
    string newpath;
 
    NEEDS_ARG();
-   newpath = evaluate_path(arg, info->pwd);
+   newpath = evaluate_path(arg, info.pwd);
 
    ANON_CHECK(newpath);
 
-   if (!unguarded(info->priv, ( : is_directory($(newpath)) :)))
+   if (!unguarded(info.priv, ( : is_directory($(newpath)) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: No such file or directory.\n", newpath));
       return;
    }
-   info->pwd = newpath;
+   info.pwd = newpath;
    info->cmdPipe->send("250 CWD command successful.\n");
 }
 
@@ -993,14 +993,14 @@ void FTP_CMD_mkd(class ftp_session info, string arg)
 {
    NEEDS_ARG();
 
-   arg = evaluate_path(arg, info->pwd);
+   arg = evaluate_path(arg, info.pwd);
 
 #ifndef ANON_CAN_PUT
 #ifdef ALLOW_ANON_FTP
    if (ANON_USER())
    {
       info->cmdPipe->send("550 Permission denied.\n");
-      destruct(info->dataPipe);
+      destruct(info.dataPipe);
       return;
    }
 #endif
@@ -1008,18 +1008,18 @@ void FTP_CMD_mkd(class ftp_session info, string arg)
    ANON_CHECK(arg);
 #endif
 
-   if (!unguarded(info->priv, ( : is_directory(base_path($(arg))) :)))
+   if (!unguarded(info.priv, ( : is_directory(base_path($(arg))) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: No such directory.\n", base_path(arg)));
       return;
    }
-   if (unguarded(info->priv, ( : file_size($(arg)) :)) != -1)
+   if (unguarded(info.priv, ( : file_size($(arg)) :)) != -1)
    {
       info->cmdPipe->send(sprintf("550 %s: File exists.\n", arg));
       return;
    }
 
-   if (!unguarded(info->priv, ( : mkdir($(arg)) :)))
+   if (!unguarded(info.priv, ( : mkdir($(arg)) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: Permission denied.\n", arg));
       return;
@@ -1036,12 +1036,12 @@ void FTP_CMD_type(class ftp_session info, string arg)
    {
    case "a":
    case "A":
-      info->binary = 0;
+      info.binary = 0;
       info->cmdPipe->send("200 Type set to A.\n");
       return;
    case "i":
    case "I":
-      info->binary = 1;
+      info.binary = 1;
       info->cmdPipe->send("200 Type set to I.\n");
       return;
    default:
@@ -1054,21 +1054,21 @@ private
 void FTP_CMD_dele(class ftp_session info, string arg)
 {
    NEEDS_ARG();
-   arg = evaluate_path(arg, info->pwd);
+   arg = evaluate_path(arg, info.pwd);
 
    ANON_CHECK(arg);
 
-   if (!unguarded(info->priv, ( : is_file($(arg)) :)))
+   if (!unguarded(info.priv, ( : is_file($(arg)) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: No such file OR directory.\n", arg));
       return;
    }
-   if (!unguarded(info->priv, ( : rm($(arg)) :)))
+   if (!unguarded(info.priv, ( : rm($(arg)) :)))
    {
       info->cmdPipe->send(sprintf("550 %s: Permission denied.\n", arg));
       return;
    }
-   FTPLOGF("%s DELETED %s.\n", capitalize(info->user), arg);
+   FTPLOGF("%s DELETED %s.\n", capitalize(info.user), arg);
    info->cmdPipe->send("250 DELE command successful.\n");
 }
 
@@ -1078,11 +1078,11 @@ void remove()
 
    foreach (item in values(sessions))
    {
-      if (objectp(item->cmdPipe))
-         destruct(item->cmdPipe);
+      if (objectp(item.cmdPipe))
+         destruct(item.cmdPipe);
 
-      if (objectp(item->dataPipe))
-         destruct(item->dataPipe);
+      if (objectp(item.dataPipe))
+         destruct(item.dataPipe);
    }
 
    destruct(sock);

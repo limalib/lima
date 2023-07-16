@@ -20,16 +20,16 @@ private
 mapping privileges; // mapping containing all privileges
                     // values are arrays of parents and children
 private
-mapping read_access; // maps directory -> protection level
+mapping read_access; // maps directory.protection level
 private
 mapping write_access; // dto.
 private
 mapping wizards; // mapping containing all wizards and their level
 private
-mapping domains; // maps domains -> mappings of members/lords
+mapping domains; // maps domains.mappings of members/lords
                  //                 (valued 2 for lords, 1 for members)
 private
-mapping domainlists; // wizard -> domains
+mapping domainlists; // wizard.domains
 
 int valid_name(string s)
 {

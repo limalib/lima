@@ -74,58 +74,58 @@ class finger get_finger_data(string userid)
                  : info[3], level
                  : get_level(userid));
 
-   if (result->real_name == "")
-      result->real_name = 0;
-   if (result->email == "")
-      result->email = 0;
-   if (result->nickname == "")
-      result->nickname = 0;
-   if (result->home_page == "")
-      result->home_page = 0;
+   if (result.real_name == "")
+      result.real_name = 0;
+   if (result.email == "")
+      result.email = 0;
+   if (result.nickname == "")
+      result.nickname = 0;
+   if (result.home_page == "")
+      result.home_page = 0;
 
 #ifdef USE_WIZ_POSITION
-   result->position = info[4];
-   if (result->position == "")
-      result->position = 0;
+   result.position = info[4];
+   if (result.position == "")
+      result.position = 0;
 #endif
 
    if (!this_user() || (userid != this_user()->query_userid() && !check_privilege(1)))
    {
 #ifdef PLAYER_INFO_IS_PUBLIC
-      if (result->email && result->email[0] == '#')
-         result->email = 0;
-      if (result->real_name && result->real_name[0] == '#')
-         result->real_name = 0;
-      if (result->home_page && result->home_page[0] == '#')
-         result->home_page = 0;
+      if (result.email && result.email[0] == '#')
+         result.email = 0;
+      if (result.real_name && result.real_name[0] == '#')
+         result.real_name = 0;
+      if (result.home_page && result.home_page[0] == '#')
+         result.home_page = 0;
 #else
-      result->email = 0;
-      result->real_name = 0;
-      result->home_page = 0;
+      result.email = 0;
+      result.real_name = 0;
+      result.home_page = 0;
 #endif
    }
 
 #ifdef USE_TITLES
 #ifdef USE_WIZ_POSITION
-   result->title = info[5];
+   result.title = info[5];
 #else
-   result->title = info[4];
+   result.title = info[4];
 #endif
 #endif
 
    mbox = MAILBOX_D->get_mailbox(userid);
-   result->mail_count = mbox->query_message_count();
-   result->mail_unread = mbox->query_unread_count();
+   result.mail_count = mbox->query_message_count();
+   result.mail_unread = mbox->query_unread_count();
 
    last = LAST_LOGIN_D->query_last(userid);
 
    user = find_user(userid, 1); /* find even linkdead users */
    if (!user)
-      result->idle = -1;
+      result.idle = -1;
    else if (!interactive(user))
-      result->idle = -2;
+      result.idle = -2;
    else
-      result->idle = query_idle(user);
+      result.idle = query_idle(user);
 
 #ifdef PLAYER_INFO_IS_PUBLIC
    // ### a person can get this info via I3 as a player... let it thru here
@@ -133,15 +133,15 @@ class finger get_finger_data(string userid)
 #else
    if (check_privilege(1))
 #endif
-      result->connect_from = last ? last[1] : 0;
+      result.connect_from = last ? last[1] : 0;
 
-   result->last_login = last ? last[0] : 0;
+   result.last_login = last ? last[0] : 0;
 
    if (is_file(WIZ_DIR + "/" + userid + "/.plan"))
-      result->plan = read_file(WIZ_DIR + "/" + userid + "/.plan");
+      result.plan = read_file(WIZ_DIR + "/" + userid + "/.plan");
 #ifdef EVERYONE_HAS_A_PLAN
    else if (info[ < 1])
-      result->plan = info[ < 1];
+      result.plan = info[ < 1];
 #endif
 
    return result;

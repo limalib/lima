@@ -90,11 +90,11 @@ string format_addrs(mapping m)
 private
 string *quote_msg(class mail_msg msg)
 {
-   return ({"", "---Original message follows:", sprintf("FROM: %s", msg->sender),
-            sprintf("TO: %s", arrayp(msg->to_list) ? implode(msg->to_list, ", ") : format_addrs(msg->to_list)),
-            sprintf("CC: %s", arrayp(msg->cc_list) ? implode(msg->cc_list, ", ") : format_addrs(msg->cc_list)),
-            sprintf("SUBJECT: %s", msg->subject)}) +
-          msg->body;
+   return ({"", "---Original message follows:", sprintf("FROM: %s", msg.sender),
+            sprintf("TO: %s", arrayp(msg.to_list) ? implode(msg.to_list, ", ") : format_addrs(msg.to_list)),
+            sprintf("CC: %s", arrayp(msg.cc_list) ? implode(msg.cc_list, ", ") : format_addrs(msg.cc_list)),
+            sprintf("SUBJECT: %s", msg.subject)}) +
+          msg.body;
 }
 
 private
@@ -103,23 +103,23 @@ void send_warning(int id, string *warning)
    class outgoing_info this_info;
    string recipient;
 
-   if (this_info->lastWarningTime + WARNING_INTERVAL > time())
+   if (this_info.lastWarningTime + WARNING_INTERVAL > time())
    {
       return; // Don't send out a warning every single time we try to send.
    }
 
    this_info = outgoing_queue[id];
-   recipient = ((class mail_msg)internal_queue[this_info->msgId])->sender;
+   recipient = ((class mail_msg)internal_queue[this_info.msgId])->sender;
 
    unguarded(1, (
                     : MAIL_D->send_mail("I3 Mail Service", "Delivery Still Pending",
                                         ({"*** Your mail hasn't been fully "
                                           "delivered yet."}) +
-                                            $(warning) + quote_msg(internal_queue[$(this_info->msgId)]),
+                                            $(warning) + quote_msg(internal_queue[$(this_info.msgId)]),
                                         ({$(recipient)}), ({}))
                     :));
 
-   this_info->lastWarningTime = time();
+   this_info.lastWarningTime = time();
    save_me();
 }
 
@@ -130,12 +130,12 @@ void report_errors(int id, string *errorset)
    string recipient;
 
    this_info = outgoing_queue[id];
-   recipient = ((class mail_msg)internal_queue[this_info->msgId])->sender;
+   recipient = ((class mail_msg)internal_queue[this_info.msgId])->sender;
 
    unguarded(
        1, (
               : MAIL_D->send_mail("I3 Mail Service", "Failed mail",
-                                  $(errorset) + quote_msg(internal_queue[$(this_info->msgId)]), ({$(recipient)}), ({}))
+                                  $(errorset) + quote_msg(internal_queue[$(this_info.msgId)]), ({$(recipient)}), ({}))
               :));
 }
 
@@ -161,7 +161,7 @@ void error_ambiguous_or_unknown_mudnames(class mail_msg msg, mapping info)
 
    unguarded(1, (
                     : MAIL_D->send_mail("I3 Mail Service", "Delivery problems", $(problems) + quote_msg($(msg)),
-                                        ({$(msg->sender)}), ({}))
+                                        ({$(msg.sender)}), ({}))
                     :));
 }
 
@@ -189,7 +189,7 @@ varargs private void handle_ack(mapping ack_list, int flag)
       {
          if (flag)
          {
-            report_errors(id, ({sprintf("%s reports the following errors:", info->mudname)}) + errorset);
+            report_errors(id, ({sprintf("%s reports the following errors:", info.mudname)}) + errorset);
          }
          else
          {
@@ -197,10 +197,10 @@ varargs private void handle_ack(mapping ack_list, int flag)
          }
       }
       map_delete(outgoing_queue, id);
-      this_msg = internal_queue[info->msgId];
-      if (!(--this_msg->dels_pending))
+      this_msg = internal_queue[info.msgId];
+      if (!(--this_msg.dels_pending))
       {
-         map_delete(internal_queue, info->msgId);
+         map_delete(internal_queue, info.msgId);
       }
    }
    save_me();
@@ -208,9 +208,9 @@ varargs private void handle_ack(mapping ack_list, int flag)
 
 private *prep_message(int id, class outgoing_info info)
 {
-   class mail_msg msg = internal_queue[info->msgId];
+   class mail_msg msg = internal_queue[info.msgId];
    return (
-       {"mail", id, msg->sender, msg->to_list, msg->cc_list, ({}), msg->date, msg->subject, implode(msg->body, "\n")});
+       {"mail", id, msg.sender, msg.to_list, msg.cc_list, ({}), msg.date, msg.subject, implode(msg.body, "\n")});
 }
 
 private
@@ -220,25 +220,25 @@ void send_message(int id)
    mixed *packet;
 
    this_info = outgoing_queue[id];
-   if (!IMUD_D->mud_exists(this_info->mudname))
+   if (!IMUD_D->mud_exists(this_info.mudname))
    {
       handle_ack(([id:({sprintf("Mud '%s' is not known at all by I3 "
                                 "(might have dropped off the mudlist)",
-                                this_info->mudname)})]));
+                                this_info.mudname)})]));
       return;
    }
-   if (!IMUD_D->has_service(this_info->mudname, "mail"))
+   if (!IMUD_D->has_service(this_info.mudname, "mail"))
    {
-      handle_ack(([id:({sprintf("Mud '%s' doesn't support I3 mail.", this_info->mudname)})]));
+      handle_ack(([id:({sprintf("Mud '%s' doesn't support I3 mail.", this_info.mudname)})]));
       return;
    }
-   if (!is_currently_up(this_info->mudname))
+   if (!is_currently_up(this_info.mudname))
    {
-      send_warning(id, ({"Couldn't deliver messgage because " + this_info->mudname + " is currently down."}));
+      send_warning(id, ({"Couldn't deliver messgage because " + this_info.mudname + " is currently down."}));
    }
 
    packet = prep_message(id, this_info);
-   IMUD_D->send_mail_message_to_mud(packet, this_info->mudname);
+   IMUD_D->send_mail_message_to_mud(packet, this_info.mudname);
 }
 
 private
@@ -262,11 +262,11 @@ mapping find_remote_recipients(class mail_msg msg)
    mapping new_cc = ([]);
    int i;
 
-   for (i = 0; i < sizeof(msg->to_list); i++)
+   for (i = 0; i < sizeof(msg.to_list); i++)
    {
       string user, mudname;
       mixed mudinf;
-      name = msg->to_list[i];
+      name = msg.to_list[i];
       if (sscanf(name, "%s@%s", user, mudname))
       {
          mudname = lower_case(mudname);
@@ -307,13 +307,13 @@ mapping find_remote_recipients(class mail_msg msg)
          }
       }
    }
-   msg->to_list = new_to;
+   msg.to_list = new_to;
 
-   for (i = 0; i < sizeof(msg->cc_list); i++)
+   for (i = 0; i < sizeof(msg.cc_list); i++)
    {
       string user, mudname;
       mixed mudinf;
-      name = msg->cc_list[i];
+      name = msg.cc_list[i];
       if (sscanf(name, "%s@%s", user, mudname))
       {
          mudname = lower_case(mudname);
@@ -361,7 +361,7 @@ mapping find_remote_recipients(class mail_msg msg)
          }
       }
    }
-   msg->cc_list = new_cc;
+   msg.cc_list = new_cc;
 
    if (sizeof(ambiguous_mudnames))
    {
@@ -389,16 +389,16 @@ void enqueue_message(class mail_msg msg)
    }
 
    myMsgId = nextMsgId++;
-   msg->dels_pending = sizeof(remote_info);
+   msg.dels_pending = sizeof(remote_info);
    internal_queue[myMsgId] = msg;
    foreach (mudName in keys(remote_info))
    {
       class outgoing_info myInfo;
 
       myInfo = new (class outgoing_info);
-      myInfo->mudname = mudName;
-      myInfo->msgId = myMsgId;
-      myInfo->lastWarningTime = 0;
+      myInfo.mudname = mudName;
+      myInfo.msgId = myMsgId;
+      myInfo.lastWarningTime = 0;
       outgoing_queue[nextOutgoingId] = myInfo;
       send_message(nextOutgoingId++);
    }
@@ -521,12 +521,12 @@ void test()
    class mail_msg test;
 
    test = new (class mail_msg);
-   test->sender = "rust";
-   test->to_list = ({"rust@zork"});
-   test->cc_list = ({});
-   test->subject = "Blah";
-   test->date = time();
-   test->thread_id = test->date;
-   test->body = ({"This is test mail."});
+   test.sender = "rust";
+   test.to_list = ({"rust@zork"});
+   test.cc_list = ({});
+   test.subject = "Blah";
+   test.date = time();
+   test.thread_id = test.date;
+   test.body = ({"This is test mail."});
    enqueue_message(test);
 }

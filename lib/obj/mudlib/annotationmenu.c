@@ -38,11 +38,11 @@ void rcv_can_ed(string y_or_n)
    {
    case "y":
    case "yes":
-      new_annotation->read_only = 0;
+      new_annotation.read_only = 0;
       break;
    case "n":
    case "no":
-      new_annotation->read_only = 1;
+      new_annotation.read_only = 1;
       break;
    default:
       get_input_then_call(( : rcv_can_ed:), "yes or no? ");
@@ -56,7 +56,7 @@ void rcv_can_ed(string y_or_n)
 private
 void end_edit(string *annotation)
 {
-   new_annotation->text = implode(annotation, "\n");
+   new_annotation.text = implode(annotation, "\n");
    get_input_then_call((
                            : rcv_can_ed:),
                        "Allow anyone to remove this "
@@ -66,7 +66,7 @@ void end_edit(string *annotation)
 private
 void rcv_title(string title)
 {
-   new_annotation->title = title;
+   new_annotation.title = title;
    new (EDIT_OB, EDIT_TEXT, 0, ( : end_edit:));
 }
 
@@ -74,7 +74,7 @@ private
 void add_annotation()
 {
    new_annotation = new (class annotation);
-   new_annotation->author = this_body()->query_userid();
+   new_annotation.author = this_body()->query_userid();
    get_input_then_call(( : rcv_title:), "Subject: ");
 }
 
@@ -108,7 +108,7 @@ void remove_annotation()
    for (int i = 0; i < sizeof(ann); i++)
    {
       a = ann[i];
-      add_menu_item(rm_annotations, new_menu_item(sprintf("%-30s (%s on %s)", a->title, capitalize(a->author), a->date),
+      add_menu_item(rm_annotations, new_menu_item(sprintf("%-30s (%s on %s)", a.title, capitalize(a.author), a.date),
                                                   (
                                                       : rm_it($(i))
                                                       :)));
@@ -140,7 +140,7 @@ void see_it(int index)
    }
    output = sprintf("Title: %s\nAuthor: %s\n Date: %s\n"
                     "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n%s\n",
-                    a->title, capitalize(a->author), a->date, a->text);
+                    a.title, capitalize(a.author), a.date, a.text);
 
    more(output, 0, ( : done_seeing_it:));
 }
@@ -163,7 +163,7 @@ void see_annotations()
       a = ann[i];
       add_menu_item(
           view_annotations,
-          new_menu_item(sprintf("%-30s (%s on %s)", a->title, capitalize(a->author), a->date), (
+          new_menu_item(sprintf("%-30s (%s on %s)", a.title, capitalize(a.author), a.date), (
                                                                                                    : see_it($(i))
                                                                                                    :)));
    }

@@ -5,7 +5,7 @@
 **
 ** Created 25-OCT-94 by Deathblade for the new help system.
 **
-** This daemon keeps track of topic->pathname mappings.
+** This daemon keeps track of topic.pathname mappings.
 ** It will also manage a topic name appearing in multiple
 ** locations.
 */

@@ -101,7 +101,7 @@ varargs nomask void cmd_channel(string channel_name, string arg, int channel_typ
          case "wiz":
          case "wizard":
             /* ### need better security? */
-            if ((ci->flags & CHANNEL_ADMIN_ONLY) && !adminp(user))
+            if ((ci.flags & CHANNEL_ADMIN_ONLY) && !adminp(user))
             {
                printf("Only admins can turn off admin-only.\n");
                return;
@@ -159,12 +159,12 @@ varargs nomask void cmd_channel(string channel_name, string arg, int channel_typ
       {
          /* enforce the channel restrictions now */
          /* ### not super secure, but screw it :-) */
-         if ((ci->flags & CHANNEL_WIZ_ONLY) && !wizardp(user))
+         if ((ci.flags & CHANNEL_WIZ_ONLY) && !wizardp(user))
          {
             printf("Sorry, but '%s' is for wizards only.\n", user_channel_name);
             return;
          }
-         if ((ci->flags & CHANNEL_ADMIN_ONLY) && !adminp(user) &&
+         if ((ci.flags & CHANNEL_ADMIN_ONLY) && !adminp(user) &&
              member_array(user->query_userid(), SECURE_D->query_domain_members("admin-channels")) == -1)
          {
             printf("Sorry, but '%s' is for admins only.\n", user_channel_name);
@@ -199,12 +199,12 @@ varargs nomask void cmd_channel(string channel_name, string arg, int channel_typ
    }
    else if (arg == "/list" || arg == "/who")
    {
-      tell(user, sprintf("Users listening to '%s': %s.\n", user_channel_name, make_name_list(ci->listeners)),
+      tell(user, sprintf("Users listening to '%s': %s.\n", user_channel_name, make_name_list(ci.listeners)),
            MSG_INDENT);
    }
    else if (arg == "/last" || arg == "/history")
    {
-      string history = implode(ci->history, "");
+      string history = implode(ci.history, "");
 
       if (history == "")
          history = "<none>\n";
@@ -213,9 +213,9 @@ varargs nomask void cmd_channel(string channel_name, string arg, int channel_typ
    }
    else if (arg == "/clear")
    {
-      if (adminp(user) || user = ci->moderator)
+      if (adminp(user) || user = ci.moderator)
       {
-         ci->history = ({});
+         ci.history = ({});
          write("Channel cleared.\n");
       }
       else
@@ -228,7 +228,7 @@ varargs nomask void cmd_channel(string channel_name, string arg, int channel_typ
    }
    else if (arg[0] == ';' || arg[0] == ':')
    {
-      if (ci->moderator && ci->speaker && user != ci->moderator && user != ci->speaker)
+      if (ci.moderator && ci.speaker && user != ci.moderator && user != ci.speaker)
       {
          printf("You are not the speaker on '%s'.\n", user_channel_name);
       }
@@ -263,7 +263,7 @@ varargs nomask void cmd_channel(string channel_name, string arg, int channel_typ
    }
    else
    {
-      if (ci->moderator && ci->speaker && user != ci->moderator && user != ci->speaker)
+      if (ci.moderator && ci.speaker && user != ci.moderator && user != ci.speaker)
       {
          printf("You are not the speaker on '%s'.\n", user_channel_name);
       }

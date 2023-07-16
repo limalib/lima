@@ -112,8 +112,8 @@ nomask mixed *query_variable(string userid, string *vlist)
          if (!user)
          {
             user = new (class var_info);
-            user->ob = find_user(userid);
-            user->fname = LINK_PATH(userid) + __SAVE_EXTENSION__;
+            user.ob = find_user(userid);
+            user.fname = LINK_PATH(userid) + __SAVE_EXTENSION__;
          }
 
          which = user;
@@ -123,8 +123,8 @@ nomask mixed *query_variable(string userid, string *vlist)
          if (!body)
          {
             body = new (class var_info);
-            body->ob = find_body(userid);
-            body->fname = USER_PATH(userid) + __SAVE_EXTENSION__;
+            body.ob = find_body(userid);
+            body.fname = USER_PATH(userid) + __SAVE_EXTENSION__;
          }
 
          which = body;
@@ -132,24 +132,24 @@ nomask mixed *query_variable(string userid, string *vlist)
       else
          error("illegal variable request\n");
 
-      if (which->ob)
+      if (which.ob)
       {
-         results += ({query_online_object(which->ob, var)});
+         results += ({query_online_object(which.ob, var)});
       }
       else
       {
-         if (!which->lines)
+         if (!which.lines)
          {
-            if (!is_file(which->fname))
+            if (!is_file(which.fname))
             {
                /* no such player */
                return 0;
             }
 
-            which->lines = explode(read_file(which->fname), "\n");
+            which.lines = explode(read_file(which.fname), "\n");
          }
 
-         results += ({query_filed_object(which->lines, var)});
+         results += ({query_filed_object(which.lines, var)});
       }
    }
 

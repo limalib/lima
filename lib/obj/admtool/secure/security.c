@@ -43,7 +43,7 @@ nomask void receive_privilege_for_show(string priv)
       foreach (privname in privnames)
       {
          if (sizeof(privmap[privname]))
-            write("[" + privname + "] -> " + implode(privmap[privname], ", ") + "\n");
+            write("[" + privname + "]." + implode(privmap[privname], ", ") + "\n");
          else
             write("[" + privname + "]\n");
       }
@@ -58,7 +58,7 @@ nomask void receive_privilege_for_show(string priv)
       }
 
       if (sizeof(privmap[priv]))
-         write("[" + priv + "] -> " + implode(privmap[priv], ", ") + "\n");
+         write("[" + priv + "]." + implode(privmap[priv], ", ") + "\n");
       else
          write("[" + priv + "]\n");
    }

@@ -477,13 +477,13 @@ nomask void init_stats()
    error("cannot reinitialize statistics\n");
 */
    mods = query_roll_mods();
-   if (mods->str_adjust + mods->agi_adjust + mods->int_adjust + mods->wil_adjust != 0)
+   if (mods.str_adjust + mods.agi_adjust + mods.int_adjust + mods.wil_adjust != 0)
       error("illegal stat adjustment values\n");
 
-   stat_str = roll_stat(mods->str_adjust, mods->str_range);
-   stat_agi = roll_stat(mods->agi_adjust, mods->agi_range);
-   stat_int = roll_stat(mods->int_adjust, mods->int_range);
-   stat_wil = roll_stat(mods->wil_adjust, mods->wil_range);
+   stat_str = roll_stat(mods.str_adjust, mods.str_range);
+   stat_agi = roll_stat(mods.agi_adjust, mods.agi_range);
+   stat_int = roll_stat(mods.int_adjust, mods.int_range);
+   stat_wil = roll_stat(mods.wil_adjust, mods.wil_range);
 
    mod_str = 0;
    mod_agi = 0;

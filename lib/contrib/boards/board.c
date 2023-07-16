@@ -35,7 +35,7 @@ nomask int filter_removed(int elem)
 {
    class news_msg msg = NEWS_D->get_message(linked_group, elem);
 
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0;
 
    return 1;
@@ -84,13 +84,13 @@ nomask varargs string format_message_line(int id)
 
    msg = NEWS_D->get_message(linked_group, id);
 
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0; // Do not display removed messages.
    else
-      subject = msg->subject;
+      subject = msg.subject;
 
    return sprintf("%-35s [%-10s on %s]", // Display message subject/poster/time
-                  subject[0..34], msg->poster, intp(msg->time) ? ctime(msg->time)[4..9] : msg->time);
+                  subject[0..34], msg.poster, intp(msg.time) ? ctime(msg.time)[4..9] : msg.time);
 }
 
 // Format all message lines.
@@ -144,7 +144,7 @@ nomask mixed read_entry(string str)
    id = ids[id - 1]; // Translate to NEWS_D id
    msg = NEWS_D->get_message(linked_group, id);
 
-   return format_message_line(id) + "\n\n" + msg->body;
+   return format_message_line(id) + "\n\n" + msg.body;
 }
 
 // Helpful text for those used to type 'read 1'.

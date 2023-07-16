@@ -28,7 +28,7 @@ string base_name(mixed val)
 
 // changed by Beek to be objects identical to previous_object()
 // since otherwise things get put in groups they don't belong in.
-// red sword + blue sword -> 2 red swords.
+// red sword + blue sword.2 red swords.
 
 int compare_objects(object o1, object o2)
 {

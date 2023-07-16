@@ -118,15 +118,15 @@ nomask string *build_message(int mail_key, int supress_header)
    output = ({});
    if (!supress_header)
    {
-      output += format_name_list("To     : ", msg->to_list);
-      output += format_name_list("Cc     : ", msg->cc_list);
-      output += ({"From   : " + capitalize(msg->sender)});
-      output += ({"Date   : " + ctime(msg->date)});
-      output += explode("Subject: " + msg->subject, "\n");
+      output += format_name_list("To     : ", msg.to_list);
+      output += format_name_list("Cc     : ", msg.cc_list);
+      output += ({"From   : " + capitalize(msg.sender)});
+      output += ({"Date   : " + ctime(msg.date)});
+      output += explode("Subject: " + msg.subject, "\n");
       output += ({repeat_string("-", 39)});
    }
 
-   output += msg->body;
+   output += msg.body;
    output += ({""});
 
    return output;
@@ -280,7 +280,7 @@ nomask void cmd_headers(string rangestr)
          output += ({sprintf("  %-3d %-15s  %10s  %s", nums[key], "", "", "*** LOST MESSAGE ***")});
       else
          output += ({sprintf("%c %-3d %-15s (%s) %s", mailbox_ob->query_message_read(key) ? 'N' : ' ', nums[key],
-                             capitalize(msg->sender), ctime(msg->date)[0..9], msg->subject)});
+                             capitalize(msg.sender), ctime(msg.date)[0..9], msg.subject)});
    }
 
    more(output);
@@ -357,15 +357,15 @@ nomask void cmd_reply(int user_num, int reply_all)
       return;
    }
 
-   body = build_body_inclusion(msg->body);
+   body = build_body_inclusion(msg.body);
    body = implode(body, "\n");
-   body = sprintf("On %s %s wrote:\n%s\n", ctime(msg->date), capitalize(msg->sender), body);
+   body = sprintf("On %s %s wrote:\n%s\n", ctime(msg.date), capitalize(msg.sender), body);
 
-   subject = "Re: " + msg->subject;
+   subject = "Re: " + msg.subject;
 
-   to_list = ({msg->sender});
+   to_list = ({msg.sender});
    if (reply_all)
-      to_list = clean_array(to_list + msg->to_list + msg->cc_list);
+      to_list = clean_array(to_list + msg.to_list + msg.cc_list);
 
    file = tmp_fname();
    write_file(file, body);
@@ -436,10 +436,10 @@ nomask void cmd_forward(int user_num, string newto)
       return;
    }
 
-   body = build_body_inclusion(msg->body);
-   body = ({"Begin forwarded message:", sprintf("On %s %s wrote:", ctime(msg->date), capitalize(msg->sender))}) + body;
+   body = build_body_inclusion(msg.body);
+   body = ({"Begin forwarded message:", sprintf("On %s %s wrote:", ctime(msg.date), capitalize(msg.sender))}) + body;
 
-   send_mail_message("FWD: " + msg->subject, body, newto, ({}), /* cc_list */
+   send_mail_message("FWD: " + msg.subject, body, newto, ({}), /* cc_list */
                      0);
 }
 

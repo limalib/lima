@@ -13,15 +13,21 @@ July 03, 2023 - Jezu@SpaceMUD
 
 */
 #include <log.h>
+#include <daemons.h>
 
 #define DEBUG_BASE_CLASS     "debug"
 #define DEBUG_CLASS(x)       DEBUG_BASE_CLASS + "/" + x
+#define DEBUG_CLASS_MASTER   DEBUG_CLASS("master")
+
 #define BORDER_CHARACTER     "-"
 #define BORDER_WIDTH         60
+#define BORDER               repeat_string(BORDER_CHARACTER, BORDER_WIDTH)
 
 #define HIW                  "%^BOLD%^%^WHITE%^"
 #define HIR                  "%^BOLD%^%^RED%^"
 #define NOR                  "%^RESET%^"
+
+#define CHANNEL_TAG          "%^CHANNEL%^[errors]%^RESET%^"
 
 #define OUTPUT ([ \
   "file" : 0,\
@@ -34,7 +40,7 @@ July 03, 2023 - Jezu@SpaceMUD
   "interactive" : 7,\
   "context" : 8,\
   "function" : 9,\
-  "locals" : 10 \
+  "locals" : 10, \
 ])
 
 class Error {
@@ -49,6 +55,8 @@ class Error {
   string uid;
   string func;
   mixed *locals;
+  string logfile;
+  int caught;
 }
 
 class Output {
@@ -65,15 +73,17 @@ class Output {
   string locals;
 }
 
+private:
+  string log_current_error(mapping err_map, int caught);
+  string trace_line(object obj, string prog, string file, int line);
+  void send_to_channel();
 
-protected string log_current_error(mapping err_map, int caught);
-
-private nosave class Error error_data;
-private nosave class Output output_data;
-
-private nosave mapping errors = ([]);
-private nosave int has_error = 0;
-private nosave string last_error = "";
+private:
+  nosave class Error error_data;
+  nosave class Output output_data;
+  nosave mapping errors = ([]);
+  nosave int has_error = 0;
+  nosave string last_error = "";
 
 
 public string clear_last_error() {
@@ -84,56 +94,47 @@ public string get_last_error() {
   return last_error;
 }
 
-protected void error_handler(mapping error_map, int caught) {
-  string str, debug_class, border, output, t;
-  function f;
-  mapping enabled_categories;
-  
-  string logfile = (caught ? LOG_FILE_CATCH : LOG_FILE_RUNTIME);
-  string what = error_map["error"];
-  string userid;
-  
-  //tell(find_user("jezu"), sprintf("%O", error_map));
-  output_data = new(class Output);
-  error_data = new(class Error);
+private void build_error_data(mapping error_map, int caught)
+{
+  error_data = new(class Error);;
 
+  error_data.caught      = caught;
   error_data.file        = (string)error_map["file"];
   error_data.line        = (int)error_map["line"];
   error_data.ob          = (object)error_map["object"];
   error_data.program     = (string)error_map["program"];
+  error_data.error       = (string)error_map["error"];
+  error_data.interactive = this_interactive() || this_player() || this_user();
+  error_data.logfile     = (caught ? LOG_FILE_CATCH : LOG_FILE_RUNTIME);
+  error_data.uid         = capitalize((string)error_data.interactive->query_userid() || "(none)");
   error_data.trace       = (mixed*)error_map["trace"];
   if ( arrayp(error_data.trace) && sizeof(error_data.trace) && mapp(error_data.trace[<1]) )
   {
-    error_data.func        = error_data.trace[<1]["function"];
-    error_data.args        = error_data.trace[<1]["arguments"];
-    error_data.locals      = error_data.trace[<1]["locals"];
+    error_data.func      = error_data.trace[<1]["function"];
+    error_data.args      = error_data.trace[<1]["arguments"];
+    error_data.locals    = error_data.trace[<1]["locals"];
   }
-  error_data.error       = (string)error_map["error"];
-  error_data.interactive = this_interactive() || this_player() || this_user();
-  
-  border = repeat_string(BORDER_CHARACTER, BORDER_WIDTH);
-  
-  str = sprintf("\n%s\n%s\n\n", border, ctime());
-  
-  if (caught)
-  {
-    str += "*Error caught\n\n";
-  }
+}
+
+private void build_output_data()
+{
+  function f;
+  output_data = new(class Output);
+
   f = function(string s, mixed m){
     if ( !stringp(m) )
       m = identify(m);
     return sprintf("\n%s%14s:%s %s", HIW, s, NOR, m);
   };
 
-  str += (*f)("Error", error_data.error[0..-2]);
-    
-  output_data.ob = (*f)("Object", error_data.ob);
-  output_data.program = (*f)("Program", error_data.program);
-  output_data.func = (*f)("Function", error_data.func);
+  output_data.error     = (*f)("Error", error_data.error[0..<2]);
+  output_data.ob        = (*f)("Object", error_data.ob);
+  output_data.program   = (*f)("Program", error_data.program);
+  output_data.func      = (*f)("Function", error_data.func);
   output_data.arguments = (*f)("Arguments", error_data.args);
-  output_data.file = (*f)("File", error_data.file);
-  output_data.line = (*f)("Line", error_data.line);
- 
+  output_data.file      = (*f)("File", error_data.file);
+  output_data.line      = (*f)("Line", error_data.line);
+  
   output_data.trace = sprintf("\n\n\n%sTrace:%s\n\n%s", HIW, NOR,
       implode( 
         map_array( 
@@ -145,21 +146,7 @@ protected void error_handler(mapping error_map, int caught) {
                (object)$1["object"] || "No object", 
                (string)$1["program"] || "No program") :)
         ), "\n"));
-        
-  last_error = str;
 
-  // if ( objectp(error_data.interactive) && wizardp(error_data.interactive) )
-  // {
-    // debug_class = DEBUG_CLASS(":"+error_data.uid);
-    // write_file( sprintf("%sdebug.log", user_path(error_data.uid)), log_current_error(error_map, 1));
-
-  // }  
-  // else
-  // {
-    debug_class = DEBUG_CLASS("master");
-    write_file(get_config(__DEBUG_LOG_FILE__), log_current_error(error_map, 0));	 
-
-  // }
   f = function(int offset, int count) {
     string lines;
     string s = "";
@@ -186,53 +173,66 @@ protected void error_handler(mapping error_map, int caught) {
       (*f)(-3, 3),
       (*f)(0, 1),
       (*f)(1, 3));
-
-
-  // foreach(object wiz in filter_array(users(), (: wizardp :)))
-  // {
-    output = "";
-    // enabled_categories = (mapping)wiz->query("debug_categories") || ([]);
-    
-    // foreach(string cat in (keys(enabled_categories)-({ "context", "trace" })))
-    foreach(string cat in (keys(OUTPUT)-({ "context", "trace" })))
-    {
-      // if ( !(int)enabled_categories[cat] )
-        // continue;
-      
-      t = fetch_class_member(output_data, OUTPUT[cat]);
-      if ( stringp(t) )
-        output += t;
-    }
-    
-    // if ( (int)enabled_categories["trace"] )
-      output += fetch_class_member(output_data, OUTPUT["trace"]);
-    // if ( (int)enabled_categories["context"] )
-      output += fetch_class_member(output_data, OUTPUT["context"]);
-    
-    // message(debug_class, sprintf("%s%s\n%s\n", str, output, border), wiz);
-  // }
-  
-
-   
-   if (this_user())
-   {
-      userid = this_user()->query_userid();
-      if (!userid || userid == "")
-         userid = "(none)";
-      printf("%sTrace written to %s\n", what, logfile);
-      errors[userid] = error_map;
-   }
-   else
-      userid = "(none)";
-   errors["last"] = error_map;
-   
-  tell(filter_array(users(), (: wizardp :)), sprintf("%s%s\n%s\n", str, output, border));
 }
+
+protected void error_handler(mapping error_map, int caught) {
+  string t;
+  mapping enabled_categories;
+  string output = "";
+  
+  last_error = error_map["error"];
+
+  build_error_data(error_map, caught);
+  build_output_data();
+    
+  log_current_error(error_map, caught);
+  
+  foreach(string cat in (keys(OUTPUT)-({ "context", "trace", "error" })))
+  {
+    t = fetch_class_member(output_data, OUTPUT[cat]);
+    if ( stringp(t) )
+      output += t;
+  }
+  
+  output += fetch_class_member(output_data, OUTPUT["trace"]);
+  output += fetch_class_member(output_data, OUTPUT["context"]);
+   
+  tell(error_data.interactive, 
+    sprintf("%s%s\n%s\n", 
+      sprintf("\n%s\n%s\n\n%s", 
+        BORDER, 
+        ctime(), 
+        output_data.error), 
+      output, 
+      BORDER));
+      
+  send_to_channel();
+}
+
+
+private void send_to_channel()
+{
+  CHANNEL_D->deliver_string("errors",
+    sprintf("%s (%s) Error logged to %s\n" + "%s %s\n" +
+               "%s %s\n",
+      CHANNEL_TAG,
+      error_data.uid, 
+      error_data.logfile, 
+      CHANNEL_TAG,
+      error_data.error, 
+      CHANNEL_TAG,
+      master()->trace_line(
+        error_data.ob, 
+        error_data.program, 
+        error_data.file, 
+        error_data.line)));
+}
+
 
 protected string log_current_error(mapping err_map, int caught)
 {
   object ob;
-  string prog, error_data, func, output, file;
+  string prog, func, output, file;
   int line;
   
   file = file_name(err_map["object"]);
@@ -241,15 +241,13 @@ protected string log_current_error(mapping err_map, int caught)
   func = err_map["function"];
   if (caught)
   {
-    error_data = replace_string(err_map["error"], "\n", " ");
-    return sprintf("[%s] %s line %d: %s\n", ctime(time()), prog, line, error_data);
+    error_data.error = replace_string(error_data.error, "\n", " ");
+    return sprintf("[%s] %s line %d: %s\n", ctime(time()), prog, line, error_data.error);
   }
-  error_data = err_map["error"];
+
   output  = sprintf("%s\n", ctime(time()));
-  output += error_data;
+  output += err_map["error"];
   output += sprintf("program: %s, object: %s line %d\n", prog, file, line);
-  
- 
  
   foreach (mapping new_map in err_map["trace"])
   {
@@ -260,9 +258,24 @@ protected string log_current_error(mapping err_map, int caught)
     
     output += sprintf("'%15s' in ' %s' ('%s')line %d\n", func, prog, file, line);
   }
-  return output;
+  
+  write_file(error_data.logfile, output);
 }
 
+string trace_line(object obj, string prog, string file, int line)
+{
+   string ret;
+   string objfn = obj ? file_name(obj) : "<none>";
+
+   ret = objfn;
+   if (master()->different(objfn, prog))
+      ret += sprintf(" (%s)", prog);
+   if (file != prog)
+      ret += sprintf(" at %s:%d\n", file, line);
+   else
+      ret += sprintf(" at line %d\n", line);
+   return ret;
+}
 
 mapping query_error(string name)
 {

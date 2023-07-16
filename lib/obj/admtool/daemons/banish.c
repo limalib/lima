@@ -58,7 +58,7 @@ nomask void show_banishes(string header, class banish_data *list)
 
    foreach (class banish_data b in list)
    {
-      result += sprintf("%-20s : %s\n", b->item, b->reason);
+      result += sprintf("%-20s : %s\n", b.item, b.reason);
    }
    more(result);
 }

@@ -87,17 +87,17 @@ class stat_roll_mods query_roll_mods()
     *   5            10		20 .. 30
     *   0		  40		 0 .. 40
     */
-   ret->str_adjust = 10;
-   ret->str_range = 20;
+   ret.str_adjust = 10;
+   ret.str_range = 20;
 
-   ret->agi_adjust = -5;
-   ret->agi_range = 10;
+   ret.agi_adjust = -5;
+   ret.agi_range = 10;
 
-   ret->int_adjust = -10;
-   ret->int_range = 10;
+   ret.int_adjust = -10;
+   ret.int_range = 10;
 
-   ret->wil_adjust = 5;
-   ret->wil_range = 10;
+   ret.wil_adjust = 5;
+   ret.wil_range = 10;
 
    return ret;
 }
@@ -117,20 +117,20 @@ void create(string userid)
 
 #if 0
 void intrinsic_resistance(class combat_result result) {
-     if (result->kind == "fire" && result->damage)
-         result->damage *= 2;
+     if (result.kind == "fire" && result.damage)
+         result.damage *= 2;
      else
-         result->damage--;
+         result.damage--;
 }
 #endif
 
 class event_info health_modify_event(class event_info evt)
 {
-   if (!arrayp(evt->data))
+   if (!arrayp(evt.data))
       return evt;
-   if (member_array("fire", evt->data) != -1)
-      evt->data[sizeof(evt->data) - 1] *= 2;
+   if (member_array("fire", evt.data) != -1)
+      evt->data[sizeof(evt.data) - 1] *= 2;
    else
-      evt->data[sizeof(evt->data) - 1]--;
+      evt->data[sizeof(evt.data) - 1]--;
    return evt;
 }

@@ -196,29 +196,29 @@ varargs void set_method(string method, mixed destination, mixed checks, mixed *e
                     method));
    }
    if (destination)
-      new_method->destination = destination;
+      new_method.destination = destination;
    if (checks)
-      new_method->checks = checks;
+      new_method.checks = checks;
    else
-      new_method->checks = 1;
+      new_method.checks = 1;
 
    // Exit messages
    if (arrayp(exit_messages))
-      new_method->exit_messages = exit_messages;
+      new_method.exit_messages = exit_messages;
    else if (stringp(exit_messages))
-      new_method->exit_messages = ({exit_messages});
+      new_method.exit_messages = ({exit_messages});
    else
-      new_method->exit_messages = ({});
+      new_method.exit_messages = ({});
 
    // Enter messages
    if (arrayp(enter_messages))
-      new_method->enter_messages = enter_messages;
+      new_method.enter_messages = enter_messages;
    else if (stringp(enter_messages))
-      new_method->enter_messages = ({enter_messages});
+      new_method.enter_messages = ({enter_messages});
    else
-      new_method->enter_messages = ({});
-   new_method->exit_dir = ( : the_short:);
-   new_method->source = this_object();
+      new_method.enter_messages = ({});
+   new_method.exit_dir = ( : the_short:);
+   new_method.source = this_object();
    methods[matches[0]] = new_method;
 }
 
@@ -268,7 +268,7 @@ void set_method_checks(string method, mixed checks)
       error("Attempted to set_method_checks on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to set_method_checks on an ambiguous method");
-   methods[applicable_methods[0]]->checks = checks;
+   methods[applicable_methods[0]].checks = checks;
 }
 
 //: FUNCTION query_method_checks
@@ -283,7 +283,7 @@ mixed query_method_checks(string method)
       error("Attempted to query_method_checks on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to query_method_checks on an ambiguous method");
-   return evaluate(methods[applicable_methods[0]]->checks, query_obvious_description(), this_body());
+   return evaluate(methods[applicable_methods[0]].checks, query_obvious_description(), this_body());
 }
 
 //: FUNCTION set_method_destination
@@ -298,7 +298,7 @@ void set_method_destination(string method, mixed destination)
       error("Attempted to set_method_destination on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to set_method_destination on an ambiguous method");
-   methods[applicable_methods[0]]->destination = destination;
+   methods[applicable_methods[0]].destination = destination;
 }
 
 //: FUNCTION query_method_destination
@@ -312,7 +312,7 @@ mixed query_method_destination(string method)
       error("Attempted to query_method_destination on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to query_method_destination on an ambiguous method");
-   ret = evaluate(methods[applicable_methods[0]]->destination);
+   ret = evaluate(methods[applicable_methods[0]].destination);
    if (stringp(ret))
       return absolute_path(ret, query_base());
    return ret;
@@ -330,7 +330,7 @@ varargs void set_method_enter_messages(string method, mixed *messages...)
       error("Attempted to set_method_enter_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to set_method_enter_messages on an ambiguous method");
-   methods[applicable_methods[0]]->enter_messages = flatten_array(messages);
+   methods[applicable_methods[0]].enter_messages = flatten_array(messages);
 }
 
 //: FUNCTION add_method_enter_messages
@@ -345,7 +345,7 @@ varargs void add_method_enter_messages(string method, mixed messages...)
       error("Attempted to add_method_enter_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to add_method_enter_messages on an ambiguous method");
-   methods[applicable_methods[0]]->enter_messages += flatten_array(messages);
+   methods[applicable_methods[0]].enter_messages += flatten_array(messages);
 }
 
 //: FUNCTION remove_method_enter_messages
@@ -360,7 +360,7 @@ varargs void remove_method_enter_messages(string method, mixed messages...)
       error("Attempted to remove_method_enter_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to remove_method_enter_messages on an ambiguous method");
-   methods[applicable_methods[0]]->enter_messages -= flatten_array(messages);
+   methods[applicable_methods[0]].enter_messages -= flatten_array(messages);
 }
 
 //: FUNCTION query_method_enter_message
@@ -375,10 +375,10 @@ string query_method_enter_message(string method)
       error("Attempted to query_method_enter_message on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to query_method_enter_message on an ambiguous method");
-   if (!sizeof(methods[applicable_methods[0]]->enter_messages))
+   if (!sizeof(methods[applicable_methods[0]].enter_messages))
       return;
 
-   ret = methods[applicable_methods[0]]->enter_messages;
+   ret = methods[applicable_methods[0]].enter_messages;
    /* We know that ret has to be an *at this point, select one element
     * randomly */
    ret = ret[random(sizeof(ret))];
@@ -396,7 +396,7 @@ mixed *list_method_enter_messages(string method)
       error("Attempted to list_method_enter_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to list_method_enter_messages on an ambiguous method");
-   return methods[applicable_methods[0]]->enter_messages;
+   return methods[applicable_methods[0]].enter_messages;
 }
 
 //: FUNCTION set_method_exit_messages
@@ -411,7 +411,7 @@ varargs void set_method_exit_messages(string method, mixed messages...)
       error("Attempted to set_method_exit_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to set_method_exit_messages on an ambiguous method");
-   methods[applicable_methods[0]]->exit_messages = flatten_array(messages);
+   methods[applicable_methods[0]].exit_messages = flatten_array(messages);
 }
 
 //: FUNCTION add_method_exit_messages
@@ -426,7 +426,7 @@ varargs void add_method_exit_messages(string method, mixed messages...)
       error("Attempted to add_method_exit_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to add_method_exit_messages on an ambiguous method");
-   methods[applicable_methods[0]]->exit_messages += flatten_array(messages);
+   methods[applicable_methods[0]].exit_messages += flatten_array(messages);
 }
 
 //: FUNCTION remove_method_exit_messages
@@ -441,7 +441,7 @@ varargs void remove_method_exit_messages(string method, mixed messages...)
       error("Attempted to remove_method_exit_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to remove_method_exit_messages on an ambiguous method");
-   methods[applicable_methods[0]]->exit_messages -= flatten_array(messages);
+   methods[applicable_methods[0]].exit_messages -= flatten_array(messages);
 }
 
 //: FUNCTION query_method_exit_messages
@@ -456,10 +456,10 @@ string query_method_exit_message(string method)
       error("Attempted to query_method_exit_message on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to query_method_exit_message on an ambiguous method");
-   if (!sizeof(methods[applicable_methods[0]]->exit_messages))
+   if (!sizeof(methods[applicable_methods[0]].exit_messages))
       return;
 
-   ret = methods[applicable_methods[0]]->exit_messages;
+   ret = methods[applicable_methods[0]].exit_messages;
    /* We know that ret has to be an array at this point, select one element
     * randomly */
    ret = ret[random(sizeof(ret))];
@@ -477,7 +477,7 @@ mixed *list_method_exit_messages(string method)
       error("Attempted to list_method_exit_messages on a nonexistant method");
    if (sizeof(applicable_methods) > 1)
       error("Attempted to list_method_exit_messages on an ambiguous method");
-   return methods[applicable_methods[0]]->exit_messages;
+   return methods[applicable_methods[0]].exit_messages;
 }
 
 /*
@@ -550,17 +550,17 @@ int complex_exit_do_verb_rule(string verb, string rule, mixed args...)
    data = copy(methods[match]);
 
    /* We want to do some operation on these */
-   data->destination = objectp(dest) ? file_name(query_method_destination(match)) : dest;
-   data->relation = prep;
-   data->exit_messages = query_method_exit_message(match);
+   data.destination = objectp(dest) ? file_name(query_method_destination(match)) : dest;
+   data.relation = prep;
+   data.exit_messages = query_method_exit_message(match);
    /* Fetch enter msg from sibling, if one is found */
    if (sibling = this_object()->get_sibling())
-      data->enter_messages = sibling->query_method_enter_message(match);
+      data.enter_messages = sibling->query_method_enter_message(match);
    else
-      data->enter_messages = query_method_enter_message(match);
+      data.enter_messages = query_method_enter_message(match);
    /* Set up the through object for M_SMARTMOVE */
-   data->through = sibling;
-   data->who = this_body();
+   data.through = sibling;
+   data.who = this_body();
 
    /* It is now time to move the body to the destination */
    return this_body()->move_to(data);

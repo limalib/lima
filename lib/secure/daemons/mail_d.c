@@ -182,13 +182,13 @@ varargs nomask string *send_mail(string Sender, string Subject, mixed Body, stri
       Body = ({"**Blank message!**"});
 
    msg = new (class mail_msg);
-   msg->to_list = To_list;
-   msg->cc_list = Cc_list;
-   msg->sender = Sender;
-   msg->subject = Subject;
-   msg->body = Body;
+   msg.to_list = To_list;
+   msg.cc_list = Cc_list;
+   msg.sender = Sender;
+   msg.subject = Subject;
+   msg.body = Body;
 
-   if (!arrayp(msg->to_list) || !arrayp(msg->cc_list))
+   if (!arrayp(msg.to_list) || !arrayp(msg.cc_list))
       error("send mail: invalid list of recipients");
 
    /*
@@ -202,10 +202,10 @@ varargs nomask string *send_mail(string Sender, string Subject, mixed Body, stri
 
    // this is the mail pointer as well as within seconds of time()
    message_key = get_message_key();
-   msg->date = msg->thread_id = message_key;
+   msg.date = msg.thread_id = message_key;
    if (send_time)
    {
-      msg->date = send_time;
+      msg.date = send_time;
    }
 
    // A list of target recipients with no names duplicated
@@ -215,14 +215,14 @@ varargs nomask string *send_mail(string Sender, string Subject, mixed Body, stri
    recip_list = recip_lists[1];
    local_recip_list = process_mail_list(local_recip_list);
 
-   msg->to_list = recip_list;
+   msg.to_list = recip_list;
    // deliver the mail (the message keys) to all recipients
    map_array(local_recip_list, ( : deliver_mail, message_key:));
 
    // we need to keep track of who needs to delete this message before
    // we erase this message to prevent people from making a call
    // to delete a mail into oblivion.
-   msg->dels_pending = local_recip_list;
+   msg.dels_pending = local_recip_list;
 
    // If there are no active copies, no one on this mud
    // is receiving this message, so why save it?
@@ -254,7 +254,7 @@ nomask mixed get_one_message(int message_key)
       return 0;
    }
 
-   if (member_array(this_user()->query_userid(), msg->dels_pending) == -1)
+   if (member_array(this_user()->query_userid(), msg.dels_pending) == -1)
       error("security violation: illegal attempt to read mail\n");
 
    return msg;
@@ -272,8 +272,8 @@ nomask void delete_mail(int message_key, string user)
    if (!(msg = restore_msg(message_key)))
       error("lost the message\n");
 
-   msg->dels_pending -= ({user});
-   if (!sizeof(msg->dels_pending))
+   msg.dels_pending -= ({user});
+   if (!sizeof(msg.dels_pending))
       unguarded(1, ( : rm, get_fname(message_key) + __SAVE_EXTENSION__:));
    else
       save_msg(message_key, msg);
@@ -287,7 +287,7 @@ nomask void process_message(string fname)
 
    message_key = to_int(fname[0.. < 3]); /* ### dependent on SAVE_EXTENSION */
    msg = restore_msg(message_key);
-   map(msg->dels_pending, ( : MAILBOX_D->get_mailbox($1)->receive_new_message($(message_key)) :));
+   map(msg.dels_pending, ( : MAILBOX_D->get_mailbox($1)->receive_new_message($(message_key)) :));
 }
 
 nomask void rebuild_mailboxes()

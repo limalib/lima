@@ -19,7 +19,7 @@ void add_annotation(mixed o, class annotation a)
 {
    class annotation *arrs;
 
-   a->date = ctime(time());
+   a.date = ctime(time());
    // ## Add code for owner of an annotation... check against WIZ_DIR
 
    arrs = annotations[(objectp(o) ? base_name(o) : o)];
@@ -54,10 +54,10 @@ int remove_annotation(mixed o, int index)
    {
       return -2;
    }
-   else if ((a = arr[index]) && (a->read_only) && (!adminp(this_body())))
+   else if ((a = arr[index]) && (a.read_only) && (!adminp(this_body())))
    {
       thisguy = this_body()->query_userid();
-      if ((thisguy != a->author) && (thisguy != a->owner))
+      if ((thisguy != a.author) && (thisguy != a.owner))
       {
          return -3;
       }

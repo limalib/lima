@@ -182,13 +182,13 @@ string *prep_aliases_for_save(string state)
          {
             class alias new_expansion;
             new_expansion = new (class alias);
-            new_expansion->template = expansion->template;
-            new_expansion->defaults = expansion->defaults;
-            new_expansion->num_args = expansion->num_args;
-            new_expansion->global_alias_status = 0;
+            new_expansion.template = expansion.template;
+            new_expansion.defaults = expansion.defaults;
+            new_expansion.num_args = expansion.num_args;
+            new_expansion.global_alias_status = 0;
             expansion = new_expansion;
          }
-         if (!(expansion->global_alias_status))
+         if (!(expansion.global_alias_status))
          {
             alias_save[a] = expansion;
             if (member_array(a, xaliases) != -1)
@@ -229,9 +229,9 @@ varargs void add_alias(string name, string template, string *defaults, int xverb
       template += " $*";
 
    new_alias = new (class alias);
-   new_alias->template = template;
-   new_alias->defaults = defaults;
-   new_alias->num_args = max(map(
+   new_alias.template = template;
+   new_alias.defaults = defaults;
+   new_alias.num_args = max(map(
        explode(template[strsrch(template, "$")..], "$"), function(string s) {
           int d;
           sscanf(s, "%d%s", d, s);
@@ -240,11 +240,11 @@ varargs void add_alias(string name, string template, string *defaults, int xverb
 
    // Pad the default array with empty strings if there aren't enough
    // defaults provided to us.
-   if (!arrayp(new_alias->defaults))
-      new_alias->defaults = ({});
+   if (!arrayp(new_alias.defaults))
+      new_alias.defaults = ({});
    i = new_alias->num_args - (sizeof(defaults) - 1);
    while (i--)
-      new_alias->defaults += ({""});
+      new_alias.defaults += ({""});
 
    if (xverb)
    {
@@ -288,20 +288,20 @@ mixed expand_alias(string input)
    if (!(this_alias = aliases[argv[0]]))
       return trim(implode(argv, " "));
 
-   expanded_input = replace_string(this_alias->template, "\\\\$", sprintf("%c", 255));
+   expanded_input = replace_string(this_alias.template, "\\\\$", sprintf("%c", 255));
    j = numargs;
 
-   for (i = 1; i <= this_alias->num_args; i++, j--)
+   for (i = 1; i <= this_alias.num_args; i++, j--)
    {
       if (j < 1)
-         expanded_input = replace_string(expanded_input, sprintf("$%d", i), this_alias->defaults[i]);
+         expanded_input = replace_string(expanded_input, sprintf("$%d", i), this_alias.defaults[i]);
       else
          expanded_input = replace_string(expanded_input, sprintf("$%d", i), argv[i]);
    }
    if (j > 0)
       expanded_input = replace_string(expanded_input, "$*", implode(argv[i..], " "));
    else
-      expanded_input = replace_string(expanded_input, "$*", this_alias->defaults[0]);
+      expanded_input = replace_string(expanded_input, "$*", this_alias.defaults[0]);
 
    return trim(replace_string(expanded_input, sprintf("%c", 255), "$"));
 }

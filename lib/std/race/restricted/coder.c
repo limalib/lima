@@ -33,17 +33,17 @@ class stat_roll_mods query_roll_mods()
 {
    class stat_roll_mods ret = new (class stat_roll_mods);
 
-   ret->str_adjust = 10;
-   ret->str_range = 10;
+   ret.str_adjust = 10;
+   ret.str_range = 10;
 
-   ret->agi_adjust = 10;
-   ret->agi_range = 10;
+   ret.agi_adjust = 10;
+   ret.agi_range = 10;
 
-   ret->int_adjust = 10;
-   ret->int_range = 10;
+   ret.int_adjust = 10;
+   ret.int_range = 10;
 
-   ret->wil_adjust = 10;
-   ret->wil_range = 10;
+   ret.wil_adjust = 10;
+   ret.wil_range = 10;
 
    return ret;
 }

@@ -182,7 +182,7 @@ string dump_final_goals(string domain)
     {
         if(quests[domain][keys[i]][Q_MSTONE])
         {
-            output += sprintf("%-17s-> %-2d pts, %s\n",
+            output += sprintf("%-17s.%-2d pts, %s\n",
               keys[i], quests[domain][keys[i]][Q_VALUE], quests[domain][keys[i]][Q_BASE]);
             total1 += quests[domain][keys[i]][Q_VALUE];
         }
@@ -248,7 +248,7 @@ string show_quest( string domain, string quest_name )
     if( !quests[domain][quest_name] )
         return sprintf("%s: no such quest milestone in domain '%s'.\n", quest_name,domain);
 
-    return sprintf("%-20s %-20s-> %-2d points, home: %O", 
+    return sprintf("%-20s %-20s.%-2d points, home: %O", 
         domain,
         quest_name, 
         quests[domain][quest_name][Q_VALUE],

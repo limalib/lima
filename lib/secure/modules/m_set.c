@@ -38,9 +38,9 @@ string set_add(string set, int number)
       return number + "-" + number;
 
    /* The cases we have to consider:
-    1-2 -> 1-2,4-4
-    1-2,4-5 -> 1-2,4-6
-    1-3,5-7 -> 1-7
+    1-2.1-2,4-4
+    1-2,4-5.1-2,4-6
+    1-3,5-7.1-7
    */
 
    idx = 0;

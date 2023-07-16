@@ -143,10 +143,10 @@ nomask mixed get_random_clothing()
    if (!tmp)
       return 0;
 
-   if (!sizeof(tmp->stuff))
+   if (!sizeof(tmp.stuff))
       return 0;
 
-   return choice(tmp->stuff);
+   return choice(tmp.stuff);
 }
 
 protected

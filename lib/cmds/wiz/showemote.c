@@ -40,11 +40,11 @@ void main(string str)
    {
       if (stringp(data[m[i]]))
       {
-         outf("%O -> %s\n", m[i], data[m[i]]);
+         outf("%O.%s\n", m[i], data[m[i]]);
       }
       else
       {
-         outf("%O -> %s\n", m[i], implode(data[m[i]], "\n\t-> "));
+         outf("%O.%s\n", m[i], implode(data[m[i]], "\n\t."));
       }
    }
 }

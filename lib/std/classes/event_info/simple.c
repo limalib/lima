@@ -14,5 +14,5 @@ class event_info
 
 int event_damage(class event_info evt)
 {
-   return evt->data;
+   return evt.data;
 }

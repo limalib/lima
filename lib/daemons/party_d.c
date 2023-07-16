@@ -41,13 +41,13 @@ nomask int register_party(string name, string owner, string password)
    // When we first create the party, the creator
    // has 100% of the experience shares and has
    // the highest access level.
-   new_party->name = name;
-   new_party->members = ([]);
-   new_party->members[owner] = 1;
-   new_party->kills = ([]);
-   new_party->kills[owner] = 0;
-   new_party->password = password;
-   new_party->total_kills = 0;
+   new_party.name = name;
+   new_party.members = ([]);
+   new_party.members[owner] = 1;
+   new_party.kills = ([]);
+   new_party.kills[owner] = 0;
+   new_party.password = password;
+   new_party.total_kills = 0;
    parties += ([lower_case(name):new_party]);
    save_me();
    return 1;
@@ -66,11 +66,11 @@ mixed test(string name)
 nomask int award_experience(object slayer, string name, object *viable, int level)
 {
    class party tmp = parties[lower_case(name)];
-   string *party_members = keys(tmp->members);
+   string *party_members = keys(tmp.members);
    int x = 0;
    float total = 0.0;
 
-   parties[lower_case(name)]->total_kills++;
+   parties[lower_case(name)].total_kills++;
 
    foreach (string member_name in party_members)
    {
@@ -78,7 +78,7 @@ nomask int award_experience(object slayer, string name, object *viable, int leve
       if (b && member_array(b, viable) != -1)
       {
          if (slayer && slayer == b)
-            parties[lower_case(name)]->kills[member_name]++;
+            parties[lower_case(name)].kills[member_name]++;
 
          total += b->query_level();
       }
@@ -105,7 +105,7 @@ nomask int award_experience(object slayer, string name, object *viable, int leve
 nomask void modify_karma(string name, object *viable, int karma_impact)
 {
    class party tmp = parties[lower_case(name)];
-   string *party_members = keys(tmp->members);
+   string *party_members = keys(tmp.members);
    int x = 0;
 
    foreach (string member_name in party_members)

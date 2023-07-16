@@ -31,18 +31,17 @@ nosave mapping themes = (["single":({"┌", "─", "┬", "┐", "│", "├", "
                             "none":({" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "})]);
 
 private
-nosave mapping colours =
-    (["fire":({"160,166,172,178,184,190,226,220,214,208,202,196", "208", "015", "197"}),
-         "steel":({"239,240,241,242,255,237,238,239,240,241", "117", "015", "197"}),
-         "fairy":({"093,099,105,111,117,123,159,153,147,141,135,129", "175", "015", "197"}),
-          "cool":({"021,027,033,039,045,051,087,081,075,069,063,057", "159", "015", "197"}),
-          "pink":({"165,171,177,183,189,195,231,225,219,213,207,201", "231", "015", "197"}),
-         "blues":({"058,059,060,061,062,063", "105", "229", "197"}),
-          "dusk":({"130,131,132,133,134,135", "220", "223", "197"}),
-         "sunny":({"226,227,228,229,230,231", "214", "015", "197"}),
-          "neon":({"088,089,090,091,092,093", "228", "045", "197"}),
-        "nature":({"022,028,034,040,046,083,077,071,065,059", "192", "015", "197"}), //Nature
-        "none":({"", "", "", ""}), ]); //And none
+nosave mapping colours = (["fire":({"160,166,172,178,184,190,226,220,214,208,202,196", "208", "015", "197"}),
+                          "steel":({"239,240,241,242,255,237,238,239,240,241", "117", "015", "197"}),
+                          "fairy":({"093,099,105,111,117,123,159,153,147,141,135,129", "175", "015", "197"}),
+                           "cool":({"021,027,033,039,045,051,087,081,075,069,063,057", "159", "015", "197"}),
+                           "pink":({"165,171,177,183,189,195,231,225,219,213,207,201", "231", "015", "197"}),
+                          "blues":({"058,059,060,061,062,063", "105", "229", "197"}),
+                           "dusk":({"130,131,132,133,134,135", "220", "223", "197"}),
+                          "sunny":({"226,227,228,229,230,231", "214", "015", "197"}),
+                           "neon":({"088,089,090,091,092,093", "228", "045", "197"}),
+                         "nature":({"022,028,034,040,046,083,077,071,065,059", "192", "015", "197"}), // Nature
+                           "none":({"", "", "", ""}), ]);                                             // And none
 private
 nosave string *bits;
 
@@ -78,7 +77,7 @@ string use_colour(string *cols, int position, int width)
    int col_index = floor(sizeof(cols) * ((0.0 + position) / (width || 1)));
 
    col_index = CLAMP(col_index, 0, sizeof(cols) - 1);
-   return cols[col_index]!="" ? "<" + cols[col_index] + ">" : "";
+   return cols[col_index] != "" ? "<" + cols[col_index] + ">" : "";
 }
 
 void select_theme(string t)
@@ -114,24 +113,24 @@ string colour_str(string t, string col)
 
 string title(mixed t)
 {
-   return colour_str(""+t, hcolours[COL_TITLE]);
+   return colour_str("" + t, hcolours[COL_TITLE]);
 }
 
 string accent(mixed t)
 {
-   return colour_str(""+t, hcolours[COL_ACCENT]);
+   return colour_str("" + t, hcolours[COL_ACCENT]);
 }
 
 string warning(mixed t)
 {
-   return colour_str(""+t, hcolours[COL_WARNING]);
+   return colour_str("" + t, hcolours[COL_WARNING]);
 }
 
 void set_frame_title(string s)
 {
    if (XTERM256_D->colourp(s))
       title = s;
-   else if (hcolours && hcolours[COL_TITLE]!="")
+   else if (hcolours && hcolours[COL_TITLE] != "")
       title = "<" + hcolours[COL_TITLE] + ">" + s + "<res>";
    else
       title = s;
@@ -166,12 +165,19 @@ void frame_init_user()
 
 void set_frame_header(string hc)
 {
-   string *header_lines = explode(hc, "\n");
+   string *header_lines;
    int i = 0;
+
+   if (!hc)
+   {
+      add_header = 0;
+      return;
+   }
+   header_lines = explode(hc, "\n");
    while (i < sizeof(header_lines))
    {
       string line = header_lines[i];
-      if (!XTERM256_D->colourp(line) && hcolours[COL_ACCENT]!="")
+      if (!XTERM256_D->colourp(line) && hcolours[COL_ACCENT] != "")
          line = "<" + hcolours[COL_ACCENT] + ">" + rtrim(line) + "<res>";
       else
          line = rtrim(line);
@@ -232,8 +238,6 @@ string create_header()
 
       out += bits[TLD] + "\n";
    }
-
-   add_header = 1;
 
    out += bits[TRD] + (add_header ? bits[THD] : "") + repeat_string(bits[TH], title_margin - (add_header ? 2 : 1)) +
           bits[TDL] + repeat_string(" ", text_margin) + title + repeat_string(" ", text_margin) + bits[TDR] +

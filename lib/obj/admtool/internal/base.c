@@ -78,20 +78,20 @@ void write_menu()
    heading();
 
    foreach (class command_info comm in commands)
-      if (comm->proto && sizeof(comm->proto) > maxlen)
+      if (comm.proto && sizeof(comm.proto) > maxlen)
       {
-         maxlen = sizeof(comm->proto);
-         maxkeylen = sizeof(comm->key);
+         maxlen = sizeof(comm.proto);
+         maxkeylen = sizeof(comm.key);
       }
 
    foreach (class command_info comm in commands)
    {
-      string desc = comm->desc;
+      string desc = comm.desc;
 
-      if (comm->who)
-         desc = desc + repeat_string(" ", 65 - maxkeylen - maxlen - strlen(desc) - strlen(comm->who)) + comm->who;
+      if (comm.who)
+         desc = desc + repeat_string(" ", 65 - maxkeylen - maxlen - strlen(desc) - strlen(comm.who)) + comm.who;
 
-      if (comm->key)
+      if (comm.key)
       {
          string color = "";
 
@@ -100,7 +100,7 @@ void write_menu()
          else
             color = "%^ADMTOOL_LO%^";
 
-         printf("  %s%3s %-*s - %s%%^RESET%%^\n", color, comm->key, maxlen, comm->proto || "", desc);
+         printf("  %s%3s %-*s - %s%%^RESET%%^\n", color, comm.key, maxlen, comm.proto || "", desc);
 
          line++;
       }
@@ -222,14 +222,14 @@ void handle_input(string str)
 
    foreach (class command_info comm in commands)
    {
-      if (str == comm->key)
+      if (str == comm.key)
       {
-         if (comm->priv && !check_previous_privilege(comm->priv))
+         if (comm.priv && !check_previous_privilege(comm.priv))
          {
-            printf("Permission denied; need privilege '%O'.\n", comm->priv);
+            printf("Permission denied; need privilege '%O'.\n", comm.priv);
             return;
          }
-         switch (sizeof(comm->args))
+         switch (sizeof(comm.args))
          {
          case 0:
             if (arg)
@@ -238,13 +238,13 @@ void handle_input(string str)
                return;
             }
 
-            evaluate(comm->action);
+            evaluate(comm.action);
             return;
          case 1:
-            input_one_arg(comm->args[0], comm->action, arg);
+            input_one_arg(comm.args[0], comm.action, arg);
             return;
          case 2:
-            input_two_args(comm->args[0], comm->args[1], comm->action, arg);
+            input_two_args(comm.args[0], comm.args[1], comm.action, arg);
             return;
          default:
             error("No support for >2 args\n");

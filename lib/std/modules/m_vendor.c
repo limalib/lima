@@ -131,8 +131,8 @@ class item init_item(object ob, mixed *setup_args)
                : ob->query_id() + ({ob->short(), ob->plural_short()}), value
                : ob->query_value(), amount : 1, args
                : setup_args);
-   if (item->long[ < 1] != '\n')
-      item->long += "\n";
+   if (item.long[ < 1] != '\n')
+      item.long += "\n";
    return item;
 }
 
@@ -141,7 +141,7 @@ int find_item(string file, mixed *setup_args)
 {
    foreach (int indx, class item item in stored_items)
    {
-      if (item->file == file && cmp(item->args, setup_args))
+      if (item.file == file && cmp(item.args, setup_args))
          return indx;
    }
    return -1;
@@ -164,8 +164,8 @@ varargs void add_sell(string file, int amt, mixed *setup_args)
    if (indx != -1)
    {
       item = stored_items[indx];
-      if (item->amount > 0)
-         item->amount = item->amount + 1;
+      if (item.amount > 0)
+         item.amount = item.amount + 1;
       stored_items[indx] = item;
       return;
    }
@@ -177,8 +177,8 @@ varargs void add_sell(string file, int amt, mixed *setup_args)
       if (ob = new (file, setup_args...))
       {
          item = init_item(ob, setup_args);
-         item->amount = amt;
-         item->file = base_name(ob);
+         item.amount = amt;
+         item.file = base_name(ob);
          stored_items[++max_item_number] = item;
          destruct(ob);
       }
@@ -213,15 +213,15 @@ void add_sell_object(object ob)
 
    foreach (item in values(stored_items))
    {
-      if (item->objects && compare_objects(item->objects[0], ob))
+      if (item.objects && compare_objects(item.objects[0], ob))
       {
-         item->objects += ({ob});
-         item->amount++;
+         item.objects += ({ob});
+         item.amount++;
          return;
       }
    }
    item = init_item(ob, 0);
-   item->objects = ({ob});
+   item.objects = ({ob});
    stored_items[++max_item_number] = item;
 }
 
@@ -410,7 +410,7 @@ void buy_object(object ob)
 string random_item_short()
 {
    class item example = choice(values(stored_items));
-   return example->ids[0];
+   return example.ids[0];
 }
 
 //: FUNCTION query_items
@@ -441,7 +441,7 @@ mixed query_items(string item, int flag)
    {
       foreach (int key in keys(stored_items))
       {
-         if (member_array(item, stored_items[key]->ids) != -1 || strsrch(stored_items[key]->short, item) != -1)
+         if (member_array(item, stored_items[key].ids) != -1 || strsrch(stored_items[key].short, item) != -1)
          {
             keys += ({key});
          }
@@ -457,15 +457,15 @@ mixed query_items(string item, int flag)
    foreach (int key in keys)
    {
       if (clear_numbers)
-         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key]->value)) / exchange_rate, 2)});
+         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key].value)) / exchange_rate, 2)});
       else
-         cost_names += ({MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key]->value)) / exchange_rate,
+         cost_names += ({MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key].value)) / exchange_rate,
                                                      currency_type)});
 
       if (cost_lng < strlen(cost_names[ < 1]))
          cost_lng = strlen(cost_names[ < 1]);
 
-      item_names += ({stored_items[key]->short});
+      item_names += ({stored_items[key].short});
       if (item_lng < strlen(item_names[ < 1]))
          item_lng = strlen(item_names[ < 1]);
    }
@@ -477,7 +477,7 @@ mixed query_items(string item, int flag)
 
    foreach (int key in keys)
    {
-      num = stored_items[key]->amount;
+      num = stored_items[key].amount;
       if (num != -1)
          out +=
              sprintf("   %-7d %-10d %-" + item_lng + "s %" + cost_lng + "s\n", key, num, item_names[i], cost_names[i]);
@@ -485,7 +485,7 @@ mixed query_items(string item, int flag)
          out += sprintf("   %-7d %-10s %-" + item_lng + "s %" + cost_lng + "s\n", key, "Many", item_names[i],
                         cost_names[i]);
       if (flag)
-         out += stored_items[key]->long;
+         out += stored_items[key].long;
       i++;
    }
    frame_content+=({out});
@@ -584,23 +584,23 @@ void sell_items(int key, int amount)
    object ob;
 
    item = stored_items[key];
-   if (item->amount != -1 && item->amount < amount)
-      amount = item->amount;
+   if (item.amount != -1 && item.amount < amount)
+      amount = item.amount;
 
    for (i = 1; i <= amount; i++)
    {
-      if (item->objects)
-         ob = item->objects[0];
+      if (item.objects)
+         ob = item.objects[0];
       else
-         ob = new (item->file, item->args...);
+         ob = new (item.file, item.args...);
       if (sell_object(ob))
       {
-         if (item->objects)
-            item->objects -= ({ob});
-         if (item->amount != -1)
+         if (item.objects)
+            item.objects -= ({ob});
+         if (item.amount != -1)
          {
-            item->amount--;
-            if (item->amount <= 0)
+            item.amount--;
+            if (item.amount <= 0)
                map_delete(stored_items, key);
          }
       }
@@ -633,7 +633,7 @@ void sell_stored_objects(string item, int number, int amount)
          sell_items(number, amount);
       else
       {
-         if (member_array(item, stored_items[number]->ids) != -1)
+         if (member_array(item, stored_items[number].ids) != -1)
             sell_items(number, amount);
          else
             write("There is no '" + item + "' at #" + number + ".\n");
@@ -643,7 +643,7 @@ void sell_stored_objects(string item, int number, int amount)
    {
       foreach (int key in keys(stored_items))
       {
-         if (member_array(item, stored_items[key]->ids) != -1)
+         if (member_array(item, stored_items[key].ids) != -1)
          {
             sell_items(key, amount);
             return;

@@ -67,7 +67,7 @@ nomask int filter_removed(int elem)
 {
    class news_msg msg = NEWS_D->get_message(linked_group, elem);
 
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0;
 
    return 1;
@@ -147,13 +147,13 @@ nomask varargs string format_message_line(int id)
 
    msg = NEWS_D->get_message(linked_group, id);
 
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0; // Do not display removed messages.
    else
-      subject = msg->subject;
+      subject = msg.subject;
 
    return sprintf("%-48s [%-10s on %s]", // Display message subject/poster/time
-                  subject[0..47], msg->poster, intp(msg->time) ? ctime(msg->time)[4..9] : msg->time);
+                  subject[0..47], msg.poster, intp(msg.time) ? ctime(msg.time)[4..9] : msg.time);
 }
 
 // Format all message lines.
@@ -240,7 +240,7 @@ nomask mixed read_entry(string str)
       this_body()->set_news_group_id(linked_group, id + 1);
    msg = NEWS_D->get_message(linked_group, id);
 
-   return format_message_line(id) + "\n\n" + msg->body;
+   return format_message_line(id) + "\n\n" + msg.body;
 }
 
 // Helpful text for those used to type 'read 1'.
@@ -319,7 +319,7 @@ nomask void do_remove(int id)
    ids = sort_array(filter_array(NEWS_D->get_messages(linked_group), ( : filter_removed:)), 1);
    msg = NEWS_D->get_message(linked_group, ids[id - 1]);
 
-   if (msg->poster != this_body()->query_name() && !check_privilege(1))
+   if (msg.poster != this_body()->query_name() && !check_privilege(1))
    {
       write("You can only delete your own posts.\n");
       return;
@@ -442,10 +442,10 @@ nomask void do_followup_with_message(int id)
       return;
    }
 
-   lines = ({sprintf("On %s %s wrote post #%d:", intp(msg->time) ? ctime(msg->time) : msg->time, msg->poster,
+   lines = ({sprintf("On %s %s wrote post #%d:", intp(msg.time) ? ctime(msg.time) : msg.time, msg.poster,
                      get_current_id())});
 
-   lines += map_array(explode(msg->body, "\n"), ( : "> " + $1:));
+   lines += map_array(explode(msg.body, "\n"), ( : "> " + $1:));
 
    new (EDIT_OB, EDIT_TEXT, lines, ( : receive_followup, ids[id - 1] :));
 }
@@ -487,9 +487,9 @@ void receive_reply(int reply_id, string *body)
    // This line required a change in the mailer
    //  (/obj/secure/mailers/mailer.c) because it checked whether the
    //  previous object was the newsreader.
-   this_body()->query_mailer()->send_news_reply("Re: " + msg->subject, body, lower_case(msg->poster));
+   this_body()->query_mailer()->send_news_reply("Re: " + msg.subject, body, lower_case(msg.poster));
 
-   write("Replied to " + lower_case(msg->poster) + ".\n");
+   write("Replied to " + lower_case(msg.poster) + ".\n");
 }
 
 nomask void do_reply(int id)
@@ -585,7 +585,7 @@ int count_unread_messages(string group, int all_messages)
    foreach (id in ids)
    {
       msg = NEWS_D->get_message(group, id);
-      if (msg->body)
+      if (msg.body)
       {
          count++;
       }

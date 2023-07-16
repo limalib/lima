@@ -42,26 +42,26 @@ mapping query_weaknesses()
 
 class event_info sink_modify_event(class event_info evt)
 {
-   int reduced = evt->data[1];
+   int reduced = evt.data[1];
    // TBUG(event_to_str(evt));
-   if (stringp(evt->data))
+   if (stringp(evt.data))
       return evt;
-   if (member_array(evt->data[0], keys(weaknesses)) != -1)
-      evt->data[1] += weaknesses[evt->data[0]];
-   if (member_array(evt->data[0], keys(resistances)) != -1)
-      evt->data[1] -= resistances[evt->data[0]] + armor_class;
+   if (member_array(evt.data[0], keys(weaknesses)) != -1)
+      evt.data[1] += weaknesses[evt.data[0]];
+   if (member_array(evt.data[0], keys(resistances)) != -1)
+      evt.data[1] -= resistances[evt.data[0]] + armor_class;
    else
-      evt->data[1] -= ((armor_class / 2) + random(armor_class / 2));
-   if (evt->data[1] < 0)
-      evt->data[1] = 0;
+      evt.data[1] -= ((armor_class / 2) + random(armor_class / 2));
+   if (evt.data[1] < 0)
+      evt.data[1] = 0;
 
-   reduced -= evt->data[1];
-   if (reduced && evt->weapon)
+   reduced -= evt.data[1];
+   if (reduced && evt.weapon)
    {
       this_object()->decrease_durability(reduced);
       evt->weapon->decrease_durability(reduced);
    }
-   // TBUG( "Outgoing dmg: "+evt->data[1]+" reduced: "+reduced);
+   // TBUG( "Outgoing dmg: "+evt.data[1]+" reduced: "+reduced);
    return evt;
 }
 

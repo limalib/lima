@@ -85,50 +85,50 @@ void main(string who)
       return;
    }
 
-   if (!info->real_name)
-      info->real_name = "(private or none given)";
-   if (!info->email)
-      info->email = "(private or none given)";
-   if (!info->nickname)
-      info->nickname = "(none)";
+   if (!info.real_name)
+      info.real_name = "(private or none given)";
+   if (!info.email)
+      info.email = "(private or none given)";
+   if (!info.nickname)
+      info.nickname = "(none)";
 
 #ifdef USE_WIZ_POSITION
-   if (!info->position)
-      info->position = "(none)";
-   info->position = " Position: " + info->position;
+   if (!info.position)
+      info.position = "(none)";
+   info.position = " Position: " + info.position;
 #else
-   info->position = "";
+   info.position = "";
 #endif
 
-   if (info->home_page)
-      info->home_page = "Homepage: " + info->home_page + "\n";
+   if (info.home_page)
+      info.home_page = "Homepage: " + info.home_page + "\n";
    else
-      info->home_page = "";
+      info.home_page = "";
 
-   if (info->connect_from)
-      info->connect_from = " from " + info->connect_from;
+   if (info.connect_from)
+      info.connect_from = " from " + info.connect_from;
    else
-      info->connect_from = "";
+      info.connect_from = "";
 
-   if (info->idle == -1)
+   if (info.idle == -1)
       idle = "";
-   else if (info->idle == -2)
+   else if (info.idle == -2)
       idle = " (linkdead)";
    else
-      idle = get_idle(info->idle);
+      idle = get_idle(info.idle);
 
-   if (info->mail_count == 0)
-      mailstring = info->visname + " has no mail.";
+   if (info.mail_count == 0)
+      mailstring = info.visname + " has no mail.";
    else
    {
-      mailstring = sprintf("%s has %s.", info->visname, number_of(info->mail_count, "message"));
+      mailstring = sprintf("%s has %s.", info.visname, number_of(info.mail_count, "message"));
 
-      if (info->mail_unread)
+      if (info.mail_unread)
          mailstring[ < 1..] =
-             sprintf(", %d of which %s unread.", info->mail_unread, info->mail_unread > 1 ? "are" : "is");
+             sprintf(", %d of which %s unread.", info.mail_unread, info.mail_unread > 1 ? "are" : "is");
    }
 
-   first_line = info->title ? info->title : info->visname;
+   first_line = info.title ? info.title : info.visname;
 
    s = sprintf("%s\n"
                "Nickname: %-29s Level: %s\n"
@@ -139,12 +139,12 @@ void main(string who)
                "%s\n"
                "Email Address: %s\n"
                "%s",
-               first_line, info->nickname, info->level, info->real_name, info->position, info->spouse,
-               info->idle == -1 ? "Left at" : "On since", info->last_login ? ctime(info->last_login) : "<unknown>",
-               idle, info->connect_from, mailstring, info->email, info->home_page);
+               first_line, info.nickname, info.level, info.real_name, info.position, info.spouse,
+               info.idle == -1 ? "Left at" : "On since", info.last_login ? ctime(info.last_login) : "<unknown>",
+               idle, info.connect_from, mailstring, info.email, info.home_page);
 
-   if (info->plan)
-      s += "Plan:\n" + info->plan + "\n";
+   if (info.plan)
+      s += "Plan:\n" + info.plan + "\n";
 #ifdef EVERYONE_HAS_A_PLAN
    else
       s += "No plan.\n";

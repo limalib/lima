@@ -37,7 +37,7 @@ void remap_ids()
    {
       class news_msg msg;
       msg = NEWS_D->get_message(boardname, ids[i]);
-      if (!msg->body)
+      if (!msg.body)
          continue;
       j++;
       idtable[j] = ids[i];
@@ -75,12 +75,12 @@ string format_subj(int id)
    class news_msg msg;
    string subject;
    msg = NEWS_D->get_message(boardname, query_actual_id(id));
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return sprintf("%d  *** REMOVED ***", id);
    else
-      subject = msg->subject;
-   return sprintf("%d  %s (%s, %s)", id, subject[0..34], msg->poster,
-                  intp(msg->time) ? ctime(msg->time)[4..9] : msg->time);
+      subject = msg.subject;
+   return sprintf("%d  %s (%s, %s)", id, subject[0..34], msg.poster,
+                  intp(msg.time) ? ctime(msg.time)[4..9] : msg.time);
 }
 
 string show_msg(int id)
@@ -90,14 +90,14 @@ string show_msg(int id)
    string ret, poster;
    msg = NEWS_D->get_message(boardname, query_actual_id(id));
    /*
-           if(!msg || !msg->body)
+           if(!msg || !msg.body)
                    return "*** REMOVED ***\n";
    */
-   subject = msg->subject;
-   body = msg->body;
-   poster = msg->poster;
+   subject = msg.subject;
+   body = msg.body;
+   poster = msg.poster;
    ret = "This note is titled '" + subject + "' (" + poster + ", " +
-         (intp(msg->time) ? ctime(msg->time)[4..9] : msg->time) + ")\n";
+         (intp(msg.time) ? ctime(msg.time)[4..9] : msg.time) + ")\n";
    ret += body;
    return ret;
 }

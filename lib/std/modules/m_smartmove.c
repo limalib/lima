@@ -34,7 +34,7 @@ nomask int move_me_there(class move_data data)
    mixed txt;
    string m;
 
-   if ((r = move(data->destination, data->relation)) != MOVE_OK)
+   if ((r = move(data.destination, data.relation)) != MOVE_OK)
    {
       if (!stringp(r))
       {
@@ -50,7 +50,7 @@ nomask int move_me_there(class move_data data)
          write("Construction blocks your path.\n");
          return 0;
       case MOVE_NO_ROOM:
-         d = load_object(data->destination);
+         d = load_object(data.destination);
          if (d->query_max_capacity() - d->query_capacity() - VERY_LARGE < 0)
          {
             if (sizeof(filter(all_inventory(d), ( : $1->is_living() :))))
@@ -75,20 +75,20 @@ nomask int move_me_there(class move_data data)
       }
    }
    /* Make sure that there is some type of direction for the exit */
-   if (!data->exit_dir)
+   if (!data.exit_dir)
    {
-      data->exit_dir = "somewhere";
+      data.exit_dir = "somewhere";
    }
    /* Also ensure that there is a valid object being moved */
-   if (!data->who)
+   if (!data.who)
    {
-      data->who = this_body();
+      data.who = this_body();
    }
 
    env = environment();
 
    /* Exit Messages */
-   txt = data->exit_messages;
+   txt = data.exit_messages;
 
    /* If there is no exit message for the exit, use the default for that body.
     * The default message is not one that should be processed any further.*/
@@ -96,13 +96,13 @@ nomask int move_me_there(class move_data data)
       txt = query_msg("leave");
 
    /* Display the message */
-   if (data->source)
-      tell_from_inside(last_loc, action(({data->who}), txt, data->source)[1]);
+   if (data.source)
+      tell_from_inside(last_loc, action(({data.who}), txt, data.source)[1]);
    else
-      tell_from_inside(last_loc, action(({data->who}), txt, data->exit_dir)[1]);
+      tell_from_inside(last_loc, action(({data.who}), txt, data.exit_dir)[1]);
 
    /* Entrance messages */
-   txt = data->enter_messages;
+   txt = data.enter_messages;
 
    /* If there is no enter message for the exit, use the default for that body.
     * The default message is not one that should be processed any further.*/
@@ -114,10 +114,10 @@ nomask int move_me_there(class move_data data)
       return r == MOVE_OK;
 
    /* Display the message */
-   if (data->through)
-      simple_action(txt, data->through);
-   else if (data->source)
-      simple_action(txt, data->source);
+   if (data.through)
+      simple_action(txt, data.through);
+   else if (data.source)
+      simple_action(txt, data.source);
    else
       simple_action(txt);
 
@@ -156,8 +156,8 @@ varargs int move_to(class move_data data)
 
    if (move_me_there(data))
    {
-      where->call_hooks("person_left", HOOK_IGNORE, 0, data->exit_dir);
-      environment()->call_hooks("person_arrived", HOOK_IGNORE, 0, data->exit_dir);
+      where->call_hooks("person_left", HOOK_IGNORE, 0, data.exit_dir);
+      environment()->call_hooks("person_arrived", HOOK_IGNORE, 0, data.exit_dir);
       call_hooks("interrupt", HOOK_IGNORE);
    }
 

@@ -17,7 +17,7 @@ int filter_removed(object brd, int elem)
 {
    class news_msg msg = NEWS_D->get_message(brd->query_group(), elem);
 
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0;
 
    return 1;
@@ -37,9 +37,9 @@ void receive_body(object brd, int reply_id, string *body)
    // This line required a change in the mailer
    //  (/obj/secure/mailers/mailer.c) because it checked whether the
    //  previous object was the newsreader.
-   this_body()->query_mailer()->send_news_reply("Re: " + msg->subject, body, lower_case(msg->poster));
+   this_body()->query_mailer()->send_news_reply("Re: " + msg.subject, body, lower_case(msg.poster));
 
-   write("Replied to " + lower_case(msg->poster) + ".\n");
+   write("Replied to " + lower_case(msg.poster) + ".\n");
 }
 
 private

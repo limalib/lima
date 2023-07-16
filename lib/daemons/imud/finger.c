@@ -33,15 +33,15 @@ nomask void rcv_finger_req(string orig_mud, string orig_user, string targ_user, 
    else
    {
       mixed *packet = ({
-          info->visname,
-          info->title,
-          info->real_name,
-          info->email,
-          info->last_login ? ctime(info->last_login) : 0,
-          info->idle,
-          info->connect_from,
-          info->level,
-          info->plan,
+          info.visname,
+          info.title,
+          info.real_name,
+          info.email,
+          info.last_login ? ctime(info.last_login) : 0,
+          info.idle,
+          info.connect_from,
+          info.level,
+          info.plan,
       });
       send_to_user("finger-reply", orig_mud, orig_user, packet);
    }

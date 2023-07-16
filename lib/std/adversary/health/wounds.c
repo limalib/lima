@@ -18,8 +18,8 @@ number_word(int); /* M_GRAMMAR */
 string number_of(int, string);
 
 /* Value is an array of numbers, indicating the size of the wounds.  Note
- * that the sum of wounds[limb] should ALWAYS be health[limb]->max_health
- * minus health[limb]->health.
+ * that the sum of wounds[limb] should ALWAYS be health[limb].max_health
+ * minus health[limb].health.
  *
  * Limbs in perfect condition and disabled limbs are not in the mapping.
  */
@@ -228,43 +228,43 @@ string diagnose_msg(string limb)
       switch (x * 100 / max)
       {
       case 0..10:
-         stuff->bruises++;
+         stuff.bruises++;
          break;
       case 11..20:
-         stuff->scratches++;
+         stuff.scratches++;
          break;
       case 21..30:
-         stuff->cuts++;
+         stuff.cuts++;
          break;
       case 31..50:
-         stuff->wounds++;
+         stuff.wounds++;
          break;
       case 51..71:
-         stuff->injuries++;
+         stuff.injuries++;
          break;
       case 72..85:
-         stuff->gashes++;
+         stuff.gashes++;
          break;
       case 86..100:
-         stuff->mutilations++;
+         stuff.mutilations++;
          break;
       }
    }
 
-   if (stuff->bruises)
-      types += ({number_of(stuff->bruises, "bruise")});
-   if (stuff->scratches)
-      types += ({number_of(stuff->scratches, "scratch")});
-   if (stuff->cuts)
-      types += ({number_of(stuff->cuts, "cut")});
-   if (stuff->wounds)
-      types += ({number_of(stuff->wounds, "wound")});
-   if (stuff->injuries)
-      types += ({number_of(stuff->injuries, "injury")});
-   if (stuff->gashes)
-      types += ({number_of(stuff->gashes, "gash")});
-   if (stuff->mutilations)
-      types += ({number_of(stuff->mutilations, "mutilation")});
+   if (stuff.bruises)
+      types += ({number_of(stuff.bruises, "bruise")});
+   if (stuff.scratches)
+      types += ({number_of(stuff.scratches, "scratch")});
+   if (stuff.cuts)
+      types += ({number_of(stuff.cuts, "cut")});
+   if (stuff.wounds)
+      types += ({number_of(stuff.wounds, "wound")});
+   if (stuff.injuries)
+      types += ({number_of(stuff.injuries, "injury")});
+   if (stuff.gashes)
+      types += ({number_of(stuff.gashes, "gash")});
+   if (stuff.mutilations)
+      types += ({number_of(stuff.mutilations, "mutilation")});
 
    return "$P " + limb + " has sustained " + format_list(types, 0) + ".\n";
 }

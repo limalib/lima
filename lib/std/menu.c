@@ -71,11 +71,11 @@ varargs protected MENU new_menu(string title, string prompt, int allow_enter, fu
    MENU new_menu;
 
    new_menu = new (MENU);
-   new_menu->items = ({});
-   new_menu->title = title;
-   new_menu->prompt = prompt;
-   new_menu->allow_enter = allow_enter;
-   new_menu->no_match_function = no_match_function;
+   new_menu.items = ({});
+   new_menu.title = title;
+   new_menu.prompt = prompt;
+   new_menu.allow_enter = allow_enter;
+   new_menu.no_match_function = no_match_function;
 
    return new_menu;
 }
@@ -85,9 +85,9 @@ varargs protected MENU new_prompt(string prompt, function callback, string *comp
    MENU new_menu;
 
    new_menu = new (MENU);
-   new_menu->prompt = prompt;
-   new_menu->no_match_function = callback;
-   new_menu->items = completions ? completions : ({});
+   new_menu.prompt = prompt;
+   new_menu.no_match_function = callback;
+   new_menu.items = completions ? completions : ({});
 
    return new_menu;
 }
@@ -97,9 +97,9 @@ varargs protected MENU_ITEM new_seperator(string description, function constrain
    MENU_ITEM new_menu_item;
 
    new_menu_item = new (MENU_ITEM);
-   new_menu_item->description = description;
-   new_menu_item->constraint = constraint;
-   new_menu_item->seperator = 1;
+   new_menu_item.description = description;
+   new_menu_item.constraint = constraint;
+   new_menu_item.seperator = 1;
 
    return new_menu_item;
 }
@@ -110,11 +110,11 @@ varargs protected MENU_ITEM new_menu_item(string description, mixed action, stri
    MENU_ITEM new_menu_item;
 
    new_menu_item = new (MENU_ITEM);
-   new_menu_item->description = description;
-   new_menu_item->action = action;
-   new_menu_item->choice_name = choice_name;
-   new_menu_item->prompt_after_action = prompt;
-   new_menu_item->constraint = constraint;
+   new_menu_item.description = description;
+   new_menu_item.action = action;
+   new_menu_item.choice_name = choice_name;
+   new_menu_item.prompt_after_action = prompt;
+   new_menu_item.constraint = constraint;
 
    return new_menu_item;
 }
@@ -122,19 +122,19 @@ varargs protected MENU_ITEM new_menu_item(string description, mixed action, stri
 protected
 void add_menu_item(MENU menu, MENU_ITEM menu_item)
 {
-   menu->items += ({menu_item});
+   menu.items += ({menu_item});
 }
 
 protected
 void set_menu_items(MENU menu, MENU_ITEM *menu_items)
 {
-   menu->items = menu_items;
+   menu.items = menu_items;
 }
 
 protected
 void set_menu_title(MENU menu, string title)
 {
-   menu->title = title;
+   menu.title = title;
 }
 
 protected
@@ -146,49 +146,49 @@ void set_menu_prompt(MENU menu, mixed prompt)
       return;
    }
 
-   menu->prompt = prompt;
+   menu.prompt = prompt;
 }
 
 protected
 void allow_empty_selection(MENU menu)
 {
-   menu->allow_enter = 1;
+   menu.allow_enter = 1;
 }
 
 protected
 void disallow_empty_selection(MENU menu)
 {
-   menu->allow_enter = 0;
+   menu.allow_enter = 0;
 }
 
 protected
 void set_no_match_function(MENU menu, function f)
 {
-   menu->no_match_function = f;
+   menu.no_match_function = f;
 }
 
 protected
 void set_number_of_columns(MENU menu, int n)
 {
-   menu->num_columns = n;
+   menu.num_columns = n;
 }
 
 protected
 void disable_menu_item(MENU_ITEM item)
 {
-   item->disabled = 1;
+   item.disabled = 1;
 }
 
 protected
 void enable_menu_item(MENU_ITEM item)
 {
-   item->disabled = 0;
+   item.disabled = 0;
 }
 
 protected
 void set_menu_item_description(MENU_ITEM item, string description)
 {
-   item->description = description;
+   item.description = description;
 }
 
 protected
@@ -196,13 +196,13 @@ void set_menu_item_action(MENU_ITEM item, mixed action)
 {
    //  Should type check here, but I can't figure out how
    //  to typecheck the class.
-   item->action = action;
+   item.action = action;
 }
 
 protected
 void set_menu_item_choice_name(MENU_ITEM item, string choice_name)
 {
-   item->choice_name = choice_name;
+   item.choice_name = choice_name;
 }
 
 //: FUNCTION user_is_active
@@ -216,7 +216,7 @@ void user_is_active()
 protected
 void constrain_menu_item(MENU_ITEM item, function f)
 {
-   item->constraint = f;
+   item.constraint = f;
 }
 
 // This variable is kind of a hack... when an action is taken
@@ -236,21 +236,21 @@ void new_parse_menu_input(string input)
    MENU completion_menu;
    input = trim(input);
    user_is_active();
-   if (input == "" && !current_menu->allow_enter)
+   if (input == "" && !current_menu.allow_enter)
    {
       return;
    }
-   if ((i = member_array(input, current_menu->current_choices)) != -1)
+   if ((i = member_array(input, current_menu.current_choices)) != -1)
    {
       matches = ({input});
    }
    else
    {
-      if (current_menu->dont_complete)
+      if (current_menu.dont_complete)
       {
-         if (functionp(current_menu->no_match_function))
+         if (functionp(current_menu.no_match_function))
          {
-            evaluate(current_menu->no_match_function, input);
+            evaluate(current_menu.no_match_function, input);
          }
          else
          {
@@ -258,7 +258,7 @@ void new_parse_menu_input(string input)
          }
          return;
       }
-      matches = M_REGEX->insensitive_regexp(current_menu->current_choices, M_GLOB->translate(input, 1));
+      matches = M_REGEX->insensitive_regexp(current_menu.current_choices, M_GLOB->translate(input, 1));
    }
    switch (sizeof(matches))
    {
@@ -266,9 +266,9 @@ void new_parse_menu_input(string input)
       write("Invalid selection.\n");
       return;
    case 1:
-      if (!sizeof(current_menu->items) || stringp(current_menu->items[0]))
+      if (!sizeof(current_menu.items) || stringp(current_menu.items[0]))
       {
-         evaluate(current_menu->no_match_function, matches[0]);
+         evaluate(current_menu.no_match_function, matches[0]);
          if (menu_after_selection)
          {
             goto_menu(menu_after_selection);
@@ -277,31 +277,31 @@ void new_parse_menu_input(string input)
          return;
       }
       matched_item =
-          filter_array(current_menu->items,
+          filter_array(current_menu.items,
                        (
                            : intp(((MENU_ITEM)$1)->choice_name) ? sprintf("%d", ((MENU_ITEM)$1)->choice_name) == $2
                                                                 : ((MENU_ITEM)$1)->choice_name == $2:),
                        matches[0])[0];
-      if (functionp(matched_item->action))
+      if (functionp(matched_item.action))
       {
          if (menu_after_selection)
          {
             goto_menu(menu_after_selection);
             menu_after_selection = 0;
          }
-         evaluate(matched_item->action, input);
+         evaluate(matched_item.action, input);
          need_refreshing = 1;
-         if (matched_item->prompt_after_action)
+         if (matched_item.prompt_after_action)
             prompt_then_return();
          return;
       }
-      goto_menu(matched_item->action);
+      goto_menu(matched_item.action);
       return;
    default:
       completion_menu = new_menu("Choose one by number:\n"
                                  "---------------------\n");
       set_menu_items(completion_menu,
-                     filter_array(current_menu->items,
+                     filter_array(current_menu.items,
                                   (
                                       : intp(((MENU_ITEM)$1)->choice_name)
                                             ? member_array(sprintf("%d", ((MENU_ITEM)$1)->choice_name), $2) != -1
@@ -326,24 +326,24 @@ void parse_menu_input(mixed input)
    if (input == -1)
       remove();
    input = trim(input);
-   if (input == "" && !current_menu->allow_enter)
+   if (input == "" && !current_menu.allow_enter)
       return;
 
-   foreach (item in current_menu->items)
+   foreach (item in current_menu.items)
    {
       // Quick and sleazy way of knowing we're a prompt...
       if (stringp(item))
          break;
-      if (item->disabled || item->seperator || (item->constraint && !evaluate(item->constraint)))
+      if (item.disabled || item.seperator || (item.constraint && !evaluate(item.constraint)))
          continue;
-      if ((!stringp(item->choice_name) && sprintf("%d", ++counter) == input) || input == item->choice_name)
+      if ((!stringp(item.choice_name) && sprintf("%d", ++counter) == input) || input == item.choice_name)
       {
-         action = item->action;
+         action = item.action;
          if (functionp(action))
          {
             evaluate(action, input);
             need_refreshing = 1;
-            if (item->prompt_after_action)
+            if (item.prompt_after_action)
                prompt_then_return();
             return;
          }
@@ -351,8 +351,8 @@ void parse_menu_input(mixed input)
          return;
       }
    }
-   if (functionp(current_menu->no_match_function))
-      evaluate(current_menu->no_match_function, input);
+   if (functionp(current_menu.no_match_function))
+      evaluate(current_menu.no_match_function, input);
    else
       write("Invalid selection.\n");
 }
@@ -362,7 +362,7 @@ string get_current_prompt()
 {
    mixed prompt;
 
-   prompt = current_menu->prompt;
+   prompt = current_menu.prompt;
    if (need_refreshing)
       display_current_menu();
    if (!prompt)
@@ -376,11 +376,11 @@ string get_current_prompt()
       string c;
       MENU_ITEM item;
       int counter;
-      foreach (item in current_menu->items)
+      foreach (item in current_menu.items)
       {
-         if (item->disabled || item->seperator || (item->constraint && !evaluate(item->constraint)))
+         if (item.disabled || item.seperator || (item.constraint && !evaluate(item.constraint)))
             continue;
-         if (!c = item->choice_name)
+         if (!c = item.choice_name)
          {
             counter++;
             continue;
@@ -455,7 +455,7 @@ void display_current_menu()
    MENU_ITEM this_item;
 
    need_refreshing = 0;
-   if (!sizeof(current_menu->items) && !current_menu->no_match_function)
+   if (!sizeof(current_menu.items) && !current_menu.no_match_function)
    {
       write("###Not implemented yet.\n");
       current_menu = previous_menu;
@@ -464,19 +464,19 @@ void display_current_menu()
       return;
    }
 
-   if (!sizeof(current_menu->items) || stringp((current_menu->items)[0]))
+   if (!sizeof(current_menu.items) || stringp((current_menu.items)[0]))
    {
-      current_menu->current_choices = current_menu->items;
+      current_menu.current_choices = current_menu.items;
       return;
    }
-   rightwidth = max(map(filter_array(current_menu->items, (
+   rightwidth = max(map(filter_array(current_menu.items, (
                                                               : !(((MENU_ITEM)$1)->seperator)
                                                               :)),
                         (
                             : strlen(((MENU_ITEM)$1)->description)
                             :)));
    // This stuff is getting as ugly as Amylaar closures =P
-   leftwidth = max(map(filter_array(current_menu->items, (
+   leftwidth = max(map(filter_array(current_menu.items, (
                                                              : stringp(((MENU_ITEM)$1)->choice_name)
                                                              :)),
                        (
@@ -484,45 +484,45 @@ void display_current_menu()
                            :)) +
                    ({3}));
 
-   output = current_menu->title + "\n";
+   output = current_menu.title + "\n";
 
-   if (!(num_columns = current_menu->num_columns))
+   if (!(num_columns = current_menu.num_columns))
       num_columns = 78 / (leftwidth + rightwidth + 6);
    if (!num_columns)
       num_columns = 1;
    // Build this each time, and pass it on to the input handler,
    // because the menu may change....
-   current_menu->current_choices = ({});
-   for (i = 0, j = 0; i < sizeof(current_menu->items); i++, j++)
+   current_menu.current_choices = ({});
+   for (i = 0, j = 0; i < sizeof(current_menu.items); i++, j++)
    {
-      this_item = current_menu->items[i];
-      if (this_item->disabled || (this_item->constraint && !evaluate(this_item->constraint)))
+      this_item = current_menu.items[i];
+      if (this_item.disabled || (this_item.constraint && !evaluate(this_item.constraint)))
          continue;
-      if (this_item->seperator)
+      if (this_item.seperator)
       {
          j = -1; // we want it to be 0 on the next loop, and it's
                  // going to get incremented at the start of the
                  // next loop
-         output += sprintf("%s\n", this_item->description);
+         output += sprintf("%s\n", this_item.description);
          continue;
       }
-      if (!stringp(this_item->choice_name))
+      if (!stringp(this_item.choice_name))
       {
-         output += sprintf("%=" + leftwidth + "d)  %-" + rightwidth + "s", ++counter, this_item->description);
-         current_menu->current_choices += ({sprintf("%d", counter)});
+         output += sprintf("%=" + leftwidth + "d)  %-" + rightwidth + "s", ++counter, this_item.description);
+         current_menu.current_choices += ({sprintf("%d", counter)});
          // Note, this will still get recalculated every time, since
          // we're setting it to an int, and not a string, but that's
          // what we want since we want the menus to be dynamic...
          // We set this for convenience of finding this menu item
          // without having to recalculate all this crap when it comes
          // time to process the choice.
-         this_item->choice_name = counter;
+         this_item.choice_name = counter;
       }
       else
       {
          output +=
-             sprintf("%=" + leftwidth + "s)  %-" + rightwidth + "s", this_item->choice_name, this_item->description);
-         current_menu->current_choices += ({this_item->choice_name});
+             sprintf("%=" + leftwidth + "s)  %-" + rightwidth + "s", this_item.choice_name, this_item.description);
+         current_menu.current_choices += ({this_item.choice_name});
       }
       if (j % num_columns == (num_columns - 1))
          output += "\n";

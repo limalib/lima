@@ -90,7 +90,7 @@ nomask void init_session(string session_name, string address)
    new_connection = new (class connection);
    for (i = 0; i < sizeof(sessions); i++)
    {
-      if (!sessions[i] || !sessions[i]->socket)
+      if (!sessions[i] || !sessions[i].socket)
          break;
    }
 
@@ -100,10 +100,10 @@ nomask void init_session(string session_name, string address)
       sessions += ({new_connection});
 
    printf("Opening connection #%i...\n", i + 1);
-   new_connection->address = get_address(address);
-   new_connection->session_name = get_unique_session_name(session_name);
-   new_connection->session_base_name = session_name;
-   new_connection->output_buffer = "";
+   new_connection.address = get_address(address);
+   new_connection.session_name = get_unique_session_name(session_name);
+   new_connection.session_base_name = session_name;
+   new_connection.output_buffer = "";
 
    if (catch (open_socket(new_connection)))
    {
@@ -111,7 +111,7 @@ nomask void init_session(string session_name, string address)
       return;
    }
    active_session = i;
-   active_session_name = new_connection->session_name;
+   active_session_name = new_connection.session_name;
 }
 
 private
@@ -137,9 +137,9 @@ nomask string get_unique_session_name(string session_name)
 
    foreach (con in sessions)
    {
-      if (!con || !stringp(con->session_name))
+      if (!con || !stringp(con.session_name))
          continue;
-      if (con->session_base_name == session_name)
+      if (con.session_base_name == session_name)
          i++;
    }
 
@@ -152,9 +152,9 @@ nomask string get_unique_session_name(string session_name)
 private
 nomask void open_socket(class connection this_con)
 {
-   string session = this_con->session_name;
+   string session = this_con.session_name;
 
-   this_con->socket = new (SOCKET, SKT_STYLE_CONNECT, this_con->address,
+   this_con.socket = new (SOCKET, SKT_STYLE_CONNECT, this_con.address,
                            (
                                : recv_input_from, session:),
                            (
@@ -170,7 +170,7 @@ nomask void recv_input_from(string session, object sock, string input)
 
    for (i = 0; i < sizeof(sessions); i++)
    {
-      if (sessions[i]->session_name == session)
+      if (sessions[i].session_name == session)
       {
          session_num = i;
       }
@@ -196,11 +196,11 @@ nomask void recv_input_from(string session, object sock, string input)
       }
       else
       {
-         if (notify_on_activity && sessions[session_num]->output_buffer == "")
+         if (notify_on_activity && sessions[session_num].output_buffer == "")
          {
             tell(owner, sprintf("%%There is activity in %s\n", session));
          }
-         sessions[session_num]->output_buffer += input;
+         sessions[session_num].output_buffer += input;
       }
    }
 }
@@ -247,7 +247,7 @@ nomask void remove()
    {
       if (!con)
          continue;
-      if (!con->socket)
+      if (!con.socket)
          continue;
       catch (con->socket->remove());
    }
@@ -273,8 +273,8 @@ nomask void handle_command(string cmd)
       else
       {
          hide_all_output = 0;
-         map(explode(sessions[active_session]->output_buffer, "\n"), ( : printf("~ %s\n", $1) :));
-         sessions[active_session]->output_buffer = "";
+         map(explode(sessions[active_session].output_buffer, "\n"), ( : printf("~ %s\n", $1) :));
+         sessions[active_session].output_buffer = "";
       }
       return;
    case "send":
@@ -304,10 +304,10 @@ nomask void handle_command(string cmd)
          return;
       }
       active_session = i - 1;
-      active_session_name = sessions[active_session]->session_name;
+      active_session_name = sessions[active_session].session_name;
       write("Switching.\n");
-      map(explode(sessions[active_session]->output_buffer, "\n"), ( : printf("~ %s\n", $1) :));
-      sessions[active_session]->output_buffer = "";
+      map(explode(sessions[active_session].output_buffer, "\n"), ( : printf("~ %s\n", $1) :));
+      sessions[active_session].output_buffer = "";
       return;
 
    case "jobs":
@@ -321,7 +321,7 @@ nomask void handle_command(string cmd)
       {
          if (typeof(sessions[i]) != "class")
             continue;
-         printf("%i:  %s\n", i + 1, sessions[i]->session_name);
+         printf("%i:  %s\n", i + 1, sessions[i].session_name);
       }
       return;
    case "exit":
@@ -352,7 +352,7 @@ nomask void handle_command(string cmd)
          write("Nothing to close.\n");
          return;
       }
-      close_session(active_session_name, sessions[active_session]->socket);
+      close_session(active_session_name, sessions[active_session].socket);
       return;
 
    default:
@@ -374,7 +374,7 @@ nomask void close_session(string ses, object sock)
    {
       if (!sessions[i])
          continue;
-      if (sessions[i]->session_name == ses)
+      if (sessions[i].session_name == ses)
       {
          sessions[i] = 0;
       }
@@ -400,7 +400,7 @@ nomask void close_session(string ses, object sock)
    else
    {
       write("Use /goto to return to another session.\n");
-      active_session_name = sessions[active_session]->session_name;
+      active_session_name = sessions[active_session].session_name;
    }
    catch (sock->remove());
 }

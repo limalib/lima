@@ -24,15 +24,15 @@ parse_file(class parse_info pi, string *term)
    mixed *tmparr;
    string arg1, arg2;
 
-   while (pi->cur < sizeof(pi->lines))
+   while (pi->cur < sizeof(pi.lines))
    {
-      string line = trim(pi->lines[pi->cur++]);
+      string line = trim(pi.lines[pi.cur++]);
       if (line[0] == '#')
          continue;
 
       if (term && (tmp = member_array(line, term)) != -1)
       {
-         pi->term = tmp;
+         pi.term = tmp;
          return program;
       }
       if (line[0] == '@')
@@ -54,8 +54,8 @@ parse_file(class parse_info pi, string *term)
             program += ({({keyword, arg1, arg2})});
             break;
          case "trigger":
-            program += ({({"trigger", line, pi->trigger_num})});
-            program += ({({"function", "trigger_" + pi->trigger_num++}) + parse_file(pi, ({"@endtrigger"}))});
+            program += ({({"trigger", line, pi.trigger_num})});
+            program += ({({"function", "trigger_" + pi.trigger_num++}) + parse_file(pi, ({"@endtrigger"}))});
             break;
          case "doevery": {
             int first, second;
@@ -80,8 +80,8 @@ parse_file(class parse_info pi, string *term)
 
             if (lhs[0] != '$')
                error("Variable must begin with $\n");
-            if (member_array(lhs[1..], pi->vars) == -1)
-               pi->vars += ({lhs[1..]});
+            if (member_array(lhs[1..], pi.vars) == -1)
+               pi.vars += ({lhs[1..]});
             program += ({({"set", lhs, rhs})});
             break;
          }
@@ -90,7 +90,7 @@ parse_file(class parse_info pi, string *term)
             break;
          case "if":
             tmparr = ({parse_file(pi, ({"@else", "@endif"}))});
-            if (pi->term == 0)
+            if (pi.term == 0)
                tmparr += ({parse_file(pi, ({"@endif"}))});
             program += ({({"if", line}) + tmparr});
             break;
@@ -312,7 +312,7 @@ string compile_program(class parse_info pi, mixed *prog)
 
    END;
 
-   foreach (string var_name in pi->vars)
+   foreach (string var_name in pi.vars)
    {
       ret += "mixed var_" + var_name + ";\n";
    }

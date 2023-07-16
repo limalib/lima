@@ -102,12 +102,12 @@ nosave private object oob_socket;
 private
 nomask void oob_close(class oob_info info)
 {
-   if (info->socket)
+   if (info.socket)
    {
-      map_delete(oob_socket_map, info->socket);
+      map_delete(oob_socket_map, info.socket);
       catch (info->socket->remove());
    }
-   map_delete(oob_mudname_map, info->remote_mudname);
+   map_delete(oob_mudname_map, info.remote_mudname);
 }
 
 private
@@ -126,8 +126,8 @@ nomask void oob_error(class oob_info info, string errcode, string errmsg, mixed 
 {
    mixed *message = ({errcode, errmsg, errpacket});
 
-   oob_send(info, ({"error", 5, mud_name(), 0, info->remote_mudname, 0}) + message);
-   log_error_snd(info->remote_mudname, message);
+   oob_send(info, ({"error", 5, mud_name(), 0, info.remote_mudname, 0}) + message);
+   log_error_snd(info.remote_mudname, message);
 }
 
 protected
@@ -155,8 +155,8 @@ private
 nomask void oob_cleanup_map(mapping conn_map)
 {
    foreach (class oob_info info in values(conn_map))
-      if (info->activity_time + OOB_INACTIVITY_TIMEOUT < time() ||
-          (info->state == OOB_STATE_CLOSE_PENDING && info->activity_time + OOB_CLOSE_DELAY < time()))
+      if (info.activity_time + OOB_INACTIVITY_TIMEOUT < time() ||
+          (info.state == OOB_STATE_CLOSE_PENDING && info.activity_time + OOB_CLOSE_DELAY < time()))
       {
          oob_close(info);
       }
@@ -184,9 +184,9 @@ nomask int oob_has_outgoing(string remote_mudname)
 private
 nomask void oob_send_outgoing(class oob_info info)
 {
-   if (mail_send_outgoing(info->remote_mudname, info->socket))
+   if (mail_send_outgoing(info.remote_mudname, info.socket))
       return;
-   file_send_outgoing(info->remote_mudname, info->socket);
+   file_send_outgoing(info.remote_mudname, info.socket);
 }
 
 private
@@ -201,10 +201,10 @@ nomask void oob_callback_read(object socket, mixed *message)
    if (!message)
    {
       info = new (class oob_info);
-      info->socket = socket;
-      info->remote_mudname = "(not yet provided)";
-      info->state = OOB_STATE_WAIT_BEGIN;
-      info->activity_time = time();
+      info.socket = socket;
+      info.remote_mudname = "(not yet provided)";
+      info.state = OOB_STATE_WAIT_BEGIN;
+      info.activity_time = time();
 
       oob_socket_map[socket] = info;
 
@@ -218,7 +218,7 @@ nomask void oob_callback_read(object socket, mixed *message)
    }
 
    /* remember that we heard something from the other guy */
-   info->activity_time = time();
+   info.activity_time = time();
 
    f_request = oob_requests[message[0]];
    f_reply = oob_replies[message[0]];
@@ -231,8 +231,8 @@ nomask void oob_callback_read(object socket, mixed *message)
    **    */
    // ### it would be nice in the I3 spec to have this transition be
    // ### explicit...
-   if (f_request && info->state == OOB_STATE_WAIT_CLOSE)
-      info->state = OOB_STATE_WAIT_END;
+   if (f_request && info.state == OOB_STATE_WAIT_CLOSE)
+      info.state = OOB_STATE_WAIT_END;
 
    /*
    ** If a request has come in and we're in the wrong state for it,
@@ -242,7 +242,7 @@ nomask void oob_callback_read(object socket, mixed *message)
    ** two states, then we have not authenticated the remote mud.  It
    ** would be bad to allow that mud to deliver stuff to us :-)
    */
-   if (f_request && info->state != OOB_STATE_SENT_END && info->state != OOB_STATE_WAIT_END)
+   if (f_request && info.state != OOB_STATE_SENT_END && info.state != OOB_STATE_WAIT_END)
    {
       oob_error(info, "bad-proto", "packet came at wrong time", message);
       return;
@@ -253,12 +253,12 @@ nomask void oob_callback_read(object socket, mixed *message)
       // ### it would be nice to have different packets for the originator vs.
       // ### the target mud
    case "oob-begin":
-      if (info->state == OOB_STATE_SENT_BEGIN)
+      if (info.state == OOB_STATE_SENT_BEGIN)
       {
          /* this is a reply to our oob-begin; trigger outgoing data */
          f_reply = (function)1;
       }
-      else if (info->state == OOB_STATE_WAIT_BEGIN)
+      else if (info.state == OOB_STATE_WAIT_BEGIN)
       {
          /* somebody connected to us. validate their tokens. */
          if (!validate_auth(message[1], message[3]))
@@ -268,8 +268,8 @@ nomask void oob_callback_read(object socket, mixed *message)
          }
          else
          {
-            info->remote_mudname = message[1];
-            if (oob_mudname_map[info->remote_mudname])
+            info.remote_mudname = message[1];
+            if (oob_mudname_map[info.remote_mudname])
             {
 #if 0 // Consistancy problems here... -- Rust
 		    oob_error(info,
@@ -279,13 +279,13 @@ nomask void oob_callback_read(object socket, mixed *message)
 		    oob_close(info);
 		    return;
 #endif
-               oob_close(oob_mudname_map[info->remote_mudname]);
+               oob_close(oob_mudname_map[info.remote_mudname]);
             }
 
-            oob_mudname_map[info->remote_mudname] = info;
+            oob_mudname_map[info.remote_mudname] = info;
 
             oob_send(info, ({"oob-begin", mud_name(), 0, 0}));
-            info->state = OOB_STATE_WAIT_END;
+            info.state = OOB_STATE_WAIT_END;
          }
       }
       else
@@ -297,16 +297,16 @@ nomask void oob_callback_read(object socket, mixed *message)
       // ### it would be nice to have different packets for the originator vs.
       // ### the target mud
    case "oob-end":
-      if (info->state == OOB_STATE_SENT_END)
+      if (info.state == OOB_STATE_SENT_END)
       {
          /*
          ** We're the originator. If the target is done, then we can
          ** send more packets or close the connection.
          */
-         if (oob_has_outgoing(info->remote_mudname))
+         if (oob_has_outgoing(info.remote_mudname))
          {
             oob_send_outgoing(info);
-            info->state = OOB_STATE_SENT_DATA;
+            info.state = OOB_STATE_SENT_DATA;
          }
          else
          {
@@ -319,27 +319,27 @@ nomask void oob_callback_read(object socket, mixed *message)
 		** connection during this time period.  Note that the
 		** period cleanup routine will close this as necessary.
 		*/
-		info->state = OOB_STATE_CLOSE_PENDING;
+		info.state = OOB_STATE_CLOSE_PENDING;
 #else
             oob_close(info);
 #endif
          }
       }
-      else if (info->state == OOB_STATE_WAIT_END)
+      else if (info.state == OOB_STATE_WAIT_END)
       {
          /*
          ** We're the target.  When the originator is done, then we
          ** can send some packets or indicate we have nothing.
          */
-         if (oob_has_outgoing(info->remote_mudname))
+         if (oob_has_outgoing(info.remote_mudname))
          {
             oob_send_outgoing(info);
-            info->state = OOB_STATE_WAIT_REPLY;
+            info.state = OOB_STATE_WAIT_REPLY;
          }
          else
          {
             oob_send(info, ({"oob-end", mud_name()}));
-            info->state = OOB_STATE_WAIT_CLOSE;
+            info.state = OOB_STATE_WAIT_CLOSE;
          }
       }
       else
@@ -350,18 +350,18 @@ nomask void oob_callback_read(object socket, mixed *message)
 
    case "error":
       BBUG(message);
-      log_error_rcv(info->remote_mudname, message[6..]);
+      log_error_rcv(info.remote_mudname, message[6..]);
       break;
 
    case "oob-error":
-      log_error_rcv(info->remote_mudname, message[1..]);
+      log_error_rcv(info.remote_mudname, message[1..]);
       break;
 
    default:
       if (f_request)
-         evaluate(f_request, info->remote_mudname, socket, message);
+         evaluate(f_request, info.remote_mudname, socket, message);
       else if (f_reply)
-         evaluate(f_reply, info->remote_mudname, socket, message);
+         evaluate(f_reply, info.remote_mudname, socket, message);
       else
          oob_error(info, "unk-type", "unknown packet type", message);
       break;
@@ -376,17 +376,17 @@ nomask void oob_callback_read(object socket, mixed *message)
    */
    if (f_reply)
    {
-      if (oob_has_outgoing(info->remote_mudname))
+      if (oob_has_outgoing(info.remote_mudname))
       {
          oob_send_outgoing(info);
       }
       else
       {
          oob_send(info, ({"oob-end", mud_name()}));
-         if (info->we_originated)
-            info->state = OOB_STATE_SENT_END;
+         if (info.we_originated)
+            info.state = OOB_STATE_SENT_END;
          else
-            info->state = OOB_STATE_WAIT_CLOSE;
+            info.state = OOB_STATE_WAIT_CLOSE;
       }
    }
 }
@@ -398,8 +398,8 @@ nomask void oob_callback_close(object socket)
 
    if (info)
    {
-      map_delete(oob_socket_map, info->socket);
-      map_delete(oob_mudname_map, info->remote_mudname);
+      map_delete(oob_socket_map, info.socket);
+      map_delete(oob_mudname_map, info.remote_mudname);
    }
 }
 
@@ -411,7 +411,7 @@ nomask void oob_open_connection(string mudname, int auth_type, int auth_token)
 
    DBBUG("opening connection");
    if (catch (skt = unguarded(1, (
-                                     : clone_object, SOCKET, SKT_STYLE_CONNECT_M, info->addr,
+                                     : clone_object, SOCKET, SKT_STYLE_CONNECT_M, info.addr,
                                        (
                                            : oob_callback_read:),
                                        (
@@ -421,13 +421,13 @@ nomask void oob_open_connection(string mudname, int auth_type, int auth_token)
       oob_close(info);
       return;
    }
-   info->socket = skt;
+   info.socket = skt;
    oob_socket_map[skt] = info;
 
    if (oob_send(info, ({"oob-begin", mud_name(), auth_type, auth_token})))
       return;
 
-   info->state = OOB_STATE_SENT_BEGIN;
+   info.state = OOB_STATE_SENT_BEGIN;
 }
 
 varargs nomask void oob_initiate_connection(string mudname, function fail_func)
@@ -449,20 +449,20 @@ varargs nomask void oob_initiate_connection(string mudname, function fail_func)
       ** Already connected.  See if we are in CLOSE_PENDING.  If so,
       ** then send an outgoing request and move back to SENT_DATA.
       */
-      if (info->state == OOB_STATE_CLOSE_PENDING)
+      if (info.state == OOB_STATE_CLOSE_PENDING)
       {
          oob_send_outgoing(info);
-         info->state = OOB_STATE_SENT_DATA;
+         info.state = OOB_STATE_SENT_DATA;
       }
 
       return;
    }
 
    info = new (class oob_info);
-   info->remote_mudname = mudname;
-   info->we_originated = 1;
-   info->activity_time = time();
-   info->fail_func = fail_func;
+   info.remote_mudname = mudname;
+   info.we_originated = 1;
+   info.activity_time = time();
+   info.fail_func = fail_func;
 
    oob_mudname_map[mudname] = info;
 
@@ -473,14 +473,14 @@ varargs nomask void oob_initiate_connection(string mudname, function fail_func)
    }
 
    mudinfo = query_mudlist()[mudname];
-   info->addr = mudinfo[1] + " " + mudinfo[3];
+   info.addr = mudinfo[1] + " " + mudinfo[3];
 
    if (mudinfo[11]["auth"])
    {
       /* they have the auth service.  send a request for a key. */
       do_auth_mud_req(mudname);
 
-      info->state = OOB_STATE_SENT_AUTH;
+      info.state = OOB_STATE_SENT_AUTH;
    }
    else
    {
@@ -496,7 +496,7 @@ nomask void oob_handle_auth_mud_reply(string mudname, int session_key)
 {
    class oob_info info = oob_mudname_map[mudname];
 
-   if (!info || info->state != OOB_STATE_SENT_AUTH)
+   if (!info || info.state != OOB_STATE_SENT_AUTH)
       return;
 
    oob_open_connection(mudname, OOB_AUTH_TYPE_MUD, session_key);
@@ -543,14 +543,14 @@ string stat_me()
 
    foreach (class oob_info info in info_list)
    {
-      int idle = time() - info->activity_time;
+      int idle = time() - info.activity_time;
 
-      if (!info->remote_mudname)
+      if (!info.remote_mudname)
          result += sprintf("Unknown incoming connection.  Idle %d seconds.\n", idle);
-      else if (info->we_originated)
-         result += sprintf("-> %s: %s.  Idle %d seconds.\n", info->remote_mudname, info->state, idle);
+      else if (info.we_originated)
+         result += sprintf("-> %s: %s.  Idle %d seconds.\n", info.remote_mudname, info.state, idle);
       else
-         result += sprintf("<- %s: %s.  Idle %d seconds.\n", info->remote_mudname, info->state, idle);
+         result += sprintf("<- %s: %s.  Idle %d seconds.\n", info.remote_mudname, info.state, idle);
    }
 
    result += sprintf("OOB cleanup is%s running.\n", oob_cleanup_running ? "" : " not");

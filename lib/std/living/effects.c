@@ -60,7 +60,7 @@ int actual_period(mixed val)
 // Removes effect from queue at appropriate point
 void remove_effect_at(int pos)
 {
-   effects[pos - 1]->delay += effects[pos]->delay;
+   effects[pos - 1].delay += effects[pos].delay;
    effects = effects[0..pos - 1] + effects[pos + 1..];
 }
 
@@ -72,7 +72,7 @@ int find_effect_index(string ob)
    if (ob)
       for (int i = 0; i < sizeof(effects); i++)
       {
-         if (effects[i]->effect_ob == ob)
+         if (effects[i].effect_ob == ob)
             return i;
       }
    return -1;
@@ -86,7 +86,7 @@ int find_effect_name_index(string name)
    if (name)
       for (int i = 0; i < sizeof(effects); i++)
       {
-         if (effects[i]->name == name)
+         if (effects[i].name == name)
             return i;
       }
    return -1;
@@ -124,7 +124,7 @@ mixed query_effect_args(string ob)
 {
    int idx = find_effect_index(ob);
    if (idx > -1)
-      return effects[idx]->args;
+      return effects[idx].args;
    return 0;
 }
 
@@ -197,8 +197,8 @@ int insert_effect(class effect_class effect)
    {
       this_effect = effects[i];
       prev_delay = cum_delay;
-      cum_delay += this_effect->delay;
-      if (effect->delay < cum_delay)
+      cum_delay += this_effect.delay;
+      if (effect.delay < cum_delay)
       {
          insert_effect_at(effect, i);
 
@@ -206,7 +206,7 @@ int insert_effect(class effect_class effect)
          // adjust its relative delay
          if (sizeof(effects) > i + 1)
          {
-            this_effect->delay -= (effect->delay - cum_delay);
+            this_effect.delay -= (effect.delay - cum_delay);
             effects[i + 1] = this_effect;
          }
 
@@ -215,7 +215,7 @@ int insert_effect(class effect_class effect)
          if (sizeof(effects) > 1)
          {
             this_effect = effects[i];
-            this_effect->delay -= prev_delay;
+            this_effect.delay -= prev_delay;
             effects[i] = this_effect;
          }
          return 1;
@@ -240,7 +240,7 @@ void next_effect()
    // Do whatever the current head of the queue wants
    this_effect = effects[0];
 
-   ob = load_object(this_effect->effect_ob);
+   ob = load_object(this_effect.effect_ob);
    if (!ob)
       return;
 
@@ -248,29 +248,29 @@ void next_effect()
    effects = effects[1..];
 
    // If counter is not zero, move current effect to later in the queue
-   if (this_effect->counter != 0)
+   if (this_effect.counter != 0)
    {
       // If counter >0, decrease it
-      if (this_effect->counter > 0)
-         this_effect->counter--;
+      if (this_effect.counter > 0)
+         this_effect.counter--;
 
-      this_effect->args = ob->do_effect(this_object(), this_effect->args, this_effect->counter);
+      this_effect.args = ob->do_effect(this_object(), this_effect.args, this_effect.counter);
 
       // Calculate delay to next occurence
-      this_effect->delay = actual_period(this_effect->interval);
+      this_effect.delay = actual_period(this_effect.interval);
 
       // Put it into queue again
       insert_effect(this_effect);
    }
    else
    {
-      ob->end_effect(this_object(), this_effect->args);
+      ob->end_effect(this_object(), this_effect.args);
    }
    // If there is anything in the queue, do a callout to it
    if (sizeof(effects))
    {
       this_effect = effects[0];
-      tag = call_out("next_effect", this_effect->delay);
+      tag = call_out("next_effect", this_effect.delay);
    }
    else
       tag = 0;
@@ -283,10 +283,10 @@ void clear_effects()
    object ob;
    foreach (class effect_class effect in effects)
    {
-      ob = load_object(effect->effect_ob);
+      ob = load_object(effect.effect_ob);
       if (ob)
          if (function_exists("end_effect", ob))
-            ob->end_effect(this_object(), effect->args, effect->counter);
+            ob->end_effect(this_object(), effect.args, effect.counter);
    }
    effects = ({});
    tag = 0;
@@ -315,18 +315,18 @@ void add_effect(string ob, mixed args, int repeats, mixed interval)
    if (undefinedp(interval))
       interval = ob->query_interval();
 
-   this_effect->effect_ob = ob;
-   this_effect->name = ob->query_name();
-   this_effect->args = args;
-   this_effect->interval = interval;
-   this_effect->counter = repeats;
-   this_effect->delay = actual_period(interval);
+   this_effect.effect_ob = ob;
+   this_effect.name = ob->query_name();
+   this_effect.args = args;
+   this_effect.interval = interval;
+   this_effect.counter = repeats;
+   this_effect.delay = actual_period(interval);
 
    if (function_exists("start_effect", obj))
-      this_effect->args = obj->start_effect(this_object(), args, repeats, interval);
+      this_effect.args = obj->start_effect(this_object(), args, repeats, interval);
    insert_effect(this_effect);
    if (!tag)
-      tag = call_out("next_effect", this_effect->delay);
+      tag = call_out("next_effect", this_effect.delay);
 }
 
 //: FUNCTION reinstate_effects
@@ -336,11 +336,11 @@ void reinstate_effects()
    object ob;
    foreach (class effect_class effect in effects)
    {
-      ob = load_object(effect->effect_ob);
+      ob = load_object(effect.effect_ob);
       if (!ob)
          continue;
       if (function_exists("reinstate_effect", ob))
-         effect->args = ob->reinstate_effect(this_object(), effect->args, effect->counter, );
+         effect.args = ob->reinstate_effect(this_object(), effect.args, effect.counter, );
    }
    next_effect();
 }

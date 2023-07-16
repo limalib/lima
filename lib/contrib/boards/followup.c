@@ -17,7 +17,7 @@ int filter_removed(object brd, int elem)
 {
    class news_msg msg = NEWS_D->get_message(brd->query_group(), elem);
 
-   if (!msg || !msg->body)
+   if (!msg || !msg.body)
       return 0;
 
    return 1;

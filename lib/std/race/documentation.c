@@ -76,17 +76,17 @@ class stat_roll_mods query_roll_mods()
     *   5            10		20 .. 30
     *   0		  40		 0 .. 40
     */
-   ret->str_adjust = 20;
-   ret->str_range = 10;
+   ret.str_adjust = 20;
+   ret.str_range = 10;
 
-   ret->agi_adjust = 5;
-   ret->agi_range = 10;
+   ret.agi_adjust = 5;
+   ret.agi_range = 10;
 
-   ret->int_adjust = -15;
-   ret->int_range = 5;
+   ret.int_adjust = -15;
+   ret.int_range = 5;
 
-   ret->wil_adjust = -10;
-   ret->wil_range = 10;
+   ret.wil_adjust = -10;
+   ret.wil_range = 10;
 
    return ret;
 }

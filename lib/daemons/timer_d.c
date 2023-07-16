@@ -37,40 +37,40 @@ nomask void process_timer(object owner)
 
    data = timers[owner];
 
-   if (data->time_left == 0)
+   if (data.time_left == 0)
       notice = "The timer has expired";
    else
-      notice = sprintf("%d:%02d left on the timer", data->time_left / 60, data->time_left % 60);
-   if (data->channel_name)
-      CHANNEL_D->deliver_notice(data->channel_name, notice);
+      notice = sprintf("%d:%02d left on the timer", data.time_left / 60, data.time_left % 60);
+   if (data.channel_name)
+      CHANNEL_D->deliver_notice(data.channel_name, notice);
    else
       tell(owner, notice + ".\n");
 
-   if (data->time_left == 0 && data->repeating)
+   if (data.time_left == 0 && data.repeating)
    {
-      data->time_left = data->delay;
+      data.time_left = data.delay;
 
-      if (data->notify_period && data->notify_period < data->delay)
-         t = data->notify_period;
+      if (data.notify_period && data.notify_period < data.delay)
+         t = data.notify_period;
       else
-         t = data->delay;
-      notice = sprintf("Timer rescheduled for %d:%02d", data->delay / 60, data->delay % 60);
-      if (data->channel_name)
-         CHANNEL_D->deliver_notice(data->channel_name, notice);
+         t = data.delay;
+      notice = sprintf("Timer rescheduled for %d:%02d", data.delay / 60, data.delay % 60);
+      if (data.channel_name)
+         CHANNEL_D->deliver_notice(data.channel_name, notice);
       else
          tell(owner, notice + ".\n");
    }
-   else if (data->time_left > 0)
+   else if (data.time_left > 0)
    {
-      if (data->time_left > data->notify_period)
-         t = data->notify_period;
+      if (data.time_left > data.notify_period)
+         t = data.notify_period;
       else
-         t = data->time_left;
+         t = data.time_left;
    }
 
    if (t)
    {
-      data->time_left -= t;
+      data.time_left -= t;
       call_out("process_timer", t, owner);
    }
 }
@@ -101,11 +101,11 @@ varargs nomask string add_timer(int delay,      /* timer delay */
       t = delay;
 
    info = new (class timer_info);
-   info->delay = delay;
-   info->time_left = delay - t;
-   info->repeating = repeating;
-   info->channel_name = channel;
-   info->notify_period = notify;
+   info.delay = delay;
+   info.time_left = delay - t;
+   info.repeating = repeating;
+   info.channel_name = channel;
+   info.notify_period = notify;
    timers[owner] = info;
 
    remove_call_out("process_timer");
