@@ -26,7 +26,6 @@ void do_wander();
 void do_game_command(string str);
 int query_attacking();
 int player_did_arrive(string dir);
-void set_def_msgs(string type);
 void moving();
 
 private
@@ -100,11 +99,6 @@ void clear_wander_area()
 string *query_wander_area()
 {
    return wander_area;
-}
-
-int can_go_str(string s)
-{
-   return 1;
 }
 
 //: FUNCTION set_wander_time
@@ -320,7 +314,6 @@ void do_wander()
 
 void mudlib_setup()
 {
-   set_def_msgs("living-default");
    add_hook("move", move_hook);
 }
 

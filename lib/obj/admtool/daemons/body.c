@@ -34,17 +34,17 @@ nomask void print_body(string cmd, string bodytype)
       foreach (string key, class limb val in body_info)
       {
          string *type = ({});
-         if (LIMB_VITAL & val.flags)
+         if (LIMB_VITAL & val->flags)
             type += ({"vital"});
-         if (LIMB_WIELDING & val.flags)
+         if (LIMB_WIELDING & val->flags)
             type += ({"wielding"});
-         if (LIMB_MOBILE & val.flags)
+         if (LIMB_MOBILE & val->flags)
             type += ({"mobile"});
-         if (LIMB_SYSTEM & val.flags)
+         if (LIMB_SYSTEM & val->flags)
             type += ({"system"});
-         if (LIMB_ATTACKING & val.flags)
+         if (LIMB_ATTACKING & val->flags)
             type += ({"attacking"});
-         output += sprintf("%-20s %-15d %-15s %-15s\n", key, val.health, val.parent ? val.parent : "None",
+         output += sprintf("%-20s %-15d %-15s %-15s\n", key, val->health, val->parent ? val->parent : "None",
                            implode(type, ", "));
       }
    else
@@ -138,7 +138,8 @@ nomask void set_limb_health(string bodytype, string limb, string health)
 private
 nomask void add_limb(string cmd, string bodytype, string limb)
 {
-   if (!sizeof(BODY_D->get_body(bodytype)))
+   TBUG("Trying to add " + cmd + "/ " + bodytype + "/ " + limb);
+   if (!BODY_D->body_exist(bodytype))
    {
       write("That body does not exist.\n");
       return;
@@ -173,7 +174,7 @@ nomask void list_body_types()
    printf("\nBODY TYPES:\n");
    foreach (string type in types)
    {
-      write(type + "\n");
+      write(capitalize(type) + "\n");
    }
 }
 
