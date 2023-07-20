@@ -24,7 +24,6 @@ inherit CLASS_SKILL;
 inherit M_WIDGETS;
 inherit M_FRAME;
 
-
 private
 void main(string arg)
 {
@@ -37,16 +36,41 @@ void main(string arg)
    string contbend = is_unicodetheme() ? "├" : " ";
    string content;
    string *names;
+   object body;
+   int self_view;
 
-   if (strlen(arg) && arg != "combat" && arg != "magic" && arg != "misc")
+   if (strlen(arg) > 0 && wizardp(this_user()))
    {
-      out("Valid arguments are: combat, magic or misc.\n");
+      body = present(arg, environment(this_body()));
+      if (!body)
+         body = find_body(arg);
+      if (!body)
+      {
+         out("Cannot find '" + arg + "'.\n");
+         return;
+      }
+      out("Skills for " + capitalize(arg) + ":\n");
+      self_view = 0;
+      arg = 0;
+   }
+
+   if (strlen(arg) && arg != "combat" && arg != "misc" && !body)
+   {
+      out("Valid arguments are: combat or misc.\n");
       return;
    }
 
+   if (!body)
+      body = this_body();
+
+   skills = body->get_skills() || body->query_skills();
+
    if (sizeof(skills) == 0)
    {
-      out("You have no skills yet.\n");
+      if (body == this_body())
+         out("You have no skills yet.\n");
+      else
+         out(body->short() + " has not skills yet.\n");
       return;
    }
    names = sort_array(keys(skills), 1);
