@@ -3,6 +3,7 @@
 inherit CONTAINER;
 inherit M_DECAY;
 inherit M_MESSAGES;
+inherit M_SALVAGEABLE;
 
 string the_name;
 object link;
@@ -30,6 +31,7 @@ object query_link()
 void mudlib_setup(string name, string long, object l)
 {
    ::mudlib_setup();
+   m_decay::mudlib_setup();
 
    link = l;
    if (!name)
@@ -63,7 +65,7 @@ void mudlib_setup(string name, string long, object l)
    set_num_decays(3);
    set_decay_action("Insects gnaw at the withering corpse.\n");
    set_last_decay_action("A corpse $vdecay into dust and ash.\n");
-   set_decay_time(20);
+   set_decay_time(1);
    set_decay_auto_remove(1);
 }
 
@@ -77,7 +79,8 @@ mixed indirect_get_obj_from_obj(object ob1, object ob2)
    return 1;
 }
 
-mixed indirect_get_obs_from_obj(object ob1, object ob2)
+// Get/take all from corpse
+mixed indirect_get_obs_from_obj(object *obs, object ob)
 {
    return 1;
 }
