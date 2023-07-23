@@ -86,8 +86,10 @@ void main(string arg)
          int level = sizeof(parts);
          int next_level = (i + 1) < sizeof(names) ? sizeof(explode(names[i + 1], "/")) : 0;
          string name2 = repeat_string("   ", sizeof(parts) - 1) + parts[ < 1];
-         string pretty_name = SKILL_D->skill_rank_pretty(this_body(), name);
-         int percentage = SKILL_D->percent_for_next_rank(this_body(), name);
+         string pretty_name =
+             body->is_body() ? SKILL_D->skill_rank_pretty(body, name) : SKILL_D->monster_skill_rank_pretty(body, name);
+         int percentage = body->is_body() ? SKILL_D->percent_for_next_rank(body, name)
+                                          : SKILL_D->monster_percent_for_next_rank(body, name);
          int green = skill_bar * percentage / 100;
          int red = skill_bar - green;
          frame_init_user();
@@ -104,11 +106,11 @@ void main(string arg)
             content = "";
             set_frame_title(pretty_name);
          }
-         else
+         else if (percentage || body->query_body())
             content += sprintf("%-25s %4s [<040>%s<238>%s<res>] %-5s\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
                                percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
-                               accent(skill.training_points), );
+                               body->query_body() ? accent(skill.training_points) : "", );
          i++;
       }
       if (content)

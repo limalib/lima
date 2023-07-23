@@ -104,7 +104,7 @@ private void build_error_data(mapping error_map, int caught)
   error_data.ob          = (object)error_map["object"];
   error_data.program     = (string)error_map["program"];
   error_data.error       = (string)error_map["error"];
-  error_data.interactive = this_interactive() || this_player() || this_user();
+  error_data.interactive = this_interactive() || this_user();
   error_data.logfile     = (caught ? LOG_FILE_CATCH : LOG_FILE_RUNTIME);
   error_data.uid         = capitalize((string)error_data.interactive->query_userid() || "(none)");
   error_data.trace       = (mixed*)error_map["trace"];
