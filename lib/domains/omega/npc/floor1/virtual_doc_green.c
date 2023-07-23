@@ -139,6 +139,20 @@ void begin_quest()
    QUEST_D->begin_quest(this_body(), "omega", "birthdaycard");
 }
 
+private
+void set_skill(string name)
+{
+   int part = 0;
+   string *parts = explode(name, "/");
+   while (part < sizeof(parts))
+   {
+      if (part + 1 < sizeof(parts))
+         this_body()->set_skill(implode(parts[0..part],"/"), 0);
+      part++;
+   }
+   this_body()->set_skill(name, 750);
+}
+
 void select_bag(int bag_num)
 {
    object bag = new ("/domains/omega/item/bag" + bag_num);
@@ -153,19 +167,31 @@ void select_bag(int bag_num)
       nnew(3, "/domains/std/consumable/bandage")->move(bag);
       new ("/domains/std/consumable/pain_killers")->move(bag);
       new ("/domains/std/consumable/chemo_satchel")->move(bag);
+      set_skill("misc/crafting/medicine");
+      set_skill("misc/challenge/investigation");
+      set_skill("combat/defense/dodge");
       break;
    case 2: // Miner
       // Laser drill
       // Goggles
+      set_skill("combat/melee/mace");
+      set_skill("misc/gathering/assaying");
+      set_skill("misc/gathering/mining");
       break;
    case 3: // Merchant
       // Product samples (quest item)
       // Notebook (quest item)
+      set_skill("combat/defense/disarm");
+      set_skill("combat/melee/unarmed");
+      set_skill("misc/life/haggle");
       break;
    case 4: // Mechanic
       new ("/domains/common/weapon/wrench")->move(bag);
       new ("/domains/common/weapon/screwdriver")->move(bag);
       new (COINS, (random(10) + 20), "credit")->move(bag);
+      set_skill("misc/crafting/electronics");
+      set_skill("misc/crafting/mechanics");
+      set_skill("combat/melee/improv");
       break;
    case 5: // Mercenary
    default:
@@ -173,8 +199,12 @@ void select_bag(int bag_num)
       if (random(2)) // 50% chance it comes with a clip
          new ("/domains/std/ammo/11mm_pistol")->move(bag);
       // 3 tokens
+      set_skill("combat/ranged/pistol");
+      set_skill("combat/defense/dodge");
+      set_skill("misc/life/boozing");
       break;
    }
+   write("<226>[You learned 3 new skills]<res>\n");
    bag->move(this_body());
    this_object()->targetted_action("$N $vhand $t a $o.", this_body(), bag);
    talk_to_me();
