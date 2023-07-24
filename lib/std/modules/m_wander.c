@@ -85,6 +85,16 @@ void remove_wander_area(string *area...)
       wander_area -= ({area});
 }
 
+int can_move()
+{
+   return 1;
+}
+
+int query_no_move_capacity()
+{
+   return 10000;
+}
+
 //: FUNCTION clear_wander_area
 // Clear the area(s) in which an NPC can wander in.  Effectively
 // this allows the NPC to wander anywhere.  See set_wander_area()
