@@ -29,6 +29,7 @@ int query_prone();
 int message_filter(object who, mixed extra);
 void set_reflex(int mp);
 void set_max_health(int);
+int karma_impact();
 int should_cap_skill(string skillname);
 varargs int test_skill(string skill, int opposing_skill, int train_limit);
 
@@ -527,9 +528,15 @@ void kill_us()
       {
          // Player is in a team
          PARTY_D->award_experience(killer, team, viable, query_level());
+#ifdef USE_KARMA
+         PARTY_D->modify_karma(team, viable, karma_impact());
+#endif
       }
       else
       {
+#ifdef USE_KARMA
+         previous_object()->modify_karma(karma_impact());
+#endif
          // Add the XP to the player.
          killer->add_experience(xp_value(killer));
          // Add xp and object for stats purposes.
