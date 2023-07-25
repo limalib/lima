@@ -1,3 +1,5 @@
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
 /* Skills command by Tsath */
 
 //: PLAYERCOMMAND
@@ -36,15 +38,15 @@ void main(string arg)
    string contbend = is_unicodetheme() ? "├" : " ";
    string content;
    string *names;
-   object body;
+   object target;
    int self_view;
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
-      body = present(arg, environment(this_body()));
-      if (!body)
-         body = find_body(arg);
-      if (!body)
+      target = present(arg, environment(this_body()));
+      if (!target)
+         target = find_body(arg);
+      if (!target)
       {
          out("Cannot find '" + arg + "'.\n");
          return;
@@ -54,23 +56,23 @@ void main(string arg)
       arg = 0;
    }
 
-   if (strlen(arg) && arg != "combat" && arg != "misc" && !body)
+   if (strlen(arg) && arg != "combat" && arg != "misc" && !target)
    {
       out("Valid arguments are: combat or misc.\n");
       return;
    }
 
-   if (!body)
-      body = this_body();
+   if (!target)
+      target = this_body();
 
-   skills = body->get_skills() || body->query_skills();
+   skills = target->get_skills() || target->query_skills();
 
    if (sizeof(skills) == 0)
    {
-      if (body == this_body())
+      if (target == this_body())
          out("You have no skills yet.\n");
       else
-         out(body->short() + " has not skills yet.\n");
+         out(target->short() + " has not skills yet.\n");
       return;
    }
    names = sort_array(keys(skills), 1);
@@ -87,9 +89,9 @@ void main(string arg)
          int next_level = (i + 1) < sizeof(names) ? sizeof(explode(names[i + 1], "/")) : 0;
          string name2 = repeat_string("   ", sizeof(parts) - 1) + parts[ < 1];
          string pretty_name =
-             body->is_body() ? SKILL_D->skill_rank_pretty(body, name) : SKILL_D->monster_skill_rank_pretty(body, name);
-         int percentage = body->is_body() ? SKILL_D->percent_for_next_rank(body, name)
-                                          : SKILL_D->monster_percent_for_next_rank(body, name);
+             target->is_body() ? SKILL_D->skill_rank_pretty(target, name) : SKILL_D->monster_skill_rank_pretty(target, name);
+         int percentage = target->is_body() ? SKILL_D->percent_for_next_rank(target, name)
+                                          : SKILL_D->monster_percent_for_next_rank(target, name);
          int green = skill_bar * percentage / 100;
          int red = skill_bar - green;
          frame_init_user();
@@ -106,11 +108,11 @@ void main(string arg)
             content = "";
             set_frame_title(pretty_name);
          }
-         else if (percentage || body->query_link())
+         else if (percentage || target->is_body())
             content += sprintf("%-25s %4s [<040>%s<238>%s<res>] %-5s\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
                                percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
-                               body->query_link() ? accent(skill.training_points) : "", );
+                               target->is_body() ? accent(skill.training_points) : "", );
          i++;
       }
       if (content)
