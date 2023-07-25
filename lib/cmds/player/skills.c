@@ -106,11 +106,11 @@ void main(string arg)
             content = "";
             set_frame_title(pretty_name);
          }
-         else if (percentage || body->query_body())
+         else if (percentage || body->query_link())
             content += sprintf("%-25s %4s [<040>%s<238>%s<res>] %-5s\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
                                percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
-                               body->query_body() ? accent(skill.training_points) : "", );
+                               body->query_link() ? accent(skill.training_points) : "", );
          i++;
       }
       if (content)
