@@ -241,8 +241,8 @@ void main(string arg)
       int max = body->query_max_capacity();
       string capa_string;
       mapping colours = ([0.0 +
-                enc_capa:"057", 0.0 + ((enc_heavy_capa * 0.8)):"056", 0.0 + ((enc_heavy_capa * 0.9)):"055", 0.0 +
-          enc_heavy_capa:"054", (1.0 * no_move):"053", (0.9 * no_move):"052", 0.0 + no_move:"088", 0.0 + max:"126"]);
+                enc_capa:"113", 0.0 + ((enc_heavy_capa * 0.8)):"119", 0.0 + ((enc_heavy_capa * 0.9)):"155", 0.0 +
+          enc_heavy_capa:"149", (1.0 * no_move):"143", (0.9 * no_move):"137", 0.0 + no_move:"131", 0.0 + max:"125"]);
 
       if (capa < enc_capa)
          capa_string = "Unencumbered";

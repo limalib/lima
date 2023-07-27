@@ -162,14 +162,15 @@ string slider_red_green(int value, int max, int width)
    int marker;
    string x_char = "X";
    string line_char = "-";
+   if (i_simplify())
+      return "";
+
    if (unicodetheme)
    {
       x_char = "●";
       line_char = "▬";
    }
 
-   if (i_simplify())
-      return "";
    width = width - 2; // [, X and ]
    marker = width * ((value + (max / 2.0)) / (max * 1.0));
 
