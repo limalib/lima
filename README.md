@@ -1,12 +1,11 @@
 Lima Mudlib that work with latest FluffOS
 
+# Get involved
+- Visit us at lima-rebean.themud.org 7878 !
+- #LIMA Channel on LPC Discord - https://discord.gg/wzUbBgs3AQ
+
 # Documentation
 Please see https://limamudlib.readthedocs.io/en/latest/
-
-# Current status
-- [X] Boot
-- [X] Basic functions
-- [ ] Error free
 
 # How to test and contribute
 ```
@@ -16,8 +15,5 @@ cd lima
 ./run.sh
 ```
 
-# Proof
-![image](https://user-images.githubusercontent.com/1256464/78710559-61566400-78ca-11ea-8479-cb87e319aab4.png)
-
 # License
-same as original Lima Lib.
+Same as original Lima Lib.
