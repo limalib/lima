@@ -108,6 +108,8 @@ void set_frame_left_header()
 private
 string colour_str(string t, string col)
 {
+   if (!col || strlen(col) != 3)
+      return t;
    return "<" + col + ">" + t + "<res>";
 }
 
