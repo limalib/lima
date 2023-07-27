@@ -166,8 +166,6 @@ void main(string arg)
                       (pretty_bonus(body->query_cha() - body->query_cha_pure()))) +
               "\n";
 
-   content += sprintf("%d of %d used %s\n\n", body->query_stat_points(), body->query_stat_points_max(),
-                      (body->query_stat_points() < body->query_stat_points_max() ? "- visit a trainer!" : ""));
    content += sprintf("XP Buff: %s\n\n",
                       (body->query_guild_xp_buff() ? "Guild buff " + body->query_guild_xp_buff() + "%" : "None"));
 
@@ -259,7 +257,7 @@ void main(string arg)
                  weight_to_string(enc_capa, get_user_variable("metric") != 1) + " - " + capa_string + ".";
    }
 
-   set_frame_header(" \nExp\n\n\nMoney" + repeat_string("\n", sizeof(curr) || 1) + "\nStats\n\n\nPoints\n\nOther\n\n" +
+   set_frame_header(" \nExp\n\n\nMoney" + repeat_string("\n", sizeof(curr) || 1) + "\nStats\n\n\nOther\n\n" +
 #ifdef USE_KARMA
                     "Karma\n\n" +
 #endif

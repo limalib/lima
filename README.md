@@ -9,8 +9,5 @@ It works on 3 layers of interaction.
 
 These 3 layers all interact, so you can e.g. land on a planet in your spacecraft and explore on foot.
 
-# How to test and contribute
-Join us on 139.144.35.74 port 7878 via Mudlet and let's have a chat!
-
 # License
-same as original Lima Lib.
+Same as original Lima Lib.

@@ -12,11 +12,21 @@
 inherit M_COLOURS;
 
 private
-nosave int unicodetheme = member_array(this_user()->frames_theme(), ({"ascii", "lines", "none"})) == -1;
-private
-nosave string barchar = unicodetheme ? "▅" : "=";
-private
-nosave string nobarchar = unicodetheme ? "▅" : ".";
+nosave string *slider_colours = ({
+    "196",
+    "202",
+    "208",
+    "214",
+    "220",
+    "226",
+    "190",
+    "154",
+    "118",
+    "047",
+    "035",
+    "023",
+    "026",
+});
 
 //: FUNCTION i_simplify
 // Returns TRUE if the current user (not the object receiving the message!)
@@ -34,14 +44,18 @@ nomask int i_emoji()
    return get_user_variable("emoji") != 0 && !i_simplify();
 }
 
+//: FUNCTION uses_unicode
+// Returns true if the user is using a unicode theme.
+int uses_unicode()
+{
+   return member_array(this_user()->frames_theme(), ({"ascii", "lines", "none"})) == -1;
+}
+
+//: FUNCTION default_user_width
+// Returns the user screen width -2 chars.
 int default_user_width()
 {
    return this_user()->query_screen_width() - 2;
-}
-
-int is_unicodetheme()
-{
-   return unicodetheme;
 }
 
 //: FUNCTION on_off_widget
@@ -52,27 +66,21 @@ string on_off_widget(int on)
    if (i_simplify())
       return on ? "On " : "Off ";
    if (on)
-      return sprintf("[<046>On<res> ]");
+      return i_emoji() ? "[ <046>✓<res> ]" : sprintf("[<046>On<res> ]");
    else
-      return sprintf("[<124>Off<res>]");
+      return i_emoji() ? "[ <124>✕<res> ]" : sprintf("[<124>Off<res>]");
 }
 
-varargs string fancy_divider(int width)
-{
-   if (!width)
-      width = default_user_width();
-   if (i_simplify())
-      return "";
-   return repeat_string("-=", ((width - 1) / 2)) + "\n";
-}
-
+//: FUNCTION simple_divider
+// Prints a simple divider either using unicode or not, depending on user settings.
 varargs string simple_divider(int width)
 {
+   string barchar = uses_unicode() ? "─" : "-";
    if (!width)
       width = default_user_width();
    if (i_simplify())
       return "";
-   return repeat_string("-", width) + "\n";
+   return repeat_string(barchar, width) + "\n";
 }
 
 //: FUNCTION green_bar
@@ -80,6 +88,9 @@ varargs string simple_divider(int width)
 string green_bar(int value, int max, int width)
 {
    int green, white;
+   string barchar = uses_unicode() ? "▅" : "=";
+   string nobarchar = uses_unicode() ? "▅" : ".";
+
    if (i_simplify())
       return value + "/" + max;
    if (value > max)
@@ -87,7 +98,7 @@ string green_bar(int value, int max, int width)
    green = (value * 1.00 / max) * (width)-1;
    white = width - 2 - green;
 
-   return sprintf("[" + (white <= 0 ? "<040>" : "<024>") + "%s<res><" + (unicodetheme ? "238" : "007") + ">%s<res>]",
+   return sprintf("[" + (white <= 0 ? "<040>" : "<024>") + "%s<res><" + (uses_unicode() ? "238" : "007") + ">%s<res>]",
                   repeat_string(barchar, green), repeat_string(nobarchar, white));
 }
 
@@ -97,6 +108,8 @@ string critical_bar(int value, int max, int width)
 {
    int green, white;
    float p;
+   string barchar = uses_unicode() ? "▅" : "=";
+   string nobarchar = uses_unicode() ? "▅" : ".";
 
    string bar_colour = "<040>";
    if (i_simplify())
@@ -116,9 +129,8 @@ string critical_bar(int value, int max, int width)
    if (green < 0)
       green = 0;
    white = width - 1 - green;
-   //	TBUG("Green: "+green+" White: "+white+" value: "+value+" max: "+max+" width: "+width);
 
-   return sprintf("[" + bar_colour + "%s<res><" + (unicodetheme ? "238" : "007") + ">%s<res>]",
+   return sprintf("[" + bar_colour + "%s<res><" + (uses_unicode() ? "238" : "007") + ">%s<res>]",
                   repeat_string(barchar, green), repeat_string(nobarchar, white));
 }
 
@@ -128,6 +140,8 @@ string reverse_critical_bar(int value, int max, int width)
 {
    int green, white;
    float p;
+   string barchar = uses_unicode() ? "▅" : "=";
+   string nobarchar = uses_unicode() ? "▅" : ".";
    string bar_colour = "<129>";
    if (i_simplify())
       return "";
@@ -149,7 +163,7 @@ string reverse_critical_bar(int value, int max, int width)
       green = 0;
    white = width - 1 - green;
 
-   return sprintf("[" + bar_colour + "%s<res><" + (unicodetheme ? "238" : "007") + ">%s<res>]",
+   return sprintf("[" + bar_colour + "%s<res><" + (uses_unicode() ? "238" : "007") + ">%s<res>]",
                   repeat_string(barchar, green), repeat_string(nobarchar, white));
 }
 
@@ -160,15 +174,20 @@ string slider_red_green(int value, int max, int width)
 {
    string return_string;
    int marker;
-   string x_char = "X";
-   string line_char = "-";
+   string x_char;
+   string line_char;
    if (i_simplify())
       return "";
 
-   if (unicodetheme)
+   if (uses_unicode())
    {
       x_char = "●";
       line_char = "▬";
+   }
+   else
+   {
+      x_char = "X";
+      line_char = "-";
    }
 
    width = width - 2; // [, X and ]
@@ -176,21 +195,7 @@ string slider_red_green(int value, int max, int width)
 
    return_string = repeat_string(line_char, marker) + x_char + repeat_string(line_char, width - marker);
    return_string = return_string[0..(width / 2)] + return_string[(width / 2 + 1)..];
-   return_string = gradient_string(return_string, ({
-                                                      "196",
-                                                      "202",
-                                                      "208",
-                                                      "214",
-                                                      "220",
-                                                      "226",
-                                                      "190",
-                                                      "154",
-                                                      "118",
-                                                      "047",
-                                                      "035",
-                                                      "023",
-                                                      "026",
-                                                  }));
+   return_string = gradient_string(return_string, slider_colours);
    return_string = replace_string(return_string, x_char, "<015>" + x_char + "<res>");
    return "[" + return_string + "<res>]";
 }
@@ -207,17 +212,23 @@ string slider_colours_sum(int value, mapping colours, int width)
    string return_string;
    int colour_add = 0;
    int next_pos = 0;
-   string x_char = "X";
-   string line_char = "-";
+   string x_char;
+   string line_char;
    string colour_after_marker; // Save this colour to make things easier later.
 
-   if (unicodetheme)
+   if (i_simplify())
+      return "";
+
+   if (uses_unicode())
    {
       x_char = "●";
       line_char = "▬";
    }
-   if (i_simplify())
-      return "";
+   else
+   {
+      x_char = "X";
+      line_char = "-";
+   }
    width = width - 3; // [ and ]
    marker = width * (1.0 * value / max);
    if (marker == 0)
