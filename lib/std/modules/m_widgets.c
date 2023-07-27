@@ -176,19 +176,19 @@ string slider_red_green(int value, int max, int width)
    return_string = repeat_string(line_char, marker) + x_char + repeat_string(line_char, width - marker);
    return_string = return_string[0..(width / 2)] + return_string[(width / 2 + 1)..];
    return_string = gradient_string(return_string, ({
-                                                      "058",
-                                                      "064",
-                                                      "070",
-                                                      "076",
-                                                      "076",
-                                                      "082",
-                                                      "190",
-                                                      "226",
-                                                      "220",
-                                                      "214",
-                                                      "208",
-                                                      "202",
                                                       "196",
+                                                      "202",
+                                                      "208",
+                                                      "214",
+                                                      "220",
+                                                      "226",
+                                                      "190",
+                                                      "154",
+                                                      "118",
+                                                      "047",
+                                                      "035",
+                                                      "023",
+                                                      "026",
                                                   }));
    return_string = replace_string(return_string, x_char, "<015>" + x_char + "<res>");
    return "[" + return_string + "<res>]";
