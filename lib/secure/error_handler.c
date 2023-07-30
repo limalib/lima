@@ -106,7 +106,7 @@ private void build_error_data(mapping error_map, int caught)
   error_data.error       = (string)error_map["error"];
   error_data.interactive = this_interactive() || this_user();
   error_data.logfile     = (caught ? LOG_FILE_CATCH : LOG_FILE_RUNTIME);
-  error_data.uid         = capitalize((string)error_data.interactive->query_userid() || "(none)");
+  error_data.uid         = error_data.interactive ? capitalize((string)error_data.interactive->query_userid() || "(none)") : "(none)";
   error_data.trace       = (mixed*)error_map["trace"];
   if ( arrayp(error_data.trace) && sizeof(error_data.trace) && mapp(error_data.trace[<1]) )
   {
@@ -196,16 +196,18 @@ protected void error_handler(mapping error_map, int caught) {
   
   output += fetch_class_member(output_data, OUTPUT["trace"]);
   output += fetch_class_member(output_data, OUTPUT["context"]);
-   
-  tell(error_data.interactive, 
-    sprintf("%s%s\n%s\n", 
-      sprintf("\n%s\n%s\n\n%s", 
-        BORDER, 
-        ctime(), 
-        output_data.error), 
-      output, 
-      BORDER));
-      
+  
+  if(objectp(error_data.interactive))
+  {
+    tell(error_data.interactive, 
+      sprintf("%s%s\n%s\n", 
+        sprintf("\n%s\n%s\n\n%s", 
+          BORDER, 
+          ctime(), 
+          output_data.error), 
+        output, 
+        BORDER));
+  }
   send_to_channel();
 }
 

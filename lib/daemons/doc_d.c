@@ -95,11 +95,16 @@ void delete_directory(string directory)
 }
 
 private
-void make_directories()
+int make_directories()
 {
    /* Assume that if the filesize is -1 that a directory needs to be created */
    if (file_size("/help/autodoc") == -1)
       mkdir("/help/autodoc");
+
+   //Still no success? Then abort here.
+   if (file_size("/help/autodoc") == -1)
+      return 0;
+
    if (file_size("/help/autodoc/FIXME") == -1)
       mkdir("/help/autodoc/FIXME");
    if (file_size("/help/autodoc/command") == -1)
@@ -120,6 +125,7 @@ void make_directories()
       mkdir("/help/autodoc/todo");
    if (file_size(sprintf("/help/autodoc/%s", MUD_AUTODOC_DIR)) == -1)
       mkdir(sprintf("/help/autodoc/%s", MUD_AUTODOC_DIR));
+   return 1;
 }
 
 //: FUNCTION scan_mudlib
@@ -135,7 +141,11 @@ void scan_mudlib()
    if (!last_time)
    {
       delete_directory("/help/autodoc");
-      make_directories();
+      if (!make_directories())
+      {
+         printf("*** Run '@DOC_D->complete_rebuild()' as an admin to initiate the autodoc system.\n");
+         return;
+      }
    }
    continue_scan();
 }
