@@ -31,7 +31,7 @@ void main(string arg)
 {
    mapping skills = this_body()->query_skills();
    int width = this_user()->query_screen_width() - 6;
-   int skill_bar = width - 35;
+   int skill_bar = width - 37;
    string barchar = uses_unicode() ? "▅" : "=";
    string nobarchar = uses_unicode() ? "▅" : ".";
    string bend = uses_unicode() ? "└" : " ";
@@ -109,7 +109,7 @@ void main(string arg)
             set_frame_title(pretty_name);
          }
          else if (percentage || target->is_body())
-            content += sprintf("%-25s %4s [<040>%s<238>%s<res>] %-5s\n",
+            content += sprintf("%-25s %4s [<040>%s<238>%s<res>] %-7s\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
                                percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
                                target->is_body() ? accent(skill.training_points) : "", );
