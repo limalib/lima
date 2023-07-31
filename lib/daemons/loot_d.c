@@ -104,6 +104,18 @@ object coins_treasure(int level, string currency)
    return new (COINS, coins, currency);
 }
 
+string domain_file(mixed file)
+{
+   string *parts;
+   if (objectp(file))
+      file = base_name(file);
+   parts = explode(file, "/");
+   if (sizeof(parts) > 2 && parts[0] == "domains")
+      return parts[1];
+   else
+      return "std";
+}
+
 void drop_corpse(object adversary)
 {
    string corpse_filename = adversary->query_corpse_filename();

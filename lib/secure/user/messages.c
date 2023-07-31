@@ -134,15 +134,6 @@ void do_receive(string msg, int msg_type)
 {
    string *lines = explode(msg, "\n");
 
-   if (!(msg_type & TREAT_AS_BLOB))
-   {
-      if (sizeof(lines) > 1)
-      {
-         filter(lines, ( : do_receive($1, $(msg_type)) :));
-         return;
-      }
-   }
-
    if (msg_type & NO_ANSI)
    {
       if (msg_type & NO_WRAP)

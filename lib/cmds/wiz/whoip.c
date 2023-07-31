@@ -82,11 +82,11 @@ void main(string arg)
       return;
    }
 
+   ips = LAST_LOGIN_D->ips_for_login(arg);
    if (ob = find_user(arg))
    {
       ip = query_ip_number(ob);
       userlist = filter(users(), ( : query_ip_number($1) == $2:), ip);
-      ips = LAST_LOGIN_D->ips_for_login(arg);
    }
    else if (sscanf(implode(explode(arg, "."), ""), "%d", x) == 1)
    {
@@ -129,7 +129,7 @@ void main(string arg)
 
    if ((x = sizeof(ips)) > 0)
    {
-      outf("\nThe following " + x + " IPs have been used by %s:\n", arg);
+      outf("\nThe following " + x + " IP" + (x == 1 ? "" : "s") + " have been used by %s:\n", arg);
       foreach (string i in ips)
       {
          outf("%-=78s", i + "\n");

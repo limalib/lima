@@ -32,10 +32,10 @@ void main(string arg)
    mapping skills = this_body()->query_skills();
    int width = this_user()->query_screen_width() - 6;
    int skill_bar = width - 35;
-   string barchar = is_unicodetheme() ? "▅" : "=";
-   string nobarchar = is_unicodetheme() ? "▅" : ".";
-   string bend = is_unicodetheme() ? "└" : " ";
-   string contbend = is_unicodetheme() ? "├" : " ";
+   string barchar = uses_unicode() ? "▅" : "=";
+   string nobarchar = uses_unicode() ? "▅" : ".";
+   string bend = uses_unicode() ? "└" : " ";
+   string contbend = uses_unicode() ? "├" : " ";
    string content;
    string *names;
    object target;
