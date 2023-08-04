@@ -241,7 +241,7 @@
  * NOTE: This is required to be changed in order to have a working
  * I3 system. Must be changed for anything to work!
  */
-#define ADMIN_EMAIL "tsath@lima-rebean.themud.org"
+#define ADMIN_EMAIL "tsath@lima.themud.org"
 
 /* If this is undefined, anonymous ftp is allowed - undef it to prevent.
   Anon ftp users are limited to /ftp/pub.*/

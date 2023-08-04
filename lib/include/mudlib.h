@@ -301,7 +301,7 @@
 #define PLAYER_MENU       "/obj/mudlib/plmenu"
 #define PLYR_SHELL        "/obj/mudlib/pshell"
 #define SIMPLE_OB         "/obj/mudlib/simple_ob"
-#define PARTY_MENU         "/obj/mudlib/party_menu"
+#define PARTY_MENU        "/obj/mudlib/party_menu"
 #define TEMP_WORKROOM     "/obj/mudlib/TWorkroom"
 #define WATER             "/std/water"
 
