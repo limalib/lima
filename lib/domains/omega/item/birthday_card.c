@@ -4,7 +4,7 @@ inherit OBJ;
 inherit M_GETTABLE;
 
 string *signers = ({"Gerald Green"});
-int max_signers = 2;
+int max_signers = 3;
 
 void setup()
 {

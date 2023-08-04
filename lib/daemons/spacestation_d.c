@@ -161,6 +161,18 @@ void undock_passive_ships()
    call_out("undock_passive_ships", 120);
 }
 
+string domain_file(mixed file)
+{
+   string *parts;
+   if (objectp(file))
+      file = base_name(file);
+   parts = explode(file, "/");
+   if (sizeof(parts) > 2 && parts[0] == "domains")
+      return parts[1];
+   else
+      return "std";
+}
+
 string stat_me()
 {
    string out = "Docked ships:\n";

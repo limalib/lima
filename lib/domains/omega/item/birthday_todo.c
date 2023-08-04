@@ -5,9 +5,10 @@ void setup()
    ::setup();
    add_id("birthday_list");
    set_title("Doc. Green's Colleagues");
-   set_entries((["1":"Find Dr. Erebor in the canteen area on the 3rd floor",
+   set_entries((["1":"Find Dr. Nelson in the canteen area on the 3rd floor",
                  "2":"Find Dr. Williams, he should be in his favourite café in the Landing Terminal, Stellar Bites, "
-                     "around this time or in the medical center on the same floor."]));
+                     "around this time or in the medical center on the same floor.",
+   ]));
    set_synonyms((["canteen":"1", "landing terminal":"2"]));
 }
 

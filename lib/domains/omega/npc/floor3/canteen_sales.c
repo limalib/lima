@@ -4,6 +4,7 @@ inherit LIVING;
 inherit M_VENDOR;
 inherit M_ACTIONS;
 inherit M_TRIGGERS;
+inherit M_CONVERSATION;
 
 void setup()
 {
@@ -15,7 +16,8 @@ void setup()
    set_long("Liam Johnson is a friendly and efficient staff member who mans the till at the canteen. With his warm "
             "smile and quick wit, he ensures smooth transactions and assists customers with their orders. Liam has a "
             "youthful charm, and his energetic nature makes him a favorite among the station's visitors. He wears a "
-            "neat uniform and is always ready to provide assistance with a touch-screen menu.");
+            "neat uniform and is always ready to provide assistance with a touch-screen menu.\n\n"
+            "Liam wears a small pin on his shirt with the head of a goblin.");
    add_pattern("%s says: I am your manager%s.", ( : "say Are you Mr. Stevens?" :));
    add_pattern("%s says: I am your boss%s.", ( : "say Are you Mr. Stevens?" :));
 
@@ -35,7 +37,35 @@ void setup()
        ({"say Good day! What can I ring up for you today? Our holographic menu offers an array of stellar options!",
          "say Do you need any extra toppings or a refreshing beverage to go with your meal? Just let me know, and "
          "I'll make it happen!",
-         "say Thank you for dining with us! Your total comes to "+(random(10)+random(10)+5)+" credits. Payment options include credits, crypto, "
-         "or a gravity-defying dance routine!",
-         "whistle"}));
+         "say Thank you for dining with us! Your total comes to " + (random(10) + random(10) + 5) +
+             " credits. Payment options include credits, crypto, "
+             "or a gravity-defying dance routine!",
+         "sing Brip to brap, brap you talk crap, and most of all you cant rap", "whistle","Do you want peas with that??"}));
+
+   //The below is a huge tribute to Eddie Izzard's Death Star Canteen bit.
+   set_start(({"penne"}));
+   set_options((["penne":"I will have the penne a la arrabiata.",
+                 "doyou":"Do you know who I am? I can kill you with a single thought!",
+                  "tray":"No, I will not need a tray. I do not need a tray to kill you. I can kill you without a tray, "
+                         "with the power of the Force - which is strong within me - even though I could kill you with "
+                         "a tray if I so wished. For I would hack at your neck with the thin bit until the blood "
+                         "flowed across the canteen floor...",
+               "hotfood":"Oh, I see, the food is hot. I'm sorry, I, I did not realize. Hah! Hah! I thought you were "
+                         "challenging me to a fight to the death.",
+             "deathstar":
+                 "Yes, but I am Vader, I am Lord Vader. Everyone challenges me to a fight to the death. Lord Vader. "
+                 "Darth Vader, I am Dart Vader, Lord Vader. Sir Lord Vader, Sir Lord Darth Vader. Lord Darth Sir Lord "
+                 "Vader of Cheam. Sir Lord Baron von Vaderham. The Death Star. I run the Death Star.",
+            "deathstar2":"This is the Death Star. You're in the Death Star. I run this star. I'm your boss.",
+                   "mrs":"No, I'm... who is Mr. Stephens?",
+              "catering":"I'm not head of catering! I am Vader. I can kill catering with a thought.",
+             "catering2":"I can kill you all. I can kill me with a thought. Just... I'll get a tray, fuck it!..."]));
+   set_responses((["penne":"You'll need a tray.@@doyou",
+                   "doyou":"You'll still need a tray.@@tray",
+                    "tray":"No, the food is hot. You'll need a tray to put the food on.@@hotfood",
+                 "hotfood":"Fight to the death? This is canteen, I am Liam and I work here.@@deathstar",
+               "deathstar":"What's the Death Star? Isn't this the Omega Station?@@deathstar2",
+              "deathstar2":"You're Mr. Stevens?@@mrs", "mrs":"He's head of catering.@@catering",
+                "catering":"What?@@catering2",
+               "catering2":"Here's your tray. Now what would you like to order, Jeff Vader?"]));
 }

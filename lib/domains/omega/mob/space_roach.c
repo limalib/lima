@@ -2,8 +2,11 @@
 
 inherit ADVERSARY;
 inherit M_AGGRESSIVE;
+inherit M_WANDER;
+inherit M_SMARTMOVE;
+inherit M_ACTIONS;
 
-void mudlib_setup()
+void setup()
 {
    int size = 1 + random(3);
    string size_str;
@@ -25,7 +28,9 @@ void mudlib_setup()
    set_combat_messages("combat-claws-bites");
    add_adj(size_str);
    set_gender(0);
-   set_in_room_desc("A " + size_str + " space roach");
+   set_wander_area("duct");
+   set_wander_time(20);
+   set_in_room_desc(capitalize(add_article(size_str + " space roach")));
    set_long("A space roach is an insectoid creature, about the size of a terrestrial cockroach - this one is " +
             size_str +
             " for the species. Its exoskeleton "
@@ -37,8 +42,7 @@ void mudlib_setup()
    set_max_health((5 * size));
    set_aggressive(50);
    set_damage_bonus((2 + size));
-   ::mudlib_setup();
-   set_skill("combat/defense/dodge", 200*size);
+   set_skill("combat/defense/dodge", 200 * size);
 }
 
 int karma_impact()
