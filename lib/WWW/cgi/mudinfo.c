@@ -17,7 +17,7 @@ string get_mudlib(string s)
    switch (s[0..3])
    {
    case "Lima":
-      return "<a href=http://lima.mudlib.org:7881>Lima</a>";
+      return "<a href=http://limalib.dev:7881>Lima</a>";
    case "Nigh":
       return sprintf("<a href=http://www.imaginary.com/LPC/Nightmare/>%s</a>", s);
    case "Disc":

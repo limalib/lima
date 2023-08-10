@@ -28,7 +28,7 @@ void setup()
                    "where":"You can find the best current sources for the LIMA mudlib in GitHub on "
                            "https://github.com/fluffos/lima.git (stable) " +
                                "or https://github.com/tsathoqqua/lima.git (development) or see a demo on the Lima "
-                               "Rebean mud itself (lima-rebean.themud.org 7878).",
+                               "MUD itself (limalib.dev 7878).",
                 "problems":"See https://www.fluffos.info/build.html, or get your MUD on the intermud "
                            "network.@@intermud,compilation",
 
