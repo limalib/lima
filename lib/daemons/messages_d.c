@@ -1,209 +1,139 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-// This really be dynamic, with managing commands, but for now ...
+/**
+ * MESSAGING_D for holding different messages for the MUD in the standard format.
+ * The files in this daemon is held in /data/messages/ in a simple format.
+ * Lines can be repeated for random selections of messages.
+ */
 
-// ###TODO: make an interface to this crap.  Put it in a file.
-// ###combat-torch also needs serious help.
+#define MESSAGE_DIR "/data/messages/"
 
-mapping messages =
-    (["combat-unarmed":(["miss":({"$N $vswing a fist at $t, but $vmiss wildly.",
-                                  "$N $vjab a fist at $t, but just $vmiss."}),
-                                "none":"$N $vpunch $t, but $n1 $v1shrug it off.",
-                              "disarm":"$N $vgrab $p1 arm, and $vslam it down on $p knee, causing $n1 to drop $p1 $o1.",
-                           "knockdown":"$N $vstep behind $t, and trips $t, sending $t flying.",
-                            "knockout":"$N $vfeint past $p1 guard and $vknock $t senseless.",
-                               "fatal":"$N $vdrive $t back with a series of punches and kicks, and $vend with a "
-                                       "stunning kick to the head.  $N1 $v1slump to the ground, motionless.",
-                                "dam1":"$N $vland a weak punch to $p1 $o2.",
-                                "dam2":"$N $vcatch $t square in the $o2 with a quick jab.",
-                                "dam3":"$N $vconnect with a kick to $p1 $o2.",
-                                "dam4":"$N $vtrip $t, and $vland a vicious blow in $p1 $o2.",
-                                "dam5":"$N1 $v1are sent flying backwards by $p well-executed kick to $p1 $o2.",
-                                "dam6":"$N1 $v1are caught off guard, and $n $vtake advantage and $vpummel $t soundly.",
-                                "dam7":"$N relentlessly $vpound $t with repeated blows to the $o2.",
-                                "dam8":"$N $vland an incredible combination of punches and kicks, beating $t badly.  "
-                                       "$N1 $v1are not in very good shape.",
-                                "dam9":"$N $vunleash a series of stunning blows to $p1 $o2!  $N1 $v1are hurt badly!",
-                               "dam10":"$N $vbeat $t within an inch of $p1 life."]),
-           "combat-bludgeon":
-               (["miss":({"$N $vswipe $p $o at $t but $vmiss by a mile.", "$N just $vmiss $t, dagnabbit."}),
-                        "none":"$N $vhit $t with $p $o, but $n1 $v1do not seem hurt by it.",
-                      "disarm":"$N $vgrab $p1 arm, and $vslam it down on $p knee, causing $n1 to drop $p1 $o1.",
-                   "knockdown":"$N $vstep behind $t, and $vtrip $t, sending $t flying.",
-                       "fatal":"$N $vdrive $t back with a ferocious series of punches and kicks, and $vend with a "
-                               "stunning kick to the head.  $N1 $vslump to the ground, motionless.",
-                    "knockout":"$N $vfeint past $p1 guard and $vknock $t senseless.",
-                    "dispatch":"$N $vhave no sense of honor; $n $vcave in $p1 $o2 with $p $o.",
-                      "wakeup":"$N slowly $vregain $p feet.", "dam1":"$N $vland a weak slap to $p1 $o2.",
-                        "dam2":"$N $vcatch $t in the $o2 with $p $o.", "dam3":"$N $vconnect with a slam to $p1 $o2.",
-                        "dam4":"$N $vtrip $t, and lands a vicious blow to $p1 $o2.",
-                        "dam5":"$N1 $v1are sent flying backwards by $p well-executed crunch to $p1 $o2.",
-                        "dam6":"$N1 $v1are caught off guard, and $n $vtake advantage and pummel $t soundly.",
-                        "dam7":"$N relentlessly $vpound $t with repeated blows to the $o2 with the $o.",
-                        "dam8":"$N $vland an incredible combination of slams and swipes, beating $t badly.  $N1 $v1are "
-                               "not in very good shape.",
-                        "dam9":"$N $vunleashes a series of stunning blows to $p1 $o2!  $N1 $v1are pummeled badly!",
-                       "dam10":"$N $vsmash $t within an inch of $p1 life."]),
-         "combat-paws-bites":
-             (["miss":({"$N $vswing a paw at $t, but $vmiss wildly.", "$N $vattack $t with a paw, but just $vmiss."}),
-                      "none":"$N $vpounce $t, but $n1 $v1shrug it off.",
-                    "disarm":"$N $vbite $p1 arm, causing $p1 to drop $p1 $o1.",
-                 "knockdown":"$N $vpounce on $t, sending $t to the ground.",
-                  "knockout":"$N $vroar up and $vpounce $p1 head and $vknock $t senseless.",
-                     "fatal":"$N $vdrive $t back with a series of attacks, and $vend with a bite to the throat.  $N1 "
-                             "$v1slump to the ground, motionless.",
-                      "dam1":"$N $vland a weak claw attack on $p1 $o2.",
-                      "dam2":"$N $vcatch $t square in the $o2 with a paw.",
-                      "dam3":"$N $vconnect with a solid paw to $p1 $o2.",
-                      "dam4":"$N $vtrip $t, and $vland a vicious front paw on $p1 $o2.",
-                      "dam5":"$N1 $v1are sent flying backwards by a bite to $p1 $o2.",
-                      "dam6":"$N1 $v1are caught off guard, and $n $vtake advantage and $vbite $t horribly.",
-                      "dam7":"$N relentlessly $vpound $t with repeated blows to the $o2.",
-                      "dam8":"$N $vstomp on $t badly, and the finishes with a bite. $N1 $v1are not in very good shape.",
-                      "dam9":"$N $vunleash a series of claw attacks and bites to $p1 $o2!  $N1 $v1are hurt badly!",
-                     "dam10":"$N $vbite $t within an inch of $p1 life."]),
-        "combat-claws-bites":
-            (["miss":({"$N $vswing a claw at $t, but $vmiss wildly.", "$N $vattack $t with a claw, but just $vmiss."}),
-                     "none":"$N $vpounce $t, but $n1 $v1shrug it off.",
-                   "disarm":"$N $vbite $p1 arm, causing $p1 to drop $p1 $o1.",
-                "knockdown":"$N $vpounce on $t, sending $t to the ground.",
-                 "knockout":"$N $vroar up and $vpounce $p1 head and $vknock $t senseless.",
-                    "fatal":"$N $vdrive $t back with a series of attacks, and $vend with a bite to the throat.  $N1 "
-                            "$v1slump to the ground, motionless.",
-                     "dam1":"$N $vland a weak claw attack on $p1 $o2.",
-                     "dam2":"$N $vcatch $t square in the $o2 with a claw.",
-                     "dam3":"$N $vconnect with a solid claw to $p1 $o2.",
-                     "dam4":"$N $vtrip $t, and $vland a vicious front claw on $p1 $o2.",
-                     "dam5":"$N1 $v1are sent flying backwards by a bite to $p1 $o2.",
-                     "dam6":"$N1 $v1are caught off guard, and $n $vtake advantage and $vbite $t horribly.",
-                     "dam7":"$N relentlessly $vpound $t with repeated blows to the $o2.",
-                     "dam8":"$N $vstomp on $t badly, and the finishes with a bite. $N1 $v1are not in very good shape.",
-                     "dam9":"$N $vunleash a series of claw attacks and bites to $p1 $o2!  $N1 $v1are hurt badly!",
-                    "dam10":"$N $vbite $t within an inch of $p1 life."]),
-              "combat-sword":
-                  (["miss":({"$N $vslash at $t but $vmiss by a mile.", "$N just $vmiss $t with a quick thrust."}),
-                         "none":"$N just barely $vnick $t with a swipe of $p $o.",
-                         "dam1":"$N $vprick $t with a quick stab of $p $o.",
-                         "dam2":"Blood flows from $p1 $o2 as $n $vsneak past $p1 guard.",
-                         "dam3":"$N1 $v1are not quite fast enough; $p $o slices $t across the $o2.",
-                         "dam4":"$N $vcatch $t in the $o2 with a quick thrust.",
-                         "dam5":"$N $vcut $t with a slice of $p $o.", "dam6":"$N $vwound $t with a quick slash.",
-                         "dam7":"$N $vthrust quickly and $vwithdraw, leaving $t wounded.",
-                         "dam8":"$N $vconnect!  $N1 $v1are hurt badly.",
-                         "dam9":"$N $vbring $p $o down hard on $p1 $o2, injuring $t badly.",
-                        "dam10":"$N $vdrive $p $o deep into $p1 $o2.  It looks serious, if not fatal.",
-                        "fatal":({"$N neatly $vinsert $p $o between $p1 ribs.  $N1 $v1slump to the ground, dead.",
-                                  "$N $vremove $p1 head from $p1 shoulders.  $P1 lifeless body slumps to the ground."}),
-                      "suicide":"$N $vtake $p $o, and $vdrive it deep into $p chest.",
-                       "disarm":({"$N $vsend $p1 $o1 flying with a quick move $ns learned in Swordfighting 201.",
-                                  "$N $vslash $p1 hand with $p $o, causing $t to drop $p1 $o1."}),
+inherit M_DAEMON_DATA;
+#define PRIV_NEEDED "Mudlib:daemons"
 
-]),
-               "combat-shot":(["miss":({"$N $vshoot at $t but $vmiss by a mile.",
-                                        "$N totally $vmiss $t with an optimistic shot."}),
-                                    "none":"$N just barely $vnick $t with glancing shot from $p $o.",
-                                    "dam1":"$N $vgrace $t with a quick shot from $p $o.",
-                                    "dam2":"Blood flows from $p1 $o2 as $n $vsneak a shot past $p1 guard.",
-                                    "dam3":"$N1 $v1are not quite fast enough; $p $o pierces $t in the $o2.",
-                                    "dam4":"$N $vcatch $t in the $o2 with a quick shot.",
-                                    "dam5":"$N $vmaim $t with a well-aimed shot of $p $o.",
-                                    "dam6":"$N $vwound $t with a quick hit.",
-                                    "dam7":"$N $vaim quickly, $vshoot and $vwithdraw, leaving $t wounded.",
-                                    "dam8":"$N $vaim perfectly!  $N1 $v1are hurt badly.",
-                                    "dam9":"$N $vhit bullseye with $p $o on $p1 $o2, injuring $t badly.",
-                                   "dam10":"$N $vshoot $p $o deep into $p1 $o2.  It looks serious, if not fatal.",
-                                   "fatal":({"$N neatly $vinsert a shot from $p $o between $p1 ribs.  $N1 $v1slump to "
-                                             "the ground, dead.",
-                                             "$N neatly $vinsert a shot from $p $o between $p1 eyes.  $N1 $v1slump to "
-                                             "the ground, dead."}),
-                                 "suicide":"$N $vtake $p $o, and $vshoot $n between the eyes.",
-                                  "disarm":({"$N $vsend $p1 $o1 flying with a quick ricochet $ns.",
-                                             "$N $vhit $p1 hand with $p $o, causing $t to drop $p1 $o1."}),
-]),
-            "combat-firearm": // $o = 11mm HV bullet, $o2 = torso, $o3 = pistol
-                (["miss":({"$N $vfire $p $o3 at $t but $vmiss by a mile.",
-                           "$N totally $vmiss $t with an optimistic shot going way over."}),
-                       "none":"$N just barely $vnick $t with glancing shot from $p $o3.",
-                       "dam1":"$N $vgrace $t with a $o from $p $o3.",
-                       "dam2":"Blood flows from $p1 $o2 as $n $vsneak a $o past $p1 guard.",
-                       "dam3":"$N1 $v1are not quite fast enough; $p $o pierces $t in the $o2.",
-                       "dam4":"$N $vcatch $t in the $o2 with a quick $o.",
-                       "dam5":"$N $vmaim $t with a well-aimed $o of $p $o3.", "dam6":"$N $vwound $t with a quick hit.",
-                       "dam7":"$N $vaim quickly, shoots and $vwithdraw, leaving $t wounded by $p $o.",
-                       "dam8":"$N $vaim perfectly!  $N1 $v1are hurt badly by a $o.",
-                       "dam9":"$N $vhit bullseye with $p $o3 on $p1 $o2, injuring $t badly.",
-                      "dam10":"$N $vshoot $p $o3 deep into $p1 $o2.  It looks serious, if not fatal.",
-                      "fatal":
-                          ({"$N neatly $vinsert a $o from $p $o3 between $p1 ribs.  $N1 $v1slump to the ground, dead.",
-                            "$N neatly $vinsert a $o from $p $o3 between $p1 eyes.  $N1 $v1slump to the ground, "
-                            "dead."}),
-                    "suicide":"$N $vtake $p $o, and $vshoot $n between the eyes.",
-                     "disarm":({"$N $vsend $p1 $o1 flying with a quick ricochet $ns.",
-                                "$N $vhit $p1 hand with $p $o, causing $t to drop $p1 $o1."}),
-]),
-              "combat-torch":
-                  (["miss":({"$N $vswipe $p $o at $t but $vmiss by a mile.", "$N just $vmiss $t with a quick thrust."}),
-                           "none":"$N $vhit $t with $p $o, but $t $vdo not seem hurt by it.",
-                         "disarm":"$N $vgrab $p1 arm, and $vslam it down on $p knee, causing $n1 to drop $p1 $o1.",
-                      "knockdown":"$N $vstep behind $t, and $vtrip $t, sending $t flying.",
-                          "fatal":"$N $vdrive $t back with a series of punches of kicks, and $vend with a stunning "
-                                  "kick to the head.  $N1 $v1slump to the ground, motionless.",
-                       "knockout":"$N $vfeint past $p1 guard and $vknock $t senseless.",
-                       "dispatch":"$N $vhave no sense of honor; $n $vlop $p1 head clean off.",
-                         "wakeup":"$N slowly $vregain $p feet.", "dam1":"$N $vland a weak punch to $p1 $o2.",
-                           "dam2":"$N $vcatch $t square in the $o2 with $p $o.",
-                           "dam3":"$N $vconnect with a kick to $p1 $o2.",
-                           "dam4":"$N $vtrip $t, and lands a vicious blow to $p1 $o2.",
-                           "dam5":"$N1 $v1are sent flying backwards by $p well-executed kick to $p1 $o2.",
-                           "dam6":"$N1 $v1are caught off guard, and $n $vtake advantage and pummel $t soundly.",
-                           "dam7":"$N relentlessly $vpound $t with repeated blows to the $o2.",
-                           "dam8":"$N $vland an incredible combination of punches and kicks, beating $t badly.  $N1 "
-                                  "$v1are not in very good shape.",
-                           "dam9":"$N $vunleashes a series of stunning blows to $p1 $o2!  $N1 $v1are hurt badly!",
-                          "dam10":"$N $vbeat $t within an inch of $p1 life."]),
-
-            "living-default":(["leave":"$N $vleave $o.",
-                                    "mleave":"$N $vdisappear in a puff of smoke.", "enter":"$N $venter.",
-                                    "menter":"$N $vappear in a puff of smoke.", "invis":"$N $vfade from view.",
-                                       "vis":"$N $vfade into view.", "home":"$N $vgo home.",
-                                     "clone":"$N $vclone the $o.", "destruct":"$N $vdest the $o.",
-                                 "fol_leave":"$N $vfollow $t $o.", "fol_enter":"$N $venter following $t.",
-                                     "clean":"$N $vtake a broom and $vclean $p surroundings.", ]),
-              // These messages stolen from Distortion :-)
-              "player-death":({
-                                 "The world mourns the loss of $N.",
-                                 "You hear $p death scream in the distance.",
-                                 "You are crushed to hear that $N $vhave died.",
-                             }),
-                  // These messages mostly stolen from Zork =)
-                  "nonsense":({
-                                 "A valiant attempt.",
-                                 "You can't be serious.",
-                                 "I don't understand you at all.",
-                                 "An interesting idea.",
-                                 "What a concept!",
-                                 "Get serious.",
-                                 "Getting desperate?",
-                             }),
-                 "discarded":({
-                                 "Someone has left %s lying on the ground.",
-                                 "It seems that someone has left %s lying here.",
-                                 "%s lies here, discarded.",
-                                 "%s lies at your feet.",
-                                 "Some luckless fool has left %s here.",
-                                 "%s lies here, abandoned.",
-                             }),
-          "discarded-plural":({
-                                 "Someone has left %s lying on the ground.",
-                                 "It seems that someone has left %s lying here.",
-                                 "%s lie here, discarded.",
-                                 "%s lie at your feet.",
-                                 "Some luckless fool has left %s here.",
-                                 "%s lie here, abandoned.",
-                             }),
-]);
+private
+mapping messages;
+private
+nosave string *mandatory_cmbt_msgs = ({"none", "disarm", "knockout", "knockdown", "miss", "dam10", "fatal", "dam1",
+                                       "dam2", "dam3", "dam4", "dam5", "dam6", "dam7", "dam8", "dam9", "dam10"});
 
 mixed query_messages(string type)
 {
    return messages[type];
+}
+
+void save_messages()
+{
+   save_me();
+   write("MESSAGES_D saved.");
+}
+
+varargs void load_messages(string type, int batch)
+{
+   string *content = explode(read_file(MESSAGE_DIR + type), "\n");
+   int combat = type[0..5] == "combat";
+   mapping m = ([]);
+
+   foreach (string c in content)
+   {
+      string name, action;
+      if (sscanf(c, "%s:%s", name, action) != 2 || c[0] == '#')
+         continue;
+      action = punctuate(trim(action));
+
+      // If action is too short or doesn't contain a $n or a verb $v, it's not a valid combat action.
+      if (strlen(action) < 3 ||
+          (combat && (strsrch(lower_case(action), "$n") == -1 || strsrch(lower_case(action), "$v") == -1)))
+         error("Bad action in " + type + " for " + name);
+
+      if (arrayp(m[name]))
+         m[name] += ({action});
+      else if (stringp(m[name]))
+         m[name] = ({m[name], action});
+      else if (!m[name])
+         m[name] = action;
+   }
+
+   // Combat messages
+   if (combat)
+   {
+      if (sizeof(mandatory_cmbt_msgs - keys(m)) != 0)
+         error("Missing combat message types in " + type + ": " + format_list(mandatory_cmbt_msgs - keys(m)));
+      if (sizeof(keys(m) - mandatory_cmbt_msgs) != 0)
+         error("Unknown message types in " + type + ": " + format_list(keys(m) - mandatory_cmbt_msgs));
+      messages[type] = m;
+   }
+   // Defeault messages for living
+   else if (type == "living-default")
+   {
+      messages[type] = m;
+   }
+   // Base messages are inserted directly into messages mapping.
+   else if (type == "base-default")
+   {
+      messages += m;
+   }
+   // Fail explicitly on other file types for now.
+   else
+      error("Unknown file type: " + type);
+
+   write("Messages '" + type + "' updated from file.");
+   if (!batch)
+      save_messages();
+}
+
+void refresh_messages()
+{
+   string *files = get_dir("/data/messages/");
+   messages = ([]);
+   foreach (string fi in files)
+   {
+      load_messages(fi, 1 /* batch - to skip saving before the end */);
+   }
+   save_messages();
+}
+
+void create()
+{
+   ::create();
+   if (!mapp(messages))
+   {
+      messages = ([]);
+      refresh_messages();
+   }
+}
+
+void clean_up()
+{
+   destruct();
+}
+
+/* Count the messages in the messages mapping recursively. Likely not a very reusable function since it's fitted to this
+ * exact mapping. */
+private
+int count_msgs(mixed m)
+{
+   if (arrayp(m))
+      return sizeof(m);
+   if (mapp(m))
+   {
+      int c = 0;
+      foreach (mixed smth in values(m))
+      {
+         c += count_msgs(smth);
+      }
+      return c;
+   }
+   if (stringp(m))
+      return 1;
+}
+
+void stat_me()
+{
+   int msg_cnt = count_msgs(messages);
+
+   write("MESSAGE_D stats:\n----------------\n\n");
+   write("Combat message types:\n\t" + format_list(filter(keys(messages), ( : strsrch($1, "combat") != -1 :))));
+   write("\n\nOther message types:\n\t" + format_list(filter(keys(messages), ( : strsrch($1, "combat") == -1 :))));
+   write("\n\nA total of " + msg_cnt + " messages.");
 }

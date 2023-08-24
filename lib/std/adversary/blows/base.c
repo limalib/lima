@@ -187,7 +187,7 @@ void handle_result(class event_info evt)
 
       switch (evt.data)
       {
-      case "dispatch":
+      case "fatal":
          evt->target->kill_us();
          break;
       case "disarm":
