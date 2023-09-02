@@ -16,6 +16,8 @@ mapping messages;
 private
 nosave string *mandatory_cmbt_msgs = ({"none", "disarm", "knockout", "knockdown", "miss", "dam10", "fatal", "dam1",
                                        "dam2", "dam3", "dam4", "dam5", "dam6", "dam7", "dam8", "dam9", "dam10"});
+private
+object troll;
 
 mixed query_messages(string type)
 {
@@ -126,6 +128,41 @@ int count_msgs(mixed m)
    }
    if (stringp(m))
       return 1;
+}
+
+private void do_action(string type, string msg)
+{
+   // Gun with ammo descriptions contain $o3.
+   if (strsrch(msg, "$o3") != -1)
+      this_body()->targetted_action("<bld>" + type + ":<res>\n" + msg, troll, "<bullet type>",
+                                    "<targets weapon>", "<limb>", "<gun type>");
+   else
+      this_body()->targetted_action("<bld>" + type + ":<res>\n" + msg, troll, "<weapon>", "<targets weapon>",
+                                    "<limb>", "<2>");
+}
+
+void test_msg(string msg)
+{
+   string *combat_msgs = sort_array(filter(keys(messages), ( : strlen($1) > 7 && $1[0..6] == "combat-" :)), 1);
+
+   if (member_array(msg, mandatory_cmbt_msgs) == -1)
+   {
+      write("Unknown combat type msg '" + msg + "'.");
+      return;
+   }
+
+   if (!troll)
+      troll = new ("/domains/std/monster/troll");
+   foreach (string t in combat_msgs)
+   {
+      if (stringp(messages[t][msg]))
+         do_action(t,messages[t][msg]);
+      else if (arrayp(messages[t][msg]))
+      {
+         foreach (string s in messages[t][msg])
+            do_action(t,s);
+      }
+   }
 }
 
 void stat_me()

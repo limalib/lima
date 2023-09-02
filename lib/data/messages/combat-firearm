@@ -16,5 +16,5 @@ dam9:$N $vhit bullseye with $p $o3 on $p1 $o2, injuring $t badly.
 dam10:$N $vshoot $p $o3 deep into $p1 $o2.  It looks serious, if not fatal.
 fatal:$N neatly $vinsert a $o from $p $o3 between $p1 ribs.  $N1 $v1slump to the ground, dead.
 fatal:$N neatly $vinsert a $o from $p $o3 between $p1 eyes.  $N1 $v1slump to the ground, dead.
-disarm:$N $vsend $p1 $o1 flying with a quick ricochet $ns.
+disarm:$N $vsend $p1 $o1 flying with a quick ricochet shot.
 disarm:$N $vhit $p1 hand with $p $o, causing $t to drop $p1 $o1.
