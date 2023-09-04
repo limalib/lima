@@ -5,7 +5,7 @@
 int query_ghost();
 void simple_action(string msg, mixed *obs...);
 varargs void filtered_simple_action(mixed msg, function filter, mixed extra, mixed *obs...);
-varargs int test_skill(string skill, int opposing_skill, int train_limit);
+varargs int test_skill(string skill, int opposing_skill, int no_learn);
 string *query_vital_limbs();
 string *query_mobile_limbs();
 string *query_wielding_limbs();

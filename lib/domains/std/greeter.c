@@ -17,14 +17,19 @@ void setup()
               "problems":"I'm having problems setting up LIMA.",
 
            "compilation":"Where should I report FluffOS compilation problems?",
-              "intermud":"How do I get on intermud (I3)?"]));
+              "intermud":"How do I get on intermud (I3)?", "str_check":"Can I lift you up?[str>20]",
+             "cha_check":"Can I ask you a personal question?[cha>20]",
+             "int_check":"I sense an alterior motive?[int>20]",
+           "skill_check":"Can you check my skills in chats?[combat/defense>0]",
+          "skill_check2":"Can you check my skills in chats?[combat/defense<1]"]));
+
    set_responses((["hello":"Hello, and welcome to the LIMA mudlib!  I'm designed to answer some basic questions you "
                            "might have about it.",
                  "greeter":"I help people with basic questions and problems with the LIMA mudlib.  I also demonstrate "
                            "LIMA's M_CONVERSATION " +
                                "module, which makes building NPCs who can hold intelligent conversations a snap!  Feel "
                                "free to read my code, its in " +
-                               __FILE__ + ".",
+                               __FILE__ + ". It includes dynamic chats that check stats and more.",
                    "where":"You can find the best current sources for the LIMA mudlib in GitHub on "
                            "https://github.com/fluffos/lima.git (stable) " +
                                "or https://github.com/tsathoqqua/lima.git (development) or see a demo on the Lima "
@@ -37,8 +42,15 @@ void setup()
                 "intermud":
                     "First, edit config.h and make sure ADMIN_EMAIL is set correctly.  If it isn't, you will not be "
                     "permitted to connect.  " +
-                    "Then do 'update /daemons/imud_d'.  You should be on the net.  You can check with 'mudinfo <your "
-                    "mud name>' from here.  Use 'igossip /on' and 'icode /on' to turn on the standard channels."]));
+                        "Then do 'update /daemons/imud_d'.  You should be on the net.  You can check with 'mudinfo "
+                        "<your "
+                        "mud name>' from here.  Use 'igossip /on' and 'icode /on' to turn on the standard channels.",
+               "str_check":"No, I would like to stay right here.@@int_check",
+             "skill_check":"This was only available if you have the right skill rank.",
+               "cha_check":"Sure, but I cannot answer.",
+               "int_check":"Read my source to see how to check stats for chats.",
+             "skill_check":"Your combat/defense rank is at least rank 1.",
+            "skill_check2":"I can see you have combat/defense rank at 0."]));
 
-   set_start(({"hello", "greeter", "where", "problems"}));
+   set_start(({"hello", "greeter", "where", "problems", "str_check", "cha_check","skill_check","skill_check2"}));
 }

@@ -112,7 +112,7 @@ int base_test_skill(string skill, int opposing_skill)
 // This is the basic skill test for adversaries.
 // For players it is replaced by an extended version, supporting the
 // improvement of skills through use.
-int test_skill(string skill, int opposing_skill)
+varargs int test_skill(string skill, int opposing_skill, int no_learn)
 {
    return base_test_skill(skill, opposing_skill);
 }

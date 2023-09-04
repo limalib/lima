@@ -31,7 +31,7 @@ void set_reflex(int mp);
 void set_max_health(int);
 int karma_impact();
 int should_cap_skill(string skillname);
-varargs int test_skill(string skill, int opposing_skill, int train_limit);
+varargs int test_skill(string skill, int opposing_skill, int no_learn);
 
 private
 nosave string body_style = "humanoid";

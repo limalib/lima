@@ -2,10 +2,15 @@
 
 /*
  * By Beek.  Merged in some functionality written by Valentino.
+ *
+ * Extended by Tsath to check for stats and skill ranks before options are shown.
  */
 
 inherit M_ACTIONS;
 inherit M_INPUT;
+
+private
+mapping stats = (["str":"Strength", "agi":"Agility", "int":"Intelligence", "con":"Constitution", "cha":"Charisma"]);
 
 void simple_action(string);
 string query_name();
@@ -21,6 +26,54 @@ mixed goodbye_action;
 void set_goodbye(mixed arg)
 {
    goodbye_action = arg;
+}
+
+private
+int check_option(string key)
+{
+   string stat_chk, s;
+   int req;
+   s = options[key];
+
+   if (sscanf(s, "%s[%s>%d]", s, stat_chk, req) == 3)
+   {
+      if (strlen(stat_chk) == 3)
+      {
+         int stat = call_other(this_body(), "query_" + stat_chk);
+         if (req > stat)
+            return 0;
+         s = "[<229>" + stats[stat_chk] + "<res>] " + s;
+      }
+      else
+      {
+         int skill_rank = SKILL_D->skill_rank(this_body(), stat_chk);
+         if (req > skill_rank)
+            return 0;
+         s = "[<209>" + explode(stat_chk,"/")[<1] + "<res>] " + s;
+      }
+      options[key] = s;
+      return 1;
+   }
+   else if (sscanf(s, "%s[%s<%d]", s, stat_chk, req) == 3)
+   {
+      if (strlen(stat_chk) == 3)
+      {
+         int stat = call_other(this_body(), "query_" + stat_chk);
+         if (req < stat)
+            return 0;
+         s = "[<229>" + stats[stat_chk] + "<res>] " + s;
+         options[key] = s;
+         return 1;
+      }
+      else
+      {
+         int skill_rank = SKILL_D->skill_rank(this_body(), stat_chk);
+         if (req < skill_rank)
+            return 0;
+         s = "[<209>" + explode(stat_chk,"/")[<1] + "<res>] " + s;
+      }
+   }
+   return 1;
 }
 
 void set_options(mapping m)
@@ -60,7 +113,10 @@ void show_menu(object ob)
    write("\n");
 
    foreach (string option in current[ob])
-      printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++, options[option]);
+   {
+      if (check_option(option))
+         printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++, options[option]);
+   }
    printf("    %%^MENU_CHOICE%%^q%%^RESET%%^: Quit talking to " + query_name() + ".\n");
 
    modal_simple(( : continue_conversation, ob:), "[choice] :>");
@@ -120,6 +176,7 @@ void continue_conversation(object ob, string input)
    int num;
    string tmp;
    string response;
+   string option;
    string tag;
 
    if (input == "q")
@@ -140,7 +197,10 @@ void continue_conversation(object ob, string input)
    }
    num--;
    tag = current[ob][num];
-   ob->simple_action("$N $vsay: " + options[tag]);
+   //Strip away [Blargh] tags infront of options.
+   if (sscanf(options[tag], "[%s] %s", tmp, option) != 2)
+      option = options[tag];
+   ob->simple_action("$N $vsay: " + option);
    response = responses[tag];
 
    do_action(ob, response);
