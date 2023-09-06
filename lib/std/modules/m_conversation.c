@@ -3,8 +3,19 @@
 /*
  * By Beek.  Merged in some functionality written by Valentino.
  *
- * Extended by Tsath to check for stats and skill ranks before options are shown.
+ * Extended and documented by Tsath to check for stats and skill ranks before options are shown.
  */
+
+//: MODULE
+// M_CONVERSATION for doing interactive conversations with NPCs.
+//
+// Three things are needed to run conversations::
+//   * A set of conversations options - set_options()
+//   * A set of matching replies for the options - set_responses()
+//   * A set of options to start from - set_start()
+//
+// Both the replies and the options have special syntaxes that is used to control
+// the interactions. See the functions below for syntax descriptions.
 
 inherit M_ACTIONS;
 inherit M_INPUT;
@@ -23,6 +34,8 @@ mapping start = ([]);
 mixed *default_start = ({});
 mixed goodbye_action;
 
+//: FUNCTION set_goodbye
+// This action is used when the NPC says goodbye.
 void set_goodbye(mixed arg)
 {
    goodbye_action = arg;
@@ -32,60 +45,89 @@ private
 int check_option(string key)
 {
    string stat_chk, s;
-   int req;
-   s = options[key];
+   int req, gt, lt, eq;
+   string option = options[key];
 
-   if (sscanf(s, "%s[%s>%d]", s, stat_chk, req) == 3)
+   if (sscanf(option, "%s[%s>%d]", s, stat_chk, req) == 3)
+      gt = 1;
+   else if (sscanf(option, "%s[%s<%d]", s, stat_chk, req) == 3)
+      lt = 1;
+   else if (sscanf(option, "%s[%s=%d]", s, stat_chk, req) == 3)
+      eq = 1;
+
+   if (strlen(s) == 0)
+      return 1;
+
+   if (gt || lt || eq)
    {
       if (strlen(stat_chk) == 3)
       {
          int stat = call_other(this_body(), "query_" + stat_chk);
-         if (req > stat)
+         if ((gt && req > stat) || (lt && req < stat) || (eq && req == stat))
             return 0;
          s = "[<229>" + stats[stat_chk] + "<res>] " + s;
       }
       else
       {
          int skill_rank = SKILL_D->skill_rank(this_body(), stat_chk);
-         if (req > skill_rank)
+         if ((gt && skill_rank <= req) || (lt && skill_rank >= req) || (eq && skill_rank == req))
             return 0;
-         s = "[<209>" + explode(stat_chk,"/")[<1] + "<res>] " + s;
+         s = "[<209>Skill: " + explode(stat_chk, "/")[ < 1] + "<res>] " + s;
       }
       options[key] = s;
-      return 1;
-   }
-   else if (sscanf(s, "%s[%s<%d]", s, stat_chk, req) == 3)
-   {
-      if (strlen(stat_chk) == 3)
-      {
-         int stat = call_other(this_body(), "query_" + stat_chk);
-         if (req < stat)
-            return 0;
-         s = "[<229>" + stats[stat_chk] + "<res>] " + s;
-         options[key] = s;
-         return 1;
-      }
-      else
-      {
-         int skill_rank = SKILL_D->skill_rank(this_body(), stat_chk);
-         if (req < skill_rank)
-            return 0;
-         s = "[<209>" + explode(stat_chk,"/")[<1] + "<res>] " + s;
-      }
    }
    return 1;
 }
 
+//: FUNCTION set_options
+// Set a mapping of keys and options. These options are typically things the player says in the conversation and can
+// select from. Only keys added using set_start() will be shown initially. Other options can be introduced later in the
+// conversation using the add and remove syntax described in the set_responses() function.
+//
+// Special option syntax:
+//   * [str>10] - only shown if strength larger than 10
+//   * [str=10] - only shown if strength equals 10
+//   * [str<10] - only shown if strength less than 10.
+//
+// Stats are: str, agi, int, con, cha.
+//
+// Example: "I can probably lift that tree trunk for you?[str>60]"
+//
+// This also works for skills for <, > and =:
+//
+// Example: "I can shoot that pistol right out of your hand [combat/ranged/pistol>3]"
+//
+// The numbers for skills refer to the ranks from 1-20. (See SKILL_D documentation)
 void set_options(mapping m)
 {
    options = m;
 }
 
+//: FUNCTION set_responses
+// Set a mapping of keys (that must match the option keys), and responses. The responses use a special syntax described
+// below, that will allow adding and removing new options.
+//
+// Special option syntax:
+// @@add options@@remove options
+// The options can be seperated by "," to include more options.
+//
+// Example: "I'll say something.@@add_option1,add_option2@@remove_option3"
+//
+// A response can be 4 different things:
+//   * A simple string that will be said by the NPC - "Hi there!"
+//   * An emote that must be performed - "!wave"
+//   * A function pointer - (: check_quest item :)
+//   * An array combined of all three things above.
+//
+// Example:
+// set_responses("hello":({"Hi there!","!wave",(: check_quest_item:) }));
 void set_responses(mapping m)
 {
    responses = m;
 }
 
+//: FUNCTION set_start
+// Sets the options that the menu contains initially.
 varargs void set_start(mixed *a, object target)
 {
    if (target)
@@ -197,7 +239,7 @@ void continue_conversation(object ob, string input)
    }
    num--;
    tag = current[ob][num];
-   //Strip away [Blargh] tags infront of options.
+   // Strip away [Blargh] tags infront of options.
    if (sscanf(options[tag], "[%s] %s", tmp, option) != 2)
       option = options[tag];
    ob->simple_action("$N $vsay: " + option);

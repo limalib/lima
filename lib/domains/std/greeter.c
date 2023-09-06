@@ -17,7 +17,7 @@ void setup()
               "problems":"I'm having problems setting up LIMA.",
 
            "compilation":"Where should I report FluffOS compilation problems?",
-              "intermud":"How do I get on intermud (I3)?", "str_check":"Can I lift you up?[str>20]",
+              "intermud":"How do I get on intermud (I3)?", "str_check":"I'm pretty strong, want a lift?[str>30]",
              "cha_check":"Can I ask you a personal question?[cha>20]",
              "int_check":"I sense an alterior motive?[int>20]",
            "skill_check":"Can you check my skills in chats?[combat/defense>0]",

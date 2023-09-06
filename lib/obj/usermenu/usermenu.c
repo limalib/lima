@@ -414,9 +414,10 @@ void auto_login()
    {
       modal_pop();
       write("(Auto login with " + capitalize(selected) + " after " + AUTO_LOGIN_AFTER + " seconds ...)\n");
-      //In case they went away here ...
+      // In case they went away here ...
       if (this_user())
          this_user()->enter_game(selected, fname);
+      destruct();
    }
 }
 
