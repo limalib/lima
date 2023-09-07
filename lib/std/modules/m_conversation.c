@@ -157,7 +157,9 @@ void show_menu(object ob)
    foreach (string option in current[ob])
    {
       if (check_option(option))
-         printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++, options[option]);
+         printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++,options[option]);
+      else
+         current[ob]-=({option});
    }
    printf("    %%^MENU_CHOICE%%^q%%^RESET%%^: Quit talking to " + query_name() + ".\n");
 
