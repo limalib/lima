@@ -20,8 +20,8 @@ void setup()
               "intermud":"How do I get on intermud (I3)?", "str_check":"I'm pretty strong, want a lift?[str>30]",
              "cha_check":"Can I ask you a personal question?[cha>20]",
              "int_check":"I sense an alterior motive?[int>20]",
-           "skill_check":"Can you check my skills in chats?[combat/defense>0]",
-          "skill_check2":"Can you check my skills in chats?[combat/defense<1]"]));
+           "skill_check":"Can you check my skills in chats?[combat/defense>1]",
+          "skill_check2":"Can you check my skills in chats?[combat/defense=0]"]));
 
    set_responses((["hello":"Hello, and welcome to the LIMA mudlib!  I'm designed to answer some basic questions you "
                            "might have about it.",
@@ -34,8 +34,8 @@ void setup()
                            "https://github.com/fluffos/lima.git (stable) " +
                                "or https://github.com/tsathoqqua/lima.git (development) or see a demo on the Lima "
                                "MUD itself (limalib.dev 7878).",
-                "problems":"See https://www.fluffos.info/build.html, or get your MUD on the intermud "
-                           "network.@@intermud,compilation",
+                "problems":({"!ponder", "See https://www.fluffos.info/build.html, or get your MUD on the intermud "
+                                        "network.@@intermud,compilation"}),
 
              "compilation":
                  "Problems compiling FluffOS should be reported on Github, https://github.com/fluffos/fluffos/issues",
@@ -52,6 +52,6 @@ void setup()
              "skill_check":"Your combat/defense rank is at least rank 1.",
             "skill_check2":"I can see you have combat/defense rank at 0."]));
 
-   set_start(({"hello", "greeter", "where", "problems", "str_check", "cha_check","skill_check","skill_check2"}));
-   set_goodbye("!wave");
+   set_start(({"hello", "greeter", "where", "problems", "str_check", "cha_check", "skill_check", "skill_check2"}));
+   set_goodbye("!wave $t");
 }

@@ -48,5 +48,6 @@ mixed query_hint(int level)
    if (level>10)
       return "You're a big wizard, you know all about this room.";
    return ({"This is a room with many different features and examples for state descriptions, objects, listen, smell and exits.",
-          "Read the source by using 'more here' or 'cd here' to go to the directory of this file."});
+          "Read the source by using 'more here' or 'cd here' to go to the directory of this file.",
+          "Use 'talk to greeter' for some basic information about the LIMA Mudlib."});
 }
