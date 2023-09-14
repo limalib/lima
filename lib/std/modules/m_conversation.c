@@ -93,7 +93,7 @@ int check_option(string key)
 //   * [str=10] - only shown if strength equals 10
 //   * [str<10] - only shown if strength less than 10.
 //
-// Both > and < are actually >= and <= since it's shorter and easier to use with ranks starting at 0-20.
+// Both > and < are actually >= and <= since it's shorter and easier to use with ranks.
 //
 // Stats are: str, agi, int, con, cha.
 //
