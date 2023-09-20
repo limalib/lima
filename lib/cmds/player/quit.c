@@ -11,5 +11,10 @@ private
 void main()
 {
    this_body()->quit();
+#ifdef USE_USER_MENU
    new (USER_MENU)->start_menu();
+#else
+   this_user()->save_me();
+   this_user()->quit();
+#endif
 }

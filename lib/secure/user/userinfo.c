@@ -107,6 +107,8 @@ nomask string query_url()
 protected
 nomask varargs void userinfo_handle_logon(int state, mixed extra, string arg)
 {
+   object tmp;
+
    switch (state)
    {
    case GENDER_QUERY:
@@ -170,7 +172,11 @@ nomask varargs void userinfo_handle_logon(int state, mixed extra, string arg)
    case GOT_REFERRAL:
       set_referral(arg);
       modal_pop();
-      new (USER_MENU)->start_menu();
+      tmp= new (USER_MENU);
+      tmp->start_menu();
+#ifndef USE_USER_MENU
+      tmp->char_name(query_userid());
+#endif
       return;
    }
 }

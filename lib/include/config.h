@@ -156,6 +156,11 @@
  ** 									                                                  **
  *************************************************************************/
 
+/* Use an MMO like user menu, where users can create many characters under the
+** the same user. If this is diabled, you will have 1 user per character (classic MUD setup).
+*/
+#define USE_USER_MENU
+
 /* Define the character which allows you to call up previous command history.
  * ! will give you problems since it's used as input escape. */
 #define HISTORY_CHAR '%'
@@ -290,7 +295,6 @@
 #define PSHELL_PATH(x) sprintf("/data/pshells/%c/%s", x[0], x)
 
 #endif __CONFIG_H__
-
 
 /*
  * runtime_config.h

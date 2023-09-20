@@ -444,7 +444,6 @@ void goto_previous_menu()
    previous_menu = swap;
 }
 
-protected
 void display_current_menu()
 {
    int leftwidth;

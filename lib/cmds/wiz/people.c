@@ -179,12 +179,14 @@ string get_who_string(string arg)
             content += sprintf("%-14.14s ", body->query_wiz_position() ? body->query_wiz_position() : "(None)");
             break;
          case "u":
+#ifdef USE_USER_MENU
             DEBUG("User");
             if (first_run)
                header += sprintf("%-15s", "User");
             content +=
                 sprintf("%-14.14s ", body->query_link()->query_userid() ? capitalize(body->query_link()->query_userid())
                                                                         : "(None?)");
+#endif
             break;
          case "a":
             if (!wizardp(this_user()))

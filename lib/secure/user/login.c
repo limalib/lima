@@ -433,15 +433,15 @@ nomask varargs void login_handle_logon(int state, mixed extra, string arg)
          /*
          ** Done with the login sequence.  Pop our input handler now.
          */
+#ifdef USE_USER_MENU
          modal_pop();
          new (USER_MENU)->start_menu();
          return;
-
-         /*
-       initialize_user();
-            sw_body_handle_existing_logon(0);
-            return;
-         */
+#else
+         initialize_user();
+         sw_body_handle_existing_logon(query_userid(),0);
+         return;
+#endif
       }
 
       register_failure(query_ip_name(this_object()));

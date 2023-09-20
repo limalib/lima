@@ -240,8 +240,13 @@ void select_char()
 private
 void creation_done()
 {
-   write("Character '" + capitalize(name) + " has been created.\n");
+   write("Character '" + capitalize(name) + "' has been created.\n");
    this_user()->set_body(name, fname, race, gender);
+#ifndef USE_USER_MENU
+   modal_pop();
+   this_user()->enter_game(name, fname);
+   destruct();
+#endif
 }
 
 private
@@ -288,7 +293,6 @@ void input_gender(int inputgender)
 #endif /* USE_RACES */
 }
 
-private
 void char_name(string inputname)
 {
    inputname = lower_case(inputname);
@@ -308,11 +312,11 @@ void char_name(string inputname)
       return;
    }
    name = inputname;
-   write("Gender for " + capitalize(name) + "?\n\t1. Male\n\t2. Female\n\t3. Non-binary\n\n");
+   write("Gender for your character '" + capitalize(name) +
+         "'? (Not your gender necessarily)\n\t1. Male\n\t2. Female\n\t3. Non-binary\n\n");
    input_one_arg("Gender: ", ( : input_gender:));
 }
 
-private
 void create_char()
 {
    if (this_user()->query_num_bodies() < MAX_CHRACTERS_PER_USER)
@@ -336,6 +340,12 @@ confirm_remove(string name, string input)
    else
       write("Cancelled. All is well.\n");
 }
+
+#ifndef USE_USER_MENU
+void display_current_menu()
+{
+}
+#endif
 
 private
 void input_remove(string name)
@@ -372,7 +382,6 @@ void quit_game()
 void create()
 {
    set_privilege(1);
-
    toplevel = new_menu(mud_name() + " User Menu");
    quit_item = new_menu_item("Quit", ( : quit_game:), "q");
    goto_main_menu_item = new_menu_item("Return to main menu", toplevel, "m");
