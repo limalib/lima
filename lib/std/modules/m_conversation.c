@@ -29,20 +29,31 @@ string query_name();
 mapping options = ([]);
 mapping responses = ([]);
 
+mapping current = ([]);
 mapping start = ([]);
 mixed *default_start = ({});
 mixed goodbye_action;
 
-// Holds a list of this_body()s we're talking to (key), and a string array of options they have in their current
-// dialogue.
-mapping current = ([]);
-
 //: FUNCTION set_goodbye
 // This action is used when the NPC says goodbye.
-// Example: set_goodbye("!wave")
 void set_goodbye(mixed arg)
 {
    goodbye_action = arg;
+}
+
+void add_option(string key, mixed act)
+{
+	options[key] = act;
+}
+
+void add_response(string key, mixed act)
+{
+	responses[key] = act;
+}
+
+void add_to_start(string key)
+{
+	default_start += ({key});
 }
 
 private
@@ -67,14 +78,14 @@ int check_option(string key)
       if (strlen(stat_chk) == 3)
       {
          int stat = call_other(this_body(), "query_" + stat_chk);
-         if ((gt && stat < req) || (lt && stat > req) || (eq && req != stat))
+         if ((gt && req > stat) || (lt && req < stat) || (eq && req == stat))
             return 0;
          s = "[<229>" + stats[stat_chk] + "<res>] " + s;
       }
       else
       {
          int skill_rank = SKILL_D->skill_rank(this_body(), stat_chk);
-         if ((gt && skill_rank < req) || (lt && skill_rank > req) || (eq && skill_rank != req))
+         if ((gt && skill_rank <= req) || (lt && skill_rank >= req) || (eq && skill_rank == req))
             return 0;
          s = "[<209>Skill: " + explode(stat_chk, "/")[ < 1] + "<res>] " + s;
       }
@@ -92,8 +103,6 @@ int check_option(string key)
 //   * [str>10] - only shown if strength larger than 10
 //   * [str=10] - only shown if strength equals 10
 //   * [str<10] - only shown if strength less than 10.
-//
-// Both > and < are actually >= and <= since it's shorter and easier to use with ranks.
 //
 // Stats are: str, agi, int, con, cha.
 //
@@ -121,7 +130,7 @@ void set_options(mapping m)
 //
 // A response can be 4 different things:
 //   * A simple string that will be said by the NPC - "Hi there!"
-//   * An emote that must be performed - "!wave" or "!wave $t" to target this_body().
+//   * An emote that must be performed - "!wave"
 //   * A function pointer - (: check_quest item :)
 //   * An array combined of all three things above.
 //
@@ -163,9 +172,9 @@ void show_menu(object ob)
    foreach (string option in current[ob])
    {
       if (check_option(option))
-         printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++, options[option]);
+         printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++,options[option]);
       else
-         current[ob] -= ({option});
+         current[ob]-=({option});
    }
    printf("    %%^MENU_CHOICE%%^q%%^RESET%%^: Quit talking to " + query_name() + ".\n");
 
@@ -176,6 +185,7 @@ void do_action(object ob, mixed action)
 {
    string add;
    string remove;
+	string train;
 
    if (arrayp(action))
       foreach (mixed act in action)
@@ -193,11 +203,20 @@ void do_action(object ob, mixed action)
             current[ob] += explode(add, ",");
          }
 
+			if (sscanf(action, "%s#T#%s", action, train) == 2)
+			{
+				if (action[0] == '!')
+					do_game_command(action[1..]);
+				else
+					do_game_command("say " + action);
+				//Are we a trainer? Otherwise ignore this part...
+				if (this_object()->is_trainer())
+					this_object()->do_training(ob, train);
+				return;
+			}
+
          if (action[0] == '!')
-         {
-            action = replace_string(action,"$t",this_body()->query_name());
             do_game_command(action[1..]);
-         }
          else
             do_game_command("say " + action);
       }

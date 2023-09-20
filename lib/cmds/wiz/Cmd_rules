@@ -1,6 +1,7 @@
 asnoop           user str*
 clean            [obj]
 clone            [cfile]
+config           str
 dest             obj
 discuss          obj
 echoall          str*

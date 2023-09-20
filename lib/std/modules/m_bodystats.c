@@ -44,7 +44,6 @@
 **	Charisma:	natural attraction, leadership, persuasion
 **		Nobody vs. great leader/speaker
 **
-**
 **  Mana:   intellectual capacity, magic ability, concentration
 **      Distraught vs. Contemplative Guru
 **
@@ -367,7 +366,7 @@ int skill_wis_sum()
 #ifndef USE_SKILLS
    return 10;
 #else
-   return to_int(51 * (aggregate_skill("misc/knowledge") / 10000.0));
+   return to_int(51 * (aggregate_skill("misc/life/knowledge") / 10000.0));
 #endif
 }
 
@@ -376,7 +375,7 @@ int skill_cha_sum()
 #ifndef USE_SKILLS
    return 10;
 #else
-   return to_int(44 * (aggregate_skill("misc/converse") / 10000.0));
+   return to_int(44 * (aggregate_skill("misc/life/converse") / 10000.0));
 #endif
 }
 
@@ -385,7 +384,7 @@ int skill_man_sum()
 #ifndef USE_SKILLS
    return 10;
 #else
-   return to_int(48 * (aggregate_skill("magic") / 10000.0));
+   return to_int(48 * (aggregate_skill("magic/arcane/knowledge") / 10000.0));
 #endif
 }
 

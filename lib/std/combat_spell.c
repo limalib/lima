@@ -18,6 +18,6 @@ void setup()
 {
    set_damage_type("force");
 #ifdef USE_SKILLS
-   set_skill_used("spell");
+   set_skill_used("magic/spell");
 #endif
 }

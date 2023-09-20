@@ -157,13 +157,16 @@ void main(string arg)
 
    l_info = "  Level: " + body->query_level();
 
-   content += sprintf("Strength     %-4d%s  Agility   %-4d%s  Intelligence %-4d%s\n" +
-                          "Constitution %-4d%s  Charisma  %-4d%s\n",
+   content += sprintf("BASE SCORES: Str %-4d%s  Agi %-4d%s  Int %-4d%s  Wil  %-4d%s\n" +
+                      "DERIVED    : Con %-4d%s  Wis %-4d%s  Cha %-4d%s  Mana %-4d%s\n",
                       body->query_str(), (pretty_bonus(body->query_str() - body->query_str_pure())), body->query_agi(),
                       (pretty_bonus(body->query_agi() - body->query_agi_pure())), body->query_int(),
-                      (pretty_bonus(body->query_int() - body->query_int_pure())), body->query_con(),
-                      (pretty_bonus(body->query_con() - body->query_con_pure())), body->query_cha(),
-                      (pretty_bonus(body->query_cha() - body->query_cha_pure()))) +
+                      (pretty_bonus(body->query_int() - body->query_int_pure())), body->query_wil(),
+                      (pretty_bonus(body->query_wil() - body->query_wil_pure())), body->query_con(),
+                      (pretty_bonus(body->query_con() - body->query_con_pure())), body->query_wis(),
+                      (pretty_bonus(body->query_wis() - body->query_wis_pure())), body->query_cha(),
+                      (pretty_bonus(body->query_cha() - body->query_cha_pure())), body->query_man(),
+                      (pretty_bonus(body->query_man() - body->query_man_pure()))) +
               "\n";
 
    content += sprintf("XP Buff: %s\n\n",

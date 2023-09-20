@@ -18,7 +18,7 @@ string query_race()
 string short_description()
 {
    return "Documentation gets a huge bonus to charisma (it is, after all, a very beautiful thing :-) ).  Hopefully, "
-          "you will become documentation, since everyone knows a mud needs as much as it can get.\n";
+          "you will become documentation, since everyone knows a MUD needs as much as it can get.\n";
 }
 
 /*

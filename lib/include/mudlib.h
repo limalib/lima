@@ -234,6 +234,7 @@
 
 /* for area objects */
 #define M_ACCOUNTANT      "/std/modules/m_accountant"
+#define M_TRAINER         "/std/modules/m_trainer"
 #define M_ACTIONS         "/std/modules/m_actions"
 #define M_BLOCKEXITS      "/std/modules/m_blockexits"
 #define M_AGGRESSIVE      "/std/modules/m_aggressive"
