@@ -9,7 +9,7 @@ nomask string module_name()
 
 nomask string module_key()
 {
-   return "Q";
+   return "q";
 }
 
 private
@@ -105,7 +105,7 @@ nomask void add_quest_domain(string domain)
       return;
    }
 
-   modal_simple(( : add_quest, domain:), "What quest name?");
+   modal_simple(( : add_quest, domain:), "Format: [quest]:[taskname], example 'pirate:foundCave'.\nWhat quest/task name?");
 }
 
 private

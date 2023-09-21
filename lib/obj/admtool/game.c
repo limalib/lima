@@ -4,7 +4,7 @@ inherit __DIR__ "internal/directory.c";
 
 string module_name()
 {
-   return "game";
+   return "game configuration";
 }
 
 string module_key()
