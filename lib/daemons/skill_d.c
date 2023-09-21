@@ -4,6 +4,8 @@
 #include <security.h>
 #include <skills.h>
 
+#define USE_ROMAN_NUMERALS
+
 inherit M_DAEMON_DATA;
 inherit CLASS_SKILL;
 
@@ -17,9 +19,20 @@ mapping skills = ([]);
 private
 nosave mixed SKILL_RANKS = ({100,  250,  500,  750,  1000, 1250, 1500, 2000, 2500, 3000,
                              3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 8000, 10000});
+#ifdef USE_ROMAN_NUMERALS
+private
+nosave mixed SKILL_TITLES = ({"",   "I",   "II",   "III", "IV", "V",   "VI",   "VII",   "VIII", "IX", "X",
+                              "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX",  "XX"});
+int roman_numerals()
+{
+   return 1;
+}
+
+#else
 private
 nosave mixed SKILL_TITLES = ({"",   "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10",
                               "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"});
+#endif
 
 #define PRIV_REQUIRED "Mudlib:daemons"
 

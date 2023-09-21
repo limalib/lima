@@ -7,15 +7,16 @@
  */
 
 #define MESSAGE_DIR "/data/messages/"
+#define PRIV_NEEDED "Mudlib:daemons"
 
 inherit M_DAEMON_DATA;
-#define PRIV_NEEDED "Mudlib:daemons"
+inherit M_COLOURS;
 
 private
 mapping messages;
 private
-nosave string *mandatory_cmbt_msgs = ({"none", "disarm", "knockout", "knockdown", "miss", "dam10", "fatal", "dam1",
-                                       "dam2", "dam3", "dam4", "dam5", "dam6", "dam7", "dam8", "dam9", "dam10"});
+nosave string *mandatory_cmbt_msgs = ({"none", "disarm", "knockout", "knockdown", "miss", "fatal", "dam1", "dam2",
+                                       "dam3", "dam4", "dam5", "dam6", "dam7", "dam8", "dam9", "dam10"});
 private
 object troll;
 
@@ -84,6 +85,11 @@ varargs void load_messages(string type, int batch)
       save_messages();
 }
 
+string *combat_messages()
+{
+   return sort_array(mandatory_cmbt_msgs, 1);
+}
+
 void refresh_messages()
 {
    string *files = get_dir("/data/messages/");
@@ -130,15 +136,16 @@ int count_msgs(mixed m)
       return 1;
 }
 
-private void do_action(string type, string msg)
+private
+void do_action(string type, string msg)
 {
    // Gun with ammo descriptions contain $o3.
    if (strsrch(msg, "$o3") != -1)
-      this_body()->targetted_action("<bld>" + type + ":<res>\n" + msg, troll, "<bullet type>",
-                                    "<targets weapon>", "<limb>", "<gun type>");
+      this_body()->targetted_action("<bld>" + type + ":<res>\n" + msg, troll, "<bullet type>", "<targets weapon>",
+                                    "<limb>", "<gun type>");
    else
-      this_body()->targetted_action("<bld>" + type + ":<res>\n" + msg, troll, "<weapon>", "<targets weapon>",
-                                    "<limb>", "<2>");
+      this_body()->targetted_action("<bld>" + type + ":<res>\n" + msg, troll, "<weapon>", "<targets weapon>", "<limb>",
+                                    "<2>");
 }
 
 void test_msg(string msg)
@@ -156,11 +163,11 @@ void test_msg(string msg)
    foreach (string t in combat_msgs)
    {
       if (stringp(messages[t][msg]))
-         do_action(t,messages[t][msg]);
+         do_action(t, messages[t][msg]);
       else if (arrayp(messages[t][msg]))
       {
          foreach (string s in messages[t][msg])
-            do_action(t,s);
+            do_action(t, s);
       }
    }
 }
@@ -169,8 +176,11 @@ void stat_me()
 {
    int msg_cnt = count_msgs(messages);
 
-   write("MESSAGE_D stats:\n----------------\n\n");
-   write("Combat message types:\n\t" + format_list(filter(keys(messages), ( : strsrch($1, "combat") != -1 :))));
-   write("\n\nOther message types:\n\t" + format_list(filter(keys(messages), ( : strsrch($1, "combat") == -1 :))));
-   write("\n\nA total of " + msg_cnt + " messages.");
+   write("%^CYAN%^Combat message sets:%^RESET%^\n");
+   write(colour_table(filter(keys(messages), ( : strsrch($1, "combat") != -1 :)), this_user()->query_screen_width()));
+   write("\n\n%^CYAN%^Combat message types are:%^RESET%^\n");
+   write(colour_table(combat_messages(), this_user()->query_screen_width()));
+   write("\n\n%^CYAN%^Other message types:%^RESET%^\n");
+   write(colour_table(filter(keys(messages), ( : strsrch($1, "combat") == -1 :)), this_user()->query_screen_width()));
+   write("\n\nA total of %^YELLOW%^" + msg_cnt + "%^RESET%^ messages.");
 }

@@ -1,6 +1,15 @@
 inherit ADVERSARY;
 inherit M_TRAINER;
 
+string what_rank()
+{
+   return SKILL_D->roman_numerals()
+              ? "All skills begin at no rank and then goes from rank 1 to 20. The skill ranks are always shown "
+                "as roman numerals in brackets, that is [I], [IV] etc.@@skillrank"
+              : "All skills begin at no rank and then goes from rank 1 to 15. The skill ranks are always shown "
+                "as numbers in brackets, that is [1], [4] etc.@@skillrank";
+}
+
 void setup()
 {
    int skill = 1000;
@@ -25,14 +34,14 @@ void setup()
               "trainers":"How do I find trainers?"]));
 
    set_responses((
-       ["hello":"Hello there! Everything you do on "+mud_name()+" trains your skills. Do a thing more and you gain more skills "
-                "doing that. But I'm willing to train you further - if you have the potential?@@potential,whatrank",
+       ["hello":"Hello there! Everything you do on " + mud_name() +
+                    " trains your skills. Do a thing more and you gain more skills "
+                    "doing that. But I'm willing to train you further - if you have the potential?@@potential,whatrank",
            "potential":"You need to gather training points as part of practicing your 'skills'. If you have these, I "
                        "can train you.@@trainpts",
             "trainpts":"You use the \"skills\" command. The numbers at the end are your "
                        "training points for a certain skill. ",
-            "whatrank":"All skills begin at no rank and then goes from rank 1 to 15. The skill ranks are always shown "
-                       "as numbers in brackets, that is [1], [4] etc.@@skillrank",
+            "whatrank":what_rank(),
            "skillrank":"I cannot train you above my own skill rank, so finding new trainer will become important to "
                        "you.@@trainers",
             "trainers":"You need to find trainers in the world that can train you in other skills than I, but also at "

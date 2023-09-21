@@ -1,27 +1,31 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-//: COMMAND
-//$$ see: admtool
-// USAGE: config <topic>
-//        config help
-//
-// Shows the MUD configuration for different areas.
-
 #include <stats.h>
-
 #define HEADCOL "<036>"
 
-inherit CMD;
+inherit "/obj/admtool/internal/base.c";
 inherit CLASS_STATMODS;
 
-void config_races()
+
+nomask string module_name()
+{
+   return "races";
+}
+
+nomask string module_key()
+{
+   return "r";
+}
+
+private
+void races()
 {
    mixed *races = get_dir("/std/race/*.c");
    int tick = 0;
    races = map(races, ( : load_object("/std/race/" + $1) :));
 
-   printf(HEADCOL + "%20.20s %8s %8s %8s %8s %8s %8s %8s %8s", "Roll Mods", "STR Adj", "STR Rng", "AGI Adj",
-          "AGI Rng", "INT Adj", "INT Rng", "WIL Adj", "WIL Rng");
+   printf(HEADCOL + "%20.20s %8s %8s %8s %8s %8s %8s %8s %8s", "Roll Mods", "STR Adj", "STR Rng", "AGI Adj", "AGI Rng",
+          "INT Adj", "INT Rng", "WIL Adj", "WIL Rng");
    foreach (object ob in races)
    {
       class stat_roll_mods srm = ob->query_roll_mods();
@@ -32,7 +36,7 @@ void config_races()
    }
 
    write("\n\n");
-   printf(HEADCOL+"%20.20s %8s %8s %8s %8s %8s %8s %8s %8s", "Stat ranges", "STR", "AGI", "INT", "WIL", "CON+",
+   printf(HEADCOL + "%20.20s %8s %8s %8s %8s %8s %8s %8s %8s", "Stat ranges", "STR", "AGI", "INT", "WIL", "CON+",
           "WIS+", "CHA+", "Adj sum");
 
    tick = 0;
@@ -56,7 +60,7 @@ void config_races()
                  (BASE_VALUE + srm.int_adjust + (srm.int_range / 2)),
              (BASE_VALUE + srm.wil_adjust - (srm.wil_range / 2)) + "-" +
                  (BASE_VALUE + srm.wil_adjust + (srm.wil_range / 2)),
-             con, wis, cha, ""+adj_total);
+             con, wis, cha, "" + adj_total);
       tick++;
    }
 
@@ -65,25 +69,7 @@ void config_races()
    write("'Adj sum' must equal 0.\n");
 }
 
-void config_topic(string topic)
+nomask class command_info *module_commands()
 {
-   switch (topic)
-   {
-   case "races":
-      config_races();
-      break;
-   default:
-      write("Not supported yet.");
-      break;
-   }
-}
-
-private
-void main(string *arg)
-{
-   if (arg[0] == "help")
-      write("config: races (not much supported now)\n");
-   else
-      config_topic(arg[0]);
-   return;
+   return ({new (class command_info, key : "s", desc : "race stats overview", action : ( : races:))});
 }

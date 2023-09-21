@@ -9,7 +9,7 @@ nomask string module_name()
 
 nomask string module_key()
 {
-   return "M";
+   return "m";
 }
 
 private
