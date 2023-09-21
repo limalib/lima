@@ -9,7 +9,7 @@ nomask string module_name()
 
 nomask string module_key()
 {
-   return "m";
+   return "M";
 }
 
 nomask string module_user()
@@ -41,8 +41,8 @@ nomask class command_info *module_commands()
 {
    return ({
        new (class command_info, key
-            : "s", desc
-            : "message statistics", action
+            : "l", desc
+            : "list message set and types", action
             : (
                 : stat_messages:)),
        new (class command_info, key
