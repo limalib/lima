@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit RACE;
+inherit BODY;
 
 /*
  * This is the name of the race.  It is used in the initial selection screen,

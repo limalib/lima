@@ -30,7 +30,6 @@
 #define NEWS_D        "/daemons/news_d"
 #define PREPOSITION_D "/daemons/preposition_d"
 #define QUEST_D       "/daemons/quest_d"
-#define RACE_D        "/daemons/race_d"
 #define REPORTER_D    "/daemons/reporter_d"
 #define SHUTDOWN_D    "/daemons/shutdown_d"
 #define SKILL_D       "/daemons/skill_d"

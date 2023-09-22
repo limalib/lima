@@ -43,7 +43,7 @@
 **   against the opposing skill (MAX if you're totally outclassed or MIN
 **   if you stomp all over your opponent).
 **
-**   All these parameters are set in the skills.h file.
+**   All these parameters are set in the config/skills.h file.
 **
 ** Note: policy decision says that we aren't protecting skills from
 **       "unauthorized" tampering.  This is consistent with much of
@@ -52,7 +52,7 @@
 */
 
 #include <classes.h>
-#include <skills.h>
+#include <config/skills.h>
 
 inherit CLASS_SKILL;
 
@@ -225,6 +225,17 @@ int query_skill_pts(string skill)
 {
    if (skills[skill])
       return skills[skill].skill_points;
+   return -1;
+}
+
+//: FUNCTION query_training_pts
+// int query_training_pts(string skill);
+// Returns the current training points for a skill.
+// Returns -1 if the skill doesn't exist for the player.
+int query_training_pts(string skill)
+{
+   if (skills[skill])
+      return skills[skill].training_points;
    return -1;
 }
 

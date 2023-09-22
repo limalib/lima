@@ -17,6 +17,8 @@
 // Both the replies and the options have special syntaxes that is used to control
 // the interactions. See the functions below for syntax descriptions.
 
+#include <config/skills.h>
+
 inherit M_ACTIONS;
 inherit M_INPUT;
 
@@ -43,26 +45,27 @@ void set_goodbye(mixed arg)
 
 void add_option(string key, mixed act)
 {
-	options[key] = act;
+   options[key] = act;
 }
 
 void add_response(string key, mixed act)
 {
-	responses[key] = act;
+   responses[key] = act;
 }
 
 void add_to_start(string key)
 {
-	default_start += ({key});
+   default_start += ({key});
 }
 
 private
 int check_option(string key)
 {
-   string stat_chk, s;
+   string stat_chk, s, skill;
    int req, gt, lt, eq;
    string option = options[key];
 
+   // Less than, greater than and equals checks.
    if (sscanf(option, "%s[%s>%d]", s, stat_chk, req) == 3)
       gt = 1;
    else if (sscanf(option, "%s[%s<%d]", s, stat_chk, req) == 3)
@@ -70,6 +73,21 @@ int check_option(string key)
    else if (sscanf(option, "%s[%s=%d]", s, stat_chk, req) == 3)
       eq = 1;
 
+#ifdef SKILL_CONFIG_USES_TRAINING_PTS
+   // This section strips away training options where the body has no training points.
+   if (strsrch(option, "#T#") != -1)
+   {
+      if (sscanf(option, "%s#T#%s skill.", s, skill) == 2)
+      {
+         if (this_body()->query_training_pts(skill) == 0)
+            return 0;
+         s = s + skill;
+      }
+      options[key] = s;
+   }
+#endif
+
+   // If at this points we have no "s", there's nothing that can strip away the option.
    if (strlen(s) == 0)
       return 1;
 
@@ -172,9 +190,9 @@ void show_menu(object ob)
    foreach (string option in current[ob])
    {
       if (check_option(option))
-         printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++,options[option]);
+         printf("   %%^MENU_CHOICE%%^%2d%%^RESET%%^: %s\n", n++, options[option]);
       else
-         current[ob]-=({option});
+         current[ob] -= ({option});
    }
    printf("    %%^MENU_CHOICE%%^q%%^RESET%%^: Quit talking to " + query_name() + ".\n");
 
@@ -185,7 +203,7 @@ void do_action(object ob, mixed action)
 {
    string add;
    string remove;
-	string train;
+   string train;
 
    if (arrayp(action))
       foreach (mixed act in action)
@@ -203,17 +221,17 @@ void do_action(object ob, mixed action)
             current[ob] += explode(add, ",");
          }
 
-			if (sscanf(action, "%s#T#%s", action, train) == 2)
-			{
-				if (action[0] == '!')
-					do_game_command(action[1..]);
-				else
-					do_game_command("say " + action);
-				//Are we a trainer? Otherwise ignore this part...
-				if (this_object()->is_trainer())
-					this_object()->do_training(ob, train);
-				return;
-			}
+         if (sscanf(action, "%s#T#%s", action, train) == 2)
+         {
+            if (action[0] == '!')
+               do_game_command(action[1..]);
+            else
+               do_game_command("say " + action);
+            // Are we a trainer? Otherwise ignore this part...
+            if (this_object()->is_trainer())
+               this_object()->do_training(ob, train);
+            return;
+         }
 
          if (action[0] == '!')
             do_game_command(action[1..]);

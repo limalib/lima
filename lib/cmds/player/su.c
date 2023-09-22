@@ -47,9 +47,14 @@ void main(string arg)
          race += ".c";
       if (!is_file(race))
       {
+         if (wizardp(this_user()))
+            race = replace_string(race, "/race/", "/race/restricted/");
          TBUG(race);
-         out("No such race.\n");
-         return;
+         if (!is_file(race))
+         {
+            out("No such race.\n");
+            return;
+         }
       }
    }
 

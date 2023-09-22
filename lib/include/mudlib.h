@@ -41,7 +41,6 @@
 ** LIVING	can hold things and perform actions (no fighting)
 ** PAPER      paper .. WFW
 ** STOCK_MASTER  stock guildmaster for stock muds :)
-** RACE		a race-modified body
 ** COINS	a bunch of coins
 ** SPELL	base class for spells
 **
@@ -195,7 +194,6 @@
 #define OBJ                "/std/object"
 #define PAPER              "/std/paper"
 #define PARAM_OBJ          "/std/param_obj"
-#define RACE               "/std/race"
 #define RANGED_WEAPON      "/std/ranged_weapon"
 #define SIGN               "/std/sign"
 #define SPELL              "/std/spell"

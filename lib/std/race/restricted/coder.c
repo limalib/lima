@@ -5,14 +5,14 @@
 // Coder is a above average race when it comes to stats. But no crazy stats
 // so wizards can test their monsters effectively.
 
-inherit RACE;
+inherit BODY;
 string query_race()
 {
    return "coder";
 }
 string short_description()
 {
-   return "Coder race is a misterious race of supernatural beings.You need to be a wizard in order to be a member of "
+   return "Coder race is a misterious race of supernatural beings. You need to be a wizard in order to be a member of "
           "the coder race.";
 }
 int racial_con_bonus()
@@ -33,10 +33,10 @@ class stat_roll_mods query_roll_mods()
 {
    class stat_roll_mods ret = new (class stat_roll_mods);
 
-   ret.str_adjust = 10;
+   ret.str_adjust = -10;
    ret.str_range = 10;
 
-   ret.agi_adjust = 10;
+   ret.agi_adjust = -10;
    ret.agi_range = 10;
 
    ret.int_adjust = 10;

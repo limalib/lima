@@ -7,7 +7,7 @@
 ** More extensive skill support for players is found in /std/body/skills.c
 */
 
-#include <skills.h>
+#include <config/skills.h>
 
 int query_level();
 

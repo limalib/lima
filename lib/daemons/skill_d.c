@@ -2,9 +2,7 @@
 
 #include <classes.h>
 #include <security.h>
-#include <skills.h>
-
-#define USE_ROMAN_NUMERALS
+#include <config/skills.h>
 
 inherit M_DAEMON_DATA;
 inherit CLASS_SKILL;

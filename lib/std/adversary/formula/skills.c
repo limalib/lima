@@ -8,7 +8,7 @@
 #include <classes.h>
 #include <combat_modules.h>
 #include <log.h>
-#include <skills.h>
+#include <config/skills.h>
 
 #define DAMAGE_STAT_IMPACT 5
 #define DEFEND_STAT_IMPACT 5

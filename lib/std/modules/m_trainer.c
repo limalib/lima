@@ -10,6 +10,8 @@
 // - Skill training
 //
 
+#include <config/skills.h>
+
 inherit M_CONVERSATION;
 inherit CLASS_SKILL;
 
@@ -17,15 +19,18 @@ void add_response(string key, mixed act);
 void add_option(string key, mixed act);
 void add_to_start(string key);
 
+private
 mapping skill_restrictions = ([]);
-mapping trainer_msgs = (["unable_msg":"\"I cannot teach you that.\", $N tells $t.",
-                           "fail_msg":"$T $v1train for a while with $N, but $v1undergo no improvement.",
-                            "low_msg":"$T $v1train with $N, but $v1improve little.",
-                            "mid_msg":"$T $v1train with $N and $v1improve a little.",
-                           "high_msg":"$T $v1train hard with $N, and $v1improve significantly",
-                      "very_high_msg":"$T $v1have an excellent lesson with $N, and $v1improve remarkably.",
-                         "reject_msg":"\"You are more skilled then me! I cannot teach you no more.\", $N tells $t.",
-                         "no_pts_msg":"\"You need more practice before you can train, sorry\", $N tells $t.", ]);
+private
+string *skills_we_train = ({});
+private
+mapping trainer_msgs = MESSAGES_D->query_messages("trainer-default");
+private
+string *stats_we_train = ({});
+private
+string currency;
+private
+int stat_cost = 10;
 
 void set_trainer_msgs(mapping msgs)
 {
@@ -36,6 +41,20 @@ void set_trainer_msgs(mapping msgs)
          error("Invalid msg name: " + key);
       trainer_msgs[key] = msg;
    }
+}
+
+void set_trainer_skill(string s, int value)
+{
+   this_object()->set_skill(s, value);
+   skills_we_train += ({s});
+}
+
+void set_train_stat(mixed s)
+{
+   if (arrayp(s))
+      stats_we_train = s;
+   if (stringp(s))
+      stats_we_train += ({s});
 }
 
 int is_trainer()
@@ -58,8 +77,7 @@ void set_train_restrict(mixed *restrictions)
 void do_training(object trainee, string skill)
 {
    class skill trainee_skill = trainee->query_skill(skill);
-   TBUG(trainee);
-   TBUG(skill);
+
    if (!trainee_skill)
       return;
    else
@@ -106,15 +124,58 @@ void do_training(object trainee, string skill)
    }
 }
 
+int stat_train_cost()
+{
+#ifdef STAT_TRAIN_SCALES_WITH_LEVEL
+   return this_body()->query_level() * STAT_TRAIN_SCALE * stat_cost;
+#else
+   return stat_cost;
+#endif
+}
+
+void train_stat(string s)
+{
+   TBUG(s);
+}
+
+string stat_response()
+{
+   this_object()->do_game_command("say Yes, which one would you like to train? It will cost you " + stat_train_cost() +
+                                  " " + currency + " for each point.");
+   foreach (string s in stats_we_train)
+      add_to_start("stat_" + s);
+}
+
 void setup_trainer_conversation(int skill_max)
 {
+   /*
+   define STAT_TRAIN_COST "50 gold"
+   define STAT_TRAIN_SCALES_WITH_LEVEL
+   define STAT_TRAIN_SCALE 2
+   */
+
+   if (sizeof(stats_we_train))
+   {
+      int train_cost;
+      if (sscanf(STAT_TRAIN_COST, "%d %s", stat_cost, currency) != 2)
+         error("STAT_TRAIN_COST in /include/config/skills.h incorrect format.");
+
+      add_option("stat", "Can you train my " + format_list(stats_we_train) + "?");
+      add_to_start("stat");
+      add_response("stat", ({"Umm... @@stat_"+implode(stats_we_train,",stat_"),( : stat_response:)}));
+      foreach (string s in stats_we_train)
+      {
+         add_option("stat_" + s, "Train my " + s + ", please. [" + stat_train_cost() + " " + currency + "]");
+         add_response("stat_" + s, ( : train_stat, s:));
+      }
+   }
    add_option("rank", "What skill rank are you?");
-   add_response("rank", "I can train your skills to around rank " + SKILL_D->skill_title_from_pts(skill_max) + ".");
+   add_response("rank", "I can train your skills to around rank " + SKILL_D->skill_title_from_pts(skill_max));
    add_to_start("rank");
 
-   foreach (string skill in keys(this_object()->query_skills()))
+   foreach (string skill in skills_we_train)
    {
-      add_option(skill, "I want to train my " + skill + " skill.");
+      add_option(skill, "I want to train my #T#" + skill + " skill.");
       add_response(skill, "Okay, " + skill + " it is...#T#" + skill);
       add_to_start(skill);
    }

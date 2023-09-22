@@ -67,7 +67,7 @@ varargs void load_messages(string type, int batch)
       messages[type] = m;
    }
    // Defeault messages for living
-   else if (type == "living-default")
+   else if (type == "living-default" || type == "trainer-default")
    {
       messages[type] = m;
    }
