@@ -40,18 +40,20 @@ void setup()
          "say Thank you for dining with us! Your total comes to " + (random(10) + random(10) + 5) +
              " credits. Payment options include credits, crypto, "
              "or a gravity-defying dance routine!",
-         "sing Brip to brap, brap you talk crap, and most of all you cant rap", "whistle","Do you want peas with that??"}));
+         "sing Brip to brap, brap you talk crap, and most of all you cant rap", "whistle",
+         "Do you want peas with that??"}));
 
-   //The below is a huge tribute to Eddie Izzard's Death Star Canteen bit.
+   // The below is a huge tribute to Eddie Izzard's Death Star Canteen bit.
    set_start(({"penne"}));
    set_options((["penne":"I will have the penne a la arrabiata.",
-                 "doyou":"Do you know who I am? I can kill you with a single thought!",
+                 "doyou":"Do you know who I am? I can kill you with a single thought![cha>20]",
                   "tray":"No, I will not need a tray. I do not need a tray to kill you. I can kill you without a tray, "
                          "with the power of the Force - which is strong within me - even though I could kill you with "
                          "a tray if I so wished. For I would hack at your neck with the thin bit until the blood "
                          "flowed across the canteen floor...",
                "hotfood":"Oh, I see, the food is hot. I'm sorry, I, I did not realize. Hah! Hah! I thought you were "
                          "challenging me to a fight to the death.",
+                "oktray":"Okay, I'll get a tray then.",
              "deathstar":
                  "Yes, but I am Vader, I am Lord Vader. Everyone challenges me to a fight to the death. Lord Vader. "
                  "Darth Vader, I am Dart Vader, Lord Vader. Sir Lord Vader, Sir Lord Darth Vader. Lord Darth Sir Lord "
@@ -60,8 +62,9 @@ void setup()
                    "mrs":"No, I'm... who is Mr. Stephens?",
               "catering":"I'm not head of catering! I am Vader. I can kill catering with a thought.",
              "catering2":"I can kill you all. I can kill me with a thought. Just... I'll get a tray, fuck it!..."]));
-   set_responses((["penne":"You'll need a tray.@@doyou",
-                   "doyou":"You'll still need a tray.@@tray",
+   set_responses((["penne":"You'll need a tray.@@doyou,oktray",
+                   "doyou":"You'll still need a tray.@@tray@@oktray",
+                   "oktray":"Great!@@@@doyou",
                     "tray":"No, the food is hot. You'll need a tray to put the food on.@@hotfood",
                  "hotfood":"Fight to the death? This is canteen, I am Liam and I work here.@@deathstar",
                "deathstar":"What's the Death Star? Isn't this the Omega Station?@@deathstar2",
