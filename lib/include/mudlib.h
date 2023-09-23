@@ -11,125 +11,126 @@
 #include <msgtypes.h>
 #include <classes.h>
 #include <lpscript.h>
+#include <custom_mudlib.h>
 
 /*
-** BODY		main player object (body)
-** USER_OB	user's connection object
-** USER_OB_BAK	user's connection object (backup version)
+** BODY            main player object (body)
+** USER_OB         user's connection object
+** USER_OB_BAK     user's connection object (backup version)
 **
-** SIMUL_OB	the simul efun object
+** SIMUL_OB	       the simul efun object
 **
-** BASE_ROOM	the room rooms are built from...
-** INDOOR_ROOM	standard room (indoors)
-** OUTDOOR_ROOM	an outdoor room/environment
-** NON_ROOM	base class for things like furniture
-** WATER_ROOM	rooms full of water (e.g. a lake)
-** GRID_SERVER	virtual server inheritable for grid-type rooms
+** BASE_ROOM       the room rooms are built from...
+** INDOOR_ROOM     standard room (indoors)
+** OUTDOOR_ROOM    an outdoor room/environment
+** NON_ROOM	base   class for things like furniture
+** WATER_ROOM      rooms full of water (e.g. a lake)
+** GRID_SERVER     virtual server inheritable for grid-type rooms
 **
-** VOID_ROOM	where to put broken stuff
-** WIZ_ROOM	a room for wizards
+** VOID_ROOM       where to put broken stuff
+** WIZ_ROOM        a room for wizards
 **
-** BASE_OBJ	base class for objects
-** OBJ		generic objects
+** BASE_OBJ        base class for objects
+** OBJ             generic objects
 ** FURNITURE
 ** MOUNT	
-** WEAPON	weapons
-** ARMOR	armor
-** CONTAINER	obs that can hold things in/on/under/behind/etc.
-** DOOR		doors to places
-** SECRET_DOOR        secret doors.
-** LIVING	can hold things and perform actions (no fighting)
-** PAPER      paper .. WFW
-** STOCK_MASTER  stock guildmaster for stock muds :)
-** COINS	a bunch of coins
-** SPELL	base class for spells
+** WEAPON          weapons
+** ARMOR           armor
+** CONTAINER       obs that can hold things in/on/under/behind/etc.
+** DOOR            doors to places
+** SECRET_DOOR     secret doors.
+** LIVING          can hold things and perform actions (no fighting)
+** PAPER           paper .. WFW
+** STOCK_MASTER    stock guildmaster for stock muds :)
+** COINS           a bunch of coins
+** SPELL           base class for spells
 **
-** M_GLOB	glob style regexp functions
-** M_GRAMMAR	grammatical manipulation functions
-** M_CMDIO	i/o functions for cmds
-** M_PARSING	input parsing functions
-** M_REGEX	regular expression functions
-** M_INPUT	interface to the input system
-** M_COMPLETE	name completion
-** M_RECONNECT	functions for performing socket reconnects
-** M_COLOURS	functions for using colours
-** M_SAVE	functions to abstract saveing and restoring objects
+** M_GLOB          glob style regexp functions
+** M_GRAMMAR       grammatical manipulation functions
+** M_CMDIO         I/O functions for cmds
+** M_PARSING       input parsing functions
+** M_REGEX         regular expression functions
+** M_INPUT         interface to the input system
+** M_COMPLETE      name completion
+** M_RECONNECT     functions for performing socket reconnects
+** M_COLOURS       functions for using colours
+** M_SAVE          functions to abstract saveing and restoring objects
 **
-** M_BODY_STATS	statistics (characteristics) for a body (player/NPC)
-** M_SMARTMOVE	living's movement with directions and enter/exit msgs
+** M_BODY_STATS	   statistics (characteristics) for a body (player/NPC)
+** M_SMARTMOVE     living's movement with directions and enter/exit msgs
 **
-** M_WEARABLE	things that can be worn
+** M_WEARABLE      things that can be worn
 ** M_SWITCHABLE
 ** M_LIGHTABLE
-** M_ITEMS	provides virtual/fake items for an object
-** M_GETTABLE	objects that can be picked up
-** M_THROWABLE  objects that can be thrown
-** M_OPENABLE	objects that can be opened/closed
-** M_LOCKABLE	openables that can be locked
-** M_READABLE	something that can be read
+** M_ITEMS         provides virtual/fake items for an object
+** M_GETTABLE      objects that can be picked up
+** M_THROWABLE     objects that can be thrown
+** M_OPENABLE      objects that can be opened/closed
+** M_LOCKABLE      openables that can be locked
+** M_READABLE      something that can be read
 ** M_DAMAGE_SOURCE
 ** M_DAMAGE_SINK
-** M_WIELDABLE	something that can be wielded (a weapon)
-** M_MESSAGES	message generation
+** M_WIELDABLE     something that can be wielded (a weapon)
+** M_MESSAGES      message generation
 ** M_ACTIONS
 ** M_TRIGGERS
 ** M_WRITING_SURFACE
 ** M_VENDOR
-** M_DIGGER	items that can dig.
-** M_DIGGABLE   items that you can dig in.
+** M_DIGGER        items that can dig.
+** M_DIGGABLE      items that you can dig in.
 ** M_BLOCKEXITS
 ** M_BLOCKABLE
 ** M_AGGRESSIVE
 ** M_KNOCKABLE
-** M_VALUABLE	items that are valuable (have value)
+** M_VALUABLE      items that are valuable (have value)
 ** M_MOUNTABLE
 ** M_ENTERABLE
 ** M_FLOW_ROOM
-** M_GUILD_MASTER	act as a "guild master"
-** M_GUILD_MEMBER   functions for guild members
-** M_SIBLING          objects that exist in two rooms;
+** M_GUILD_MASTER  act as a "guild master"
+** M_GUILD_MEMBER  functions for guild members
+** M_SIBLING       objects that exist in two rooms;
 **
-** M_LIB_LOCKABLE	arbitrates "locked" state of multiple instances
-** M_LIB_OPENABLE	arbitrates "opened" state of multiple instances
+** M_LIB_LOCKABLE  arbitrates "locked" state of multiple instances
+** M_LIB_OPENABLE  arbitrates "opened" state of multiple instances
 **
-** ED_SESSION	provides an 'ed' session for the user
-** ADDTO_OB	object to add ines to a file
-** WIZ_SHELL	a wizard's shell object
-** TELNET_OB	a telnet tool
-** ADMTOOL	administration tool's input menu object
-** DATAEDIT	save file data editor
+** ED_SESSION      provides an 'ed' session for the user
+** ADDTO_OB        object to add ines to a file
+** WIZ_SHELL       a wizard's shell object
+** TELNET_OB       a telnet tool
+** ADMTOOL         administration tool's input menu object
+** DATAEDIT        save file data editor
 **
 ** ALIASMENU
 ** ANNO_MENU
 ** CORPSE
-** HELPSYS	help system
+** HELPSYS         help system
 ** HINT_MENU
-** IFTP_OB	command object to transfer files between muds via I3
-** NEWSREADER	a basic newsreader
+** IFTP_OB         command object to transfer files between muds via I3
+** NEWSREADER      a basic newsreader
 ** NNTP_OB
 ** PLAYER_MENU
 ** PLYR_SHELL
-** SIMPLE_OB	an object with simple responses to verbs
+** SIMPLE_OB       an object with simple responses to verbs
 ** TEMP_WORKROOM
-** WATER	some water
+** WATER           some water
 **
-** VERB_OB	basic functionality for parser-based verbs
-** MENUS   	generic menuing facility
+** VERB_OB         basic functionality for parser-based verbs
+** MENUS           generic menuing facility
 **
-** CMD          base inheritable for commands
-** DAEMON	for daemons
-** MAILBOX	mailbox to hold message references
-** MAILER	generic "mailer" functionality
-** SOCKET	object to manage a socket
+** CMD             base inheritable for commands
+** DAEMON          for daemons
+** MAILBOX         mailbox to hold message references
+** MAILER          generic "mailer" functionality
+** SOCKET          object to manage a socket
 **
 ** SHELL
-** M_ALIAS 	module for storing and expanding aliases
-** M_GETOPT	functions for command processing
-** M_HISTORY 	module for handling command history
+** M_ALIAS         module for storing and expanding aliases
+** M_GETOPT        functions for command processing
+** M_HISTORY       module for handling command history
 ** M_PROMPT
 ** M_SCROLLBACK
-** M_SHELLFUNCS	??
-** M_SHELLVARS	??
+** M_SHELLFUNCS	   ??
+** M_SHELLVARS	   ??
 **
 ** ACCOUNTANT
 ** SWORD
