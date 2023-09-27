@@ -38,7 +38,7 @@ inherit __DIR__ "body/pockets";
 inherit __DIR__ "body/start";
 inherit __DIR__ "body/time";
 inherit __DIR__ "body/naming";
-inherit __DIR__ "body/spacemud";
+inherit __DIR__ "body/levels";
 
 #ifndef SAY_HISTORY_IN_ROOMS
 inherit __DIR__ "body/history";

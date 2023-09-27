@@ -286,6 +286,7 @@
 #define ADDTO_OB          "/trans/obj/addto_ob"
 #define WIZ_SHELL         "/trans/obj/wish"
 #define TELNET_OB         "/trans/obj/telnet_ob"
+#define CONFIG_EDITOR     "/trans/obj/config_editor"
 #define USER_MENU         "/obj/usermenu/usermenu"
 #define ADMTOOL           "/obj/admtool/admtool2"
 #define TASKTOOL          "/obj/tasktool/tasktool"

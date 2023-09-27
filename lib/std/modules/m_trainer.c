@@ -1,5 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 // Work in NonProgress ... will be finished sometime after Vendor has been redone. probably for a7
+//
 // Finished 10-20 years after by Tsath.
 
 //: MODULE
@@ -148,12 +149,6 @@ string stat_response()
 
 void setup_trainer_conversation(int skill_max)
 {
-   /*
-   define STAT_TRAIN_COST "50 gold"
-   define STAT_TRAIN_SCALES_WITH_LEVEL
-   define STAT_TRAIN_SCALE 2
-   */
-
    if (sizeof(stats_we_train))
    {
       int train_cost;
