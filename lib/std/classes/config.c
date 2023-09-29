@@ -11,6 +11,5 @@ class config
    string range;
    string type;
    int define; // 1 = define, -1 = undefine
-   int handled;
 }
 

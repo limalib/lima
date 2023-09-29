@@ -50,6 +50,7 @@
 */
 
 #include <classes.h>
+#include <config/stats.h>
 #include <hooks.h>
 #include <stats.h>
 
@@ -243,7 +244,7 @@ void inc_mod_wil()
 
 int spare_points()
 {
-   int total_pts = this_object()->query_level() * 3;
+   int total_pts = this_object()->query_level() * STAT_PTS_PER_LEVEL;
    total_pts -= mod_str + mod_agi + mod_int + mod_wil;
    return total_pts;
 }
@@ -463,6 +464,14 @@ nomask int roll_stat(int adjust, int range)
    return BASE_VALUE + adjust + random(range) - (range + 1) / 2;
 }
 
+void reset_stat_increases()
+{
+   mod_str = 0;
+   mod_agi = 0;
+   mod_int = 0;
+   mod_wil = 0;
+}
+
 //: FUNCTION init_stats
 // Rolls the stats for the first time, based on the proper racial adjustments.
 // Admins can call this to reinitialize a player's stats (for example, in the
@@ -484,10 +493,7 @@ nomask void init_stats()
    stat_int = roll_stat(mods.int_adjust, mods.int_range);
    stat_wil = roll_stat(mods.wil_adjust, mods.wil_range);
 
-   mod_str = 0;
-   mod_agi = 0;
-   mod_int = 0;
-   mod_wil = 0;
+   reset_stat_increases();
 
    recompute_derived();
    refresh_stats();

@@ -1,5 +1,5 @@
-#ifndef __STATS_H__
-#define __STATS_H__
+#ifndef __STATSENGINE_H__
+#define __STATSENGINE_H__
 
 #define DEFAULT_RANGE	6
 #define BASE_VALUE	20

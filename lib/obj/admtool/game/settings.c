@@ -74,7 +74,7 @@ void get_config_setting(string key, class config c, mixed result)
          c.define = -1;
       break;
    case "string":
-      if (!stringp(result))
+      if (!stringp(result) || strlen(result)==0)
       {
          write("** Invalid selection, old value kept.");
       }

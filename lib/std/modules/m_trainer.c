@@ -12,6 +12,7 @@
 //
 
 #include <config/skills.h>
+#include <config/stats.h>
 
 inherit M_CONVERSATION;
 inherit CLASS_SKILL;
@@ -29,9 +30,11 @@ mapping trainer_msgs = MESSAGES_D->query_messages("trainer-default");
 private
 string *stats_we_train = ({});
 private
-string currency;
+string currency; // Loaded during create()
 private
-int stat_cost = 10;
+int stat_cost = 10; // Overridden in create()
+private
+mapping stat_abrevs = (["strength":"str", "agility":"agi", "intelligence":"int", "willpower":"wil"]);
 
 void set_trainer_msgs(mapping msgs)
 {
@@ -125,26 +128,58 @@ void do_training(object trainee, string skill)
    }
 }
 
-int stat_train_cost()
+varargs int stat_train_cost(string statstr)
 {
+   int cost = stat_cost;
+   int stat;
+
+   cost = cost * STAT_TRAIN_SCALE;
 #ifdef STAT_TRAIN_SCALES_WITH_LEVEL
-   return this_body()->query_level() * STAT_TRAIN_SCALE * stat_cost;
-#else
-   return stat_cost;
+   cost = this_body()->query_level() * cost;
 #endif
+#ifdef STAT_TRAIN_SCALES_WITH_STAT
+   if (statstr && strlen(statstr))
+      stat = call_other(this_body(), "query_mod_" + stat_abrevs[statstr]);
+   else
+      stat = max(({
+          this_body()->query_mod_str(),
+          this_body()->query_mod_agi(),
+          this_body()->query_mod_int(),
+          this_body()->query_mod_wil(),
+      }));
+   cost = cost * (stat + 1);
+#endif
+
+   return cost;
 }
 
 void train_stat(string s)
 {
-   TBUG(s);
-}
+   string abr;
+   int cost = stat_train_cost(s);
 
-string stat_response()
-{
-   this_object()->do_game_command("say Yes, which one would you like to train? It will cost you " + stat_train_cost() +
-                                  " " + currency + " for each point.");
-   foreach (string s in stats_we_train)
-      add_to_start("stat_" + s);
+   if (undefinedp(stat_abrevs[s]))
+      error("Unknown stat '" + s + "'.");
+
+   // No spare points, end it here.
+   if (!this_body()->spare_points())
+   {
+      this_object()->targetted_action(trainer_msgs["no_stat_pts_msg"], this_body());
+      return;
+   }
+
+   if (this_body()->query_amt_currency(currency) < cost)
+   {
+      this_object()->targetted_action(trainer_msgs["no_money"], this_body());
+      return;
+   }
+
+   abr = stat_abrevs[s];
+   this_body()->subtract_money(currency,cost);
+   this_body()->targetted_action("$N $vgive $t $o.",this_object(),cost+" "+currency);
+   this_object()->targetted_action(trainer_msgs["stat_train"], this_body(), s);
+   add_current(this_body(),"stat_"+s);
+   call_other(this_body(), "inc_mod_" + abr);
 }
 
 void setup_trainer_conversation(int skill_max)
@@ -153,15 +188,14 @@ void setup_trainer_conversation(int skill_max)
    {
       int train_cost;
       if (sscanf(STAT_TRAIN_COST, "%d %s", stat_cost, currency) != 2)
-         error("STAT_TRAIN_COST in /include/config/skills.h incorrect format.");
+         error("STAT_TRAIN_COST is " + STAT_TRAIN_COST +
+               " in /include/config/skills.h incorrect format, should be \"50 gold\" or similar.");
 
-      add_option("stat", "Can you train my " + format_list(stats_we_train) + "?");
-      add_to_start("stat");
-      add_response("stat", ({"Umm... @@stat_"+implode(stats_we_train,",stat_"),( : stat_response:)}));
       foreach (string s in stats_we_train)
       {
-         add_option("stat_" + s, "Train my " + s + ", please. [" + stat_train_cost() + " " + currency + "]");
-         add_response("stat_" + s, ( : train_stat, s:));
+         add_option("stat_" + s, "Train my " + s + ", please. [" + stat_train_cost(s) + " " + currency + "]");
+         add_response("stat_" + s, ({"Okay! @@stat_"+s,( : train_stat, s:)}));
+         add_to_start("stat_"+s);
       }
    }
    add_option("rank", "What skill rank are you?");

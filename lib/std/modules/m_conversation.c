@@ -169,6 +169,11 @@ varargs void set_start(mixed *a, object target)
       default_start = a;
 }
 
+void add_current(object ob, string option)
+{
+   current[ob]+=explode(option,",");
+}
+
 mixed direct_talk_to_liv()
 {
    return 1;

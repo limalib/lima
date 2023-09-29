@@ -62,20 +62,4 @@
 // Type: boolean
 #define USE_ROMAN_NUMERALS
 
-// Cost for 1 stat increase at level 1.
-// Default: 50 gold
-// Type: string
-#define STAT_TRAIN_COST "50 gold"
-
-// Should we multiply stat increase cost by player level?
-// Default: yes
-// Type: boolean
-#define STAT_TRAIN_SCALES_WITH_LEVEL
-
-// Should we further multiply the train cost with level AND this factor?
-// Default: 2
-// Range: 1-10
-// Type: integer
-#define STAT_TRAIN_SCALE 2
-
 #endif /* __SKILLS_H__ */
