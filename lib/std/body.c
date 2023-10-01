@@ -228,7 +228,6 @@ void enter_game(int state)
 void save_me()
 {
    object shell_ob = link && link->query_shell_ob();
-   string userid = query_userid();
    string bodyid = lower_case(query_name());
 
    /* save the shell information */
@@ -246,8 +245,6 @@ void save_me()
 // Handle mailboxes and the last login daemon, as well as the normal stuff
 void remove()
 {
-   object ob;
-
    if (!clonep())
    {
       ::remove();

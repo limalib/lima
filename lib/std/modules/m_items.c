@@ -27,7 +27,6 @@
 // valid, but remains in only for compatability reasons.
 void add_item(mixed *stuff...)
 {
-   mapping compat;
    if (mapp(stuff[ < 1]))
    {
       new (SIMPLE_OB, stuff[ < 1], stuff[0.. < 2]);

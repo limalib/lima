@@ -162,7 +162,7 @@ string is_relation_alias(string test)
 
 //: FUNCTION set_relation_alias
 // Set the aliases that a relation has
-void set_relation_alias(string relation, string aliases...)
+void set_relation_alias(string relation, string *aliases...)
 {
    string aliased_to;
    relation = PREPOSITION_D->translate_preposition(relation);
@@ -178,7 +178,7 @@ void set_relation_alias(string relation, string aliases...)
 
 //: FUNCTION add_relation_alias
 // Add additional aliases that a relation has.
-void add_relation_alias(string relation, string aliases...)
+void add_relation_alias(string relation, string *aliases...)
 {
    string aliased_to;
    relation = PREPOSITION_D->translate_preposition(relation);
@@ -197,7 +197,7 @@ void add_relation_alias(string relation, string aliases...)
 
 // FUNCTION remove_relation_alias
 // Remove aliases that a relation has.
-void remove_relation_alias(string relation, string aliases...)
+void remove_relation_alias(string relation, string *aliases...)
 {
    relation_aliases[relation] -= aliases;
    if (!sizeof(relation_aliases))

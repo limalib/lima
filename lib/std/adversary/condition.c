@@ -46,15 +46,6 @@ object *query_readied()
    return copy(readied);
 }
 
-void set_attack_speed(int speed)
-{
-   TBUG("Set attack speed: " + speed);
-   if (speed < 1)
-      return;
-
-   attack_speed = speed > MAX_ATTACK_SPEED ? MAX_ATTACK_SPEED : speed;
-}
-
 int query_attack_speed()
 {
    return attack_speed;

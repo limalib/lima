@@ -56,7 +56,6 @@ int chance_to_hit(object weapon, object target)
    int defend_mod = 1;
    int res;
    int skill_test = 0;
-   class skill skill;
    int train_limit;
 
    // Skill restrictions
@@ -108,7 +107,6 @@ int defend_chance(object weapon, object target)
    int defend_mod = 1;
    int res;
    int skill_impact = 1;
-   class skill skill;
    int train_limit;
 
    if (target->should_cap_skill(defend_skill))
@@ -141,7 +139,6 @@ int defend_chance(object weapon, object target)
 
 int disarm_chance(object target)
 {
-   int attack_mod = 1;
    int defend_mod = 1;
    int res;
    object weapon = this_object()->query_weapon();

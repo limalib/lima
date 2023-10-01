@@ -23,7 +23,7 @@ void simple_action(string);
 int query_ghost();
 void target_is_asleep();
 void handle_events();
-void try_to_ready();
+int try_to_ready();
 object *query_readied();
 void remove_readied(object);
 int query_prone();

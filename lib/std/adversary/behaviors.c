@@ -83,7 +83,6 @@ varargs int busy_with(object ob, string action, string bf, mixed args)
 {
    if (time() - busy_at > MAX_BUSY || !busy_with)
    {
-      int retvalue = 0;
       tell(this_object(), "You begin " + action + " ...\n");
       busy_at = time();
       busy_with = ob;

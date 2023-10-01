@@ -255,7 +255,7 @@ int stat_component(int STAT, int PART)
    int adj_str, adj_agi, adj_int, adj_wil;
    int ccur_str, ccur_agi, ccur_int, ccur_wil;
    int *stats;
-   int *mods = ({mod_str, mod_agi, mod_int, mod_wil});
+
    ccur_str = stat_str + mod_str + (adj_str = call_hooks("str_bonus", HOOK_SUM));
    ccur_agi = stat_agi + mod_agi + (adj_agi = call_hooks("agi_bonus", HOOK_SUM));
    ccur_int = stat_int + mod_int + (adj_int = call_hooks("int_bonus", HOOK_SUM));

@@ -103,9 +103,9 @@
  * Nothing in here should be changed.
  */
 /* internal use */
-#define STR(y)       #y
-#define STRINGIZE(z) STR(z)
-#define MODULE(x, y) SUBDIR x "/" STR(y)
+#define STRRR(y)       #y
+#define STRINGIZE(z) STRRR(z)
+#define MODULE(x, y) SUBDIR x "/" STRRR(y)
 
 #define DEATH_VAPORIZE        1
 #define DEATH_CORPSES         2

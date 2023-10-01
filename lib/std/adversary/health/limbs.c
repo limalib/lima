@@ -832,7 +832,6 @@ void banner_wounded(string limb, int hp)
 // the worst hurt vital limb if vital=1, otherwise from all limbs.
 varargs mixed *query_worst_limb(int vital)
 {
-   mixed ret = ({});
    int hp_percent, min = 100;
    string l = "none";
 

@@ -165,7 +165,7 @@ int destruct_if_useless()
 // is called in objects that haven't had a function call in a while].
 //
 // e.g. environment()->anything, like many libs do, is remarkably stupid.
-int clean_up(int instances)
+int clean_up()
 {
    // If we have an environment, we will be destructed when our environment
    // cleans up.  So no need to worry about it ourself.  Note that once

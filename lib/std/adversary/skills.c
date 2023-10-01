@@ -80,7 +80,6 @@ int query_skill(string skill)
 int base_test_skill(string skill, int opposing_skill)
 {
    int total_skill;
-   int amount;
    int combined_total;
 
    total_skill = aggregate_skill(skill);

@@ -41,7 +41,6 @@ varargs mixed move(mixed dest, string relation)
 {
    object env;
    string oldrelation;
-   object tmp;
    mixed ret;
    mixed err;
    int light;

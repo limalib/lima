@@ -19,8 +19,6 @@ string *hidden_exits = ({});
 private
 string default_error;
 private
-string default_desc;
-private
 mixed default_exit_message;
 private
 mixed default_enter_message;
@@ -446,7 +444,6 @@ varargs void add_exit(mixed direction, mixed destination)
 // exits doc
 void set_exits(mapping new_exits)
 {
-   mixed key;
    if (mapp(new_exits))
       foreach (string direction, mixed destination in new_exits)
          add_exit(direction, destination);

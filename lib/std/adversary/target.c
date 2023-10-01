@@ -37,11 +37,11 @@ object *query_targets()
 object get_target()
 {
    int x, n = sizeof(other_targets);
-   object tmp;
 
 #ifdef TARGETTING_IS_RANDOM
    if (!explicit)
    {
+      object tmp;
       x = random(n + 1);
       if (x < n) // target == n means keep the current target
       {

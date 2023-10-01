@@ -32,7 +32,6 @@ nomask int move_me_there(class move_data data)
    object d;
    mixed r;
    mixed txt;
-   string m;
 
    if ((r = move(data.destination, data.relation)) != MOVE_OK)
    {
