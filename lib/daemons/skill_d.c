@@ -229,6 +229,7 @@ int monster_percent_for_next_rank(object mob, string skill_name)
 
 void create()
 {
+   ::create(); //Restore values from .o file
    if (MAX_SKILL_VALUE != 10000)
    {
       float factor = (MAX_SKILL_VALUE * 1.0) / 10000;
