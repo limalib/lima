@@ -2,7 +2,6 @@
 #define __STATSENGINE_H__
 
 #define DEFAULT_RANGE	6
-#define BASE_VALUE	20
 
 // Base stats
 #define STR 0

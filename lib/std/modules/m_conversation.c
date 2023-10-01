@@ -297,10 +297,10 @@ void continue_conversation(object ob, string input)
       option = options[tag];
    ob->simple_action("$N $vsay: " + option);
    response = responses[tag];
+   current[ob] -= ({tag});
 
    do_action(ob, response);
 
-   current[ob] -= ({tag});
 
    if (sizeof(current[ob]))
       show_menu(ob);

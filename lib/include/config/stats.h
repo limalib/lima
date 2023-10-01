@@ -4,6 +4,12 @@
 #ifndef __STATS_H__
 #define __STATS_H__
 
+// Base value of score for all races. See 'admtool i r' for race info.
+// Default: 20
+// Range: 10-30
+// Type integer
+#define STAT_BASE_VALUE	20
+
 // Cost for 1 stat increase at level 1.
 // Default: 50 gold
 // Type: string

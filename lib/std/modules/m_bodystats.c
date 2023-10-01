@@ -461,7 +461,7 @@ nomask int roll_stat(int adjust, int range)
    if (!range)
       range = DEFAULT_RANGE;
 
-   return BASE_VALUE + adjust + random(range) - (range + 1) / 2;
+   return STAT_BASE_VALUE + adjust + random(range) - (range + 1) / 2;
 }
 
 void reset_stat_increases()

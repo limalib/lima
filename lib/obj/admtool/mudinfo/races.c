@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-#include <stats.h>
+#include <config/stats.h>
 #define HEADCOL "<036>"
 
 inherit "/obj/admtool/internal/base.c";
@@ -52,19 +52,19 @@ void races()
       printf((tick % 2 == 0 ? "<015>" : "<117>") + "%20.20s %8s %8s %8s %8s %8d %8d %8d " +
                  (adj_total != 0 ? "<009>" : "") + "%8s",
              ob->query_race(),
-             (BASE_VALUE + srm.str_adjust - (srm.str_range / 2)) + "-" +
-                 (BASE_VALUE + srm.str_adjust + (srm.str_range / 2)),
-             (BASE_VALUE + srm.agi_adjust - (srm.agi_range / 2)) + "-" +
-                 (BASE_VALUE + srm.agi_adjust + (srm.agi_range / 2)),
-             (BASE_VALUE + srm.int_adjust - (srm.int_range / 2)) + "-" +
-                 (BASE_VALUE + srm.int_adjust + (srm.int_range / 2)),
-             (BASE_VALUE + srm.wil_adjust - (srm.wil_range / 2)) + "-" +
-                 (BASE_VALUE + srm.wil_adjust + (srm.wil_range / 2)),
+             (STAT_BASE_VALUE + srm.str_adjust - (srm.str_range / 2)) + "-" +
+                 (STAT_BASE_VALUE + srm.str_adjust + (srm.str_range / 2)),
+             (STAT_BASE_VALUE + srm.agi_adjust - (srm.agi_range / 2)) + "-" +
+                 (STAT_BASE_VALUE + srm.agi_adjust + (srm.agi_range / 2)),
+             (STAT_BASE_VALUE + srm.int_adjust - (srm.int_range / 2)) + "-" +
+                 (STAT_BASE_VALUE + srm.int_adjust + (srm.int_range / 2)),
+             (STAT_BASE_VALUE + srm.wil_adjust - (srm.wil_range / 2)) + "-" +
+                 (STAT_BASE_VALUE + srm.wil_adjust + (srm.wil_range / 2)),
              con, wis, cha, "" + adj_total);
       tick++;
    }
 
-   write("<res>\n\nStats are calculated as: " + BASE_VALUE + " + Adjust ± (Range/2)\n");
+   write("<res>\n\nStats are calculated as: " + STAT_BASE_VALUE + " + Adjust ± (Range/2)\n");
    write("VAL+ are bonuses that are just added to the derived stat.\n");
    write("'Adj sum' must equal 0.\n");
 }

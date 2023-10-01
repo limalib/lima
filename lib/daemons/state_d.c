@@ -66,12 +66,9 @@ void heart_beat()
 void capture_all_statefuls()
 {
    object *statefuls = filter_array(objects(), ( : clonep($1) && $1->is_stateful() :));
+   queue = ([]);
    foreach (object ob in statefuls)
-   {
-      string f = file_name(ob);
-      if (member_array(f, keys(queue)) == -1)
-         add_to_queue(ob, random(INITIAL_SPREAD));
-   }
+      add_to_queue(ob, random(INITIAL_SPREAD));
 }
 
 void create()

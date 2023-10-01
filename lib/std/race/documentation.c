@@ -59,22 +59,7 @@ class stat_roll_mods query_roll_mods()
    class stat_roll_mods ret = new (class stat_roll_mods);
 
    /*
-    * These give the adjustments and ranges for base statistics.
-    *
-    * The actual score is in the range:
-    *
-    * BASE_VALUE + adjust +- range/2
-    *
-    * where BASE_VALUE is in /std/modules/bodystat.c (currently 20)
-    *
-    * Here are some examples:
-    *
-    * adjust        range         possible values
-    * -10		  20		 0 .. 20
-    * -15		   5		 3 .. 8
-    *  25		  30		30 .. 60
-    *   5            10		20 .. 30
-    *   0		  40		 0 .. 40
+    * See the race stat overview in admtool, for race balance.
     */
    ret.str_adjust = 20;
    ret.str_range = 10;
