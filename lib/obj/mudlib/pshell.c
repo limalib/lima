@@ -84,7 +84,7 @@ void unset_variable(string name, mixed value)
 mixed get_variable(string name)
 {
    if (!shell_vars)
-      shell_vars = ([]);
+      default_variables();
    return shell_vars[name];
 }
 
