@@ -40,7 +40,7 @@ string fname;
 private
 int autologin_tag;
 private
-mapping races = ([]);
+mapping races;
 
 private
 int name_available(string name)
@@ -57,6 +57,7 @@ nomask void simple_cmd(string cmd)
 private
 void load_races()
 {
+   races=([]);
    foreach (string file in get_dir(DIR_RACES + "/*.c"))
    {
       string tmp = DIR_RACES + "/" + file;
