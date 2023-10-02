@@ -5,7 +5,7 @@ inherit __DIR__ "scr_command";
 private
 void main(string *args)
 {
-   string brief = implode(args[0], " ");
+   string brief = implode(args, " ");
    string fname;
 
    if (!(fname = get_file_name()))

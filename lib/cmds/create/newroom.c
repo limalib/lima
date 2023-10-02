@@ -14,9 +14,15 @@ void main(string *args)
       write("File exists!\n");
       return;
    }
-   write_file(fname, @END is = room brief = A new room(change with 'setbrief') long =
-                         There is nothing here.Describe this room using 'describeroom'.Add objects
-                             with 'addobject'.Add exits with 'addexit'.END);
+   write_file(fname, 
+@END 
+is = room
+brief = A new room(change with 'setbrief')
+long = There is nothing here. 
+       Describe this room using 'describeroom'.
+       Add objects with 'addobject'.
+      Add exits with 'addexit'.
+END);
    write("Done (moving you there).\n");
    this_body()->move(fname);
 }
