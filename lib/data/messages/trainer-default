@@ -9,4 +9,4 @@ reject_msg:$N tells $t, "You are more skilled then me! I cannot teach you no mor
 no_pts_msg:$N tells $t, "You need more practice before you can train, sorry".
 no_stat_pts_msg:$N tells $t, "You need to be a higher level before you can increase your statistics, sorry".
 stat_train:$T $v1train with $N and $v1improve $p1 $o.
-no_money:$T $vask $N how $n is going to pay for that?
+no_money:$N $vask $t how $n1 $v1are going to pay for that?

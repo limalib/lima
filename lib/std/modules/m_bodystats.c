@@ -470,6 +470,7 @@ void reset_stat_increases()
    mod_agi = 0;
    mod_int = 0;
    mod_wil = 0;
+   refresh_stats();
 }
 
 //: FUNCTION init_stats

@@ -20,6 +20,7 @@ inherit CLASS_SKILL;
 void add_response(string key, mixed act);
 void add_option(string key, mixed act);
 void add_to_start(string key);
+varargs void targetted_action(mixed msg, object target, mixed *obs...);
 
 private
 mapping skill_restrictions = ([]);
@@ -124,7 +125,7 @@ void do_training(object trainee, string skill)
       else
          msg = trainer_msgs["reject_msg"];
 
-      this_object()->targetted_action(msg, trainee);
+      targetted_action(msg, trainee);
    }
 }
 
@@ -139,13 +140,13 @@ varargs int stat_train_cost(string statstr)
 #endif
 #ifdef STAT_TRAIN_SCALES_WITH_STAT
    if (statstr && strlen(statstr))
-      stat = call_other(this_body(), "query_mod_" + stat_abrevs[statstr]);
+      stat = call_other(this_body(), "query_" + stat_abrevs[statstr]);
    else
       stat = max(({
-          this_body()->query_mod_str(),
-          this_body()->query_mod_agi(),
-          this_body()->query_mod_int(),
-          this_body()->query_mod_wil(),
+          this_body()->query_str(),
+          this_body()->query_agi(),
+          this_body()->query_int(),
+          this_body()->query_wil(),
       }));
    cost = cost * (stat + 1);
 #endif
@@ -156,33 +157,38 @@ varargs int stat_train_cost(string statstr)
 void train_stat(string s)
 {
    string abr;
+   object b=this_body();
    int cost = stat_train_cost(s);
 
    if (undefinedp(stat_abrevs[s]))
       error("Unknown stat '" + s + "'.");
 
    // No spare points, end it here.
-   if (!this_body()->spare_points())
+   if (!b->spare_points())
    {
-      this_object()->targetted_action(trainer_msgs["no_stat_pts_msg"], this_body());
+      targetted_action(trainer_msgs["no_stat_pts_msg"], b);
       return;
    }
 
-   if (this_body()->query_amt_currency(currency) < cost)
+   if (b->query_amt_currency(currency) < cost)
    {
-      this_object()->targetted_action(trainer_msgs["no_money"], this_body());
+      targetted_action(trainer_msgs["no_money"], b);
       return;
    }
 
    abr = stat_abrevs[s];
-   this_body()->subtract_money(currency,cost);
-   this_body()->targetted_action("$N $vgive $t $o.",this_object(),cost+" "+currency);
-   this_object()->targetted_action(trainer_msgs["stat_train"], this_body(), s);
-   add_current(this_body(),"stat_"+s);
-   call_other(this_body(), "inc_mod_" + abr);
+   b->subtract_money(currency, cost);
+   b->targetted_action("$N $vgive $t $o.", this_object(), cost + " " + currency);
+   targetted_action(trainer_msgs["stat_train"], b, s);
+
+   call_other(b, "inc_mod_" + abr);
+   b->refresh_stats();
+
+   //Need this one again to update potential price hike. Must be done after stat increase.
+   add_option("stat_" + s, "Train my " + s + ", please. [" + stat_train_cost(s) + " " + currency + "]");
 }
 
-void setup_trainer_conversation(int skill_max)
+void begin_conversation()
 {
    if (sizeof(stats_we_train))
    {
@@ -194,10 +200,15 @@ void setup_trainer_conversation(int skill_max)
       foreach (string s in stats_we_train)
       {
          add_option("stat_" + s, "Train my " + s + ", please. [" + stat_train_cost(s) + " " + currency + "]");
-         add_response("stat_" + s, ({"Okay! @@stat_"+s,( : train_stat, s:)}));
-         add_to_start("stat_"+s);
+         add_response("stat_" + s, ({"Okay! @@stat_" + s, ( : train_stat, s:)}));
+         add_to_start("stat_" + s);
       }
    }
+   ::begin_conversation();
+}
+
+void setup_trainer_conversation(int skill_max)
+{
    add_option("rank", "What skill rank are you?");
    add_response("rank", "I can train your skills to around rank " + SKILL_D->skill_title_from_pts(skill_max));
    add_to_start("rank");

@@ -55,7 +55,8 @@ void add_response(string key, mixed act)
 
 void add_to_start(string key)
 {
-   default_start += ({key});
+   if(member_array(key,default_start)==-1)
+      default_start += ({key});
 }
 
 private
@@ -171,7 +172,11 @@ varargs void set_start(mixed *a, object target)
 
 void add_current(object ob, string option)
 {
-   current[ob]+=explode(option,",");
+   foreach (string opt in explode(option, ","))
+   {
+      if (member_array(opt, current[ob]) == -1)
+         current[ob] += ({opt});
+   }
 }
 
 mixed direct_talk_to_liv()
@@ -300,7 +305,6 @@ void continue_conversation(object ob, string input)
    current[ob] -= ({tag});
 
    do_action(ob, response);
-
 
    if (sizeof(current[ob]))
       show_menu(ob);
