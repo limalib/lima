@@ -14,8 +14,3 @@ void setup()
    set_drink_action("$N $vtake a drink from the bottle.");
    set_last_drink_action("$N $vtake a drink from the bottle, finishing it off.");
 }
-
-mapping lpscript_attributes()
-{
-   return object::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

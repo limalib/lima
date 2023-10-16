@@ -105,12 +105,6 @@ mixed direct_whisper_to_liv_str()
    return 1;
 }
 
-mapping lpscript_attributes()
-{
-   return (["name":({LPSCRIPT_STRING, "setup", "set_name"}),
-       "proper_name":({LPSCRIPT_STRING, "setup", "set_proper_name"}), "gender":({LPSCRIPT_GENDER}), ]);
-}
-
 string look_in(string relation)
 {
    // only trap "in", since you may want something to be behind/on/under a living

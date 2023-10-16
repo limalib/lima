@@ -19,8 +19,8 @@ void setup()
             " Dead people come to the church and pray.\nThere is a clock on th"
             "e wall.\nThere is an exit to south.$lamp");
    set_state_description("lamp_on", "\nThe lamp beside the elevator is lit.\n");
-   set_objects((["/std/elevator_door":({"west", "/domains/std/2.4.5/elevator"}),
-          "/std/elevator_call_button":({"2/church", "/domains/std/2.4.5/elevator"}), ]));
+   set_objects((["/std/elevator_door":({"west", "/domains/std//elevator"}),
+          "/std/elevator_call_button":({"2/church", "/domains/std//elevator"}), ]));
    add_item("pit", "In the middle of the church is a deep pit.\n It was used for sacrifice in the old times, but "
                    "nowadays\n it is only left for tourists to look at.\n");
 }

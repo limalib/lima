@@ -68,11 +68,6 @@ string look_in(string prep)
   return evaluate(look_in_desc);
 }
 
-mapping lpscript_attributes()
-{
-  return (["look_in_desc":({LPSCRIPT_STRING, "setup", "set_look_in_desc"})]);
-}
-
 varargs void mudlib_setup(string d)
 {
   ::mudlib_setup();

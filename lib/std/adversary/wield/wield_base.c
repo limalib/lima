@@ -31,8 +31,3 @@ varargs void add_equipment(string file, int num)
       ob->move(this_object());
    }
 }
-
-mapping lpscript_attributes()
-{
-   return (["wielded":({LPSCRIPT_WIELD}), ]);
-}

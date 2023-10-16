@@ -744,11 +744,3 @@ int check_uniqueness(object ob)
       return 1;
    return 0;
 }
-
-mapping lpscript_attributes()
-{
-   return (["currency_type":({LPSCRIPT_STRING, "setup", "set_currency_type"}),
-                 "for_sale":({LPSCRIPT_BOOLEAN, "setup", "set_for_sale"}),
-                 "will_buy":({LPSCRIPT_BOOLEAN, "setup", "set_will_buy"}),
-                     "sell":({LPSCRIPT_INT_MAPPING, "setup", "set_sell"}), ]);
-}

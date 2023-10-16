@@ -53,7 +53,6 @@
 #define HTTP_D        "/secure/daemons/http_d"
 #define IMAIL_D       "/secure/daemons/imail_d"
 #define LOG_D         "/secure/daemons/log_d"
-#define LPSCRIPT_D    "/secure/daemons/lpscript_d"
 #define MAIL_D        "/secure/daemons/mail_d"
 #define RCP_D         "/secure/daemons/rcp_d"
 #define SECURE_D      "/secure/daemons/secure_d"

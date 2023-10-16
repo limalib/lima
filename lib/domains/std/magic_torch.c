@@ -21,11 +21,6 @@ int sound()
    return 1;
 }
 
-mapping lpscript_attributes()
-{
-   return m_valuable::lpscript_attributes() + torch::lpscript_attributes();
-}
-
 // Give us unlimited fuel. Also, note that we don't need to call
 // set_fuel() from within setup().
 mixed check_fuel()

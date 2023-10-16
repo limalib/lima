@@ -38,8 +38,3 @@ void open_with()
          "aren't quite where you thought you were going to end up.\n");
    this_body()->move_to(dest);
 }
-
-mapping lpscript_attributes()
-{
-   return object::lpscript_attributes() + m_openable::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

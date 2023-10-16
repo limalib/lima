@@ -13,7 +13,7 @@ void setup()
    // Set destinations with filenames of where we can go and shorthands.
    set_destinations(
        (["1/lima":"^std/Wizroom",
-            "2/church":"^std/2.4.5/Church", "3/attic":"^std/2.4.5/Attic", "4/wizhall":"^std/2.4.5/wiz_hall", ]));
+            "2/church":"^std//Church", "3/attic":"^std//Attic", "4/wizhall":"^std//wiz_hall", ]));
 
    // Set start position for elevator
    move_to("2/church");
@@ -26,7 +26,7 @@ void setup()
    set_distance("1/lima", "4/wizhall", 42);
 
    // Set an elevator door direction and default location
-   set_objects((["/std/elevator_door":({"east", "^std/2.4.5/Attic"})]));
+   set_objects((["/std/elevator_door":({"east", "^std//Attic"})]));
 
    // Spawn the buttons on the wall automatically.
    // This *must* be done after the set_destinations() cal.

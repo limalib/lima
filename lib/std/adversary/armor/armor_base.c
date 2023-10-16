@@ -13,8 +13,3 @@ void set_wearing(string s)
    ob->move(this_object());
    ob->do_wear();
 }
-
-mapping lpscript_attributes()
-{
-   return (["worn":({LPSCRIPT_WEAR}), ]);
-}

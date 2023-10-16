@@ -967,14 +967,6 @@ int destruct_if_useless()
    return ::destruct_if_useless();
 }
 
-mapping lpscript_attributes()
-{
-   return (["objects":({LPSCRIPT_OBJECTS}),
-               "capacity":({LPSCRIPT_INT, "setup", "set_max_capacity"}),
-              "relations":({LPSCRIPT_LIST, "setup", "set_relations"}),
-       "default_relation":({LPSCRIPT_STRING, "setup", "set_default_relation"}), ]);
-}
-
 /********    Miscellaneous    ********/
 
 //: FUNCTION is_container

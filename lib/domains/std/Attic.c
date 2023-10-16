@@ -1,12 +1,21 @@
-/* Do not remove the headers from this file! see /USAGE for more info. */
+#pragma no_warnings
+inherit "/std/indoor_room";
 
-inherit INDOOR_ROOM;
-
+void setup();
+void arrived()
+{
+   if (query_state("lamp"))
+      tell_from_inside(this_object(), "The lamp on the button beside the elevator goes out.\n");
+   clear_room_state("lamp");
+}
 void setup()
 {
-   set_brief("Attic");
-   set_long("A large chest glows softly as it sits against a wall of this small, dusty attic. Set into the wall above "
-            "the chest is a brass dish, and within this, a blue flame burns. A flight of stairs plunge steeply down to "
-            "the Grand Hall below.");
-   set_objects(([STAIRS:({"", "Wizroom"}), "dish":1, "chest":1, "web":1, "magic_torch":1, ]));
+   function f;
+   set_brief("The Attic");
+   set_long("This is the attic above the church.\nThere is an elevator door to"
+            " the west, and a button beside the door.\n$lamp");
+   set_state_description("lamp_on", "\nThe lamp on the button beside the elevator is lit.\n");
+   set_light(1);
+   set_objects((["/std/elevator_door":({"west", "/domains/std//elevator"}),
+          "/std/elevator_call_button":({"3/attic", "/domains/std//elevator"}), ]));
 }

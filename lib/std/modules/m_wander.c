@@ -330,10 +330,3 @@ void mudlib_setup()
    set_def_msgs("living-default");
    add_hook("move", move_hook);
 }
-
-mapping lpscript_attributes()
-{
-   return (["wander_area":({LPSCRIPT_LIST, "setup", "set_wander_area"}),
-            "wander_time":({LPSCRIPT_INT, "setup", "set_wander_time"}),
-              "max_moves":({LPSCRIPT_INT, "setup", "set_max_moves"})]);
-}

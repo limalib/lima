@@ -280,8 +280,3 @@ mapping dump_synonyms()
 {
    return synonyms;
 }
-
-mapping lpscript_attributes()
-{
-   return (["text":({LPSCRIPT_STRING, "setup", "set_text"}), ]);
-}

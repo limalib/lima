@@ -199,12 +199,3 @@ void set_defend_skill_used(string skill)
    defend_skill_used = skill;
 }
 #endif
-
-mapping lpscript_attributes()
-{
-   return (["max_health":({LPSCRIPT_INT, "setup", "set_max_health"}),
-#ifdef USE_SKILLS
-       "defend_skill_used":({LPSCRIPT_STRING, "setup", "set_defend_skill_used"}),
-#endif
-   ]);
-}

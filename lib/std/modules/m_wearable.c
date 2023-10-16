@@ -327,9 +327,3 @@ int is_wearable()
 {
    return 1;
 }
-
-mapping lpscript_attributes()
-{
-   return (
-       ["bodyslot":({LPSCRIPT_STRING, "setup", "set_slot"}), "wearmsg":({LPSCRIPT_STRING, "setup", "set_wearmsg"}), ]);
-}

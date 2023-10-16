@@ -575,23 +575,3 @@ string stat_me()
    }
    return ret;
 }
-
-mapping lpscript_attributes()
-{
-   return (["hidden":({LPSCRIPT_INT, "setup", "set_hidden"}),
-               "brief":({LPSCRIPT_STRING, "setup", "set_obvious_description"}),
-              "method":({LPSCRIPT_STRING, "setup", "set_method"}),
-         "destination":({LPSCRIPT_TWO, (
-                                           : ({"setup", "set_method_destination(\"" + $1 + "\",\"" + $2[0] + "\")"})
-                                           :)}),
-               "check":({LPSCRIPT_TWO, (
-                                           : ({"setup", "set_method_check(\"" + $1 + "\",\"" + $2[0] + "\")"})
-                                           :)}),
-        "exit_message":({LPSCRIPT_TWO, (
-                                           : ({"setup", "add_method_exit_messages(\"" + $1 + "\", \"" + $2[0] + "\")"})
-                                           :)}),
-       "enter_message":({LPSCRIPT_TWO, (
-                                           : ({"setup", "add_method_enter_messages(\"" + $1 + "\", \"" + $2[0] + "\")"})
-                                           :)}),
-   ]);
-}

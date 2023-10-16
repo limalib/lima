@@ -70,8 +70,3 @@ int query_aggressive()
 {
    return aggression_chance;
 }
-
-mapping lpscript_attributes()
-{
-   return (["aggressive":({LPSCRIPT_INT, "setup", "set_aggressive"}), ]);
-}

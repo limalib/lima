@@ -22,8 +22,6 @@
  * overriding the values we got from it.
  */
 
-#include <lpscript.h>
-
 inherit COMPLEX_EXIT_OBJ;
 inherit M_LOCKABLE;
 inherit M_OPENABLE;
@@ -210,11 +208,4 @@ void do_knock()
 mixed direct_get_obj(object obj)
 {
    return "#Opening it would be easier.\n";
-}
-
-mapping lpscript_attributes()
-{
-   return (["ident":({LPSCRIPT_STRING, "setup", "set_sibling_ident"}),
-         "direction":({LPSCRIPT_STRING, "setup", "set_door_direction"}),
-       "destination":({LPSCRIPT_STRING, "setup", "set_door_destination"})]);
 }

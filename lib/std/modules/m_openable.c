@@ -227,8 +227,3 @@ void internal_setup()
    add_hook("extra_long", ( : extra_long_stuff:));
    add_hook("prevent_look_in", ( : query_closed() ? "It is closed.\n" : (mixed)1 :));
 }
-
-mapping lpscript_attributes()
-{
-   return (["closed":({LPSCRIPT_INT, "setup", "set_closed"}), ]);
-}

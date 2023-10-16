@@ -149,8 +149,3 @@ int is_gettable()
 {
    return get_response == 1;
 }
-
-mapping lpscript_attributes()
-{
-   return (["getmsg":({LPSCRIPT_STRING, "setup", "set_getmsg"}), ]);
-}

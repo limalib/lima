@@ -183,19 +183,6 @@ mixed direct_get_obj(object ob)
    return ::direct_get_obj(ob);
 }
 
-mapping lpscript_attributes()
-{
-   return (["area":({LPSCRIPT_STRING, "setup", "set_area"}),
-           "brief":({LPSCRIPT_STRING, "setup", "set_brief"}), "exits":({LPSCRIPT_MAPPING, "setup", "set_exits"}),
-           "state":({LPSCRIPT_TWO, (
-                                       : ({"setup", "set_state_description(\"" + $1 + "\", \"" + $2[0] + "\")"})
-                                       :)}),
-            "item":({LPSCRIPT_SPECIAL,
-                     (
-                         : ({"setup", "add_item(\"" + $1[0] + "\", \"" + implode($1[1..], " ") + "\")"})
-                         :)})]);
-}
-
 /* tweak the base long description to add the state stuff */
 string get_base_long()
 {

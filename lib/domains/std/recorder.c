@@ -121,8 +121,3 @@ void receive_outside_msg(string s)
    if (current_button == "record")
       transcript += s;
 }
-
-mapping lpscript_attributes()
-{
-   return m_gettable::lpscript_attributes() + container::lpscript_attributes();
-}

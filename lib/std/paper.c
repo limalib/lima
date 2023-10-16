@@ -64,8 +64,3 @@ void set_fuel(int amount)
       max_fuel = amount;
    ::set_fuel(amount);
 }
-
-mixed lpscript_attributes()
-{
-   return object::lpscript_attributes() + light_object::lpscript_attributes();
-}

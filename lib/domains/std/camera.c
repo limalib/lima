@@ -23,8 +23,3 @@ void take_picture()
                               this_object());
    give_new_obj(environment(), __DIR__ "camera/picture", 1);
 }
-
-mapping lpscript_attributes()
-{
-   return container::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

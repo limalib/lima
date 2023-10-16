@@ -23,8 +23,3 @@ mixed *setup_args()
 {
    return ({});
 }
-
-mapping lpscript_attributes()
-{
-   return (["value":({LPSCRIPT_INT, "setup", "set_value"}), ]);
-}

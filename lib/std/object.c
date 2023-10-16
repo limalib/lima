@@ -33,8 +33,6 @@ inherit __DIR__ "object/visible";
 inherit __DIR__ "object/hooks";
 inherit __DIR__ "object/msg_recipient";
 
-mapping lpscript_attributes;
-
 void names_restore();
 
 //: FUNCTION stat_me
@@ -194,35 +192,4 @@ int clean_up()
 
 void on_clone(mixed *args...)
 {
-}
-
-void set_lpscript_attributes(mapping attributes)
-{
-   if (base_name(previous_object()) != LPSCRIPT_D)
-      error("Access violation:  Illegal attempt to set_lpscript_attributes");
-   lpscript_attributes = attributes;
-}
-
-string *list_lpscript_attributes()
-{
-   return copy(keys(lpscript_attributes));
-}
-
-mapping dump_lpscript_attributes()
-{
-   return copy(lpscript_attributes);
-}
-mapping lpscript_attributes()
-{
-   return (["adj":({LPSCRIPT_LIST, "setup", "add_adj"}),
-                 "id":({LPSCRIPT_LIST, "setup", "add_id"}), "primary_adj":({LPSCRIPT_STRING, "setup", "set_adj"}),
-         "primary_id":({LPSCRIPT_STRING, "setup", "set_id"}),
-       "in_room_desc":({LPSCRIPT_STRING, "setup", "set_in_room_desc"}), "long":({LPSCRIPT_STRING, "setup", "set_long"}),
-               "flag":({LPSCRIPT_FLAGS}), "light":({LPSCRIPT_INT, "setup", "set_light"}),
-#ifdef USE_MASS
-               "mass":({LPSCRIPT_INT, "setup", "set_mass"}), "weight":({LPSCRIPT_INT, "setup", "set_mass"}),
-#else
-               "mass":({LPSCRIPT_INT, "setup", "set_size"}), "weight":({LPSCRIPT_INT, "setup", "set_size"}),
-#endif
-   ]);
 }

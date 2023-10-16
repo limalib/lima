@@ -62,15 +62,3 @@ varargs void do_search(object with, string item)
                           "there, if you explore any furthur, the $o0p is going to get stuck.",
                           with);
 }
-
-/*
-void reset()
-{
-    container::reset();
-}
-*/
-
-mapping lpscript_attributes()
-{
-   return m_gettable::lpscript_attributes() + container::lpscript_attributes();
-}

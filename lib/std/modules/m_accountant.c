@@ -416,11 +416,3 @@ void remove()
 {
    menu::remove();
 }
-
-mapping lpscript_attributes()
-{
-   return (["bank_id":({LPSCRIPT_STRING, "setup", "set_bank_id"}),
-           "bank_name":({LPSCRIPT_STRING, "setup", "set_bank_name"}),
-       "currency_type":({LPSCRIPT_STRING, "setup", "set_currency_type"}),
-        "exchange_fee":({LPSCRIPT_INT, "setup", "set_exchange_fee"}), ]);
-}

@@ -558,23 +558,3 @@ void set_base(mixed what)
 {
    base = what;
 }
-
-mapping lpscript_attributes()
-{
-   return (["exits":({LPSCRIPT_MAPPING, "setup", "set_exits"}),
-                "hidden_exits":({LPSCRIPT_LIST, "setup", "set_hidden_exits"}),
-        "default_exit_message":({LPSCRIPT_STRING, "setup", "set_default_exit_message"}),
-       "default_enter_message":({LPSCRIPT_STRING, "setup", "set_default_enter_message"}),
-                  "wrong_exit":({LPSCRIPT_STRING, "setup", "set_default_error"}),
-                   "enter_msg":({LPSCRIPT_TWO, (
-                                                   : ({"setup", "set_enter_msg(\"" + $1 + "\",\"" + $2[0] + "\")"})
-                                                   :)}),
-                    "exit_msg":({LPSCRIPT_TWO, (
-                                                   : ({"setup", "set_exit_msg(\"" + $1 + "\",\"" + $2[0] + "\")"})
-                                                   :)}),
-            "exit_description":({LPSCRIPT_TWO,
-                                 (
-                                     : ({"setup", "set_exit_description(\"" + $1 + "\",\"" + $2[0] + "\")"})
-                                     :)}),
-   ]);
-}

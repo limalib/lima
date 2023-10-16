@@ -14,8 +14,3 @@ void setup()
    set_objects((["magic_flame":1]));
    set_getmsg("#It's securely affixed to the wall.\n");
 }
-
-mapping lpscript_attributes()
-{
-   return container::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

@@ -116,8 +116,3 @@ void receive_outside_msg(string s)
    if (state)
       transcript += s;
 }
-
-mapping lpscript_attributes()
-{
-   return m_gettable::lpscript_attributes() + object::lpscript_attributes();
-}

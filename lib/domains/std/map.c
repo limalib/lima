@@ -24,8 +24,3 @@ void setup()
             "                                       |                               " +
             "                                 CULT OF LIMA                          ");
 }
-
-mapping lpscript_attributes()
-{
-   return object::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

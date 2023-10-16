@@ -106,8 +106,3 @@ void set_in_progress(function f, int delay)
    in_progress = f;
    progress_delay = delay;
 }
-
-mapping lpscript_attributes()
-{
-   return (["destinations":({LPSCRIPT_MAPPING, "setup", "set_destinations"})]);
-}

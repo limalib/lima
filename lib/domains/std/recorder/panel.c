@@ -16,8 +16,3 @@ int do_not_restore()
 {
    return 1;
 }
-
-mapping lpscript_attributes()
-{
-   return object::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

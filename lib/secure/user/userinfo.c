@@ -96,7 +96,7 @@ nomask void set_referral(string reftxt)
    if (!reftxt || strlen(trim(reftxt)) == 0)
       return;
 
-   unguarded(1, ( : write_file, REFERRALS_LOG, query_userid() + ": " + reftxt:));
+   unguarded(1, ( : write_file, REFERRALS_LOG, ctime(time()) + ":" + query_userid() + ": " + reftxt + "\n" :));
 }
 
 nomask string query_url()
@@ -172,7 +172,7 @@ nomask varargs void userinfo_handle_logon(int state, mixed extra, string arg)
    case GOT_REFERRAL:
       set_referral(arg);
       modal_pop();
-      tmp= new (USER_MENU);
+      tmp = new (USER_MENU);
       tmp->start_menu();
 #ifndef USE_USER_MENU
       tmp->char_name(query_userid());

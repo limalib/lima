@@ -216,11 +216,6 @@ void mudlib_setup()
    add_hook("move", ( : did_move:));
 }
 
-mapping lpscript_attributes()
-{
-   return (["follow_search":({LPSCRIPT_LIST, "setup", "set_follow_search"})]);
-}
-
 void do_follow_obj(object ob)
 {
    if (member_array(ob, follow_search) > -1)

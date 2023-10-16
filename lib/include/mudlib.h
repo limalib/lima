@@ -10,7 +10,6 @@
 #include <setbit.h>
 #include <msgtypes.h>
 #include <classes.h>
-#include <lpscript.h>
 #include <custom_mudlib.h>
 
 /*

@@ -151,12 +151,3 @@ int need_to_see()
 {
    return 0;
 }
-
-mapping lpscript_attributes()
-{
-   return (["light_msgs":({LPSCRIPT_SPECIAL, (
-                                                 : ({"special", "set_light_msgs(\"" + $1[0] + "\", \"" +
-                                                                    (sizeof($1) > 1 ? $1[1] : $1[0]) + "\")"})
-                                                 :)}),
-                  "fuel":({LPSCRIPT_INT, "setup", "set_fuel"}), ]);
-}

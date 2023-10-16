@@ -227,21 +227,9 @@ void create()
                                                }),
       ]),
                               }),
-                    "domains":({
-                                  -1,
-                                  (["lpscript":({
-                                                   "Lpscript:",
-                                                   0,
-                                               }),
-                                         "std":({
-                                                   "Std:",
-                                                   0,
-                                               }),
-      ]),
-                              }),
       ]);
       domains = (["mail":([]),
-                   "admin":([]), "admin-channels":([]), "lpscript":([]), "approval":([]), "std":([]), "mudlib":([]), ]);
+                   "admin":([]), "admin-channels":([]), "approval":([]), "std":([]), "mudlib":([]), ]);
       domainlists = ([]);
       wizards = ([]);
       save_data();

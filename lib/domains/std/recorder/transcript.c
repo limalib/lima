@@ -19,8 +19,3 @@ void setup(string text)
    set_long("It's got a transcript of a conversation on it.");
    set_text(text);
 }
-
-mapping lpscript_attributes()
-{
-   return object::lpscript_attributes() + m_readable::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

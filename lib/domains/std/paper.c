@@ -11,8 +11,3 @@ void setup()
    set_long("It's a rather plain scrap of white paper.");
    set_space(100);
 }
-
-mapping lpscript_attributes()
-{
-   return object::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

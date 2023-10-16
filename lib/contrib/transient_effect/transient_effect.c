@@ -111,8 +111,3 @@ varargs mixed move(object dest, string where)
    set_heart_beat(1);
    return ::move(dest, where);
 }
-
-mapping lpscript_attributes()
-{
-   return object::lpscript_attributes() + m_gettable::lpscript_attributes();
-}

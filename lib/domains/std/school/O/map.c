@@ -54,7 +54,3 @@ void setup() {
     |-----------|-----------|
 FOO);
 }
-
-mapping lpscript_attributes() {
-    return object::lpscript_attributes() + m_gettable::lpscript_attributes();
-}
