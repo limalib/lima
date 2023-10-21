@@ -3,7 +3,7 @@
 //: MODULE
 // A complex hidden exit object.
 
-inherit COMPLEX_EXIT_OBJ;
+inherit EXIT_OBJ;
 
 //: FUNCTION set_destination
 // Set where you go when you enter the portal.  Valid arguments are a function

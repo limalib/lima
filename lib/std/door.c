@@ -22,7 +22,7 @@
  * overriding the values we got from it.
  */
 
-inherit COMPLEX_EXIT_OBJ;
+inherit EXIT_OBJ;
 inherit M_LOCKABLE;
 inherit M_OPENABLE;
 inherit M_KNOCKABLE;

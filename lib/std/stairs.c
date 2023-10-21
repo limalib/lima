@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit COMPLEX_EXIT_OBJ;
+inherit EXIT_OBJ;
 
 mixed direct_get_obj(object ob)
 {

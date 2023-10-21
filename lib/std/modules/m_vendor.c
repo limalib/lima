@@ -14,7 +14,7 @@
 // m_vendor is used to create vendor objects that buy and sell stuff
 // they work as traditional shopkeepers and also bartenders.
 // See: /domains/std/shopkeeper.c
-// See: M_VALUABLE for possible interactions and notes about generic items.
+// See:  for possible interactions and notes about generic items.
 
 /* TODO
 compatibility of buying and selling vehicles

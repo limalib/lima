@@ -2,7 +2,7 @@
 
 inherit WEAPON;
 inherit M_THROWABLE;
-inherit M_VALUABLE;
+
 
 string colour;
 

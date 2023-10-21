@@ -29,7 +29,7 @@ nomask void start_shell()
 {
    if (!shell_ob)
    {
-      shell_ob = new (wizardp(query_userid()) ? WIZ_SHELL : PLYR_SHELL);
+      shell_ob = new (wizardp(query_userid()) ? WIZ_SHELL : PLAYER_SHELL);
    }
 
    shell_ob->start_shell();

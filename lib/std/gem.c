@@ -4,7 +4,7 @@
 
 inherit OBJ;
 inherit M_GETTABLE;
-inherit M_VALUABLE;
+
 
 string *gem_size = ({"fine", "tiny", "small", "medium", "large", "giant"});
 string *gem_shape = ({"unworked", "round", "oval", "heart-shaped", "drop-shaped", "pentagon"});
@@ -24,7 +24,7 @@ void set_value(float value);
 
 float query_value()
 {
-   return m_valuable::query_value();
+   return query_value();
 }
 
 int randomize_gem()

@@ -4,7 +4,6 @@ inherit M_GETTABLE;
 inherit M_DRINK_CONTAINER;
 inherit M_DRINKABLE;
 inherit M_HEALING;
-inherit M_VALUABLE;
 
 #define XP_PER_RARITY_PT 10
 

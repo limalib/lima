@@ -32,6 +32,7 @@ inherit __DIR__ "object/move";
 inherit __DIR__ "object/visible";
 inherit __DIR__ "object/hooks";
 inherit __DIR__ "object/msg_recipient";
+inherit __DIR__ "object/value";
 
 void names_restore();
 
@@ -49,6 +50,7 @@ string stat_me()
 #else
    result += "Light: " + query_light() + "\n";
 #endif
+   result += "Value: " + query_value() + "\n";
 #endif
 
    return result;

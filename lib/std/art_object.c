@@ -4,7 +4,7 @@
 
 inherit OBJ;
 inherit M_GETTABLE;
-inherit M_VALUABLE;
+
 
 string *hard_materials = ({"marble", "silver", "tin", "copper", "wooden", "lead", "carved bone", "gold"});
 string *soft_materials = ({"cloth", "silk", "hemp"});
@@ -19,7 +19,7 @@ void set_value(float value);
 
 float query_value()
 {
-   return m_valuable::query_value();
+   return query_value();
 }
 
 // If sold to merchant, just remove the item, don't sell it again.

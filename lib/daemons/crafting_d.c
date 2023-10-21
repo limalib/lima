@@ -3,8 +3,9 @@
 /*
 ** crafting_d.c -- Crafting, materials, salvage and repairs.
 ** This daemon manages materials, loot, salvage, upgrade and crafting.
+** Originally made for PLEXUS mud, but adapted for Nuclear War MUD 2.
 **
-** Tsath 2019-10-14
+** Tsath 2019-10-14 - 2020-12-20
 **
 */
 
@@ -12,18 +13,18 @@ inherit M_DAEMON_DATA;
 inherit M_DICE;
 #define PRIV_NEEDED "Mudlib:daemons"
 #define CRAFTING_ITEMS "/domains/std/crafting/"
+#define REPAIR_FACTOR 10.0
 
 nosave int *repair_values = ({10, 100, 1000, 10000, 100000});
 nosave string *cache_names = ({});
+nosave mapping cache_cats = ([]);
 private
-string currency_type = "gold";
+nosave string currency_type = "dollars";
 private
 nosave mapping special_mats = (
     ["metal":([128:"steel",
                  64:"darksteel", 32:"silver", 16:"gold", 8:"platinum", 4:"titanium", 2:"adamantine", 1:"orichalcum", ]),
         "wood":([128:"fir", 64:"pine", 32:"oak", 16:"cedar", 8:"larch", 4:"hemlock", 2:"ebony", 1:"bloodwood", ]), ]);
-
-// Should be moved to DAMAGE_D
 private
 nosave mapping special_attk =
     (["acid":([128:"sourness", 64:"bitterness", 32:"tartness", 4:"astringent bite", 1:"corrosive jaws", ]),
@@ -40,70 +41,21 @@ nosave mapping special_attk =
 private
 nosave string *rn = ({"I", "II", "III", "IV", "V", "VI", "VII", "IIX", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"});
 private
-nosave int *mat_sums = ({128, 192, 224, 240, 248, 252, 254, 255});
-private
 nosave int *attk_sums = ({128, 192, 224, 228, 229});
 private
 nosave mapping crafting_recipes = ([]);
 private
 nosave mapping recipe_file = ([]);
+private
+nosave mapping crafting_stations = ([]);
 
 /* Saved variables */
-mapping materials = (["skin":({
-                                 "tuft",
-                                 "piece",
-                                 "patch",
-                                 "square",
-                                 "leather",
-                             }),
-                     "metal":({
-                                 "grain",
-                                 "splinter",
-                                 "fragment",
-                                 "part",
-                                 "bar",
-                             }),
-                      "wood":({
-                                 "grain",
-                                 "splinter",
-                                 "fragment",
-                                 "part",
-                                 "log",
-                             }),
-]);
-
-mapping upgrade_mat_schemes = (["metal":(["adamantine":({
-                                                           "advanced metal kit",
-                                                           "metal weapon soul",
-                                                           "metal weapon core",
-                                                           "metal weapon heart",
-                                                       }),
-                                             "platinum":({
-                                                            "precious metal kit",
-                                                            "metal weapon core",
-                                                        }),
-                                                "steel":({
-                                                            "simple metal kit",
-                                                        }),
-                                             "titanium":({
-                                                            "advanced metal kit",
-                                                            "metal weapon soul",
-                                                        }),
-                                               "silver":({
-                                                            "rare metal kit",
-                                                            "metal weapon heart",
-                                                        }),
-                                            "darksteel":({
-                                                            "simple metal kit",
-                                                            "metal weapon heart",
-                                                        }),
-                                                 "gold":({
-                                                            "rare metal kit",
-                                                            "metal weapon core",
-                                                        }),
-])]);
+mapping materials = ([]);
+mapping upgrade_mat_schemes = ([]);
 
 /* Functions */
+
+string *query_material_categories();
 
 void load_crafting_recipes()
 {
@@ -148,17 +100,31 @@ void load_crafting_recipes()
 
       recipe_file[crafting_str] = item;
       crafting_recipes[crafting_str] = obj->query_recipe();
+      if (!crafting_stations[obj->query_station() || "unknown"])
+         crafting_stations[obj->query_station() || "unknown"] = ({});
+      crafting_stations[obj->query_station() || "unknown"] += ({crafting_str});
+      //        TBUG("Adding " + crafting_str + " to " + obj->query_station());
+      crafting_str = 0;
    }
    save_me();
 }
 
-varargs mapping query_crafting_recipes(string filter)
+mapping query_crafting_stations()
+{
+   return crafting_stations;
+}
+
+varargs mapping query_crafting_recipes(string station)
 {
    mapping new_map = ([]);
-   if (!filter)
-      return crafting_recipes;
 
-   foreach (string key in filter_array(keys(crafting_recipes), ( : strsrch($1, $(filter)) != -1 :)))
+   if (!crafting_stations[station])
+      return ([]);
+
+   foreach (
+       string key in filter_array(keys(crafting_recipes), (
+                                                              : member_array($1, crafting_stations[$(station)]) != -1
+                                                              :)))
    {
       new_map[key] = crafting_recipes[key];
    }
@@ -177,12 +143,12 @@ int valid_crafting_recipe(string name)
 
 mixed *query_special_mats(string category)
 {
-   return ({special_mats[category], mat_sums});
+   return special_mats[category];
 }
 
-mixed *query_all_special_mats()
+mapping query_all_special_mats()
 {
-   return ({special_mats, mat_sums});
+   return special_mats;
 }
 
 mixed *query_special_attk()
@@ -214,7 +180,10 @@ void refresh_cache()
    foreach (string category in keys(materials))
    {
       foreach (string m in materials[category])
-         cache_names += ({category + " " + m});
+      {
+         cache_names += ({m});
+         cache_cats[m] = category;
+      }
    }
 }
 
@@ -226,6 +195,11 @@ void clean_up()
 int valid_category(string c)
 {
    return member_array(c, keys(materials)) != -1;
+}
+
+string material_category(string m)
+{
+   return cache_cats[m];
 }
 
 int valid_material(string m)
@@ -269,7 +243,12 @@ string *query_material_categories()
 
 string *query_materials(string category)
 {
-   return materials[category];
+   return materials[category] || ({});
+}
+
+int query_rarity(string mat)
+{
+   return 1 + member_array(mat, query_materials(material_category(mat)));
 }
 
 object create_material(string m)
@@ -278,7 +257,7 @@ object create_material(string m)
 
    if (recipe_file[m])
    {
-      mat = new ("/domains/std/crafting/" + recipe_file[m]);
+      mat = new (CRAFTING_ITEMS + recipe_file[m]);
       return mat;
    }
    else if (!valid_material(m))
@@ -300,7 +279,7 @@ string material_below(string category, string material)
 
    if (pos >= 0)
    {
-      return category + " " + mats[pos];
+      return mats[pos];
    }
    return 0;
 }
@@ -315,7 +294,7 @@ string material_above(string category, string material)
    pos++;
 
    if (pos < (sizeof(mats)))
-      return category + " " + mats[pos];
+      return mats[pos];
    return 0;
 }
 
@@ -338,81 +317,123 @@ string salvage_description(object *s)
    return tidy_list(parts);
 }
 
-void save()
+int *chance_array(int cnt)
 {
-   save_me();
-   write("Saved.\n");
+   int *pows = ({});
+   int total;
+   int c = 0;
+   int sum = 30;
+
+   for (int i = cnt; i > 0; i--)
+   {
+      pows += ({pow(2, i + 1)});
+      total += pow(2, i + 1);
+   }
+
+   foreach (int i in pows)
+   {
+      int perc = to_int(round((0.0 + i) / total * 70));
+      sum += perc;
+      pows[c] = sum;
+      c++;
+   }
+
+   pows = ({30}) + pows;
+
+   return pows;
+}
+
+object *salvage_parts(object ob)
+{
+   mapping salvage = ob->query_salvageable();
+   mapping direct_salvage = ob->query_direct_salvage();
+   object *salvaged = ({});
+   string picked_material;
+   int s_roll = random(100) + 1;
+   int *chance_ar;
+   int total = 0;
+
+   if (!sizeof(keys(direct_salvage)))
+   {
+
+      foreach (string key in keys(salvage))
+      {
+         if (picked_material)
+            continue;
+         total += salvage[key];
+         if (s_roll <= total)
+         {
+            picked_material = key;
+         }
+      }
+
+      chance_ar = chance_array(sizeof(materials[picked_material]));
+
+      for (int i = 0; i < ob->query_salvage_level(); i++)
+      {
+         int index = -1;
+         int chance = chance_ar[0];
+         int cnt = 0;
+
+         s_roll = random(100) + 1 + ob->query_salvage_level();
+         if (s_roll > 100)
+            s_roll = 100;
+
+         while (s_roll > chance)
+         {
+            cnt++;
+            chance = chance_ar[cnt];
+            index++;
+         }
+
+         if (index >= 0)
+            salvaged += ({create_material(materials[picked_material][index])});
+      }
+
+      // TBUG("Salvaged: "+sprintf("%O",salvaged));
+   }
+   else
+   {
+      foreach (string mat, int num in direct_salvage)
+      {
+         for (int i = 0; i < num; i++)
+         {
+            salvaged += ({create_material(mat)});
+         }
+      }
+   }
+   ob->remove();
+   return salvaged;
 }
 
 void salvage_obj(object ob)
 {
-   mapping salvage = ob->query_salvageable();
    object *salvaged = ({});
-   string picked_material;
-   int s_roll = random(100) + 1;
-   int total = 0;
-   foreach (string key in keys(salvage))
+   string short = ob->short();   // Keep the short since the ob is gone after we salvage it.
+   salvaged = salvage_parts(ob); // Ob no longer exists.
+   if (sizeof(salvaged))
    {
-      if (picked_material)
-         continue;
-      total += salvage[key];
-      if (s_roll <= total)
+      printf("You salvage %s from the %s.\n", salvage_description(salvaged), short);
+
+      foreach (object mat in salvaged)
       {
-         picked_material = key;
+         this_body()->add_material(mat);
       }
    }
-
-   for (int i = 0; i < ob->query_salvage_level(); i++)
-   {
-      int index = -1;
-      s_roll = random(100) + 1 + ob->query_salvage_level();
-      if (s_roll > 100)
-         s_roll = 100;
-
-      switch (s_roll)
-      {
-      case 1..30:
-         index = -1;
-         break;
-      case 31..65:
-         index = 0;
-         break;
-      case 66..82:
-         index = 1;
-         break;
-      case 83..94:
-         index = 2;
-         break;
-      case 95..98:
-         index = 3;
-         break;
-      case 99..100:
-         index = 4;
-         break;
-      }
-      if (index >= 0)
-         salvaged += ({create_material(picked_material + " " + materials[picked_material][index])});
-   }
-
-   // TBUG("Salvaged: "+sprintf("%O",salvaged));
-
-   printf("You salvage %s from the %s.\n", salvage_description(salvaged), ob->short());
-
-   foreach (object mat in salvaged)
-   {
-      this_body()->add_material(mat);
-   }
-   ob->remove();
+   else
+      printf("You salvage nothing from the %s.\n", short);
 }
 
 float money_to_repair(object ob)
 {
-   return ob->missing_durability() / 100.0;
+   if (!ob)
+      return 0;
+   return ob->missing_durability() / REPAIR_FACTOR;
 }
 
 string repair_cost_string(object ob)
 {
-   return MONEY_D->currency_to_string(money_to_repair(ob), "gold");
+   return MONEY_D->currency_to_string(money_to_repair(ob), "dollars");
 }
 
 mapping estimate_objects(object player, object *obs)
@@ -434,6 +455,7 @@ mapping estimate_objects(object player, object *obs)
       foreach (string mat in keys(salvage))
       {
          int needed = salvage[mat] * missing_dura / 100;
+         //            TBUG("Salvage[" + mat + "] needed: " + needed);
          if (!arrayp(picked_mats[mat]))
             picked_mats[mat] = ({0, 0, 0, 0, 0});
          for (int i = rep_size; i >= 0; i--)
@@ -441,37 +463,27 @@ mapping estimate_objects(object player, object *obs)
             if (repair_values[i] < needed)
             {
                int picked;
-               picked = CLAMP(needed / repair_values[i], 0, pouch[mat + " " + materials[mat][i]]);
+               picked = CLAMP(needed / repair_values[i], 0, pouch[materials[mat][i]]);
                picked_mats[mat][i] += picked;
                needed -= picked * repair_values[i];
-               TBUG("Now picked " + picked + " of " + materials[mat][i]);
-               pouch[mat + " " + materials[mat][i]] -= picked;
-               if (i == 0 && needed != 0 && picked_mats[mat][i] < pouch[mat + " " + materials[mat][i]])
+               //                  TBUG("Now picked " + picked + " of " + materials[mat][i] + ". Needed now: " +
+               //                  needed);
+               pouch[materials[mat][i]] -= picked;
+               if (i == 0 && needed != 0 && picked_mats[mat][i] < pouch[materials[mat][i]])
                {
-                  TBUG("Added one extra " + mat + " " + materials[mat][i] + " to cover the remainder (" + needed +
-                       ").");
+                  //                        TBUG("Added one extra " + materials[mat][i] + " to cover the remainder (" +
+                  //                        needed + ").");
                   picked_mats[mat][i]++;
                   needed = 0;
                }
             }
          }
          remainder += needed;
+         //            TBUG("Remainder: " + remainder);
       }
    }
-   picked_mats["money"] = remainder / 100.0;
+   picked_mats["money"] = remainder / REPAIR_FACTOR;
    return picked_mats;
-}
-
-void set_materials(mapping m)
-{
-   materials = m;
-   save_me();
-}
-
-void set_upgrade_schemes(mapping m)
-{
-   upgrade_mat_schemes = m;
-   save_me();
 }
 
 int pay_for_repair_with_money(object player, mixed obs)
@@ -485,7 +497,7 @@ int pay_for_repair_with_money(object player, mixed obs)
 
    foreach (object ob in obs)
    {
-      total_cost += ob->missing_durability() / 100.0;
+      total_cost += ob->missing_durability() / REPAIR_FACTOR;
    }
 
    if (total_cost && player->query_amt_currency(currency_type) > total_cost)
@@ -493,7 +505,7 @@ int pay_for_repair_with_money(object player, mixed obs)
 
       money = MONEY_D->handle_subtract_money(player, total_cost, currency_type);
       player->my_action(
-          "$N $vbuy repairs for " + MONEY_D->currency_to_string(total_cost, currency_type) + ". You give " +
+          "$N $vrepair for " + MONEY_D->currency_to_string(total_cost, currency_type) + ". $N $vgive " +
           MONEY_D->currency_to_string(money[0], currency_type) + ", " +
           (sizeof(money[1]) ? " and get " + MONEY_D->currency_to_string(money[1], currency_type) + " as change" : "") +
           ".\n");
@@ -522,7 +534,11 @@ int pay_for_repair(object player, mixed obs)
          continue;
       for (int i = rep_size; i >= 0; i--)
       {
-         string material = mat + " " + materials[mat][i];
+         string material;
+         if (i + 1 > sizeof(materials[mat]))
+            continue;
+         TBUG("mat: " + mat + " i: " + i);
+         material = materials[mat][i];
          if (!player->remove_material(material, estimate[mat][i]))
          {
             TBUG("Could not find " + material + " / " + estimate[mat][i]);
@@ -530,11 +546,11 @@ int pay_for_repair(object player, mixed obs)
          }
       }
    }
-   if (estimate["money"] && player->query_amt_currency(currency_type) > (estimate["money"] / 100.0))
+   if (estimate["money"] && player->query_amt_currency(currency_type) > (estimate["money"] / REPAIR_FACTOR))
    {
       money = MONEY_D->handle_subtract_money(player, estimate["money"], currency_type);
       player->my_action(
-          "$N $vbuy repairs for " + MONEY_D->currency_to_string(estimate["money"], currency_type) + ". You hand over " +
+          "$N $vrepair for " + MONEY_D->currency_to_string(estimate["money"], currency_type) + ". You hand over " +
           MONEY_D->currency_to_string(money[0], currency_type) + "" +
           (sizeof(money[1]) ? " and get " + MONEY_D->currency_to_string(money[1], currency_type) + " as change" : "") +
           ".\n");
@@ -552,16 +568,16 @@ int pay_for_repair(object player, mixed obs)
 varargs string *buy_durability(mixed m, int rest)
 {
    if (intp(m) || floatp(m))
-      return MONEY_D->money_to_array((m - rest) / 100.0);
+      return MONEY_D->money_to_array((m - rest) / REPAIR_FACTOR);
    if (objectp(m))
-      return MONEY_D->money_to_array((m->missing_durability() - rest) / 100.0);
+      return MONEY_D->money_to_array((m->missing_durability() - rest) / REPAIR_FACTOR);
    if (arrayp(m))
    {
       float total_dura = 0.0;
       foreach (object ob in m)
          total_dura += ob->missing_durability();
-      total_dura -= rest;
-      return MONEY_D->currency_to_string(total_dura / 100.0, currency_type);
+      total_dura -= (rest * REPAIR_FACTOR);
+      return ({MONEY_D->currency_to_string(total_dura / REPAIR_FACTOR, currency_type)});
    }
 }
 
@@ -592,8 +608,8 @@ mixed estimate_with_mats(object player, mixed obs)
       {
          if (picked_mats[mat][i])
          {
-            mat_str += "[" + picked_mats[mat][i] + "/" + pouch[mat + " " + materials[mat][i]] + "] " +
-                       materials[mat][i] + (picked_mats[mat][i] != 1 ? "s" : "") + ", ";
+            mat_str += "[" + picked_mats[mat][i] + "/" + pouch[materials[mat][i]] + "] " + materials[mat][i] +
+                       (picked_mats[mat][i] != 1 ? "s" : "") + ", ";
             mats_used = 1;
          }
       }
@@ -605,9 +621,9 @@ mixed estimate_with_mats(object player, mixed obs)
       }
    }
 
-   if (picked_mats["money"] && player->query_amt_currency(currency_type) > (picked_mats["money"] / 100.0))
+   if (picked_mats["money"] && player->query_amt_currency(currency_type) > (picked_mats["money"] / REPAIR_FACTOR))
       returnStr += "Money: " + MONEY_D->currency_to_string(picked_mats["money"], currency_type) + ".\n";
-   if (picked_mats["money"] && player->query_amt_currency(currency_type) < (picked_mats["money"] / 100.0))
+   if (picked_mats["money"] && player->query_amt_currency(currency_type) < (picked_mats["money"] / REPAIR_FACTOR))
    {
       returnStr +=
           "Money: " + format_list(buy_durability(picked_mats["money"])) + " %%^RED%%^(You lack money!)%%^RESET%%^\n";
@@ -667,18 +683,18 @@ void stat_me()
 {
    foreach (string category in keys(materials))
    {
-      write("Category: " + category + "\n");
+      write("%^BOLD%^Category: %^RESET%^%^YELLOW%^" + category + "%^RESET%^\n");
       write(" " + format_list(materials[category]));
       write("\n");
    }
-   write("\n\nCrafting recipes: \n");
+   write("\n\n%^BLUE%^Crafting recipes:%^RESET%^ \n");
    write("  " + implode(sort_array(keys(crafting_recipes), 1), "\n  "));
    write("\n");
 
-   write("\nUpgrade schemes: \n");
+   write("\n%^BLUE%^Upgrade schemes: %^RESET%^\n");
    foreach (string name, mapping m in upgrade_mat_schemes)
    {
-      write("CATEGORY: " + name + "\n");
+      write("Category: " + name + "\n");
       foreach (string name2, string * sar in m)
       {
          write(" [" + name2 + "]\n\t" + implode(sar, ",") + "\n");
@@ -693,3 +709,6 @@ void create()
    refresh_cache();
    load_crafting_recipes();
 }
+
+//@CRAFTING_D->remove_category("plastic")
+//@CRAFTING_D->add_category("plastic",({"soft pvc", "molded plastic", "fiberglass spool","ethylene granulate"}))

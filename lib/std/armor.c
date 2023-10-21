@@ -5,7 +5,7 @@ inherit M_WEARABLE;
 inherit M_GETTABLE;
 inherit M_SALVAGEABLE;
 inherit M_DAMAGE_SINK;
-inherit M_VALUABLE;
+
 inherit M_DURABILITY;
 
 #define ARMOR_LVL_PRICE 50
@@ -26,7 +26,7 @@ void mudlib_setup()
 
 int query_value()
 {
-   int value = m_valuable::query_value();
+   int value = query_value();
    int level = query_armor_class() + array_sum(values(query_stat_mods()));
    if (!value)
       value = ARMOR_LVL_PRICE * level - random(ARMOR_LVL_PRICE);

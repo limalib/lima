@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit COMPLEX_EXIT_OBJ;
+inherit EXIT_OBJ;
 
 void award_points(object ob, string direction);
 

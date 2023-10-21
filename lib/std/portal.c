@@ -3,7 +3,7 @@
 //:MODULE
 // A simple one way portal
 
-inherit COMPLEX_EXIT_OBJ;
+inherit EXIT_OBJ;
 inherit M_GETTABLE;
 
 string look_in_desc;

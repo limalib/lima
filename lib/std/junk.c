@@ -1,7 +1,7 @@
 inherit OBJ;
 inherit M_GETTABLE;
 inherit M_SALVAGEABLE;
-inherit M_VALUABLE;
+
 
 int junk_level = 1;
 

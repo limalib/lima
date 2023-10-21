@@ -6,7 +6,6 @@
  * exit type objects.  This is intended to be used by vehicles, and furniture
  * and such things as that.
  *
- * Unlike SIMPLE_EXIT_OBJ only one exit can be assigned to COMPLEX_EXIT.
  * This will serve to allow more full utilization of OBJ and all of the
  * features of the parser.
  */

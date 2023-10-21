@@ -11,7 +11,7 @@ inherit M_DAMAGE_SOURCE;
 inherit M_GETTABLE;
 inherit M_MESSAGES;
 inherit M_READY;
-inherit M_VALUABLE;
+
 
 private
 int charges = -1;
