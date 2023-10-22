@@ -33,7 +33,7 @@ void do_salvage_obj(object ob)
    }
 
    CRAFTING_D->salvage_obj(ob);
-   this_body()->simple_action("$N $vsalvage materials from something.");
+   this_body()->other_action("$N $vsalvage materials from something.");
 }
 
 void do_salvage_obs(object *obs)

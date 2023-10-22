@@ -123,6 +123,11 @@ string accent(mixed t)
    return colour_str("" + t, hcolours[COL_ACCENT]);
 }
 
+string raw_accent()
+{
+   return hcolours[COL_ACCENT];
+}
+
 string warning(mixed t)
 {
    return colour_str("" + t, hcolours[COL_WARNING]);

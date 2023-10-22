@@ -11,6 +11,8 @@
 
 inherit M_DAEMON_DATA;
 inherit M_DICE;
+
+#define MATERIALS "/data/config/crafting-materials"
 #define PRIV_NEEDED "Mudlib:daemons"
 #define CRAFTING_ITEMS "/domains/std/crafting/"
 #define REPAIR_FACTOR 10.0
@@ -52,6 +54,7 @@ nosave mapping crafting_stations = ([]);
 /* Saved variables */
 mapping materials = ([]);
 mapping upgrade_mat_schemes = ([]);
+int longest_material = 0;
 
 /* Functions */
 
@@ -353,7 +356,7 @@ object *salvage_parts(object ob)
    int *chance_ar;
    int total = 0;
 
-   if (!sizeof(keys(direct_salvage)))
+   if (!direct_salvage || !sizeof(keys(direct_salvage)))
    {
 
       foreach (string key in keys(salvage))
@@ -679,6 +682,79 @@ int add_upgrade_scheme(string category, string special_material, string *recipes
    return 1;
 }
 
+private
+int strtype(string component)
+{
+   int i;
+
+   if (component[0..6] == "quality")
+      i = 1;
+   else if (strsrch(component, "/") != -1)
+      i = 2;
+   else
+      i = 0;
+
+   return i;
+}
+
+int query_longest_mat()
+{
+   return longest_material;
+}
+
+void load_materials_from_file()
+{
+   mapping l_materials = ([]);
+   mapping l_special_mats = ([]);
+   mapping l_upgrade_mat_schemes = ([]);
+   string *material_input = explode(read_file(MATERIALS), "\n");
+
+   foreach (string line in material_input)
+   {
+      string component, tmp, *mats, *tmpar;
+      int count, linetype;
+      mapping tmpmap = ([]);
+      if (line[0] == '#' || sscanf(line, "%s:%s", component, tmp) != 2)
+         continue;
+      component = trim(component);
+      mats = explode(tmp, ",");
+      mats -= ({""});
+      count = sizeof(mats) - 1;
+      linetype = strtype(component);
+      mats = map(mats, ( : trim($1) :));
+
+      switch (linetype)
+      {
+      case 0:
+         l_materials[component] = mats;
+         foreach (string m in mats)
+            if (strlen(m) > longest_material)
+               longest_material = strlen(m);
+         break;
+      case 1:
+         foreach (string m in mats)
+         {
+            tmpmap[pow(2, count)] = m;
+            count--;
+         }
+         l_special_mats[component] = tmpmap;
+         break;
+      case 2:
+         sscanf(component, "%s/%s", component, tmp);
+         if (!l_upgrade_mat_schemes[component])
+            l_upgrade_mat_schemes[component] = ([]);
+         l_upgrade_mat_schemes[component][tmp] = mats;
+         break;
+      default:
+         error("Unknown type");
+      }
+   }
+
+   materials = l_materials;
+   special_mats = l_special_mats;
+   upgrade_mat_schemes = l_upgrade_mat_schemes;
+}
+
 void stat_me()
 {
    foreach (string category in keys(materials))
@@ -706,6 +782,7 @@ void stat_me()
 void create()
 {
    ::create();
+   load_materials_from_file();
    refresh_cache();
    load_crafting_recipes();
 }
