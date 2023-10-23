@@ -5,6 +5,8 @@
 //: PLAYERCOMMAND
 // Quit to the user menu.
 
+#include <config/user_menu.h>
+
 inherit CMD;
 
 private

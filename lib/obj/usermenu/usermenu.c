@@ -10,10 +10,7 @@
 #include <mudlib.h>
 #include <playerflags.h>
 #include <security.h>
-
-// Move to config.h perhaps?
-#define MAX_CHRACTERS_PER_USER 10
-#define AUTO_LOGIN_AFTER 10 // seconds
+#include <config/user_menu.h>
 
 inherit MENUS;
 inherit M_ACCESS;
@@ -57,7 +54,7 @@ nomask void simple_cmd(string cmd)
 private
 void load_races()
 {
-   races=([]);
+   races = ([]);
    foreach (string file in get_dir(DIR_RACES + "/*.c"))
    {
       string tmp = DIR_RACES + "/" + file;
@@ -358,12 +355,12 @@ void char_name(string inputname)
 
 void create_char()
 {
-   if (this_user()->query_num_bodies() < MAX_CHRACTERS_PER_USER)
+   if (this_user()->query_num_bodies() < MAX_CHARACTERS_PER_USER)
    {
       input_one_arg("Name: ", ( : char_name:));
    }
    else
-      write("The maximum number of characters on " + mud_name() + " is currently " + MAX_CHRACTERS_PER_USER +
+      write("The maximum number of characters on " + mud_name() + " is currently " + MAX_CHARACTERS_PER_USER +
             ".\n"
             "Alas, you can create no more. Remove an old one to make space for a new.\n");
 }
@@ -413,9 +410,18 @@ void remove_char()
 private
 void quit_game()
 {
-   this_user()->save_me();
-   this_user()->quit();
+   if (this_user())
+   {
+      this_user()->save_me();
+      this_user()->quit();
+   }
    destruct();
+}
+
+void quit_idle_menu()
+{
+   write("(Sorry, you've idled for too long)\n");
+   quit_game();
 }
 
 void create()
@@ -426,6 +432,8 @@ void create()
    goto_main_menu_item = new_menu_item("Return to main menu", toplevel, "m");
 
    main_seperator = new_seperator("--------------------------------------------------");
+   if (clonep())
+      call_out(( : quit_idle_menu:), USER_MENU_TIMEOUT);
 
    // Add items to the toplevel (main) menu.
    add_menu_item(toplevel, main_seperator);
@@ -445,6 +453,8 @@ void user_is_active()
       autologin_tag = 0;
       write("(Cancelled autologin)\n");
    }
+   remove_call_out();
+   call_out(( : quit_idle_menu:), USER_MENU_TIMEOUT);
 }
 
 void auto_login()

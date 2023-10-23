@@ -54,6 +54,7 @@
 // F -Prints an 'I' if a person is idle, and an 'E' if the person is editing.
 
 #include <playerflags.h>
+#include <config/user_menu.h>
 
 inherit CMD;
 inherit M_FRAME;

@@ -12,7 +12,7 @@
 inherit M_DAEMON_DATA;
 inherit M_DICE;
 
-#define MATERIALS "/data/config/crafting-materials"
+#define MATERIALS_CONFIG_FILE "/data/config/crafting-materials"
 #define PRIV_NEEDED "Mudlib:daemons"
 #define CRAFTING_ITEMS "/domains/std/crafting/"
 #define REPAIR_FACTOR 10.0
@@ -707,31 +707,44 @@ void load_materials_from_file()
    mapping l_materials = ([]);
    mapping l_special_mats = ([]);
    mapping l_upgrade_mat_schemes = ([]);
-   string *material_input = explode(read_file(MATERIALS), "\n");
+   string *material_input;
+
+   if (!sizeof(stat(MATERIALS_CONFIG_FILE)))
+      error("Critical error: Missing config file '" + MATERIALS_CONFIG_FILE + "'.");
+
+   material_input = explode(read_file(MATERIALS_CONFIG_FILE), "\n");
 
    foreach (string line in material_input)
    {
       string component, tmp, *mats, *tmpar;
       int count, linetype;
       mapping tmpmap = ([]);
+
+      // Skip comments.
       if (line[0] == '#' || sscanf(line, "%s:%s", component, tmp) != 2)
          continue;
       component = trim(component);
       mats = explode(tmp, ",");
       mats -= ({""});
       count = sizeof(mats) - 1;
+
+      // Figure out what kind of linetype we have
       linetype = strtype(component);
+
+      // Trim all the parts of the array
       mats = map(mats, ( : trim($1) :));
 
       switch (linetype)
       {
       case 0:
+         // Materials
          l_materials[component] = mats;
          foreach (string m in mats)
             if (strlen(m) > longest_material)
                longest_material = strlen(m);
          break;
       case 1:
+         // Qualities
          foreach (string m in mats)
          {
             tmpmap[pow(2, count)] = m;
@@ -740,6 +753,7 @@ void load_materials_from_file()
          l_special_mats[component] = tmpmap;
          break;
       case 2:
+         // Upgrade schemes
          sscanf(component, "%s/%s", component, tmp);
          if (!l_upgrade_mat_schemes[component])
             l_upgrade_mat_schemes[component] = ([]);

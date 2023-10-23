@@ -65,7 +65,7 @@ void main(string arg)
                              "" + (p_materials[mat] ? p_materials[mat] : ""));
          line++;
 
-         // Out of items, and we have more?
+         // Out of items for this line, but are we done?
          if (line == per_row && member_array(mat, mats) != (sizeof(mats) - 1))
          {
             mat_line += "\n";

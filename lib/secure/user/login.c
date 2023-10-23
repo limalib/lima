@@ -9,6 +9,7 @@
 #include <config.h>
 #include <daemons.h>
 #include <security.h>
+#include <config/user_menu.h>
 
 string query_userid();
 void set_userid(string new_name);
