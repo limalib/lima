@@ -15,18 +15,18 @@ class wear_info
    object secondary;
 }
 
-private mapping armors = ([]);
+private mapping armours = ([]);
 
-mapping query_armor_map()
+mapping query_armour_map()
 {
-   return armors;
+   return armours;
 }
 
 class wear_info find_wi(string s)
 {
    class wear_info wi;
 
-   wi = armors[s];
+   wi = armours[s];
 
    // Upgrade class with secondary if needed
    if (sizeof(wi) == 2)
@@ -35,25 +35,25 @@ class wear_info find_wi(string s)
       wi_upgrade.primary = wi.primary;
       wi_upgrade.others = wi.others;
       wi = wi_upgrade;
-      armors[s] = wi;
+      armours[s] = wi;
    }
 
    if (!wi)
    {
       if (!is_limb(s))
          return 0;
-      wi = armors[s] = new (class wear_info);
+      wi = armours[s] = new (class wear_info);
    }
    return wi;
 }
 
-//: FUNCTION query_armors
-// object *query_armors(string s);
-// Returns the armors that are covering limb 's'.
-object *query_armors(string s)
+//: FUNCTION query_armours
+// object *query_armours(string s);
+// Returns the armours that are covering limb 's'.
+object *query_armours(string s)
 {
    class wear_info wi;
-   object *armors = ({});
+   object *armours = ({});
 
    if (query_max_health(s) == -1)
       return 0;
@@ -62,9 +62,9 @@ object *query_armors(string s)
    if (!wi)
       return 0;
 
-   armors += ({wi.primary}) + (arrayp(wi.others) ? wi.others : ({0})) + ({wi.secondary});
-   armors -= ({0});
-   return sizeof(armors) ? armors : 0;
+   armours += ({wi.primary}) + (arrayp(wi.others) ? wi.others : ({0})) + ({wi.secondary});
+   armours -= ({0});
+   return sizeof(armours) ? armours : 0;
 
    /*
    if (wi.primary)
@@ -146,20 +146,20 @@ nomask int wear_item(object what, string where)
 
 //: FUNCTION remove_item
 // nomask int remove_item(object what, string where);
-// Removes armor 'what' from the 'where' limb.
+// Removes armour 'what' from the 'where' limb.
 nomask int remove_item(object what, string where)
 {
    class wear_info wi;
    string orig_w = where;
    string *also;
 
-   if (!(wi = armors[where]) || (wi.primary != what && wi.secondary != what))
+   if (!(wi = armours[where]) || (wi.primary != what && wi.secondary != what))
    {
       where = "left " + where;
-      if (!(wi = armors[where]) || (wi.primary != what && wi.secondary != what))
+      if (!(wi = armours[where]) || (wi.primary != what && wi.secondary != what))
       {
          where = "right " + orig_w;
-         if (!(wi = armors[where]) || (wi.primary != what && wi.secondary != what))
+         if (!(wi = armours[where]) || (wi.primary != what && wi.secondary != what))
          {
             return 0;
          }
@@ -168,7 +168,7 @@ nomask int remove_item(object what, string where)
 
    wi.primary = 0;
    if (wi.others == 0)
-      map_delete(armors, where);
+      map_delete(armours, where);
 
    also = what->also_covers();
    if (also)
@@ -181,7 +181,7 @@ nomask int remove_item(object what, string where)
             if (sizeof(wi.others) == 0)
             {
                if (wi.primary == 0)
-                  map_delete(armors, limb);
+                  map_delete(armours, limb);
                else
                   wi.others = 0;
             }
@@ -197,21 +197,21 @@ int has_body_slot(string slot)
    return is_limb(slot);
 }
 
-//: FUNCTION query_armor_slots
-// string *query_armor_slots()
-// Returns all valid armor slots on an adversary.
-string *query_armor_slots()
+//: FUNCTION query_armour_slots
+// string *query_armour_slots()
+// Returns all valid armour slots on an adversary.
+string *query_armour_slots()
 {
    return query_limbs() - query_non_limbs();
 }
 
-string query_random_armor_slot()
+string query_random_armour_slot()
 {
    return query_random_limb();
 }
 
-object *event_get_armors(class event_info evt)
+object *event_get_armours(class event_info evt)
 {
    // Following ifdef added so this would update nicely always
-   return query_armors(evt.target_extra);
+   return query_armours(evt.target_extra);
 }

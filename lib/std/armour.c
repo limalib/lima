@@ -8,10 +8,10 @@ inherit M_DAMAGE_SINK;
 
 inherit M_DURABILITY;
 
-#define ARMOR_LVL_PRICE 50
+#define ARMOUR_LVL_PRICE 50
 
 //: MODULE
-// This is the base for creating a piece of armor.  It uses M_WEARABLE to
+// This is the base for creating a piece of armour.  It uses M_WEARABLE to
 // allow it to be worn, and M_DAMAGE_SINK to allow it to absorb damage.
 
 void mudlib_setup()
@@ -19,17 +19,16 @@ void mudlib_setup()
    object::mudlib_setup();
    m_wearable::mudlib_setup();
    set_salvageable((["skin":50, "metal":50]));
-   add_id("armor", "armour");
+   add_id("armour", "armour");
    set_mass(1);
-   set_max_durability(500 * query_armor_class());
 }
 
 int query_value()
 {
    int value = query_value();
-   int level = query_armor_class() + array_sum(values(query_stat_mods()));
+   int level = query_armour_class() + array_sum(values(query_stat_mods()));
    if (!value)
-      value = ARMOR_LVL_PRICE * level - random(ARMOR_LVL_PRICE);
+      value = ARMOUR_LVL_PRICE * level - random(ARMOUR_LVL_PRICE);
    set_value(value);
    return value;
 }
@@ -40,9 +39,9 @@ int query_value()
 void set_worn(int g)
 {
    if (g)
-      environment()->add_armor(this_object());
+      environment()->add_armour(this_object());
    else
-      environment()->remove_armor(this_object());
+      environment()->remove_armour(this_object());
    ::set_worn(g);
 }
 

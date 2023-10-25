@@ -2,7 +2,7 @@
 
 #include <bodyslots.h>
 
-inherit ARMOR;
+inherit ARMOUR;
 
 void set_slot(string);
 
@@ -19,5 +19,5 @@ void setup()
    set_mass(LARGE);
 #endif
    set_slot("torso");
-   set_armor_class(15);
+   set_armour_class(15);
 }

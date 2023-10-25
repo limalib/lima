@@ -5,13 +5,13 @@ void setup(){
     set_brief("How to make platemail");
     set_long(@MAY
 #include <bodyslots.h>
-inherit ARMOR;
+inherit ARMOUR;
 
 void setup() {
     set_adj("Black","black","torso");
     set_size(73);
-    set_armor_class (8);
-    set_id("platemail","Platemail","mail","plate","armor","armour");
+    set_armour_class (8);
+    set_id("platemail","Platemail","mail","plate","armour","armour");
     set_long(@KAAN
 A black platemail that is made out of some strange substance. It has
 no refelctive surfaces but shapes in the form of a black storm trooper's 
@@ -24,7 +24,7 @@ KAAN
 MAY
     );
     set_exits( ([
-	"armory" : R "armory",
+	"armoury" : R "armoury",
       ]) );
     set_objects( ([
       ]) );

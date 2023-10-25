@@ -5,13 +5,13 @@ void setup(){
     set_brief("How to make a basic amulet");
     set_long(@MAY
 #include <bodyslots.h>
-inherit ARMOR;
+inherit ARMOUR;
 
 void setup() {
     set_adj("Dusty","dusty","neck");
     set_size(3);
-    set_armor_class (4);
-    set_id("Desert Amulet","Amulet","amulet","desert amulet","armor","armour");
+    set_armour_class (4);
+    set_id("Desert Amulet","Amulet","amulet","desert amulet","armour","armour");
     set_long(@KRAMER
 This is an amulet of the Mythryl Desert Valley. It seems to have some sort of
 magical aura because it is glowing a little and is making somewhat of a faint
@@ -24,7 +24,7 @@ KRAMER
 MAY
     );
     set_exits( ([
-	"armory" : R "armory",
+	"armoury" : R "armoury",
       ]) );
     set_objects( ([
       ]) );

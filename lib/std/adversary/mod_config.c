@@ -29,14 +29,14 @@ void check_combat_config()
    error("No valid wield style set.\n");
 #endif
 
-#if ARMOR_STYLE == ARMOR_LIMBS
+#if ARMOUR_STYLE == ARMOUR_LIMBS
 #ifndef HEALTH_USES_LIMBS
-   error("ARMOR_LIMBS requires either HEALTH_LIMBS or HEALTH_WOUNDS.\n");
+   error("ARMOUR_LIMBS requires either HEALTH_LIMBS or HEALTH_WOUNDS.\n");
 #endif
 #endif
 
-#if ARMOR_STYLE != ARMOR_SIMPLE_SLOTS && ARMOR_STYLE != ARMOR_COMPLEX_SLOTS && ARMOR_STYLE != ARMOR_LIMBS
-   error("No valid armor style set.\n");
+#if ARMOUR_STYLE != ARMOUR_SIMPLE_SLOTS && ARMOUR_STYLE != ARMOUR_COMPLEX_SLOTS && ARMOUR_STYLE != ARMOUR_LIMBS
+   error("No valid armour style set.\n");
 #endif
 
 #if PULSE_STYLE != PULSE_NON_HEART_BEAT && PULSE_STYLE != PULSE_HEART_BEAT

@@ -3,7 +3,7 @@
 // 04-98: Iizuka updated to conform to the new adversary code.
 // 05-98: Iizuka added support for multiple resistances.
 
-#include <armor.h>
+#include <armour.h>
 
 inherit CLASS_EVENT_INFO;
 
@@ -12,22 +12,22 @@ mapping resistances = ([]);
 private
 mapping weaknesses = ([]);
 private
-int armor_class;
+int armour_class;
 
-//: FUNCTION set_armor_class
+//: FUNCTION set_armour_class
 // Set the protection of the particular damage sink.  random(class) points
 // of damage will be prevented.
-void set_armor_class(int x)
+void set_armour_class(int x)
 {
-   armor_class = x;
-   this_object()->set_max_durability(ARMOR_DURA_PER_AC * x);
+   armour_class = x;
+   this_object()->set_max_durability(ARMOUR_DURA_PER_AC * x);
 }
 
-//: FUNCTION query_armor_class
-// Query the current armor class of an object.  Higher is better.
-int query_armor_class()
+//: FUNCTION query_armour_class
+// Query the current armour class of an object.  Higher is better.
+int query_armour_class()
 {
-   return armor_class;
+   return armour_class;
 }
 
 mapping query_resistances()
@@ -49,9 +49,9 @@ class event_info sink_modify_event(class event_info evt)
    if (member_array(evt.data[0], keys(weaknesses)) != -1)
       evt.data[1] += weaknesses[evt.data[0]];
    if (member_array(evt.data[0], keys(resistances)) != -1)
-      evt.data[1] -= resistances[evt.data[0]] + armor_class;
+      evt.data[1] -= resistances[evt.data[0]] + armour_class;
    else
-      evt.data[1] -= ((armor_class / 2) + random(armor_class / 2));
+      evt.data[1] -= ((armour_class / 2) + random(armour_class / 2));
    if (evt.data[1] < 0)
       evt.data[1] = 0;
 
@@ -66,7 +66,7 @@ class event_info sink_modify_event(class event_info evt)
 }
 
 //: FUNCTION set_resist
-// set_resist(type, amt) specifies that for damage of type 'type', the armor
+// set_resist(type, amt) specifies that for damage of type 'type', the armour
 // class should be increased by 'amt'
 void set_resist(string type, int amt)
 {
@@ -77,7 +77,7 @@ void set_resist(string type, int amt)
 }
 
 //: FUNCTION set_resistances
-// void set_resistances(mapping) - Set all the resistances an armor
+// void set_resistances(mapping) - Set all the resistances an armour
 // possesses.
 void set_resistances(mapping x)
 {
@@ -88,7 +88,7 @@ void set_resistances(mapping x)
 }
 
 //: FUNCTION set_weakness
-// set_weakness(type, amt) specifies that for damage of type 'type', the armor
+// set_weakness(type, amt) specifies that for damage of type 'type', the armour
 // class should be decreased by 'amt'
 void set_weakness(string type, int amt)
 {
@@ -99,7 +99,7 @@ void set_weakness(string type, int amt)
 }
 
 //: FUNCTION set_weaknesses
-// void set_weaknesses(mapping) - Set all the weaknesses an armor
+// void set_weaknesses(mapping) - Set all the weaknesses an armour
 // possesses.
 void set_weaknesses(mapping weak)
 {
@@ -109,9 +109,9 @@ void set_weaknesses(mapping weak)
    weaknesses = weak;
 }
 
-//: FUNCTION is_armor
+//: FUNCTION is_armour
 // Returns 1 if the object is a damage_sink.
-int is_armor()
+int is_armour()
 {
    return 1;
 }

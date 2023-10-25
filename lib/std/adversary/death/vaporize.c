@@ -16,7 +16,7 @@ nomask string query_default_death_message()
 void vaporize()
 {
    simple_action(query_death_message());
-   filter(all_inventory(this_object()), ( : $1->is_armor() :))->remove_it();
+   filter(all_inventory(this_object()), ( : $1->is_armour() :))->remove_it();
    all_inventory(this_object())->move(environment());
    remove();
 }

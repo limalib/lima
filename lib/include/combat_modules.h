@@ -50,10 +50,10 @@
 **                                                                         **
 **                             WEARING ARMOUR                              **
 **                                                                         **
-** ARMOR_SIMPLE_SLOTS	This is a simplistic way of determining            **
+** ARMOUR_SIMPLE_SLOTS	This is a simplistic way of determining            **
 **                      where armour can be worn                           **
-** ARMOR_COMPLEX_SLOTS  A more complicated slot method                     **
-** ARMOR_LIMBS          Armour works with limbs.  Each limb that is        **
+** ARMOUR_COMPLEX_SLOTS  A more complicated slot method                     **
+** ARMOUR_LIMBS          Armour works with limbs.  Each limb that is        **
 **                      marked able to bear armour, works properly.        **
 **                      Requires HEALTH_LIMBS or HEALTH_WOUNDS             **
 **                                                                         **
@@ -115,9 +115,9 @@
 #define WIELD_SINGLE          1
 #define WIELD_MULTIPLE        2
 #define WIELD_LIMBS           3
-#define ARMOR_SIMPLE_SLOTS    1
-#define ARMOR_COMPLEX_SLOTS   2
-#define ARMOR_LIMBS           3
+#define ARMOUR_SIMPLE_SLOTS    1
+#define ARMOUR_COMPLEX_SLOTS   2
+#define ARMOUR_LIMBS           3
 #define PULSE_HEART_BEAT      1
 #define PULSE_NON_HEART_BEAT  2
 #define BLOW_SIMPLE           1
@@ -135,7 +135,7 @@
 #define DEATH_STYLE       DEATH_CORPSES
 #define HEALTH_STYLE      HEALTH_LIMBS
 #define WIELD_STYLE       WIELD_LIMBS
-#define ARMOR_STYLE       ARMOR_LIMBS
+#define ARMOUR_STYLE       ARMOUR_LIMBS
 #define PULSE_STYLE       PULSE_HEART_BEAT
 #define BLOW_STYLE        BLOW_TYPES
 #define FORMULA_STYLE     FORMULA_SKILLS
@@ -188,14 +188,14 @@
 #endif
 #endif
 
-#if ARMOR_STYLE == ARMOR_SIMPLE_SLOTS
-#define ARMOR_MODULE simple_slots
+#if ARMOUR_STYLE == ARMOUR_SIMPLE_SLOTS
+#define ARMOUR_MODULE simple_slots
 #else
-#if ARMOR_STYLE == ARMOR_COMPLEX_SLOTS
-#define ARMOR_MODULE complex_slots
+#if ARMOUR_STYLE == ARMOUR_COMPLEX_SLOTS
+#define ARMOUR_MODULE complex_slots
 #else
-#if ARMOR_STYLE == ARMOR_LIMBS
-#define ARMOR_MODULE limbs
+#if ARMOUR_STYLE == ARMOUR_LIMBS
+#define ARMOUR_MODULE limbs
 #endif
 #endif
 #endif

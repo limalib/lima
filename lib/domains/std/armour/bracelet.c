@@ -1,4 +1,4 @@
-inherit ARMOR;
+inherit ARMOUR;
 
 void setup()
 {

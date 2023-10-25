@@ -10,7 +10,7 @@ LORIEL
   );
   set_exits( ([
     "weaponry" : R "weaponry",
-    "armory" : R "armory",
+    "armoury" : R "armoury",
     "backward" : R "corridor05",
     "forward" : R "corridor07",
     "emoting" : R "emote01",

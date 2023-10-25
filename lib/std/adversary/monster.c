@@ -17,7 +17,7 @@ void set_int(int);
 void set_wil(int);
 void update_max_health();
 void heal_all();
-void set_natural_armor(int na);
+void set_natural_armour(int na);
 void set_damage_bonus(int x);
 void add_id(string *id...);
 void init_stats();
@@ -74,7 +74,7 @@ void setup_monster_defaults()
       return;
 
    init_stats();
-   set_natural_armor(query_level() / 2);
+   set_natural_armour(query_level() / 2);
    set_damage_bonus(query_level() / 2);
 
    foreach (string skill in skills)

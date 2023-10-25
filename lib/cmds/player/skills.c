@@ -52,7 +52,7 @@ void main(string arg)
          out("Cannot find '" + arg + "'.\n");
          return;
       }
-      out("Skills for " + capitalize(arg) + ":\n");
+      out("Skills for " + target->short() + ":\n");
       self_view = 0;
       arg = 0;
    }

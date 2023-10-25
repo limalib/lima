@@ -79,7 +79,7 @@ mixed land_throwable(object target, int success)
 		this_body()->start_fight(target);
 		this_body()->add_event(target,
 							   this_object(),
-							   target->query_random_armor_slot(),
+							   target->query_random_armour_slot(),
 							   damage);
 		has_been_thrown(target);
 	}

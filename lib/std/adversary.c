@@ -18,7 +18,7 @@ inherit SUBDIR "condition";
 inherit SUBDIR "target";
 inherit SUBDIR "messages";
 inherit SUBDIR "mod_config";
-inherit SUBDIR "armor/armor_base";
+inherit SUBDIR "armour/armour_base";
 inherit SUBDIR "wield/wield_base";
 #ifdef USE_SKILLS
 inherit SUBDIR "skills";
@@ -28,7 +28,7 @@ inherit SUBDIR "monster";
 inherit MODULE("death", DEATH_MODULE);
 inherit MODULE("health", HEALTH_MODULE);
 inherit MODULE("wield", WIELD_MODULE);
-inherit MODULE("armor", ARMOR_MODULE);
+inherit MODULE("armour", ARMOUR_MODULE);
 inherit MODULE("pulse", PULSE_MODULE);
 inherit MODULE("blows", BLOW_MODULE);
 inherit MODULE("formula", FORMULA_MODULE);

@@ -73,7 +73,7 @@ void main(string arg)
    frame_init_user();
    set_frame_title("HP");
    set_frame_header(
-       sprintf("%14s %6-s %5s/%5-s %5-s %s", "Limb", "Type", "HP", "Max", "Armor", i_simplify() ? "" : "Bar"));
+       sprintf("%14s %6-s %5s/%5-s %5-s %s", "Limb", "Type", "HP", "Max", "armour", i_simplify() ? "" : "Bar"));
 
    foreach (string name in names)
    {
@@ -97,11 +97,11 @@ void main(string arg)
       if (LIMB_ATTACKING & limb.flags)
          type += ({"attack"});
 
-      if (arrayp(body->query_armors(name)))
-         foreach (object armor in body->query_armors(name))
+      if (arrayp(body->query_armours(name)))
+         foreach (object armour in body->query_armours(name))
          {
-            if (armor)
-               ac_total += armor->query_armor_class();
+            if (armour)
+               ac_total += armour->query_armour_class();
          }
 
       content += sprintf("%15s %6-s %5s/%5-s %5-s %s\n", capitalize(name),

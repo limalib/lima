@@ -5,6 +5,6 @@ class slot
    int howmany;
    string name;
    int max_size;
-   int non_armor;
+   int non_armour;
    object *stuff;
 }

@@ -34,7 +34,7 @@ void setup()
    add_sell("^std/weapon/stick", 2, ({"red"}));
    add_sell("^std/weapon/stick", 1, ({"blue"}));
 
-   /* We would set this so that the vendor stores weaps/armor in a storage
+   /* We would set this so that the vendor stores weaps/armour in a storage
       room.  See help on set_unique_inventory.  storage.c in the rooms subdir has
       been set up to work.
        set_unique_inventory(__DIR__ "rooms/storage");

@@ -19,7 +19,6 @@ void mudlib_setup()
    set_skill_used("combat/melee/club");
    set_salvageable((["skin":50, "metal":50]));
    add_save(({"persist_flags"}));
-   set_max_durability(100 * query_weapon_class());
 }
 
 int query_value()

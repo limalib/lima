@@ -259,7 +259,7 @@ void main(string arg)
             return;
          }
       }
-      set_frame_title("Score for " + capitalize(arg)); // Title of frame for other people
+      set_frame_title("Score for " + body->short()); // Title of frame for other people
    }
    else
       set_frame_title("Score"); // Title of frame

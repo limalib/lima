@@ -39,19 +39,19 @@ mapping default_slots()
                          : SMALL, stuff
                          : ({})),
 
-       /* These are non-armor slots. You can wear things here, but they
+       /* These are non-armour slots. You can wear things here, but they
           don't offer any standard protection. */
        "right hand":new (class slot, howmany : 1, name
                          : "right hand", max_size
-                         : SMALL, non_armor : 1, stuff
+                         : SMALL, non_armour : 1, stuff
                          : ({})),
         "left hand":new (class slot, howmany : 1, name
                          : "left hand", max_size
-                         : SMALL, non_armor : 1, stuff
+                         : SMALL, non_armour : 1, stuff
                          : ({})),
              "neck":new (class slot, howmany : 1, name
                          : "neck", max_size
-                         : SMALL, non_armor : 1, stuff
+                         : SMALL, non_armour : 1, stuff
                          : ({})),
    ]);
 }
@@ -118,7 +118,7 @@ nomask int remove_item(object what, string sname)
    return sizeof(SLOT(sname)->stuff) < num;
 }
 
-nomask string query_random_armor_slot()
+nomask string query_random_armour_slot()
 {
    string tmp;
 
@@ -163,15 +163,15 @@ nomask int has_body_slot(string what)
    return !!slots[what];
 }
 
-//: FUNCTION query_armor_slots
-// string *query_armor_slots()
-// Returns a list of all armor slots on the adversary.
-string *query_armor_slots()
+//: FUNCTION query_armour_slots
+// string *query_armour_slots()
+// Returns a list of all armour slots on the adversary.
+string *query_armour_slots()
 {
    return keys(slots);
 }
 
-varargs object *event_get_armors()
+varargs object *event_get_armours()
 {
    object *tmp = ({get_random_clothing()}) - ({0});
    if (!sizeof(tmp))

@@ -10,7 +10,7 @@
 */
 
 inherit M_DAEMON_DATA;
-inherit M_DICE;
+//inherit M_DICE;
 
 #define MATERIALS_CONFIG_FILE "/data/config/crafting-materials"
 #define PRIV_NEEDED "Mudlib:daemons"
@@ -28,22 +28,7 @@ nosave mapping special_mats = (
                  64:"darksteel", 32:"silver", 16:"gold", 8:"platinum", 4:"titanium", 2:"adamantine", 1:"orichalcum", ]),
         "wood":([128:"fir", 64:"pine", 32:"oak", 16:"cedar", 8:"larch", 4:"hemlock", 2:"ebony", 1:"bloodwood", ]), ]);
 private
-nosave mapping special_attk =
-    (["acid":([128:"sourness", 64:"bitterness", 32:"tartness", 4:"astringent bite", 1:"corrosive jaws", ]),
-             "cold":([128:"chill", 64:"frost", 32:"crystals", 4:"frigid freeze", 1:"arctic cold", ]),
-             "fire":([128:"glow", 64:"embers", 32:"flames", 4:"blaze", 1:"infernal fire", ]),
-            "force":([128:"pushing", 64:"thrusting", 32:"bursting", 4:"blasting", 1:"impetuous force", ]),
-        "lightning":([128:"light", 64:"sparks", 32:"volt", 4:"electricity", 1:"lightning storm", ]),
-         "necrotic":([128:"nausea", 64:"pestilence", 32:"rotting", 4:"decay", 1:"ungraceful death", ]),
-           "poison":([128:"toxicity", 64:"miasma", 32:"blight", 4:"contagion", 1:"pandemic plague", ]),
-          "psychic":([128:"spirit", 64:"obscura", 32:"mysticism", 4:"shadow", 1:"etheral duress", ]),
-          "radiant":([128:"sparkling", 64:"lucent", 32:"glowing", 4:"resplending", 1:"light of the stars", ]),
-          "thunder":([128:"thunderclap",
-                        64:"thunderbolt", 32:"thundercrack", 4:"thunderous barrage", 1:"thunderous explosion", ])]);
-private
-nosave string *rn = ({"I", "II", "III", "IV", "V", "VI", "VII", "IIX", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"});
-private
-nosave int *attk_sums = ({128, 192, 224, 228, 229});
+nosave int *mat_sums = ({128, 192, 224, 240, 248, 252, 254, 255});
 private
 nosave mapping crafting_recipes = ([]);
 private
@@ -144,24 +129,14 @@ int valid_crafting_recipe(string name)
    return crafting_recipes[name] != 0;
 }
 
+mixed *query_all_special_mats()
+{
+    return ({special_mats, mat_sums});
+}
+
 mixed *query_special_mats(string category)
 {
-   return special_mats[category];
-}
-
-mapping query_all_special_mats()
-{
-   return special_mats;
-}
-
-mixed *query_special_attk()
-{
-   return ({special_attk, attk_sums});
-}
-
-string *query_roman_numerals()
-{
-   return rn;
+    return ({special_mats[category], mat_sums});
 }
 
 mapping query_upgrade_schemes()
@@ -635,7 +610,7 @@ mixed estimate_with_mats(object player, mixed obs)
 
    returnStr +=
        (mats_used ? "(You save " + format_list(buy_durability(obs, picked_mats["money"])) + " by using materials)"
-                  : "(Salvage weapons and armors to get materials for cheaper repairs)") +
+                  : "(Salvage weapons and armours to get materials for cheaper repairs)") +
        "\n\n";
 
    return ({possible, returnStr});
@@ -653,13 +628,13 @@ int add_upgrade_scheme(string category, string special_material, string *recipes
 
    if (member_array(special_material, values(special_mats[category])) == -1)
    {
-      write("Invalid special material '" + special_material + "'.\n");
+      write("Invalid special material for " + category + ": '" + special_material + "'.\n");
       return 0;
    }
 
    if (!sizeof(recipes))
    {
-      write("Invalid empty recipe list.\n");
+      write("Invalid empty recipe list for " + category + ".\n");
       return 0;
    }
 
@@ -667,7 +642,8 @@ int add_upgrade_scheme(string category, string special_material, string *recipes
    {
       if (!query_crafting_recipe(recipe))
       {
-         write("Unknown recipe '" + recipe + "'.\n");
+         write("Unknown recipe '" + recipe + "' for category '" + category + "' material '" + special_material +
+               "'.\n");
          halt = 1;
       }
    }
@@ -683,15 +659,16 @@ int add_upgrade_scheme(string category, string special_material, string *recipes
 }
 
 private
-int strtype(string component)
+int strtype(string category)
 {
-   int i;
+   int i = -1;
+   string tmp;
 
-   if (component[0..6] == "quality")
+   if (category[0..6] == "quality")
       i = 1;
-   else if (strsrch(component, "/") != -1)
+   else if (strsrch(category, "/") != -1)
       i = 2;
-   else
+   else if (sscanf(category, "[%s]", tmp) == 1)
       i = 0;
 
    return i;
@@ -702,11 +679,12 @@ int query_longest_mat()
    return longest_material;
 }
 
-void load_materials_from_file()
+void load_config_from_file()
 {
-   mapping l_materials = ([]);
-   mapping l_special_mats = ([]);
-   mapping l_upgrade_mat_schemes = ([]);
+   int errors_found = 0;
+   mapping materials = ([]);
+   mapping special_mats = ([]);
+   mapping upgrade_mat_schemes = ([]);
    string *material_input;
 
    if (!sizeof(stat(MATERIALS_CONFIG_FILE)))
@@ -716,20 +694,20 @@ void load_materials_from_file()
 
    foreach (string line in material_input)
    {
-      string component, tmp, *mats, *tmpar;
+      string category, tmp, tmp2, *mats, *tmpar;
       int count, linetype;
       mapping tmpmap = ([]);
 
       // Skip comments.
-      if (line[0] == '#' || sscanf(line, "%s:%s", component, tmp) != 2)
+      if (line[0] == '#' || sscanf(line, "%s:%s", category, tmp) != 2)
          continue;
-      component = trim(component);
+      category = trim(category);
       mats = explode(tmp, ",");
       mats -= ({""});
       count = sizeof(mats) - 1;
 
       // Figure out what kind of linetype we have
-      linetype = strtype(component);
+      linetype = strtype(category);
 
       // Trim all the parts of the array
       mats = map(mats, ( : trim($1) :));
@@ -738,7 +716,8 @@ void load_materials_from_file()
       {
       case 0:
          // Materials
-         l_materials[component] = mats;
+         category = category[1.. < 2]; // Strip the brackets.
+         add_category(category, mats);
          foreach (string m in mats)
             if (strlen(m) > longest_material)
                longest_material = strlen(m);
@@ -750,23 +729,32 @@ void load_materials_from_file()
             tmpmap[pow(2, count)] = m;
             count--;
          }
-         l_special_mats[component] = tmpmap;
+         special_mats[category] = tmpmap;
          break;
       case 2:
          // Upgrade schemes
-         sscanf(component, "%s/%s", component, tmp);
-         if (!l_upgrade_mat_schemes[component])
-            l_upgrade_mat_schemes[component] = ([]);
-         l_upgrade_mat_schemes[component][tmp] = mats;
+         if (sscanf(category, "%s/%s", tmp, tmp2) != 2)
+         {
+            write("Bad format for: " + category);
+            errors_found++;
+         }
+         else if (!add_upgrade_scheme(tmp, tmp2, mats))
+            errors_found++;
          break;
       default:
-         error("Unknown type");
+         error("Unknown type for '" + category + "'.");
+         errors_found++;
       }
    }
 
-   materials = l_materials;
-   special_mats = l_special_mats;
-   upgrade_mat_schemes = l_upgrade_mat_schemes;
+   if (!errors_found)
+   {
+      write(__FILE__ + ": " + MATERIALS_CONFIG_FILE + " loaded.");
+      write("Saved.");
+      save_me();
+   }
+   else
+      write(__FILE__ + ": Not saved. " + errors_found + " errors while loading, see messages above.");
 }
 
 void stat_me()
@@ -796,9 +784,9 @@ void stat_me()
 void create()
 {
    ::create();
-   load_materials_from_file();
-   refresh_cache();
    load_crafting_recipes();
+   load_config_from_file();
+   refresh_cache();
 }
 
 //@CRAFTING_D->remove_category("plastic")

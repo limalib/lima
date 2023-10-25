@@ -2,7 +2,7 @@
 inherit ROOM;
 
 void setup(){
-    set_brief("Extras for basic armor");
+    set_brief("Extras for basic armour");
     set_long(@MAY
 
 Starting with chainmail, as in previous room:
@@ -22,10 +22,10 @@ Use set_resist() for strength adjustment against different damage types.
 MAY
     );
     set_exits( ([
-	"finish" : R "armory",
+	"finish" : R "armoury",
 	"backward" : "chainmail02",
       ]) );
     set_objects( ([
-    "/domains/std/armor/chainmail" : 1,
+    "/domains/std/armour/chainmail" : 1,
       ]) );
 }

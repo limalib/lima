@@ -5,13 +5,13 @@ void setup(){
     set_brief("How to make basic boots");
     set_long(@MAY
 #include <bodyslots.h>
-inherit ARMOR;
+inherit ARMOUR;
 inherit M_READABLE;
 
 void setup() {
     set_adj("Black","black","feet");
-    set_armor_class (3);
-    set_id("boots","Boots","armor","armour");
+    set_armour_class (3);
+    set_id("boots","Boots","armour","armour");
     add_id("inscription");
     set_long(@KAAN
 These are black boots of the darkest black leather you have ever seen. 
@@ -29,6 +29,6 @@ KAAN
 MAY
     );
     set_exits( ([
-	"armory" : R "armory",
+	"armoury" : R "armoury",
       ]) );
 }

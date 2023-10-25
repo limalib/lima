@@ -5,7 +5,7 @@ inherit AMMUNITION;
 void setup()
 {
    set_id("11mm AP bullet", "ammo", "clip");
-   set_long("A clip of 11 mm armor piercing ammo.");
+   set_long("A clip of 11 mm armour piercing ammo.");
    set_combat_messages("combat-firearm");
    set_damage_type("force");
    set_skill_used("combat/ranged/pistol");
@@ -25,6 +25,6 @@ string alt_weapon()
    case 1:
       return "AP pistol bullet";
    case 2:
-      return "armor piercing round";
+      return "armour piercing round";
    }
 }

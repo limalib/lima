@@ -44,7 +44,7 @@ void do_salvage_obs(object *obs)
    {
       if (environment(ob) != this_body())
          continue;
-      if (ob->is_armor() && ob->ob_state())
+      if (ob->is_armour() && ob->ob_state())
          continue;
       if (ob->is_weapon() && ob->query_wielded_by() == this_body())
          continue;

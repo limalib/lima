@@ -8,9 +8,9 @@
 //$$ see: skills, hp, stats, score, pouch
 // USAGE equip
 //
-// Shows your wielded and worn weapons and armors, their durability
+// Shows your wielded and worn weapons and armours, their durability
 // and some primary stats. The command also shows your spell failure chance
-// which increases with the more medium and heavy armor you wear, the latter
+// which increases with the more medium and heavy armour you wear, the latter
 // having a greater impact.
 //
 // Reparing and salvaging
@@ -32,6 +32,7 @@
 
 inherit CMD;
 inherit M_FRAME;
+inherit M_WIDGETS;
 
 class wear_info
 {
@@ -41,31 +42,59 @@ class wear_info
 
 mapping short_names = DAMAGE_D->query_short_names();
 
-string abbreviate(string s)
+int item_length(string *shorts)
 {
-   return filter_array(s, ( : member_array($1, "eyuioa") == -1 :));
+   int width = this_user()->query_screen_width() - 60;
+   int uni = uses_unicode();
+   int smallest = max(map(shorts, ( : strlen($1) :)));
+   string ellipsis = uni ? "…" : "...";
+   int l = strlen(ellipsis);
+   if (smallest < 8)
+      smallest = 8;
+   if (smallest < width)
+      width = smallest;
+
+   return CLAMP(width - l, 0, 100);
+}
+
+string ellipsis_name(string name, string *names)
+{
+   int width = item_length(names);
+   int uni = uses_unicode();
+   string ellipsis = uni ? "…" : "...";
+
+   if (strlen(name) - 1 > width)
+   {
+      name = !width ? "..." : trim(name[0..width]) + ellipsis;
+   }
+   return capitalize(name);
 }
 
 private
 void main(string arg)
 {
-   int width = this_user()->query_screen_width() - 7;
    object *weapons = ({});
-   object *armors = ({});
-   object body = this_body();
+   object *armours = ({});
+   object body;
    int nothing_worn = 1;
    int nothing_wielded = 1;
+   int width;
+   int uni = uses_unicode();
+   if (arg)
+      arg = trim(arg);
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
-      body = find_body(arg);
+      body = find_body(arg) || present(arg, environment(this_body()));
       if (!body)
       {
          out("Cannot find '" + arg + "'.\n");
          return;
       }
-      write("Equip for " + capitalize(arg) + ":\n");
+      write("Equip for " + body->short() + ":\n");
    }
+   else
+      body = this_body();
 
    foreach (string limb in body->query_wielding_limbs())
    {
@@ -73,32 +102,34 @@ void main(string arg)
          weapons += ({body->query_weapon(limb)});
    }
 
-   // foreach (string limb in body->query_armor_slots())
+   // foreach (string limb in body->query_armour_slots())
    foreach (string limb in body->query_limbs())
    {
-      if (body->find_wi(limb) && member_array(body->find_wi(limb), armors) == -1)
-         armors += ({((class wear_info)body->find_wi(limb))->primary});
+      if (body->find_wi(limb) && member_array(body->find_wi(limb), armours) == -1)
+         armours += ({((class wear_info)body->find_wi(limb))->primary});
    }
 
    weapons = filter_array(weapons, ( : $1:));
-   armors = filter_array(armors, ( : $1:));
+   armours = filter_array(armours, ( : $1:));
    frame_init_user();
 
    if (sizeof(weapons))
    {
       string *props = ({});
       string content = "";
+      width = item_length(weapons->short()) + (uni ? 2 : 4);
       set_frame_title("Weapons");
       set_frame_header(
-          sprintf("%-24s  %-7s  %-5s %-11s   %s", "Weapon", "WC", "Dura", "Damage Type", "Properties"));
+          sprintf("%-" + width + "s  %-7s  %-5s  %-11s  %s", "Weapon", "WC", "Dura", "Damage Type", "Properties"));
       foreach (object w in weapons)
       {
          string *types =
              w->query_loadable() && w->loaded_with() ? w->loaded_with()->query_damage_type() : w->query_damage_type();
          types -= ({0});
          types = map_array(types, ( : short_names[$1] :));
-         props += w->query_properties() || ({});
-         content += sprintf(" %-24s  %-7s  %-5s  %11-s  %s\n", capitalize(w->short()),
+         props = w->query_properties() || ({});
+         content += sprintf(" %-" + width + "." + width + "s  %-7s  %-5s  %11-s  %s\n",
+                            ellipsis_name(w->short(), weapons->short()),
                             "" + w->query_weapon_class() +
                                 (w->query_to_hit_bonus() > 0
                                      ? "(+" + w->query_to_hit_bonus() + ")"
@@ -110,12 +141,14 @@ void main(string arg)
       nothing_wielded = 0;
    }
 
-   if (sizeof(armors))
+   if (sizeof(armours))
    {
       string content = "";
+      width = item_length(armours->short()) + (uni ? 2 : 4);
       set_frame_title("Armours");
-      set_frame_header(sprintf("%-25s %-21s  %-3s  %-5s  %s", "Item", "Worn on", "AC", "Dura", "Stat mod."));
-      foreach (object a in armors)
+      set_frame_header(sprintf("%-" + width + "." + width + "s  %-21s  %-3s  %-5s  %s", "Item", "Worn on", "AC", "Dura",
+                               "Stat mod."));
+      foreach (object a in armours)
       {
          string *slots = ({a->query_slot()});
 
@@ -155,9 +188,10 @@ void main(string arg)
 
          slots = map_array(slots, ( : capitalize($1) :));
 
-         content += sprintf(" %-24s  %-21s  %-3s  %-5s  %s\n", capitalize(a->short()), format_list(slots),
-                            "" + (a->query_armor_class() || "-"),
-                            a->query_armor_class() ? "" + a->durability_percent() + "%" : "-",
+         content += sprintf(" %-" + width + "." + width + "s  %-21s  %-3s  %-5s  %s\n",
+                            ellipsis_name(a->short(), armours->short()), format_list(slots),
+                            "" + (a->query_armour_class() || "-"),
+                            a->query_armour_class() ? "" + a->durability_percent() + "%" : "-",
                             (a->query_stat_bonus() ? capitalize(a->query_stat_bonus()) + " " +
                                                          (a->query_stat_mod() >= 0 ? "+" : "") + a->query_stat_mod()
                              : a->stat_mods_string(1) ? a->stat_mods_string(1)

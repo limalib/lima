@@ -12,7 +12,7 @@
 ** 25 March, 1998: Iizuka made major changes to support the new adversary
                    code.
 ** 2020: Tsath made improvements to support being worn underneath
-         under armor and fixed a ton of issues with messages and other things.
+         under armour and fixed a ton of issues with messages and other things.
          Stat modifiers, better worn_attributes and more.
 */
 
@@ -188,7 +188,7 @@ string *also_covers()
 }
 
 //: FUNCTION set_also_covers
-// Set string or an an array of other limbs that this armor piece
+// Set string or an an array of other limbs that this armour piece
 // also covers.
 //
 //  set_also_covers("left foot");

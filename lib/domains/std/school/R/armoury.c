@@ -2,9 +2,9 @@
 inherit ROOM;
 
 void setup(){
-    set_brief("Wizard's Armory");
+    set_brief("Wizard's armoury");
     set_long(@MAY
-The armory.
+The armoury.
 MAY
     );
     set_exits( ([

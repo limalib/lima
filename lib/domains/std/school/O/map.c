@@ -25,7 +25,7 @@ void setup() {
     |-----------|-----------|----------|
     | Weaponry  |           |          |
     |-----------| Corridor6 | Emoting  |
-    |  Armory   |           | Tutorial |
+    |  armoury   |           | Tutorial |
     |-----------|-----------|----------|
     |           |           |
     |  Objects  | Corridor5 |

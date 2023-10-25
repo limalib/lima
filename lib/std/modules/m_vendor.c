@@ -669,7 +669,7 @@ mapping query_stored()
 // what you buy.  The unique inventory is set by sending the room
 // where the inventory is kept.
 // ex: set_unique_inventory("/domains/std/rooms/storage");
-// NOTE: only armor, weaps, vehicles are uniqued
+// NOTE: only armour, weaps, vehicles are uniqued
 // Unless the object has a is_unique() { return 1; } function in it
 // See set_all_unique to unique everything
 void set_unique_inventory(string str)
@@ -736,7 +736,7 @@ int check_uniqueness(object ob)
    if (ob->is_unique())
       return 1;
 
-   if (ob->is_armor())
+   if (ob->is_armour())
       return 1;
    if (ob->is_weapon())
       return 1;

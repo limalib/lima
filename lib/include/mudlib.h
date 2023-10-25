@@ -34,7 +34,7 @@
 ** FURNITURE
 ** MOUNT	
 ** WEAPON          weapons
-** ARMOR           armor
+** ARMOUR           armor
 ** CONTAINER       obs that can hold things in/on/under/behind/etc.
 ** DOOR            doors to places
 ** SECRET_DOOR     secret doors.
@@ -164,7 +164,7 @@
 #define ADVERSARY          "/std/adversary"
 #define AGGRESSIVE_MONSTER "/std/aggressive_monster"
 #define AMMUNITION         "/std/ammunition"
-#define ARMOR              "/std/armor"
+#define ARMOUR             "/std/armour"
 #define BASE_OBJ           "/std/base_obj"
 #define CHEST              "/std/chest"
 #define COMBAT_SPELL       "/std/combat_spell"
@@ -275,6 +275,7 @@
 #define M_LOCKPICK         _MODULES "m_lockpick"
 #define M_SALVAGEABLE      _MODULES "m_salvageable"
 #define M_HEALING          _MODULES "m_healing"
+#define M_SPECIAL_WEAPON   _MODULES "m_special_weapon"
  
 /* secure _MODULES */
 #define _SEC_MODULES       "/secure/modules/"

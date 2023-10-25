@@ -7,7 +7,7 @@
 inherit __DIR__ "class_" STRINGIZE(BLOW_MODULE);
 
 private
-nosave int natural_armor = 0;
+nosave int natural_armour = 0;
 nosave string *resistances = ({});
 nosave string *vulnerabilities = ({});
 varargs int hurt_us(int, string);
@@ -19,28 +19,28 @@ void add_experience(int);
 object *query_targets();
 object query_weapon();
 varargs void unwield(string);
-object *event_get_armors(class event_info);
+object *event_get_armours(class event_info);
 
 void gmcp_send_vitals()
 {
    // Do nothing in adversary. Real function for players is in body.
 }
 
-//: FUNCTION query_natural_armor
-// int query_natural_armor()
-// Returns the natural armor automatically reduces the amount of damage taken.
-int query_natural_armor()
+//: FUNCTION query_natural_armour
+// int query_natural_armour()
+// Returns the natural armour automatically reduces the amount of damage taken.
+int query_natural_armour()
 {
-   return natural_armor;
+   return natural_armour;
 }
 
-//: FUNCTION set_natural_armor
-// void set_natural_armor(int na)
-// Natural armor automatically reduces the amount of damage taken.
-void set_natural_armor(int na)
+//: FUNCTION set_natural_armour
+// void set_natural_armour(int na)
+// Natural armour automatically reduces the amount of damage taken.
+void set_natural_armour(int na)
 {
    if (na > 0)
-      natural_armor = na;
+      natural_armour = na;
 }
 
 //: FUNCTION query_resistances
@@ -120,9 +120,9 @@ class event_info health_modify_event(class event_info evt)
    if (stringp(evt.data))
       return evt;
 
-   if (natural_armor)
+   if (natural_armour)
    {
-      evt.data[1] -= random(natural_armor);
+      evt.data[1] -= random(natural_armour);
       if (evt.data[1] < 0)
          evt.data[1] = 0;
    }
@@ -130,13 +130,13 @@ class event_info health_modify_event(class event_info evt)
    return evt;
 }
 
-class event_info armors_modify_event(class event_info evt)
+class event_info armours_modify_event(class event_info evt)
 {
-   object *armors = event_get_armors(evt);
+   object *armours = event_get_armours(evt);
 
-   // TBUG(armors);
-   if (armors)
-      foreach (object ob in armors)
+   // TBUG(armours);
+   if (armours)
+      foreach (object ob in armours)
          if (ob)
             evt = ob->sink_modify_event(evt);
    return evt;
@@ -147,7 +147,7 @@ class event_info armors_modify_event(class event_info evt)
 class event_info modify_event(class event_info evt)
 {
    evt = health_modify_event(evt);
-   evt = armors_modify_event(evt);
+   evt = armours_modify_event(evt);
 
    return evt;
 }

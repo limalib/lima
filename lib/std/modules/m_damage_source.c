@@ -264,9 +264,17 @@ void set_weapon_class(int x)
    this_object()->set_max_durability(100 * x);
 }
 
+//Override in weapons if you want. Default is a 25% bonus
+//if you dual wield a weapon.
+int query_weapon_class_bonus()
+{
+   if (this_object()->query_dual_wielded())
+      return to_int(weapon_class*0.25);
+}
+
 int query_weapon_class()
 {
-   return weapon_class;
+   return weapon_class + query_weapon_class_bonus();
 }
 
 private

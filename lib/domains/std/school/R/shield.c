@@ -6,14 +6,14 @@ void setup(){
     set_long(@MAY
 #include <bodyslots.h>
 
-inherit ARMOR;
+inherit ARMOUR;
 
 void setup() {
     set_adj("Black","black","right","arm");
     add_adj("right");
     set_size(39);
-    set_armor_class (10);
-    set_id("shield","Shield","armor","armour");
+    set_armour_class (10);
+    set_id("shield","Shield","armour","armour");
     set_long(@KAAN
 This is a black shield for demonstration.
 KAAN
@@ -24,7 +24,7 @@ KAAN
 MAY
     );
     set_exits( ([
-	"armory" : R "armory",
+	"armoury" : R "armoury",
       ]) );
     set_objects( ([
       ]) );
