@@ -10,7 +10,7 @@
 */
 
 inherit M_DAEMON_DATA;
-//inherit M_DICE;
+// inherit M_DICE;
 
 #define MATERIALS_CONFIG_FILE "/data/config/crafting-materials"
 #define PRIV_NEEDED "Mudlib:daemons"
@@ -21,12 +21,19 @@ nosave int *repair_values = ({10, 100, 1000, 10000, 100000});
 nosave string *cache_names = ({});
 nosave mapping cache_cats = ([]);
 private
-nosave string currency_type = "dollars";
+nosave string currency_type = DOMAIN_D->query_currency();
+
+// Left here mostly as an example for understanding. The materials are defined and read from MATERIALS_CONFIG_FILE at
+// start of this daemon.
 private
 nosave mapping special_mats = (
     ["metal":([128:"steel",
                  64:"darksteel", 32:"silver", 16:"gold", 8:"platinum", 4:"titanium", 2:"adamantine", 1:"orichalcum", ]),
         "wood":([128:"fir", 64:"pine", 32:"oak", 16:"cedar", 8:"larch", 4:"hemlock", 2:"ebony", 1:"bloodwood", ]), ]);
+
+// 128, then 192 (128+64), 224 (192+32), etc. These are tried to the "special_mats" mapping.
+// Make sure to update these sums if you change the array. These are used for random selection of power level.
+// random(229), and then the number has to be 0..128 or 129..192 etc. Hence only 1:255 chance for level 8 item.
 private
 nosave int *mat_sums = ({128, 192, 224, 240, 248, 252, 254, 255});
 private
@@ -131,12 +138,12 @@ int valid_crafting_recipe(string name)
 
 mixed *query_all_special_mats()
 {
-    return ({special_mats, mat_sums});
+   return ({special_mats, mat_sums});
 }
 
 mixed *query_special_mats(string category)
 {
-    return ({special_mats[category], mat_sums});
+   return ({special_mats[category], mat_sums});
 }
 
 mapping query_upgrade_schemes()
@@ -387,7 +394,7 @@ object *salvage_parts(object ob)
 void salvage_obj(object ob)
 {
    object *salvaged = ({});
-   string short = ob->short();   // Keep the short since the ob is gone after we salvage it.
+   string short = ob->short(); // Keep the short since the ob is gone after we salvage it.
    salvaged = salvage_parts(ob); // Ob no longer exists.
    if (sizeof(salvaged))
    {

@@ -3,13 +3,12 @@
 inherit M_INPUT; // We use modal_simple() from here.
 
 //: MODULE
-// This module should be inherited into ammunition,
-// to interact with the "ready" verb which prepares for firing
+// This module handles most of the crafting functionality.
 
 #define CRAFT_COST 5
 #define MAT_SALVAGE_COST 5
 #define MAT_CRAFT_COST 1
-#undef CAN_UPGRADE_DOWNGRADE
+#define CAN_UPGRADE_DOWNGRADE
 
 // Words we shouldn't strip "es" from from the CRAFTING_D material names.
 #define ESSE_EXCEPTIONS ({"squares"})
@@ -19,7 +18,7 @@ int craft_item(object body, string what);
 private
 string recipe_list;
 private
-mixed craft_currency_type = "dollar";
+mixed craft_currency_type = DOMAIN_D->query_currency();
 private
 mapping special_mats;
 private
@@ -66,13 +65,6 @@ int simple_craft(object body, string what)
    if (sizeof(parts) < 2)
    {
       tell(body, "Craft what? Better look at the station again.\n");
-      return;
-   }
-
-   // No crafting without a employee
-   if (!employee || (employee && !employee->is_employee()))
-   {
-      tell(body, "Better not use the station without an employee present?\n");
       return;
    }
 
@@ -129,12 +121,12 @@ int simple_craft(object body, string what)
    money = MONEY_D->handle_subtract_money(this_body(), MAT_CRAFT_COST, craft_currency_type);
    body->add_material(material, number);
    body->my_action("$N $vpay to craft a $o for " + MONEY_D->currency_to_string(MAT_CRAFT_COST, craft_currency_type) +
-                       ". You give " + MONEY_D->currency_to_string(money[0], craft_currency_type) + " to $o2" +
+                       ". You give " + MONEY_D->currency_to_string(money[0], craft_currency_type) + 
                        (sizeof(money[1])
                             ? " and get " + MONEY_D->currency_to_string(money[1], craft_currency_type) + " as change"
                             : "") +
                        ".\n",
-                   "" + number + " " + material, this_object(), employee);
+                   "" + number + " " + material, this_object());
 
    challenge_rating += challenge_rating + (number * (member_array(material, CRAFTING_D->query_materials(category))));
 
@@ -349,7 +341,7 @@ int craft_item(object body, string what)
 
    write("You have all materials needed! This craft will consume:\n");
    write(missing_mats);
-   write("Craft item - costs $" + CRAFT_COST + "? (y/N) ");
+   write("Craft item - costs " + CRAFT_COST + " " + craft_currency_type + "? (y/N) ");
    modal_simple(( : craft_item_confirmed, body, what:));
 }
 

@@ -104,18 +104,6 @@ object coins_treasure(int level, string currency)
    return new (COINS, coins, currency);
 }
 
-string domain_file(mixed file)
-{
-   string *parts;
-   if (objectp(file))
-      file = base_name(file);
-   parts = explode(file, "/");
-   if (sizeof(parts) > 2 && parts[0] == "domains")
-      return parts[1];
-   else
-      return "std";
-}
-
 void drop_corpse(object adversary)
 {
    string corpse_filename = adversary->query_corpse_filename();
@@ -202,7 +190,7 @@ object *loot_chest(int level, object env)
    object t;
    object *t_ar = ({});
    int roll = random(100);
-   string dom = domain_file(env);
+   string dom = file_domain(env);
    string cur = DOMAIN_D->query_currency(dom) || "gold"; // Use "gold" as fallback.
    int count;
 

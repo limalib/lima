@@ -21,6 +21,11 @@ mapping query_materials()
    return materials;
 }
 
+void empty_materials()
+{
+    materials = ([]);
+}
+
 private
 int valid_currency(string currency)
 {
@@ -61,13 +66,19 @@ varargs int add_material(mixed m, int c)
 //: FUNCTION has_material
 // int has_material(string m, int count)
 // Checks for count material from the pouch if available (return 1),
-// otherwise return 0.
+// otherwise return 0. Material could also be in inventory, which is
+// also checked.
 int has_material(string m, int count)
 {
+   object ims;
    if (materials[m] >= count)
    {
       return 1;
    }
+
+   ims = filter_array(all_inventory(), ( : $1->id($(m)) && ($1->is_material() || $1->is_junk()) :));
+   if (sizeof(ims) >= count)
+      return 1;
    return 0;
 }
 
@@ -77,6 +88,22 @@ int has_material(string m, int count)
 // otherwise it does nothing (return 0).
 int remove_material(string m, int count)
 {
+   object *ims;
+
+   ims = filter_array(all_inventory(), ( : $1->id($(m)) && ($1->is_material() || $1->is_junk()) :));
+
+   if (sizeof(ims) >= count)
+   {
+      count--;
+      ims = ims[0..count];
+      ims->remove();
+      return 1;
+   }
+   else if (sizeof(ims) < count && sizeof(ims))
+   {
+      return 0;
+   }
+
    if (!CRAFTING_D->valid_material(m))
    {
       map_delete(materials, m);

@@ -48,7 +48,11 @@ void remove_currency(string domain)
 
 string query_currency(string domain)
 {
-   return currency[domain] || currency["std"];
+   string body_d = file_domain(environment(this_body()));
+   if (domain)
+      return currency[domain] || currency["std"];
+
+   return currency[body_d] || currency["std"];
 }
 
 mapping query_currencies()

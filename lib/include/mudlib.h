@@ -351,6 +351,7 @@
 #define LADDER            "/std/ladder"
 #define LANTERN           "/std/lantern"
 #define GEM               "/std/gem"
+#define CRAFTING_STATION  "/std/crafting_station"
 #define PELT              "/std/pelt"
 #define ART_OBJECT        "/std/art_object"
 #define TAMING_COLLAR     "/std/taming_collar"
