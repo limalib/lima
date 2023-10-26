@@ -182,7 +182,7 @@ mixed need_to_be_unused()
 
   if (need_to_have())
   {
-    if (this_object()->is_armor() && this_object()->ob_state())
+    if (this_object()->is_armour() && this_object()->ob_state())
       return "#You are wearing it.";
     if (this_object()->is_weapon() && this_object()->ob_state()[ < 1] == '1')
       return "#You are wielding it.";

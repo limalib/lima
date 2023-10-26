@@ -24,15 +24,15 @@ string primary_material;
 // int query_salvage_level()
 // Returns the salvage level determining how much material an object
 // will drop when salvaged. This function returns sane values for
-// weapons, armor and pelts.
+// weapons, armour and pelts.
 int query_salvage_level()
 {
     if (this_object()->is_weapon())
         return this_object()->query_weapon_class();
     if (this_object()->is_junk())
         return this_object()->query_junk_level();
-    if (this_object()->is_armor())
-        return this_object()->query_armor_class();
+    if (this_object()->is_armour())
+        return this_object()->query_armour_class();
     if (this_object()->is_pelt())
         return this_object()->query_pelt_size();
     return 0;
