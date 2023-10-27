@@ -2,7 +2,7 @@
 
 // Beek - a simple room to demonstrate relationships and some toys
 
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 void setup()
 {

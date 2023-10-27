@@ -1,13 +1,13 @@
 // Yourwizname   Date   (example:  May  02 Feb 2001)
 
 #include "../school.h";
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 void setup(){
     set_brief("Skeleton Room Requirements");
     set_long(@MAY
 #include "yourareaname.h";
-inherit ROOM;
+inherit INDOOR_ROOM;
 void setup(){
     set_light(1);
     set_area("schoolroom");

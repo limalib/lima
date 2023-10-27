@@ -1,5 +1,5 @@
 #include "../school.h";
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 void setup(){
     set_brief("Wandering npc - part 2");

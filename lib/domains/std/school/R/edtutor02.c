@@ -1,7 +1,7 @@
 // May's Ed Tutorial for Wizards
 
 #include "../school.h";
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 void setup(){
   set_brief("Ed Tutorial 2");

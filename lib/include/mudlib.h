@@ -34,7 +34,7 @@
 ** FURNITURE
 ** MOUNT	
 ** WEAPON          weapons
-** ARMOUR           armor
+** ARMOUR          armour
 ** CONTAINER       obs that can hold things in/on/under/behind/etc.
 ** DOOR            doors to places
 ** SECRET_DOOR     secret doors.
@@ -81,7 +81,6 @@
 ** M_BLOCKABLE
 ** M_AGGRESSIVE
 ** M_KNOCKABLE
-**       items that are valuable (have value)
 ** M_MOUNTABLE
 ** M_ENTERABLE
 ** M_FLOW_ROOM
@@ -153,9 +152,6 @@
 #define NON_ROOM           "/std/non_room"
 #define WATER_ROOM         "/std/water_room"
 #define GRID_SERVER        "/std/grid_server"
-
-//### temporary
-#define ROOM               INDOOR_ROOM
 
 #define VOID_ROOM          "/domains/std/Void"
 #define WIZ_ROOM           "/domains/std/Wizroom"

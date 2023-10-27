@@ -53,8 +53,8 @@
 // I -Prints IP/hostnames of people logged on.
 // F -Prints an 'I' if a person is idle, and an 'E' if the person is editing.
 
-#include <playerflags.h>
 #include <config/user_menu.h>
+#include <playerflags.h>
 
 inherit CMD;
 inherit M_FRAME;
@@ -126,7 +126,10 @@ string get_who_string(string arg)
       string footer = "";
       args -= ({"h"});
       DEBUG("Header");
-      footer += "There are " + sizeof(b) + " users connected ";
+      if (sizeof(b) == 1)
+         footer += "There is only " + sizeof(b) + " user connected ";
+      else
+         footer += "There are " + sizeof(b) + " users connected ";
       footer += "at " + ctime(time()) + "" + "\n";
       set_frame_footer(footer);
    }
@@ -251,7 +254,6 @@ string get_who_string(string arg)
    set_frame_content(rtrim(content));
    return frame_render();
 }
-
 
 private
 void main(string arg)

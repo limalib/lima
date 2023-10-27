@@ -6,7 +6,7 @@
 /*                                                             */
 /****************************************************************/
 
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 /*
  * This is a special case function.  That allows you to check for

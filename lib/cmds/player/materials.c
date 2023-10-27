@@ -24,7 +24,7 @@ void main(string arg)
    string *mat_cats = CRAFTING_D->query_material_categories();
    string acc;
    int per_row;
-   int total = 0, total_count;
+   int total_count;
    int widest_category, width;
    int longest_mat = CRAFTING_D->query_longest_mat();
    string content = "", header = "";
@@ -43,9 +43,6 @@ void main(string arg)
 
    width = this_user()->query_screen_width() - widest_category;
    per_row = width / (longest_mat + 6);
-
-   foreach (int c in values(p_materials))
-      total += c;
 
    foreach (string category in mat_cats)
    {
@@ -85,7 +82,7 @@ void main(string arg)
       }
    }
 
-   set_frame_title("Materials - " + total_count + "/" + total);
+   set_frame_title("Materials - " + total_count + "/" + CRAFTING_D->count_materials());
    set_frame_left_header(); // This frame will use left header
    if (strlen(header) == 0)
       header = "None";

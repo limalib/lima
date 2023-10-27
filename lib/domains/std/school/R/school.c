@@ -1,7 +1,7 @@
 // May - 2000
 
 #include "../school.h";
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 void setup(){
   set_brief("Wizard's Academy");

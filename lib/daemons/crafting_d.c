@@ -394,7 +394,7 @@ object *salvage_parts(object ob)
 void salvage_obj(object ob)
 {
    object *salvaged = ({});
-   string short = ob->short(); // Keep the short since the ob is gone after we salvage it.
+   string short = ob->short();   // Keep the short since the ob is gone after we salvage it.
    salvaged = salvage_parts(ob); // Ob no longer exists.
    if (sizeof(salvaged))
    {
@@ -762,6 +762,11 @@ void load_config_from_file()
    }
    else
       write(__FILE__ + ": Not saved. " + errors_found + " errors while loading, see messages above.");
+}
+
+int count_materials()
+{
+   return array_sum(values(map_mapping(materials, ( : sizeof($2) :))));
 }
 
 void stat_me()

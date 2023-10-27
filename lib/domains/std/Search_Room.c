@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit ROOM;
+inherit INDOOR_ROOM;
 inherit M_SEARCHABLE;
 
 void setup()

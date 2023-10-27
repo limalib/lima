@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 // This checks whether to allow an object to enter the car wash
 // It prohibits livings from entering, and returns an appropriate message

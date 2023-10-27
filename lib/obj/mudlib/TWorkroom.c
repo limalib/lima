@@ -12,7 +12,7 @@
 
 #include <mudlib.h>
 
-inherit ROOM;
+inherit INDOOR_ROOM;
 
 void set_owner(string str)
 {

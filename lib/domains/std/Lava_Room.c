@@ -5,7 +5,7 @@
 // I'll try to explain what is going on...
 // If you don't understand any part of this, post to lima.help on Lima Bean.
 
-inherit ROOM;
+inherit INDOOR_ROOM;
 inherit CLASS_COMBAT_RESULT;
 
 private
