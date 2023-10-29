@@ -30,7 +30,7 @@ void mudlib_setup()
 
 mapping query_recipe()
 {
-   return (["skin":({0, 1, 0, 0, 0}), "metal":({5, 0, 0, 0, 0})]);
+   return (["textile":({0, 1, 0, 0, 0}), "metal":({5, 0, 0, 0, 0})]);
 }
 
 void set_combat_collar()
@@ -60,7 +60,7 @@ int is_taming_collar()
    return 1;
 }
 
-void set_tattered()
+void set_damaged()
 {
    this_object()->remove();
 }

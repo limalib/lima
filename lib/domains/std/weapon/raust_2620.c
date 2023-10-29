@@ -15,5 +15,5 @@ void setup()
    set_ammo_type("10mm bullets");
    set_combat_messages("combat-bludgeon");
    set_value(450);
-   set_salvageable((["skin":10, "metal":70, "wood":20]));
+   set_salvageable((["textile":10, "metal":70, "wood":20]));
 }

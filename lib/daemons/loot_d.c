@@ -127,7 +127,7 @@ void drop_corpse(object adversary)
       corpse->override_room_desc(in_room_singular, in_room_plural);
 #ifdef PLAYERS_DROP_EQUIPMENT_AT_DEATH
       all_inventory(adversary)->set_worn(0);
-      all_inventory(adversary)->set_tattered();
+      all_inventory(adversary)->set_damaged();
       all_inventory(adversary)->reduce_value_by(10);
       all_inventory(adversary)->move(corpse);
 #endif
@@ -143,7 +143,7 @@ void drop_corpse(object adversary)
       if (sizeof(all_inventory(adversary)))
       {
          all_inventory(adversary)->set_worn(0);
-         all_inventory(adversary)->set_tattered();
+         all_inventory(adversary)->set_damaged();
          all_inventory(adversary)->reduce_value_by(10);
          all_inventory(adversary)->move(corpse);
          coins_treasure(adversary->query_level(), cur)->move(corpse);

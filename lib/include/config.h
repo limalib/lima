@@ -160,6 +160,10 @@
  * ! will give you problems since it's used as input escape. */
 #define HISTORY_CHAR '%'
 
+/* Define the character which allows you to comment out a line in the shell
+ * # recommended as default for other shells. */
+#define COMMENT_CHAR '#'
+
 /* Define this if players are allowed to have a plan as well as wizards. */
 #define EVERYONE_HAS_A_PLAN
 

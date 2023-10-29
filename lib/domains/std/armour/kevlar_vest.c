@@ -12,5 +12,5 @@ void setup()
    set_wearmsg("$N $vstrap on a kevlar vest.");
    set_resistances((["force":20]));
    set_weaknesses((["slashing":5]));
-   set_salvageable((["skin":60, "metal":40]));
+   set_salvageable((["textile":60, "metal":40]));
 }

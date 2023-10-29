@@ -9,8 +9,9 @@
 **
 */
 
+#include <config/equipment.h>
+
 inherit M_DAEMON_DATA;
-// inherit M_DICE;
 
 #define MATERIALS_CONFIG_FILE "/data/config/crafting-materials"
 #define PRIV_NEEDED "Mudlib:daemons"
@@ -418,7 +419,7 @@ float money_to_repair(object ob)
 
 string repair_cost_string(object ob)
 {
-   return MONEY_D->currency_to_string(money_to_repair(ob), "dollars");
+   return MONEY_D->currency_to_string(money_to_repair(ob), currency_type);
 }
 
 mapping estimate_objects(object player, object *obs)
@@ -429,6 +430,7 @@ mapping estimate_objects(object player, object *obs)
    if (!arrayp(obs))
       obs = ({obs});
 
+   TBUG(obs);
    foreach (object ob in obs)
    {
       mapping salvage = ob->query_salvageable();
@@ -440,7 +442,7 @@ mapping estimate_objects(object player, object *obs)
       foreach (string mat in keys(salvage))
       {
          int needed = salvage[mat] * missing_dura / 100;
-         //            TBUG("Salvage[" + mat + "] needed: " + needed);
+         TBUG("Salvage[" + mat + "] needed: " + needed);
          if (!arrayp(picked_mats[mat]))
             picked_mats[mat] = ({0, 0, 0, 0, 0});
          for (int i = rep_size; i >= 0; i--)
@@ -451,20 +453,18 @@ mapping estimate_objects(object player, object *obs)
                picked = CLAMP(needed / repair_values[i], 0, pouch[materials[mat][i]]);
                picked_mats[mat][i] += picked;
                needed -= picked * repair_values[i];
-               //                  TBUG("Now picked " + picked + " of " + materials[mat][i] + ". Needed now: " +
-               //                  needed);
+               TBUG("Now picked " + picked + " of " + materials[mat][i] + ". Needed now: " + needed);
                pouch[materials[mat][i]] -= picked;
                if (i == 0 && needed != 0 && picked_mats[mat][i] < pouch[materials[mat][i]])
                {
-                  //                        TBUG("Added one extra " + materials[mat][i] + " to cover the remainder (" +
-                  //                        needed + ").");
+                  TBUG("Added one extra " + materials[mat][i] + " to cover the remainder (" + needed + ").");
                   picked_mats[mat][i]++;
                   needed = 0;
                }
             }
          }
          remainder += needed;
-         //            TBUG("Remainder: " + remainder);
+         TBUG("Remainder: " + remainder);
       }
    }
    picked_mats["money"] = remainder / REPAIR_FACTOR;
@@ -491,7 +491,7 @@ int pay_for_repair_with_money(object player, mixed obs)
       money = MONEY_D->handle_subtract_money(player, total_cost, currency_type);
       player->my_action(
           "$N $vrepair for " + MONEY_D->currency_to_string(total_cost, currency_type) + ". $N $vgive " +
-          MONEY_D->currency_to_string(money[0], currency_type) + ", " +
+          MONEY_D->currency_to_string(money[0], currency_type) +
           (sizeof(money[1]) ? " and get " + MONEY_D->currency_to_string(money[1], currency_type) + " as change" : "") +
           ".\n");
       all_good = 1;
@@ -500,7 +500,7 @@ int pay_for_repair_with_money(object player, mixed obs)
    if (all_good)
    {
       obs->durability_after_repair();
-      obs->remove_adj("tattered");
+      obs->remove_adj(DAMAGED_EQ_NAME);
    }
    return all_good;
 }
@@ -545,7 +545,7 @@ int pay_for_repair(object player, mixed obs)
    if (all_good)
    {
       obs->durability_after_repair();
-      obs->remove_adj("tattered");
+      obs->remove_adj(DAMAGED_EQ_NAME);
    }
    return all_good;
 }

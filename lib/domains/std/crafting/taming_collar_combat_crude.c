@@ -12,5 +12,5 @@ void setup()
 
 mapping query_recipe()
 {
-   return (["skin":({0, 1, 0, 0, 0}), "metal":({5, 0, 0, 0, 0})]);
+   return (["textile":({0, 1, 0, 0, 0}), "metal":({5, 0, 0, 0, 0})]);
 }

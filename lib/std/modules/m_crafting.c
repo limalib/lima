@@ -147,24 +147,28 @@ int simple_salvage(object body, string what)
    int number = 1;
    int challenge_rating = 10;
 
+   TBUG(what);
+
    // bad arguments
    if (sizeof(parts) < 2)
    {
       tell(body, "Salvage what? Better look at the station again.\n");
-      return;
+      return 0;
    }
 
 #ifndef CAN_UPGRADE_DOWNGRADE
    tell(body, "Salvage what? Better look at the station again.\n");
-   return;
+   return 0;
 #endif
 
+#ifdef 0
    // No crafting without a employee
    if (!employee || (employee && !employee->is_employee()))
    {
       tell(body, "Better not use the station without an employee present?\n");
       return;
    }
+#endif
 
    // Do some number parsing
    if (sizeof(parts) == 3)
@@ -222,7 +226,7 @@ int simple_salvage(object body, string what)
    body->add_material(CRAFTING_D->material_below(category, material), number * 10);
    body->my_action(
        "$N $vpay to salvage a $o for " + MONEY_D->currency_to_string(MAT_SALVAGE_COST, craft_currency_type) +
-           ". You give " + MONEY_D->currency_to_string(money[0], craft_currency_type) + " to $o2" +
+           ". You give " + MONEY_D->currency_to_string(money[0], craft_currency_type) +
            (sizeof(money[1]) ? " and get " + MONEY_D->currency_to_string(money[1], craft_currency_type) + " as change"
                              : "") +
            ".\n",
@@ -231,6 +235,108 @@ int simple_salvage(object body, string what)
    challenge_rating += challenge_rating + (number * (member_array(material, CRAFTING_D->query_materials(category))));
 
    if (body->test_skill("misc/crafting/" + station_filter, challenge_rating))
+   {
+      tell(body, "You get a few materials extra because you did well crafting.\n");
+      body->add_material(CRAFTING_D->material_below(category, material), random((number * 5)) + number);
+   }
+}
+
+int simple_salvage2(object body, string what)
+{
+   string *parts = explode(what, " ");
+   string category;
+   string material;
+   mapping money;
+   object smith = present("smith", environment(body));
+   int number = 1;
+   int challenge_rating = 10;
+
+   // bad arguments
+   if (sizeof(parts) < 2)
+   {
+      tell(body, "Salvage what? Better look at the bench again.\n");
+      return;
+   }
+
+   // No crafting without a smith
+   if (!smith || (smith && !smith->is_smith()))
+   {
+      tell(body, "Better not use the bench without the smith present?\n");
+      return;
+   }
+
+   // Do some number parsing
+   if (sizeof(parts) == 3)
+   {
+      if (parts[0] == "a" || parts[0] == "an" || parts[0] == "one")
+         parts[0] = "1";
+      number = to_int(parts[0]);
+      if (!number)
+      {
+         tell(body, "Salvage how many? Better look at the bench again.");
+         return;
+      }
+      parts = parts[1..2];
+   }
+
+   if (!CRAFTING_D->valid_category(parts[0]))
+   {
+      tell(body, "Salvage " + parts[0] + "? You don't know how to do that.\n");
+      return;
+   }
+   else
+      category = parts[0];
+
+   if (parts[1][ < 2..] == "es" && member_array(parts[1], ESSE_EXCEPTIONS) == -1)
+      parts[1] = parts[1][0.. < 3];
+   if (parts[1][ < 1] == 's')
+      parts[1] = parts[1][0.. < 2];
+
+   if (!CRAFTING_D->valid_material(parts[0] + " " + parts[1]))
+   {
+      tell(body, "Salvage " + parts[0] + " " + parts[1] + "? You don't know how to do that.\n");
+      return;
+   }
+   else
+      material = parts[1];
+
+   if (!CRAFTING_D->material_below(category, material))
+   {
+      tell(body, "The " + category + " " + material + " cannot be salvaged further.\n");
+      return;
+   }
+
+   // We have a valid number, category and material, hooray! \o/
+
+   if (MAT_SALVAGE_COST > this_body()->query_amt_currency(craft_currency_type))
+   {
+      printf("Sorry, that costs %s to salvage, which you don't have!\n",
+             MONEY_D->currency_to_string(MAT_SALVAGE_COST, craft_currency_type));
+      return;
+   }
+
+   if (!body->remove_material(category + " " + material, number))
+   {
+      tell(body, sprintf("Crafting that, requires %d %s which you do not have.\n", number,
+                         pluralize(category + " " + material)));
+      return;
+   }
+
+   // We have the materials and the money now! Hooray again! \o/
+
+   money = MONEY_D->handle_subtract_money(this_body(), MAT_SALVAGE_COST, craft_currency_type);
+   body->add_material(CRAFTING_D->material_below(category, material), number * 10);
+   body->my_action(
+       "$N $vpay to salvage a $o for " + MONEY_D->currency_to_string(MAT_SALVAGE_COST, craft_currency_type) +
+           ". You give " + MONEY_D->currency_to_string(money[0], craft_currency_type) + " to $o2" +
+           (sizeof(money[1]) ? " and get " + MONEY_D->currency_to_string(money[1], craft_currency_type) + " as change"
+                             : "") +
+           ".\n",
+       "" + number + " " + category + " " + material, this_object(), smith);
+
+   challenge_rating += challenge_rating + (number * (member_array(material, CRAFTING_D->query_materials(category))));
+
+   if (body->test_skill("misc/crafting", challenge_rating))
    {
       tell(body, "You get a few materials extra because you did well crafting.\n");
       body->add_material(CRAFTING_D->material_below(category, material), random((number * 5)) + number);

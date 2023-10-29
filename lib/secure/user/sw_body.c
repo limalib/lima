@@ -210,7 +210,9 @@ nomask void sw_body_handle_existing_logon(string name, int enter_now)
       ids = users->query_userid();
       if ((idx = member_array(query_userid(), ids)) != -1)
       {
-         if (!interactive(the_user = users[idx]))
+         //If the user is not interactive (DC'ed) we can take them over directly.
+         //If the user does not have a body yet (hanging on login typically), the same.
+         if (!interactive(the_user = users[idx]) || !the_user->query_body())
          {
             if (body = the_user->query_body())
             {

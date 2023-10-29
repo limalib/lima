@@ -36,7 +36,7 @@ nomask int max_durability()
    return current_max_dura;
 }
 
-void set_tattered_durability()
+void set_damaged_durability()
 {
    durability = 1 + random(current_max_dura * 0.1);
 }

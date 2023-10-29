@@ -11,4 +11,5 @@ void mudlib_setup()
 #ifdef USE_SKILLS
    set_skill_used("combat/melee/blade");
 #endif
+TBUG("mudlib_setup() called");
 }

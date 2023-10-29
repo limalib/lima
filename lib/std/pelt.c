@@ -23,13 +23,13 @@ int query_pelt_size()
 void set_pelt_type(string t)
 {
    pelt_type = t;
-   set_id(pelt_type, "skin", "pelt");
+   set_id(pelt_type, "textile", "pelt");
 }
 
 string short()
 {
    if (strlen(pelt_type))
-      set_id(pelt_type, "skin", "pelt");
+      set_id(pelt_type, "textile", "pelt");
    return ::short();
 }
 
@@ -41,8 +41,8 @@ string query_pelt_type()
 void mudlib_setup()
 {
    ::mudlib_setup();
-   set_salvageable((["skin":100]));
-   set_id("skin", "pelt");
+   set_salvageable((["textile":100]));
+   set_id("textile", "pelt");
 #ifdef USE_SIZE
    set_size(0);
 #endif

@@ -17,5 +17,5 @@ void setup()
    set_combat_messages("combat-bludgeon");
    set_exertion_rating(7);
    set_value(2300);
-   set_salvageable((["skin":10, "metal":90]));
+   set_salvageable((["textile":10, "metal":90]));
 }

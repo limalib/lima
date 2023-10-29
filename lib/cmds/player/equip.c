@@ -20,8 +20,8 @@
 // seen in your 'pouch'.
 //
 // You can easily salvage by using 'salvage all' which will salvage all
-// your tattered equipment. You can salvage other things by salvaging
-// them one by one, i.e. 'salvage mace' to salvage your non-tattered mace.
+// your damaged equipment. You can salvage other things by salvaging
+// them one by one, i.e. 'salvage mace' to salvage your non-damaged mace.
 //
 // Use 'repair all' to repair all your equipment. The command will give you
 // an estimate of the cost in materials and coins (if needed) before you

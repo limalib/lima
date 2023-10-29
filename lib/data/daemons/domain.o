@@ -1,0 +1,3 @@
+#/daemons/domain_d.c
+spawn_control ([])
+currency (["std":"gold",])

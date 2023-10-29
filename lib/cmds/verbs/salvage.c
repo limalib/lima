@@ -48,7 +48,7 @@ void do_salvage_obs(object *obs)
          continue;
       if (ob->is_weapon() && ob->query_wielded_by() == this_body())
          continue;
-      if (ob->is_salvageable() && (ob->is_tattered() || ob->is_pelt()))
+      if (ob->is_salvageable() && (ob->is_battered() || ob->is_pelt()))
       {
          do_salvage_obj(ob);
          count++;
@@ -62,7 +62,7 @@ void do_salvage_obs(object *obs)
 
 void do_salvage_str_on_obj(string str, object ob)
 {
-   if (ob->is_crafting_bench())
+   if (ob->is_crafting_station())
    {
       return ob->simple_salvage(this_body(), str);
    }
@@ -74,7 +74,7 @@ void do_salvage_str(string str)
 {
    foreach (object ob in all_inventory(environment(this_body())))
    {
-      if (ob->is_crafting_bench())
+      if (ob->is_crafting_station())
       {
          return do_salvage_str_on_obj(str, ob);
       }

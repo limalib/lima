@@ -1,0 +1,3 @@
+#/daemons/crafting_d.c
+materials (["skin":({"tuft","piece","patch","square","leather",}),"metal":({"grain","splinter","fragment","part","bar",}),"wood":({"grain","splinter","fragment","part","log",}),])
+upgrade_mat_schemes (["metal":(["adamantine":({"advanced metal kit","metal weapon soul","metal weapon core","metal weapon heart",}),"platinum":({"precious metal kit","metal weapon core",}),"steel":({"simple metal kit",}),"titanium":({"advanced metal kit","metal weapon soul",}),"silver":({"rare metal kit","metal weapon heart",}),"darksteel":({"simple metal kit","metal weapon heart",}),"gold":({"rare metal kit","metal weapon core",}),]),])
