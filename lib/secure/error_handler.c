@@ -135,16 +135,19 @@ private void build_output_data()
   output_data.file      = (*f)("File", error_data.file);
   output_data.line      = (*f)("Line", error_data.line);
   
+  //Reduced the output width below. Object didn't give a lot, so removed.
   output_data.trace = sprintf("\n\n\n%sTrace:%s\n\n%s", HIW, NOR,
       implode( 
         map_array( 
           error_data.trace,
-          (: sprintf("Line: %O File: %O Function: %O Object: %O Program: %O", 
+          //(: sprintf("Line: %O File: %O Function: %O Object: %O Program: %O", 
+          (: sprintf("Line %-4.4O %O %s() Ob: %O" , 
                (int)$1["line"], 
                (string)$1["file"], 
                (string)$1["function"], 
-               (object)$1["object"] || "No object", 
-               (string)$1["program"] || "No program") :)
+           //    (object)$1["object"] || "No object", 
+            //   (string)$1["program"] || "No program") :)
+               (object)$1["object"] || "No object" ):)
         ), "\n"));
 
   f = function(int offset, int count) {

@@ -5,6 +5,7 @@
 standard:piercing:PRC,slashing:SLA,bludgeon:BLU
 
 # Magical damage types, should have exactly 5 items each
+# Full name : 3 letter abbreviation : 5 step list
 # Low magical ability  <---> High magical ability
 
 acid:ACI:sourness, bitterness, tartness, astringent bite, corrosive jaws
