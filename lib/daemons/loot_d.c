@@ -110,7 +110,7 @@ void drop_corpse(object adversary)
    string corpse_long = adversary->query_corpse_long();
    string in_room_singular = adversary->in_room_singular();
    string in_room_plural = adversary->in_room_plural();
-   string dom = domain_file(adversary);
+   string dom = file_domain(adversary);
    string cur = DOMAIN_D->query_currency(dom) || "gold"; // Use "gold" as fallback.
 
    // Handling of players dropping corpses
