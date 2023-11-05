@@ -10,7 +10,12 @@ inherit M_DAEMON_DATA;
 
 void save_me();
 
-mapping methods = ([]);
+mapping methods = (["dismount":({"dismount","get off",}),"descend":({"descend","climb down","go down",}
+),"ascend":({"ascend","climb up","go up",}),"crawl under":({"crawl under","get under",}),"lie
+ on":({"lie on",}),"sit in":({"enter","sit in","get in",}),"leave":({"exit","leave","get out"
+,}),"go":({"go",}),"wade in":({"wade in",}),"stand on":({"get on","stand on",}),"enter":({"en
+ter",}),"stand":({"stand","stand up",}),"mount":({"mount","sit on","get on",}),"sit on":({"ge
+t on","sit on",})]);
 
 //: FUNCTION add_method
 // Add a method and a set of equivalents

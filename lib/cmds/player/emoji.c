@@ -56,7 +56,7 @@ void main(string arg)
          printf("%%^BOLD%%^%-30s %10|s %-10s%%^RESET%%^", "Emoji", "Unicode", "Replacement\n");
          foreach (string key, string * arr in emojis)
          {
-            printf("%-30s %10|s %-10s\n", key, arr[0], arr[1]);
+            printf("%-30s %10|s %-10s\n", key, arr[0], implode(explode(arr[1],""),"<res>"));
          }
          printf("\n");
       }

@@ -24,7 +24,99 @@ inherit M_DAEMON_DATA;
 #define PRIV_NEEDED "Mudlib:daemons"
 
 private
-mapping emoji_map = ([]);
+mapping emoji_map = (["beaming face with smiling eyes":({
+                                                           "😁",
+                                                           "^^",
+                                                       }),
+                                        "neutral face":({
+                                                           "😐",
+                                                           ":|",
+                                                       }),
+                                             "ok hand":({
+                                                           "👌",
+                                                           ":ok:",
+                                                       }),
+                              "face screaming in fear":({
+                                                           "😱",
+                                                           ":O",
+                                                       }),
+                                       "grinning face":({
+                                                           "😀",
+                                                           ":D",
+                                                       }),
+                                          "woozy face":({
+                                                           "🥴",
+                                                           ":S",
+                                                       }),
+                                          "starstruck":({
+                                                           "🤩",
+                                                           ":starstruck:",
+                                                       }),
+                                    "downwards button":({
+                                                           "🔽",
+                                                           ":down:",
+                                                       }),
+                                      "upwards button":({
+                                                           "🔼",
+                                                           ":up:",
+                                                       }),
+                        "smiling face with sunglasses":({
+                                                           "😎",
+                                                           "B)",
+                                                       }),
+                              "slightly frowning face":({
+                                                           "🙁",
+                                                           ":(",
+                                                       }),
+                             "slightly smiling face 2":({
+                                                           "🙂",
+                                                           ":)",
+                                                       }),
+                                       "middle finger":({
+                                                           "🖕",
+                                                           ":middle finger:",
+                                                       }),
+                                        "winking face":({
+                                                           "😉",
+                                                           ";)",
+                                                       }),
+                                "slightlysmiling face":({
+                                                           "🙂",
+                                                           ":-)",
+                                                       }),
+                                           "thumbs up":({
+                                                           "👍",
+                                                           "(Y)",
+                                                       }),
+                                    "face with tongue":({
+                                                           "😛",
+                                                           ":P",
+                                                       }),
+                                        "growingheart":({
+                                                           "💗",
+                                                           "<3",
+                                                       }),
+                       "rolling on the floor laughing":({
+                                                           "🤣",
+                                                           ":lol:",
+                                                       }),
+                                                 "zzz":({
+                                                           "💤",
+                                                           ":zzz:",
+                                                       }),
+                                        "pouting face":({
+                                                           "😡",
+                                                           ":-(",
+                                                       }),
+                                 "face blowing a kiss":({
+                                                           "😘",
+                                                           ":*",
+                                                       }),
+                                           "nerd face":({
+                                                           "🤓",
+                                                           "8)",
+                                                       }),
+]);
 
 nomask void remove_emoji(string emoji)
 {

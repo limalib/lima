@@ -14,7 +14,7 @@ inherit M_DAEMON_DATA;
 private
 mapping spawn_control = ([]);
 private
-mapping currency = ([]);
+mapping currency = (["std":"gold"]);
 
 void add_spawn_control(string domain, string basename, int max)
 {

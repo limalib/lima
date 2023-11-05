@@ -18,7 +18,7 @@ inherit M_DAEMON_DATA;
 
 // Save this....
 private
-string *spell_dirs = ({});
+string *spell_dirs = ({"/domains/std/spells/", "/domains/std/spells/stock-mage/", "/domains/std/spells/stock-priest/"});
 
 // Map the name of the spell to its object name.
 // We build this each create.

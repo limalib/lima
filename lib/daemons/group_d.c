@@ -25,7 +25,7 @@ inherit M_DAEMON_DATA;
 #define PRIV_NEEDED "Mudlib:daemons"
 
 private
-mapping group_map = ([]);
+mapping group_map = (["moderators":({})]);
 
 nomask void add_group(string group)
 {
