@@ -12,6 +12,7 @@ last -sn:d:D:    [str*]
 ilocate          str
 lightme          num
 Move             obj obj
+cmd              obj str*
 objcount         [num]
 review -cd       [user]
 scan -d          [obj]

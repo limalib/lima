@@ -20,7 +20,7 @@ private
 void main(string arg)
 {
    string *modes = ({"plain", "vt100", "ansi", "xterm"});
-   string term_type = this_user()->query_terminal_type();
+   string term_type = this_user()->query_terminal_type() || "unknown";
    int suggestion = member_array(XTERM256_D->client_compatibility(term_type), modes);
    if (!arg)
    {
