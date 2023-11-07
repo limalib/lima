@@ -695,7 +695,10 @@ void load_config_from_file()
    string *material_input;
 
    if (!sizeof(stat(MATERIALS_CONFIG_FILE)))
-      error("Critical error: Missing config file '" + MATERIALS_CONFIG_FILE + "'.");
+   {
+      write("Error: Missing config file '" + MATERIALS_CONFIG_FILE + "'.");
+      return;
+   }
 
    material_input = explode(read_file(MATERIALS_CONFIG_FILE), "\n");
 

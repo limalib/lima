@@ -103,7 +103,7 @@ varargs mixed *random_special(int seed, int max, mapping map)
 
 string random_damage_type()
 {
-   return choice(DAMAGE_D->query_damage_types() - ({"bludgeoning", "slashing", "piercing"}));
+   return choice(DAMAGE_D->query_special_damage_types());
 }
 
 private

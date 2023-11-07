@@ -61,6 +61,11 @@ mapping query_short_names()
    return short_names;
 }
 
+string *query_special_damage_types()
+{
+   return keys(query_special_attk()[0]);
+}
+
 void remove_damage_type(string t)
 {
    if (member_array(t, damage) != -1)
@@ -114,7 +119,10 @@ void load_config_from_file()
    damage = ({});
 
    if (!sizeof(stat(DAMAGE_CONFIG_FILE)))
-      error("Critical error: Missing config file '" + DAMAGE_CONFIG_FILE + "'.");
+   {
+      write("Error: Missing config file '" + DAMAGE_CONFIG_FILE + "'.");
+      return;
+   }
 
    input = explode(read_file(DAMAGE_CONFIG_FILE), "\n");
 
