@@ -25,9 +25,9 @@ void setup()
     set_in_room_desc("A large pile of trash.");
     set_id("trash","sludge","slime");
     set_adj("a pile");
-    set_long("The trash is full of slush. People will through anything away?");
+    set_long("The trash seems to be various broken items. Perhaps you can find something useful if you search it?");
     set_material_files(search_list);
-    set_success_action("$N $vsearch all the trash and sludge. $N $vfind <item>.");
+    set_success_action("$N $vsearch through the trash and sludge. $N $vfind <item>.");
     set_fail_action("$N $vfail to find any more usuable items right now.");
     set_search_string("searching through the sludge and trash.");
 }
