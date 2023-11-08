@@ -344,6 +344,7 @@
 #define HOLE              "/std/hole"
 #define LOOT_CHEST        "/std/loot_chest"
 #define MATERIAL          "/std/material"
+#define MATERIAL_SPAWNER  "/std/material_spawner"
 #define LADDER            "/std/ladder"
 #define LANTERN           "/std/lantern"
 #define GEM               "/std/gem"
