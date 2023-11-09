@@ -48,7 +48,7 @@ void do_salvage_obs(object *obs)
          continue;
       if (ob->is_weapon() && ob->query_wielded_by() == this_body())
          continue;
-      if (ob->is_salvageable() && (ob->is_battered() || ob->is_pelt()))
+      if (ob->is_salvageable() && (ob->is_damaged() || ob->is_pelt() || ob->is_junk()))
       {
          do_salvage_obj(ob);
          count++;
