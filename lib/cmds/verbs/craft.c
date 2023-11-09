@@ -25,6 +25,7 @@ void do_craft_str(string str)
          return do_craft_str_on_obj(str, ob);
       }
    }
+   write("To craft something you need to find a crafting station.\n");
 }
 
 void do_craft()
