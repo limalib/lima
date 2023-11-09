@@ -10,7 +10,7 @@ string *search_list = ({
     "^std/junk/baseball",
     "^std/junk/battered_clipboard",
     "^std/junk/cinder_block",
-    "^std/junk/light_builb",
+    "^std/junk/light_bulb",
     "^std/junk/screwdriver",
     "^std/junk/mop",
     "^std/junk/turpentine_can",
