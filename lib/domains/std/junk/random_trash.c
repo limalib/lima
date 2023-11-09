@@ -6,7 +6,7 @@ object *receivers = ({});
 
 string *search_list = ({
 "^std/junk/aluminum_can",
-    "^std/junk/antifreeze_bottle",
+    "^std/junk/anti_freeze_bottle",
     "^std/junk/baseball",
     "^std/junk/battered_clipboard",
     "^std/junk/cinder_block",
