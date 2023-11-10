@@ -50,7 +50,7 @@ varargs int count(object o)
       else
          o = previous_object();
    }
-   if (!objectp(environment(o)))
+   if (!objectp(o) || !objectp(environment(o)))
       return 1;
 
    obs = all_inventory(environment(o));

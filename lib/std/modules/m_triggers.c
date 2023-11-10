@@ -31,6 +31,16 @@ varargs void add_pattern(string pattern, mixed action, mixed left, mixed right, 
    patterns[0] += ({pat});
 }
 
+varargs void remove_pattern(string pattern)
+{
+   patterns[0] = filter_array(patterns[0], ( : ((class pattern)$1).pattern != $(pattern) :));
+}
+
+mapping query_patterns()
+{
+   return copy(patterns);
+}
+
 varargs void add_sub_pattern(mixed rule, string pattern, mixed action, mixed left, mixed right)
 {
    class pattern pat = new (class pattern);
