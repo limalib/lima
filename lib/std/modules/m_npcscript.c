@@ -41,7 +41,10 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    switch (type)
    {
    case SCRIPT_ACTION:
-      ss.action = (string)payload;
+      if (stringp(payload))
+         ss.action = (string)payload;
+      else if (functionp(payload))
+         ss.func = (function)payload;
       break;
    case SCRIPT_TRIGGER:
       if (!function_exists("add_pattern", this_object()))
@@ -94,7 +97,10 @@ void next_step()
    switch (step.type)
    {
    case SCRIPT_ACTION:
-      this_object()->do_game_command(step.action);
+      if (step.action)
+         this_object()->do_game_command(step.action);
+      else
+         evaluate(step.func);
       break;
    case SCRIPT_TRIGGER:
       return;

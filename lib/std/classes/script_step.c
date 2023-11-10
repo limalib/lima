@@ -18,4 +18,5 @@ class script_step
     string location;
     string in_room_desc;
     string trigger;
+    function func;
 }
