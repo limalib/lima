@@ -143,8 +143,10 @@ void actions()
 {
    if (!this_object()->query_target() && sizeof(my_actions))
       do_game_command(choice(my_actions));
-   if (query_listeners())
+   if (query_listeners() && find_call_out("actions") == -1)
+   {
       call_out("actions", delay_time);
+   }
 }
 
 // If last player leaves, remove call_out
@@ -162,8 +164,10 @@ void action_arrival(object who)
 {
    if (who->query_link())
    {
-      if (query_listeners() == 1)
+      if (query_listeners() == 1 && find_call_out("actions") == -1)
+      {
          call_out("actions", delay_time);
+      }
    }
 }
 
@@ -195,8 +199,10 @@ void start_actions()
       env->add_hook("object_left", departure_fn);
    }
 
-   if (query_listeners())
+   if (query_listeners() && find_call_out("actions") == -1)
+   {
       call_out("actions", delay_time);
+   }
 }
 
 void stop_actions()
