@@ -93,6 +93,10 @@ string green_bar(int value, int max, int width)
 
    if (i_simplify())
       return value + "/" + max;
+   // Avoid div by 0.
+   if (max < value)
+      max = value;
+
    if (value > max)
       value = max;
    green = (value * 1.00 / max) * (width)-1;
