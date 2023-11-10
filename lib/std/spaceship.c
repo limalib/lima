@@ -3,7 +3,7 @@
 ** Interacts with SHIP_D.
 */
 
-inherit ROOM;
+inherit INDOOR_ROOM;
 inherit SPACE_CLASSES;
 inherit M_ACCESS;
 inherit __DIR__ "spaceship/persistence";

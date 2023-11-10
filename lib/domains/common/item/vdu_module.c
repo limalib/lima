@@ -1,6 +1,5 @@
 inherit OBJ;
 inherit M_GETTABLE;
-inherit M_VALUABLE;
 
 string guild;
 string letter;

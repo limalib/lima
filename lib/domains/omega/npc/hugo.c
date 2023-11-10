@@ -11,7 +11,7 @@ void setup()
    set_proper_name("Hugo the Weapon Dealer");
    set_in_room_desc("Hugo the Weapon Dealer");
    set_long("The ammo dealer looks to be a rugged and intimidating figure, dressed in a combination of"
-            "futuristic armor and utilitarian clothing. Despite his rough exterior, the dealer is a shrewd"
+            "futuristic armour and utilitarian clothing. Despite his rough exterior, the dealer is a shrewd"
             "businessman, always willing to negotiate prices and barter for valuable goods. He has a"
             "reputation for acquiring rare and powerful weapons from across the galaxy, and"
             "his clientele ranged from military commanders to bounty hunters to rebels fighting against oppressive regimes.\n");
@@ -31,7 +31,7 @@ void setup()
    */
    // set_sell(([__DIR__ "apple":-1, "^std/weapon/sword":3, __DIR__ "ale":-1, ]));
 
-   /* We would set this so that the vendor stores weaps/armor in a storage
+   /* We would set this so that the vendor stores weaps/armour in a storage
       room.  See help on set_unique_inventory.  storage.c in the rooms subdir has
       been set up to work.
        set_unique_inventory(__DIR__ "rooms/storage");

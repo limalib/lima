@@ -11,7 +11,7 @@ void setup()
     set_state_description("electronic_door_on", "open");
     set_exits((["north":"n_corridor1",
                 "south":"waiting_room7",
-                "east" : "omega_armor",
+                "east" : "omega_armour",
                 "west" : "omega_guns",
     ]));
     // set_objects(([""]));

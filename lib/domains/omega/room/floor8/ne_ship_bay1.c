@@ -1,4 +1,4 @@
-inherit ROOM_DOCKING;
+inherit INDOOR_ROOM_DOCKING;
 
 void setup()
 {

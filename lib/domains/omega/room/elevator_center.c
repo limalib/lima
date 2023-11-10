@@ -22,7 +22,7 @@ void setup()
             "responding to a gentle press with a soft glow.");
    // Set destinations with filenames of where we can go and shorthands.
    set_destinations(
-       (["1/Living Quarters":"^omega/room/floor1/waiting_room1",
+       (["1/Maintenance":"^omega/room/floor1/waiting_room1",
                         "2/waiting2":"^omega/room/floor2/waiting_room2",
                        "3/cafeteria":"^omega/room/floor3/waiting_room3", "4/labs":"^omega/room/floor4/waiting_room4",
                         "5/waiting5":"^omage/room/floor5/waiting_room5",

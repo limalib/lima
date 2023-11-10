@@ -7,8 +7,8 @@
 #define CUR_FUEL 1
 #define MAX_WARP_FUEL 2
 #define CUR_WARP_FUEL 3
-#define MAX_ARMOR 4
-#define CUR_ARMOR 5
+#define MAX_ARMOUR 4
+#define CUR_ARMOUR 5
 
 private int *status = ({0,0,0,0,0,0});
 
@@ -42,17 +42,17 @@ int query_current_warp_fuel()
    return status[CUR_WARP_FUEL];
 }
 
-int query_max_armor()
+int query_max_armour()
 {
-   return status[MAX_ARMOR];
+   return status[MAX_ARMOUR];
 }
 
-void set_max_armor(int a)
+void set_max_armour(int a)
 {
-   status[MAX_ARMOR] = a;
+   status[MAX_ARMOUR] = a;
 }
 
-int query_current_armor()
+int query_current_armour()
 {
-   return status[CUR_ARMOR];
+   return status[CUR_ARMOUR];
 }

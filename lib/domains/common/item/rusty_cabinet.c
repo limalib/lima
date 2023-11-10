@@ -13,11 +13,12 @@ void setup()
    set_gettable("#It's way too big to move.\n");
 }
 
+//Allow direct gets from this object.
 mixed direct_get_obj(object ob)
 {
    if (environment(ob)==this_object())
       {
-         write("(From the cabinet)");
+         write("(From the "+this_object()->short()+")");
          return 1;
       }
 }

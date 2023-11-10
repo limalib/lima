@@ -27,17 +27,12 @@ void tr(string s)
 
 void setup_room(int virtual)
 {
-   object s;
    if (virtual && !present("rusty_cabinet"))
    {
       set_light(0); // Dark when people arrive.
       set_objects((["^common/item/door":({"south", "^omega/room/floor1/n_hall"}), "^common/item/rusty_cabinet":1]));
       // Add cabinet that can be open with some stuff inside.
       present("door")->set_locked("metal_door");
-      s = new (COINS, (random(5) + 5), "credit");
-      s->move(present("cabinet"));
-      s = new ("/domains/omega/armor/bomber_jacket");
-      s->move(present("cabinet"));
    }
    else if (!virtual && !present("rusty_cabinet"))
    {
@@ -46,6 +41,17 @@ void setup_room(int virtual)
            "^common/item/rusty_cabinet":1, "^omega/npc/floor1/doc_green":1]));
       present("door")->set_locked(0);
    }
+}
+
+void create_cabinet()
+{
+   object s;
+
+   s = new (COINS, (random(5) + 5), "credit");
+   s->move(present("cabinet"));
+   s = new ("/domains/omega/armour/bomber_jacket");
+   TBUG("creating jacket");
+   s->move(present("cabinet"));
 }
 
 void play_script()
@@ -60,6 +66,7 @@ void play_script()
          "a space station. The room is dimly lit, with flickering fluorescent lights casting eerie shadows "
          "on the cracked and stained walls. The air carries a stale odor, a mix of metallic tang and an "
          "underlying scent of mildew.");
+      create_cabinet();
       set_smell("The air carries a stale odor, a mix of metallic tang and an "
                 "underlying scent of mildew.");
       add_item("lights",

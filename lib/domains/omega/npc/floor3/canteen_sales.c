@@ -1,10 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+#include <npcscript.h>
+
 inherit LIVING;
 inherit M_VENDOR;
-inherit M_ACTIONS;
 inherit M_TRIGGERS;
 inherit M_CONVERSATION;
+inherit M_SMARTMOVE;
+inherit "/std/modules/m_npcscript";
 
 void setup()
 {
@@ -63,12 +66,18 @@ void setup()
               "catering":"I'm not head of catering! I am Vader. I can kill catering with a thought.",
              "catering2":"I can kill you all. I can kill me with a thought. Just... I'll get a tray, fuck it!..."]));
    set_responses((["penne":"You'll need a tray.@@doyou,oktray",
-                   "doyou":"You'll still need a tray.@@tray@@oktray",
-                   "oktray":"Great!@@@@doyou",
+                   "doyou":"You'll still need a tray.@@tray@@oktray", "oktray":"Great!@@@@doyou",
                     "tray":"No, the food is hot. You'll need a tray to put the food on.@@hotfood",
                  "hotfood":"Fight to the death? This is canteen, I am Liam and I work here.@@deathstar",
                "deathstar":"What's the Death Star? Isn't this the Omega Station?@@deathstar2",
               "deathstar2":"You're Mr. Stevens?@@mrs", "mrs":"He's head of catering.@@catering",
                 "catering":"What?@@catering2",
                "catering2":"Here's your tray. Now what would you like to order, Jeff Vader?"]));
+
+   create_script("sandwich");
+   add_steps("sandwich",
+             ({step(SCRIPT_IN_ROOM_DESC, "Liam Johnson, the canteen cashier is standing here."),
+               step(SCRIPT_ACTION, "go south"), step(SCRIPT_ACTION, "go south"), step(SCRIPT_ACTION, "go south"),
+               step(SCRIPT_ACTION, "hum"), step(SCRIPT_WAIT, 5), step(SCRIPT_ACTION, "push button"),
+               step(SCRIPT_TRIGGER, "The elevator door opens.", "go northwest")}));
 }

@@ -1,6 +1,5 @@
 inherit CONTAINER;
 inherit M_GETTABLE;
-inherit M_VALUABLE;
 inherit M_WEARABLE;
 
 int level = 1;

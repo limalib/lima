@@ -11,7 +11,7 @@ string *given = ({});
 
 int quest_status(object player_ob)
 {
-  return player_ob->check_quest("omega", "birthdaycard");
+   return player_ob->check_quest("omega", "birthdaycard");
 }
 
 void setup()
@@ -43,7 +43,7 @@ void check_card()
       object tmp = new ("/domains/std/consumable/bandage");
       card->remove();
       tmp->move(this_body());
-      tmp=present("birthday_list",this_body());
+      tmp = present("birthday_list", this_body());
       tmp->remove();
       do_game_command("emote accepts the card.");
       do_game_command("say You got them all to sign it! Most excellent.");
@@ -87,7 +87,7 @@ void give_new_list()
 void begin_conversation()
 {
    object card = present("birthday_card_quest", this_body());
-   if (card)
+   if (objectp(card))
    {
       set_start(({"card", "lostlist"}), this_body());
    }
@@ -99,12 +99,13 @@ void begin_conversation()
 string query_hint()
 {
    object card = present("birthday_card_quest", this_body());
-   if (card->completed())
-   {
-      return "Try talking to Dr. Green";
-   }
-   else
-   {
-      return "Check your list, you seem to be missing signatures.";
-   }
+   if (objectp(card))
+      if (card->completed())
+      {
+         return "Try talking to Dr. Green";
+      }
+      else
+      {
+         return "Check your list, you seem to be missing signatures.";
+      }
 }

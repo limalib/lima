@@ -4,7 +4,7 @@
 #define COMMON "/domains/common/"
 
 //Rooms
-#define ROOM_DOCKING COMMON "room/docking"
+#define INDOOR_ROOM_DOCKING COMMON "room/docking"
 
 //Items
 #define ITEM_VDU            COMMON "item/vdu"

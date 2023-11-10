@@ -27,7 +27,7 @@ void setup()
    */
    set_sell((["^std/apple":-1, "^std/weapon/sword":3, "^std/ale":-1, ]));
 
-   /* We would set this so that the vendor stores weaps/armor in a storage
+   /* We would set this so that the vendor stores weaps/armour in a storage
       room.  See help on set_unique_inventory.  storage.c in the rooms subdir has
       been set up to work.
        set_unique_inventory(__DIR__ "rooms/storage");

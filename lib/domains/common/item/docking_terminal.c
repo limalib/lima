@@ -1,5 +1,4 @@
 inherit CONTAINER;
-inherit M_VALUABLE;
 inherit SPACE_CLASSES;
 
 object body;

@@ -150,7 +150,7 @@ void set_skill(string name)
          this_body()->set_skill(implode(parts[0..part],"/"), 0);
       part++;
    }
-   this_body()->set_skill(name, 750);
+   this_body()->set_skill(name, 250);
 }
 
 void select_bag(int bag_num)
