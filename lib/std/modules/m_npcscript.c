@@ -7,7 +7,7 @@
 // of steps and checks along the way. Need your NPC to go buy a sandwich? This is the way.
 //
 // This modules inherits M_ACTIONS by itself. If triggers are used, inherit M_TRIGGERS in your mob as well.
-// Only 1 trigger is supported at a time. 
+// Only 1 trigger is supported at a time.
 
 #include <npcscript.h>
 inherit "/std/classes/script_step";
@@ -15,11 +15,9 @@ inherit M_ACTIONS;
 
 private
 mapping scripts = ([]);
-int step_pause = 1;
+int step_pause = 3;
 string running_script;
 int running_step;
-string trigger;
-string trigger_action;
 
 void create_script(string name)
 {
@@ -52,6 +50,7 @@ varargs class script_step step(int type, mixed payload, mixed extra)
       ss.action = (string)extra;
       break;
    case SCRIPT_WAIT:
+      ss.wait = (int)payload;
       break;
    case SCRIPT_IN_ROOM_DESC:
       ss.in_room_desc = (string)payload;
@@ -63,34 +62,32 @@ varargs class script_step step(int type, mixed payload, mixed extra)
 
 void execute_script(string name)
 {
+   stop_actions();
    running_script = name;
    running_step = 0;
    call_out("next_step", step_pause);
 }
 
-void respond(mixed t)
-{
-   if (t == trigger_action)
-   {
-      this_object()->remove_pattern(trigger);
-   }
-   ::respond(t);
-}
-
 void next_step()
 {
    int next_call_out = step_pause;
-   class script_step step = scripts[running_script][running_step];
-   class script_step next_step;
+   class script_step step;
+
+   if (running_step >= sizeof(scripts[running_script]))
+   {
+      running_script = 0;
+      running_step = 0;
+      return;
+   }
+   step = scripts[running_script][running_step];
 
    if (running_step + 1 < sizeof(scripts[running_script]))
    {
+      class script_step next_step;
       next_step = scripts[running_script][running_step + 1];
       if (next_step.type == SCRIPT_TRIGGER)
       {
          this_object()->add_pattern(next_step.trigger, next_step.action);
-         trigger_action = next_step.action;
-         trigger = next_step.trigger;
       }
    }
 
@@ -100,7 +97,7 @@ void next_step()
       this_object()->do_game_command(step.action);
       break;
    case SCRIPT_TRIGGER:
-      // Do nothing, always added in advanced.
+      return;
       break;
    case SCRIPT_WAIT:
       next_call_out = step.wait;
@@ -112,7 +109,10 @@ void next_step()
 
    running_step++;
    if (running_step >= sizeof(scripts[running_script]))
+   {
+      start_actions();
       return;
+   }
 
    // Find next step
    step = scripts[running_script][running_step];
@@ -125,6 +125,13 @@ void next_step()
       // Triggers are added immediately.
       next_step();
    }
+}
+
+void triggered(string pattern)
+{
+   this_object()->remove_pattern(pattern);
+   running_step++;
+   call_out("next_step", step_pause);
 }
 
 mapping query_scripts()

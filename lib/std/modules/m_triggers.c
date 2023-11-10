@@ -31,7 +31,7 @@ varargs void add_pattern(string pattern, mixed action, mixed left, mixed right, 
    patterns[0] += ({pat});
 }
 
-varargs void remove_pattern(string pattern)
+void remove_pattern(string pattern)
 {
    patterns[0] = filter_array(patterns[0], ( : ((class pattern)$1).pattern != $(pattern) :));
 }
@@ -102,6 +102,7 @@ varargs void check_msg(string str, int type)
             if (!stringp(ret))
                continue;
          }
+         this_object()->triggered(pat.pattern);
          respond(ret);
          return;
       }

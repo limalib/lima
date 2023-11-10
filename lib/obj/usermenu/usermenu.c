@@ -103,6 +103,7 @@ void enter_game()
       remove_call_out(autologin_tag);
       autologin_tag = 0;
    }
+   remove_call_out();
    modal_pop();
    this_user()->enter_game(selected, fname);
    destruct();
