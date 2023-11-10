@@ -52,7 +52,7 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    case SCRIPT_WAIT:
       ss.wait = (int)payload;
       break;
-   case SCRIPT_IN_ROOM_DESC:
+   case SCRIPT_DESC:
       ss.in_room_desc = (string)payload;
       break;
    }
@@ -102,7 +102,7 @@ void next_step()
    case SCRIPT_WAIT:
       next_call_out = step.wait;
       break;
-   case SCRIPT_IN_ROOM_DESC:
+   case SCRIPT_DESC:
       this_object()->set_in_room_desc(step.in_room_desc);
       break;
    }
