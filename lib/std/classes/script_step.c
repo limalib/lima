@@ -19,4 +19,5 @@ class script_step
     string in_room_desc;
     string trigger;
     function func;
+    string *multiple;
 }

@@ -42,7 +42,13 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    {
    case SCRIPT_ACTION:
       if (stringp(payload))
-         ss.action = (string)payload;
+      {
+         string *more = explode(payload, "@@");
+         if (sizeof(more) > 1)
+            ss.multiple = more;
+         else
+            ss.action = (string)payload;
+      }
       else if (functionp(payload))
          ss.func = (function)payload;
       break;
@@ -97,7 +103,17 @@ void next_step()
    switch (step.type)
    {
    case SCRIPT_ACTION:
-      if (step.action)
+      if (step.multiple && sizeof(step.multiple))
+      {
+         this_object()->do_game_command(step.multiple[0]);
+         if (sizeof(step.multiple) > 1)
+         {
+            //Shorten the array, and go a step back so we don't progress.
+            step.multiple = step.multiple[1..];
+            running_step--;
+         }
+      }
+      else if (step.action)
          this_object()->do_game_command(step.action);
       else
          evaluate(step.func);
