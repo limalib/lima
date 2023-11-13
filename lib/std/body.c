@@ -230,6 +230,10 @@ void save_me()
    object shell_ob = link && link->query_shell_ob();
    string bodyid = lower_case(query_name());
 
+   //Never save guests
+   if (bodyid && strlen(bodyid) > 5 && bodyid[0..4] == "guest")
+      return;
+
    /* save the shell information */
    if (shell_ob)
       shell_ob->save_me();

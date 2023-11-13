@@ -24,6 +24,12 @@ void set_body(string name, string fname, string race, int gender)
    if (!mapp(bodies))
       bodies = ([]);
    bodies[name] = ({fname, 1, race, gender});
+   
+   //Don't save guests
+   if (strlen(name) > 5 && name[0..4] == "guest")
+      return;
+   
+   //Save all others here.
    save_me();
 }
 
@@ -76,6 +82,8 @@ int update_body(object body)
       bodies[name][BODY_LEVEL] = body->query_level();
       bodies[name][BODY_RACE] = body->query_race();
       bodies[name][BODY_GENDER] = body->query_gender();
+      if (strlen(name) > 5 && name[0..4] == "guest")
+         return 1;
       save_me();
       // TBUG("Body "+name+" updated in user.");
       return 1;
@@ -87,6 +95,8 @@ protected
 nomask void set_body_fname(string name, string new_body_fname)
 {
    bodies[name][BODY_FNAME] = new_body_fname;
+   if (strlen(name) > 5 && name[0..4] == "guest")
+      return;
    save_me();
 }
 

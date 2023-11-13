@@ -12,7 +12,15 @@ inherit CMD;
 private
 void main()
 {
+   string name=this_body()->query_name();
+
    this_body()->quit();
+   if (name && strlen(name) > 5 && name[0..4] == "Guest")
+   {
+      out("Not saving guests.");
+      this_user()->quit();
+      return;
+   }
 #ifdef USE_USER_MENU
    new (USER_MENU)->start_menu();
 #else

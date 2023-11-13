@@ -41,7 +41,11 @@ void setup_for_save()
 
 void save_me()
 {
+   string name = owner->query_userid();
    if (!owner) /* probably the blueprint */
+      return;
+
+   if (strlen(name) > 5 && name[0..4] = "guest")
       return;
 
    setup_for_save();

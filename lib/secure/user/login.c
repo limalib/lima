@@ -7,9 +7,9 @@
 
 #include <commands.h>
 #include <config.h>
+#include <config/user_menu.h>
 #include <daemons.h>
 #include <security.h>
-#include <config/user_menu.h>
 
 string query_userid();
 void set_userid(string new_name);
@@ -157,9 +157,9 @@ void enter_game(string name)
       return;
    }
 
-   //Get people into the a body
+   // Get people into the a body
    sw_body_handle_existing_logon(name, 0);
-   //Then initialize channels and show didlog and other things needed.
+   // Then initialize channels and show didlog and other things needed.
    initialize_user();
 }
 
@@ -300,7 +300,7 @@ nomask varargs void login_handle_logon(int state, mixed extra, string arg)
          return;
       if (!valid_name(arg))
          return;
-      if (unguarded(1, ( : file_size, LINK_PATH(arg) + __SAVE_EXTENSION__:)) <= 0)
+      if (arg != "guest" && unguarded(1, ( : file_size, LINK_PATH(arg) + __SAVE_EXTENSION__:)) <= 0)
       {
          modal_func(( : login_handle_logon, CONFIRM_NEW_NAME, arg:), "Is '" + capitalize(arg) + "' correct? ");
          return;
@@ -314,15 +314,17 @@ nomask varargs void login_handle_logon(int state, mixed extra, string arg)
       ** Restore the object, without worrying about preserving variables.
       ** Note that this sets the userid value.
       */
-      restore_me(arg, 0);
 
       if (arg == "guest")
       {
          modify_guest_userid();
          modal_pop();
-         sw_body_handle_existing_logon("Guest", 1);
+         sw_body_handle_existing_logon(capitalize(query_userid()), 1);
          return;
       }
+      else
+         // No guests from this point on
+         restore_me(arg, 0);
 
       modal_func(( : login_handle_logon, GET_PASSWORD, 0 :), "Password: ", 1);
 
@@ -442,7 +444,7 @@ nomask varargs void login_handle_logon(int state, mixed extra, string arg)
          return;
 #else
          initialize_user();
-         sw_body_handle_existing_logon(query_userid(),0);
+         sw_body_handle_existing_logon(query_userid(), 0);
          return;
 #endif
       }

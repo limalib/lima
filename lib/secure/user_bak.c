@@ -80,6 +80,8 @@ void quit()
 
 nomask void save_me()
 {
+   if (strlen(userid) > 5 && userid[0..4] == "guest")
+      return;
    unguarded(1, ( : save_object, LINK_PATH(userid) :));
 }
 
