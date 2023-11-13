@@ -35,6 +35,7 @@ mapping current = ([]);
 mapping start = ([]);
 mixed *default_start = ({});
 mixed goodbye_action;
+int can_talk = 1;
 
 //: FUNCTION set_goodbye
 // This action is used when the NPC says goodbye.
@@ -55,8 +56,13 @@ void add_response(string key, mixed act)
 
 void add_to_start(string key)
 {
-   if(member_array(key,default_start)==-1)
+   if (member_array(key, default_start) == -1)
       default_start += ({key});
+}
+
+void set_can_talk(int i)
+{
+   can_talk = i;
 }
 
 private
@@ -181,12 +187,12 @@ void add_current(object ob, string option)
 
 mixed direct_talk_to_liv()
 {
-   return 1;
+   return can_talk ? 1 : "#That person cannot talk right now.";
 }
 
 mixed direct_talk_with_liv()
 {
-   return 1;
+   return can_talk ? 1 : "#That person cannot talk right now.";
 }
 
 void continue_conversation(object, string);
@@ -194,6 +200,12 @@ void continue_conversation(object, string);
 void show_menu(object ob)
 {
    int n = 1;
+
+   if (!current[ob])
+   {
+      continue_conversation(ob, "q");
+      return;
+   }
 
    write("\n");
 
@@ -271,6 +283,19 @@ void bye(object ob)
       do_action(ob, goodbye_action);
 }
 
+void exit_conversations()
+{
+   foreach (object body in keys(current))
+   {
+      if (present(body, environment(this_object())))
+      {
+         body->modal_pop();
+         map_delete(current, body);
+         do_action(body, goodbye_action || "say Sorry, I have to go.");
+      }
+   }
+}
+
 void continue_conversation(object ob, string input)
 {
    int num;
@@ -279,7 +304,7 @@ void continue_conversation(object ob, string input)
    string option;
    string tag;
 
-   if (input == "q")
+   if (input == "q" || !current[ob])
    {
       return bye(ob);
    }

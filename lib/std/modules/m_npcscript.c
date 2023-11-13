@@ -71,6 +71,12 @@ varargs class script_step step(int type, mixed payload, mixed extra)
 
 void execute_script(string name)
 {
+   // If we have ongoing conversations in M_CONVERSATION, exit those.
+   // Also, disable conversations
+   this_object()->exit_conversations();
+   this_object()->set_can_talk(0);
+
+   // Stop actions we might have running
    stop_actions();
    running_script = name;
    running_step = 0;
@@ -108,7 +114,7 @@ void next_step()
          this_object()->do_game_command(step.multiple[0]);
          if (sizeof(step.multiple) > 1)
          {
-            //Shorten the array, and go a step back so we don't progress.
+            // Shorten the array, and go a step back so we don't progress.
             step.multiple = step.multiple[1..];
             running_step--;
          }
@@ -132,6 +138,9 @@ void next_step()
    running_step++;
    if (running_step >= sizeof(scripts[running_script]))
    {
+      // Enable conversation again
+      this_object()->set_can_talk(1);
+      // Start actions from M_ACTIONS if we had any running.
       start_actions();
       return;
    }
