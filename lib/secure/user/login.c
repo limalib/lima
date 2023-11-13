@@ -157,8 +157,10 @@ void enter_game(string name)
       return;
    }
 
-   initialize_user();
+   //Get people into the a body
    sw_body_handle_existing_logon(name, 0);
+   //Then initialize channels and show didlog and other things needed.
+   initialize_user();
 }
 
 private

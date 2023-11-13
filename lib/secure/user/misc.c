@@ -70,7 +70,7 @@ void display_didlog()
    if (wizardp(this_object()))
    {
       DID_D->dump_did_info(query_didlog_time(),
-                           ({"", "Changes since you last logged in", "********************************", ""}), 0);
+                           ({"", "Changes since you last logged in", "--------------------------------", ""}), 0);
       set_didlog_time(time());
       return;
    }
