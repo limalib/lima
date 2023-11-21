@@ -50,6 +50,11 @@ mixed can_list_str()
 
 private show_frame(string *parts)
 {
+   if (!parts) 
+   {
+      write(find_vendor()->short()+" has nothing for sale right now.");
+      return;
+   }
    frame_init_user();
    set_frame_title(find_vendor()->query_named_possessive()+" shop");
    set_frame_header(parts[0]);

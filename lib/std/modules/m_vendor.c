@@ -430,7 +430,6 @@ mixed query_items(string item, int flag)
 
    if (sizeof(stored_items) == 0 || !for_sale)
    {
-      write("This shop has nothing to sell.\n");
       return 0;
    }
    if (item == "all")
