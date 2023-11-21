@@ -456,7 +456,7 @@ mixed query_items(string item, int flag)
    foreach (int key in keys)
    {
       if (clear_numbers)
-         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key].value)) / exchange_rate, 2)});
+         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key].value)) / exchange_rate || 1, 2)});
       else
          cost_names += ({MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key].value)) / exchange_rate,
                                                      currency_type)});
@@ -487,8 +487,8 @@ mixed query_items(string item, int flag)
          out += stored_items[key].long;
       i++;
    }
-   frame_content+=({out});
-   frame_content+=({sprintf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n")});
+   frame_content += ({out});
+   frame_content += ({sprintf("(Example: 'buy #1' or buy several 'buy 2 " + random_item_short() + "')\n")});
    return frame_content;
 }
 
