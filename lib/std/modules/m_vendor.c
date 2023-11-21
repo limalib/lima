@@ -456,10 +456,10 @@ mixed query_items(string item, int flag)
    foreach (int key in keys)
    {
       if (clear_numbers)
-         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key].value)) / exchange_rate || 1, 2)});
+         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key].value)) / (exchange_rate || 1), 2)});
       else
-         cost_names += ({MONEY_D->currency_to_string(selling_cost(to_float(stored_items[key].value)) / exchange_rate || 1,
-                                                     currency_type)});
+         cost_names += ({MONEY_D->currency_to_string(
+             selling_cost(to_float(stored_items[key].value)) / (exchange_rate || 1), currency_type)});
 
       if (cost_lng < strlen(cost_names[ < 1]))
          cost_lng = strlen(cost_names[ < 1]);
