@@ -426,8 +426,9 @@ mixed query_items(string item, int flag)
    string *cost_names = ({});
    int num, item_lng, cost_lng, i;
    string cost, out = "";
-   float exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
+   float exchange_rate;
    currency_type = DOMAIN_D->query_currency();
+   exchange_rate=to_float(MONEY_D->query_exchange_rate(currency_type));
 
    if (sizeof(stored_items) == 0 || !for_sale)
    {
