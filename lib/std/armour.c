@@ -25,7 +25,7 @@ void mudlib_setup()
 
 int query_value()
 {
-   int value = query_value();
+   int value = ::query_value();
    int level = query_armour_class() + array_sum(values(query_stat_mods()));
    if (!value)
       value = ARMOUR_LVL_PRICE * level - random(ARMOUR_LVL_PRICE);
