@@ -67,7 +67,7 @@ mixed for_sale;
 private
 mixed will_buy;
 private
-mixed currency_type = DOMAIN_D->query_currency();
+mixed currency_type = "gold";
 private
 mapping stored_items = ([]);
 private
@@ -427,6 +427,7 @@ mixed query_items(string item, int flag)
    int num, item_lng, cost_lng, i;
    string cost, out = "";
    float exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
+   currency_type = DOMAIN_D->query_currency();
 
    if (sizeof(stored_items) == 0 || !for_sale)
    {
