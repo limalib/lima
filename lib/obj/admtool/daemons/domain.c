@@ -171,8 +171,7 @@ nomask class command_info *module_commands()
             : (
                 : clear_currency:)),
        new (class command_info, key
-            : "L", proto
-            : "[domain]", desc
+            : "L", desc
             : "list currencies", action
             : (
                 : list_currencies:)),

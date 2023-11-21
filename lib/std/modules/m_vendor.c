@@ -67,7 +67,7 @@ mixed for_sale;
 private
 mixed will_buy;
 private
-mixed currency_type = "dollars";
+mixed currency_type = DOMAIN_D->query_currency();
 private
 mapping stored_items = ([]);
 private
