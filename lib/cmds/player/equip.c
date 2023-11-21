@@ -179,6 +179,12 @@ void main(string arg)
             slots += ({"hands"});
          }
 
+         if (member_array("left foot", slots) != -1 && member_array("right foot", slots) != -1)
+         {
+            slots -= ({"left foot", "right foot"});
+            slots += ({"feet"});
+         }
+
          if (member_array("arms", slots) != -1 && member_array("legs", slots) != -1 &&
              member_array("torso", slots) != -1)
          {
