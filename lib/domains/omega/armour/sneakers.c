@@ -1,5 +1,7 @@
 inherit ARMOUR;
 
+   //Need mechanism to modify the stance skill and improve it when wearing these.
+
 void setup()
 {
    set_adj("pair of levitating");
