@@ -7,7 +7,7 @@ void setup()
     set_long("This is the control office for the North Landing zone.");
     set_state_description("electronic_door_off", "closed");
     set_state_description("electronic_door_on", "open");
-    set_exits((["east":"n_landing2",
+    set_exits((["south":"n_landing2",
                 //"west":"n_ccloset",
                //"north":"n_computer_office"
                ]));

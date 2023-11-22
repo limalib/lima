@@ -7,7 +7,7 @@ inherit M_VENDOR;
 inherit M_TRIGGERS;
 inherit M_CONVERSATION;
 inherit M_SMARTMOVE;
-inherit "/std/modules/m_npcscript";
+inherit M_NPCSCRIPT;
 
 void setup()
 {
@@ -74,10 +74,39 @@ void setup()
                 "catering":"What?@@catering2",
                "catering2":"Here's your tray. Now what would you like to order, Jeff Vader?"]));
 
-   create_script("sandwich");
-   add_steps("sandwich",
-             ({step(SCRIPT_IN_ROOM_DESC, "Liam Johnson, the canteen cashier is standing here."),
-               step(SCRIPT_ACTION, "go south"), step(SCRIPT_ACTION, "go south"), step(SCRIPT_ACTION, "go south"),
-               step(SCRIPT_ACTION, "hum"), step(SCRIPT_WAIT, 5), step(SCRIPT_ACTION, "push button"),
-               step(SCRIPT_TRIGGER, "The elevator door opens.", "go northwest")}));
+   create_script("lunch");
+   add_steps(
+       "lunch",
+       ({
+           step(SCRIPT_ACTION, (: set_for_sale, 0:)),
+           step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
+           step(SCRIPT_ACTION, "say Well, time for some lunch."),
+           step(SCRIPT_ACTION, "go south@@go south@@go south@@hum"),
+           step(SCRIPT_WAIT, 5),
+           step(SCRIPT_ACTION, "push button"),
+           step(SCRIPT_TRIGGER, "The elevator door opens.", "go northwest"),
+           step(SCRIPT_DESC, "Liam Johnson, leaning against the elevator panel."),
+           step(SCRIPT_TRIGGER, "The elevator door closes.", "push 8"),
+           step(SCRIPT_TRIGGER, "Elevator speaker says, \"You have arrived at Landing Terminal\".", "go southeast"),
+           step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
+           step(SCRIPT_ACTION, "go east@@go north@@hum"),
+           step(SCRIPT_WAIT, 10),
+           step(SCRIPT_ACTION, "say I'd like to order the Stellar Sandwich with extra mayo, please.@@emote sits down."),
+           step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is sitting here."),
+           step(SCRIPT_WAIT, 20),
+           step(SCRIPT_ACTION, "emote eats a sandwich.@@emote stands up."),
+           step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
+           step(SCRIPT_ACTION, "say That was delicious! Back to the work!@@go south@@go west@@push button"),
+           step(SCRIPT_TRIGGER, "The elevator door opens.", "go northwest"),
+           step(SCRIPT_DESC, "Liam Johnson, leaning against the elevator panel."),
+           step(SCRIPT_TRIGGER, "The elevator door closes.", "push 3"),
+           step(SCRIPT_TRIGGER, "Elevator speaker says, \"You have arrived at cafeteria\".", "go southeast"),
+           step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
+           step(SCRIPT_WAIT, 10),
+           step(SCRIPT_ACTION, "go north@@go north@@go north@@hum"),
+           step(SCRIPT_ACTION, "say That was a great lunch, now back to work."),
+           step(SCRIPT_ACTION, (: set_for_sale, 1:)),
+           step(SCRIPT_DESC, "Liam Johnson, the canteen cashier looks bored behind the counter."),
+           step(SCRIPT_ACTION, "grin@@emote sits down behind the counter."),
+       }));
 }

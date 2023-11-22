@@ -9,7 +9,7 @@ void setup()
     set_long("Ship Landing for visitors and deliveries. You must speak with the coordinaotor for extended stay.");
     set_state_description("electronic_door_off", "closed");
     set_state_description("electronic_door_on", "open");
-    set_exits((["southwest":"se_ship_bay",
+    set_exits((["south":"se_ship_bay",
                     "north":"e_landing1",
     ]));
     // set_objects(([""]));

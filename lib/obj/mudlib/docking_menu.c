@@ -106,6 +106,7 @@ void do_dock_ship(mapping ships, float docking_fee, string bank, string number)
    if (!ACCOUNT_D->coverage(bank, this_body(), fee, "credit"))
    {
       error_text("Lacking coverage in your account to commence docking.");
+      return;
    }
 
    docking_completed = SHIP_D->docking_time(((class ship_info)ships[num])->type);
@@ -240,6 +241,7 @@ void confirm_release()
 void bank_statement()
 {
    string bank = SHIP_D->query_bank(this_body());
+   frame_init_user();
    accent_text("You rental contract is tied to: " + upper_case(bank + " bank"));
    write(replace_string(ACCOUNT_D->bank_statement(bank, "credit", this_body()), " crd", " ¤  ") + "\n\n");
 }

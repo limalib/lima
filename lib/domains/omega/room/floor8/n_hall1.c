@@ -2,17 +2,14 @@ inherit INDOOR_ROOM;
 
 void setup()
 {
-    set_area("omega_terminal", "landing_term");
-    // set_weather(1);
-    set_light(1);
-    set_brief("North Hallway 1");
-    set_long("A hallway leading to the North Landing.");
-    set_state_description("electronic_door_off", "closed");
-    set_state_description("electronic_door_on", "open");
-    set_exits((["south":"n_hall2",
-                "north":"n_hall",
-    ]));
+   set_area("omega_terminal", "landing_term");
+   set_brief("Stellar Lane");
+   set_long("Bathed in a soft, artificial light that reflects off its sterile, metallic surfaces, the hallway "
+            "stretches forward in clean lines. The walls, adorned with occasional access panels, bear subtle signs of "
+            "wear and tear, evidence of the bustling activity that characterizes life on the station.");
+   add_item("floor", "The floor, a smooth, low-gravity surface, allows for effortless movement. ");
+   set_exits((["south":"n_hall2", "north":"n_hall", ]));
 
-    set_listen("You hear people running through the terminal. " +
-               "It sounds like a busy terminal with people coming and going");
+   set_listen("You hear people running through the terminal. " +
+              "It sounds like a busy terminal with people coming and going");
 }

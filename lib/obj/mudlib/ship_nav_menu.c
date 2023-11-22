@@ -101,6 +101,7 @@ void do_dock_ship(mapping structs, string bank, string number)
    if (!ACCOUNT_D->coverage(bank, this_body(), fee, "credit"))
    {
       error_text("Lacking coverage in your account to commence docking.");
+      return;
    }
    else
       accent_text("Account coverage verified for docking at " + st->name);
