@@ -2,8 +2,12 @@
 /build/
 # Ignore these mudlib folders and any changes there
 /lib/data/
+lib/data/daemons/
 /lib/help/
 /lib/log/
+/lib/wiz/
+/lib/.vscode/
+/lib/tmp/
 /open/
 tmp_*
 # but not these
