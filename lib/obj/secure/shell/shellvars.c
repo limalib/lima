@@ -159,13 +159,12 @@ int cmd_set(string *argv, string *implode_info)
    {
    case 1:
       write("Current variables\n"
-            "(unset varname to unset):\n"
-            "-----------------------------\n");
+            "(unset varname to unset):\n\n");
       foreach (var, val in variables)
          if (val == "")
-            write(var + " ---->  is set.\n");
+            write(var + " is set.\n");
          else
-            printf("%-10s%O\n", var + " ----> ", val);
+            printf("%-10s%O\n", var + ": ", val);
       write("\n");
       return 1;
    case 2:

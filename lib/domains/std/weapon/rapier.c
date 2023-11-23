@@ -4,7 +4,6 @@
 //Notice custom property "skillfull".
 
 inherit SWORD;
-function mod_func = ( : mod_skill:);
 
 void wielded()
 {
@@ -26,6 +25,5 @@ void setup()
    set_skill_restriction("combat/melee/blade", 2);
    set_skill_restriction_message("The rapier feels foreign in $p hand. $N $vwield it like $n would wield a stick.");
    add_combat_message("miss", "$N $vtake an untrained swipe at $t, but only $vsucceed in losing $p footing.");
-   set_can_dual_wield(1);
    add_property("skillfull");
 }
