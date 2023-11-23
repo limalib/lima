@@ -111,7 +111,7 @@ void banner_rankup(string skill, int rank)
 int check_rank(string skill_name, int sp)
 {
    int rank = 0;
-   int rankUp = 0;
+   int rank_up = 0;
 
    while (rank < (sizeof(ranks) - 1) && sp > ranks[rank])
    {
@@ -120,14 +120,14 @@ int check_rank(string skill_name, int sp)
    // TBUG(this_object()+"Name: "+skill_name+" Cached rank: "+skill_ranks[skill_name]+" calc rank: "+rank+" Skillpoints:
    // "+sp);
 
-   rankUp = rank > skill_ranks[skill_name] ? 1 : 0;
-   if (rankUp)
+   rank_up = rank > skill_ranks[skill_name] ? 1 : 0;
+   if (rank_up)
    {
       banner_rankup(skill_name, rank);
       skill_ranks[skill_name] = rank;
    }
 
-   return rankUp;
+   return rank_up;
 }
 
 //: FUNCTION query_skill_ranks

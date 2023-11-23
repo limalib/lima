@@ -275,6 +275,7 @@ void do_wear()
    }
    if (stat_bonus && stat_mod)
       environment()->add_hook(stat_bonus + "_bonus", stat_mod);
+   this_object()->worn();
 }
 
 void do_remove()
@@ -295,6 +296,7 @@ void do_remove()
    }
    if (stat_bonus && stat_mod)
       environment()->remove_hook(stat_bonus + "_bonus", stat_mod);
+   this_object()->removed();
 }
 
 mixed direct_wear_obj()
