@@ -15,6 +15,11 @@ void create()
    set_privilege(1);
 }
 
+int simplify()
+{
+   return this_user()->query_shell_ob() && this_user()->query_shell_ob()->get_variable("simplify") == 1;
+}
+
 varargs nomask mixed call_main(mixed arg1, mixed arg2, mixed arg3, mixed arg4, mixed implode_info,
                                mixed remaining_implode_info, string original_input)
 {

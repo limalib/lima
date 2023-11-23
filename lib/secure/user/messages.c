@@ -173,7 +173,7 @@ void do_receive(string msg, int msg_type)
    }
 
    // Handle Emoji replacement if turned on for this player.
-   if (query_shell_ob() && query_shell_ob()->get_variable("emoji") == 1)
+   if ((!msg_type & NO_ANSI) && query_shell_ob() && query_shell_ob()->get_variable("emoji") == 1)
       msg = EMOJI_D->emoji_replace(msg, msg_type);
 
    receive(msg);

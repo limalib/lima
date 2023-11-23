@@ -66,7 +66,6 @@ void main(string arg)
 void player_menu_entry(string str)
 {
    bare_init();
-   ZBUG(str);
    main(str);
    done_outputing();
 }
