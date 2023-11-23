@@ -147,7 +147,7 @@ void main(string arg)
       width = item_length(armours->short()) + (uni ? 2 : 4);
       set_frame_title("Armours");
       set_frame_header(sprintf("%-" + width + "." + width + "s  %-21s  %-3s  %-5s  %s", "Item", "Worn on", "AC", "Dura",
-                               "Stat mod."));
+                               "Modifiers"));
       foreach (object a in armours)
       {
          string *slots = ({a->query_slot()});

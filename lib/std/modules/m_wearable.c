@@ -39,6 +39,8 @@ int worn_under;
 private
 string stat_bonus;
 private
+string extra_mod;
+private
 mapping stat_mods = ([]);
 
 void mudlib_setup()
@@ -79,6 +81,11 @@ void set_worn_under(int wu)
    worn_under = wu;
 }
 
+void set_extra_mod(string s)
+{
+   extra_mod = s;
+}
+
 varargs string stat_mods_string(int compact)
 {
    string *s = ({});
@@ -88,6 +95,8 @@ varargs string stat_mods_string(int compact)
       foreach (string stat, int value in stat_mods)
          s += ({capitalize(stat) + (compact ? "" : " ") + (value >= 0 ? "+" : "") + value});
    }
+   if (extra_mod)
+      s += ({extra_mod});
 
    mods = format_list(s, ",");
    mods = replace_string(mods, " , ", ", ");
