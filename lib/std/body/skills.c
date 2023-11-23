@@ -219,7 +219,7 @@ class skill query_skill(string s)
    if (!skills[s])
       return 0;
    skill = copy(skills[s]);
-   skill.skill_points+=skill_bonus[s];
+   skill.skill_points += skill_bonus[s];
    return skill;
 }
 
@@ -239,6 +239,8 @@ int query_skill_pts(string skill)
 void add_skill_bonus(string s, int v)
 {
    class skill skill, new_skill;
+   if (skills[s])
+      skills[s] = new (class skill);
    if (!skill_bonus[s])
       skill_bonus[s] = 0;
    skill_bonus[s] += v;
