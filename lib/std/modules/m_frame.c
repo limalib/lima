@@ -145,7 +145,7 @@ void set_frame_title(string s)
 
 void set_width(int w)
 {
-   width = w;
+   width = CLAMP(w,10,1000);
 }
 
 void set_title_margin(int hm)
@@ -160,7 +160,7 @@ void set_text_margin(int tm)
 
 void frame_init_user()
 {
-   width = (this_user()->query_screen_width() ? this_user()->query_screen_width() - 2 : 79);
+   set_width(this_user()->query_screen_width() ? this_user()->query_screen_width() - 2 : 79);
    hcolours = (this_user()->frames_colour() != "none" ? colours[this_user()->frames_colour()] : colours["none"]);
    select_theme(this_user()->frames_theme());
    title_margin = 2;
