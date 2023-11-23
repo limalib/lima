@@ -80,7 +80,7 @@ void main(string arg)
          string name = names[i];
          class skill skill = target->query_skill(name);
          string *parts = explode(name, "/");
-         int bonus=target->query_skill_bonus(name)!=0;
+         int bonus = target->query_skill_bonus(name);
          int level = sizeof(parts);
          int next_level = (i + 1) < sizeof(names) ? sizeof(explode(names[i + 1], "/")) : 0;
          string name2 = repeat_string("   ", sizeof(parts) - 1) + parts[ < 1];
@@ -105,10 +105,10 @@ void main(string arg)
             set_frame_title(pretty_name);
          }
          else if (percentage || target->is_body())
-            content += sprintf("%-25s "+(bonus? warning("+"):" ")+"%4s [<040>%s<238>%s<res>] %-7s\n",
+            content += sprintf("%-25s " + (bonus > 0 ? "<010>+<res>" : (bonus < 0 ? "<009>-<res>" : " ")) +
+                                   "%4s [<040>%s<238>%s<res>] %-7s\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
-                               percentage+
-                               "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
+                               percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
 #ifdef SKILL_CONFIG_USES_TRAINING_PTS
                                target->is_body() ? accent(skill.training_points) : ""
 #else
