@@ -99,6 +99,8 @@ void mark_wielded_by(object which, string *limbs)
    wielding_limbs = limbs;
    if (!which)
       this_object()->unwielded();
+   else
+      this_object()->wielded();
    hook_state("move", move_hook, which && which != this_object());
    if (arrayp(limbs) && sizeof(limbs) >= 2)
    {

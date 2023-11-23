@@ -53,6 +53,7 @@
 
 #include <classes.h>
 #include <config/skills.h>
+#include <hooks.h>
 
 inherit CLASS_SKILL;
 
@@ -62,6 +63,8 @@ private
 nosave mapping skill_ranks = ([]);
 private
 nosave mixed ranks = SKILL_D->ranks();
+private
+nosave mapping skill_bonus = ([]);
 
 int base_test_skill(string skill, int opposing_skill);
 
@@ -210,9 +213,14 @@ void clean_skills()
 //: FUNCTION query_skill
 // class skill query_skill(string skill);
 // Returns a single class skill by name.
-class skill query_skill(string skill)
+class skill query_skill(string s)
 {
-   return skills[skill];
+   class skill skill;
+   if (!skills[s])
+      return 0;
+   skill = copy(skills[s]);
+   skill.skill_points+=skill_bonus[s];
+   return skill;
 }
 
 //: FUNCTION query_skill_pts
@@ -225,6 +233,30 @@ int query_skill_pts(string skill)
 {
    if (skills[skill])
       return skills[skill].skill_points;
+   return -1;
+}
+
+void add_skill_bonus(string s, int v)
+{
+   class skill skill, new_skill;
+   if (!skill_bonus[s])
+      skill_bonus[s] = 0;
+   skill_bonus[s] += v;
+}
+
+void remove_skill_bonus(string s, int v)
+{
+   add_skill_bonus(s, (-1 * v));
+}
+
+//: FUNCTION query_skill_bonus
+// int query_skill_bonus(string skill);
+// Returns the current skill bonus for a skill.
+// Returns -1 if the skill doesn't exist for the player.
+int query_skill_bonus(string skill)
+{
+   if (skills[skill])
+      return skill_bonus[skill];
    return -1;
 }
 
@@ -248,6 +280,7 @@ int aggregate_skill(string skill)
    int total_skill = 0;
    int coef = 1;
 
+   // total_skill += this_object()->call_hooks("modify_skill", HOOK_SUM, 0, skill);
    while (1)
    {
       class skill my_skill;

@@ -3,7 +3,7 @@
 // Davmar/Nevyn
 
 //: COMMAND
-//$$ see: clone, clean
+//$$ see: clone, clean, scan
 // USAGE:  dest <object>
 //
 // This command destroys an object in your inventory or in your environment.
@@ -17,6 +17,10 @@ void main(mixed *arg)
 
    ob = arg[0];
 
+   //Give objects a chance before dested.
+   ob->do_remove();
+
+   //Message about the dest.
    if (ob->short())
    {
       this_body()->do_player_message("destruct", ob);

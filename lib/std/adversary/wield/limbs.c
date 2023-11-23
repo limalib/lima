@@ -156,7 +156,7 @@ varargs void wield(object ob, string limb, int force_dual_wield)
       ob->mark_wielded_by(this_object(), ({limb}));
    }
 
-   call_hooks("on_wield", HOOK_IGNORE);
+   call_hooks("on_wield", HOOK_IGNORE,0,ob,limb);
 
    // Uh oh, object is not for everyone
    restriction_level = ob->query_restriction_level();

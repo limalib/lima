@@ -19,7 +19,6 @@ void mudlib_setup()
    set_skill_used("combat/melee/club");
    set_salvageable((["wood":40, "textile":10, "metal":50]));
    add_save(({"persist_flags"}));
-   TBUG(query_salvageable());
 }
 
 int query_value()
