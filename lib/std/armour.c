@@ -19,7 +19,7 @@ void mudlib_setup()
    object::mudlib_setup();
    m_wearable::mudlib_setup();
    set_salvageable((["textile":50, "metal":50]));
-   add_id("armour", "armour");
+   add_id("armour", "armor");
    set_mass(1);
 }
 
