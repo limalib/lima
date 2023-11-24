@@ -33,12 +33,7 @@
 inherit CMD;
 inherit M_FRAME;
 inherit M_WIDGETS;
-
-class wear_info
-{
-   object primary;
-   object *others;
-}
+inherit CLASS_WEAR_INFO;
 
 mapping short_names = DAMAGE_D->query_short_names();
 
@@ -106,7 +101,10 @@ void main(string arg)
    foreach (string limb in body->query_limbs())
    {
       if (body->find_wi(limb) && member_array(body->find_wi(limb), armours) == -1)
+      {
          armours += ({((class wear_info)body->find_wi(limb))->primary});
+         armours += ({((class wear_info)body->find_wi(limb))->secondary});
+      }
    }
 
    weapons = filter_array(weapons, ( : $1:));

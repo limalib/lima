@@ -16,6 +16,7 @@
 #define CLASS_SKILL         "/std/classes/skill"
 #define CLASS_STATMODS      "/std/classes/statmods"
 #define CLASS_BODYSLOTS     "/std/classes/bodyslot"
+#define CLASS_WEAR_INFO     "/std/classes/wear_info"
 #define CLASS_MOVE          "/std/classes/move"
 #define CLASS_ALIAS         "/obj/secure/shell/classes/alias"
 

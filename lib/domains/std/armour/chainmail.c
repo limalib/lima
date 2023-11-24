@@ -14,4 +14,5 @@ void setup()
    set_resist("slashing", 2); // a little better against blades
    set_wearmsg("$N $vput on a $o.");
    set_slot("torso");
+   set_also_covers("left arm", "right arm");
 }

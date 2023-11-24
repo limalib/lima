@@ -1,19 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 inherit CLASS_EVENT_INFO;
+inherit CLASS_WEAR_INFO;
 
 int is_limb(string);
 string *query_limbs();
 string query_random_limb();
 string *query_non_limbs();
 varargs int query_max_health(string);
-
-class wear_info
-{
-   object primary;
-   object *others;
-   object secondary;
-}
 
 private mapping armours = ([]);
 
@@ -65,13 +59,6 @@ object *query_armours(string s)
    armours += ({wi.primary}) + (arrayp(wi.others) ? wi.others : ({0})) + ({wi.secondary});
    armours -= ({0});
    return sizeof(armours) ? armours : 0;
-
-   /*
-   if (wi.primary)
-      return wi.others ? ({wi.primary}) + wi.others : ({wi.primary});
-   else
-      return wi.others ? wi.others : 0;
-      */
 }
 
 //: FUNCTION wear_item

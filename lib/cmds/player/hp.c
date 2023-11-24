@@ -73,7 +73,7 @@ void main(string arg)
    frame_init_user();
    set_frame_title("HP");
    set_frame_header(
-       sprintf("%14s %6-s %5s/%5-s %5-s %s", "Limb", "Type", "HP", "Max", "armour", i_simplify() ? "" : "Bar"));
+       sprintf("%14s %6-s %5s/%5-s %5-s %s", "Limb", "Type", "HP", "Max", "Armour", i_simplify() ? "" : "Bar"));
 
    foreach (string name in names)
    {
