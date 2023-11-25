@@ -184,6 +184,13 @@ void main(string arg)
             slots += ({"full body"});
          }
 
+         if (member_array("arms", slots) != -1 && member_array("head", slots) != -1 &&
+             member_array("torso", slots) != -1)
+         {
+            slots -= ({"arms", "head", "torso"});
+            slots += ({"upper body"});
+         }
+
          slots = map_array(slots, ( : capitalize($1) :));
 
          content += sprintf(" %-" + width + "." + width + "s  %-21s  %-3s  %-5s  %s\n",

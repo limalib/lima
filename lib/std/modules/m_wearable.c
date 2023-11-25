@@ -214,22 +214,37 @@ string worn_attributes()
 
    if (also_covers())
       all += also_covers();
+
+   if (sizeof(all) > 1)
+   {
+      string *replaced = ({"hand", "foot", "leg", "arm", "paw", "claw", "head"});
+      foreach (string r in replaced)
+      {
+         if (member_array("left " + r, all) != -1 && member_array("right " + r, all) != -1)
+         {
+            all -= ({"left " + r, "right " + r});
+            all += ({r + "s"});
+         }
+      }
+
+      if (member_array("arms", all) != -1 && member_array("legs", all) != -1 && member_array("torso", all) != -1)
+      {
+         all -= ({"arms", "legs", "torso"});
+         all += ({"full body"});
+      }
+
+      if (member_array("arms", all) != -1 && member_array("head", all) != -1 && member_array("torso", all) != -1)
+      {
+         all -= ({"arms", "head", "torso"});
+         all += ({"upper body"});
+      }
+   }
+
    if (sizeof(all) > 1)
       worn_str = "(worn " + (query_worn_under() ? "underneath " : "") + "on " +
                  implode(all[0..(sizeof(all) - 2)], ", ") + ", and " + all[sizeof(all) - 1] + ")";
    else
       worn_str = "(worn " + (query_worn_under() ? "underneath " : "") + "on " + all[0] + ")";
-
-   // Some better grammar for humanoid limbs
-   // TODO: Should also handle paws, claws and other things.
-   worn_str = replace_string(worn_str, "left foot, and right foot", "feet");
-   worn_str = replace_string(worn_str, "right foot, and left foot", "feet");
-   worn_str = replace_string(worn_str, "left hand, and right hand", "hands");
-   worn_str = replace_string(worn_str, "right hand, and left hand", "hands");
-   worn_str = replace_string(worn_str, "left leg, and right leg", "legs");
-   worn_str = replace_string(worn_str, "right leg, and left leg", "legs");
-   worn_str = replace_string(worn_str, "left arm, and right arm", "arms");
-   worn_str = replace_string(worn_str, "right arm, and left arm", "arms");
 
    return worn_str;
 }
