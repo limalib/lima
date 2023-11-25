@@ -9,7 +9,8 @@ string query_random_limb();
 string *query_non_limbs();
 varargs int query_max_health(string);
 
-private mapping armours = ([]);
+private
+mapping armours = ([]);
 
 mapping query_armour_map()
 {
@@ -61,6 +62,27 @@ object *query_armours(string s)
    return sizeof(armours) ? armours : 0;
 }
 
+//: FUNCTION update_cover
+// Update the cover of a piece of equipment using this function should the cover change between wearing it and it being
+// removed and worn again.
+void update_cover(object what)
+{
+   mixed *also;
+   class wear_info wi;
+
+   also = what->also_covers();
+   if (also)
+      foreach (string limb in also)
+         if (wi = find_wi(limb))
+         {
+            if (wi.others && member_array(what, wi.others) == -1)
+               wi.others += ({what});
+            else
+               wi.others = ({what});
+            wi.others -= ({0});
+         }
+}
+
 //: FUNCTION wear_item
 // nomask int wear_item(object what, string where);
 // Forces the adversary to wear 'what' on its 'where' limb.
@@ -96,18 +118,7 @@ nomask int wear_item(object what, string where)
          return 0;
 
       wi.secondary = what;
-
-      also = what->also_covers();
-      if (also)
-         foreach (string limb in also)
-            if (wi = find_wi(limb))
-            {
-               if (wi.others)
-                  wi.others += ({what});
-               else
-                  wi.others = ({what});
-               wi.others -= ({0});
-            }
+      update_cover(what);
       return 1;
    }
 
@@ -117,17 +128,7 @@ nomask int wear_item(object what, string where)
    wi.primary = what;
 
    also = what->also_covers();
-   if (also)
-      foreach (string limb in also)
-         if (wi = find_wi(limb))
-         {
-            if (wi.others)
-               wi.others += ({what});
-            else
-               wi.others = ({what});
-            wi.others -= ({0});
-         }
-
+   update_cover(what);
    return 1;
 }
 
