@@ -366,9 +366,7 @@ void quit_menu()
 
 void mudlib_setup()
 {
-   MENU_ITEM main_seperator = (MENU_ITEM)new_seperator("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
    toplevel = (MENU)new_menu();
-   add_menu_item(toplevel, main_seperator);
    add_menu_item(toplevel, new_menu_item("Show the money you have", ( : show_money:), "s"));
    add_menu_item(toplevel, new_menu_item("List exchange rates", ( : show_rates:), "l"));
    add_menu_item(toplevel, new_menu_item("Exchange currencies", ( : exchange1:), "x"));
@@ -397,7 +395,7 @@ void begin_conversation()
                       "%. "
                       "You can deposit your money in " +
                       MONEY_D->query_plural(deposit_currency) + ".\n");
-      set_menu_title(toplevel, "Main Menu of " + bank_name);
+      set_menu_title(toplevel, "Main Menu of " + bank_name+"\n");
       init_menu_application(toplevel);
    }
 }

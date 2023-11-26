@@ -57,8 +57,10 @@ string ellipsis_name(string name, string *names)
    int width = item_length(names);
    int uni = uses_unicode();
    string ellipsis = uni ? "…" : "...";
+   if (simplify())
+      return capitalize(name);
 
-   if (strlen(name) - 1 > width)
+   if (strlen(name) - strlen(ellipsis) > width)
    {
       name = !width ? "..." : trim(name[0..width]) + ellipsis;
    }

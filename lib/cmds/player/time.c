@@ -94,3 +94,10 @@ void main(string notused)
    str = str[0.. < 2] + ".\n";
    out(str);
 }
+
+void player_menu_entry(string str)
+{
+   bare_init();
+   main(str);
+   done_outputing();
+}
