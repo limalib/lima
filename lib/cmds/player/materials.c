@@ -42,7 +42,7 @@ void main(string arg)
          widest_category = strlen(category);
 
    width = this_user()->query_screen_width() - widest_category;
-   per_row = width / (longest_mat + 6);
+   per_row = width / (longest_mat + 8);
 
    foreach (string category in mat_cats)
    {
