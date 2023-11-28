@@ -67,7 +67,7 @@ int do_verb_rule(string action, string rule, string prep, object ob)
 
    this_body()->spend_reflex(concentration_use());
 
-   if (this_body()->test_skill("misc/climb", challenge_rating))
+   if (this_body()->test_skill("misc/life/climbing", challenge_rating))
    {
       return ::do_verb_rule(action, rule, prep, ob);
    }
