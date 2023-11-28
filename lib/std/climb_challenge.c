@@ -54,18 +54,18 @@ int handle_fail(string action, string rule, string prep, object ob)
 int do_verb_rule(string action, string rule, string prep, object ob)
 {
    // You can always climb if you just have 5 point of mana.
-   if (action == "ascend" && this_body()->query_concentration() < 5)
+   if (action == "ascend" && this_body()->query_reflex() < 5)
    {
       write("You cannot concentrate enough to climb this.\n");
       return;
    }
 
-   if (action == "descend" && this_body()->query_concentration() < 5)
+   if (action == "descend" && this_body()->query_reflex() < 5)
    {
       return handle_fail(action, rule, prep, ob);
    }
 
-   this_body()->spend_concentration(concentration_use());
+   this_body()->spend_reflex(concentration_use());
 
    if (this_body()->test_skill("misc/climb", challenge_rating))
    {
