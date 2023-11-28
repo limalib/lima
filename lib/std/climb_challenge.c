@@ -2,7 +2,7 @@
 
 inherit EXIT_OBJ;
 
-#define CONCENTRATION_USE_FACTOR 5
+#define REFLEX_USE_FACTOR 5
 
 private
 string challenge_name = "";
@@ -28,9 +28,9 @@ void set_fail_climb_message(string *m)
    fail_messages = m;
 }
 
-int concentration_use()
+int reflex_use()
 {
-   return to_int(challenge_rating / CONCENTRATION_USE_FACTOR) || 1;
+   return to_int(challenge_rating / REFLEX_USE_FACTOR) || 1;
 }
 
 int handle_fail(string action, string rule, string prep, object ob)
@@ -65,7 +65,7 @@ int do_verb_rule(string action, string rule, string prep, object ob)
       return handle_fail(action, rule, prep, ob);
    }
 
-   this_body()->spend_reflex(concentration_use());
+   this_body()->spend_reflex(reflex_use());
 
    if (this_body()->test_skill("misc/life/climbing", challenge_rating))
    {

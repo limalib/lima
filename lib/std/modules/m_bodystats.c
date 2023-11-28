@@ -44,7 +44,7 @@
 **	Charisma:	natural attraction, leadership, persuasion
 **		Nobody vs. great leader/speaker
 **
-**  Mana:   intellectual capacity, magic ability, concentration
+**  Mana:   intellectual capacity, magic ability, reflex
 **      Distraught vs. Contemplative Guru
 **
 */
