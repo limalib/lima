@@ -217,7 +217,7 @@ string worn_attributes()
 
    if (sizeof(all) > 1)
    {
-      string *replaced = ({"hand", "foot", "leg", "arm", "paw", "claw", "head"});
+      string *replaced = ({"hand", "foot", "leg", "arm", "paw", "claw", "head", "wrist"});
       foreach (string r in replaced)
       {
          if (member_array("left " + r, all) != -1 && member_array("right " + r, all) != -1)
