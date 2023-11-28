@@ -12,10 +12,12 @@
 **     o disable newbie options
 */
 
+#include <combat_config.h>
 #include <commands.h>
 #include <menu.h>
 #include <mudlib.h>
 #include <playerflags.h>
+
 // ### for now
 #include <security.h>
 
@@ -26,6 +28,8 @@ inherit M_ACCESS;
 MENU toplevel;
 // submenus of the toplevel (main) menu
 MENU soulmenu;
+MENU ccmenu;
+
 MENU reportmenu;
 MENU remotemenu;
 MENU personalmenu;
@@ -37,6 +41,8 @@ MENU snoopablemenu;
 MENU_ITEM quit_item;
 MENU_ITEM goto_main_menu_item;
 MENU_ITEM main_seperator;
+
+void toggle_cc(int flag, string state);
 
 // right now, we're just going to call the help command.
 // private MENU helpmenu;
@@ -255,12 +261,118 @@ void remote_who()
    write("Which mud do you want to query?\n");
    complete_choice(0, IMUD_D->query_mudnames(), ( : finish_who:));
 }
+void update_ccmenu()
+{
+   // Add items to the combat config menu
+   this_body()->update_combat_config();
+   set_menu_items(
+       ccmenu,
+       ({main_seperator,
+         new_menu_item(
+             "Hide missed swings in combat      [" +
+                 (this_body()->combat_config(CC_HIDE_MISSES) ? "%^GREEN%^ON%^RESET%^" : "%^RED%^OFF%^RESET%^") + "]",
+             (
+                 : get_input_then_call,
+                   (
+                       : toggle_cc, CC_HIDE_MISSES:),
+                   "Toggle on "
+                   "(y/n): "
+                 :),
+             "s"),
+         new_menu_item(
+             "Hide attacks without damage       [" +
+                 (this_body()->combat_config(CC_HIDE_NO_DAMAGE) ? "%^GREEN%^ON%^RESET%^" : "%^RED%^OFF%^RESET%^") + "]",
+             (
+                 : get_input_then_call,
+                   (
+                       : toggle_cc, CC_HIDE_NO_DAMAGE:),
+                   "Toggle on "
+                   "(y/n): "
+                 :),
+             "n"),
+         new_menu_item(
+             "Hide low damage attacks           [" +
+                 (this_body()->combat_config(CC_HIDE_LOW_DAMAGE) ? "%^GREEN%^ON%^RESET%^" : "%^RED%^OFF%^RESET%^") +
+                 "]",
+             (
+                 : get_input_then_call,
+                   (
+                       : toggle_cc, CC_HIDE_LOW_DAMAGE:),
+                   "Toggle on "
+                   "(y/n): "
+                 :),
+             "l"),
+         new_menu_item(
+             "Hide disabled limb messages       [" +
+                 (this_body()->combat_config(CC_HIDE_DISABLE_LIMB) ? "%^GREEN%^ON%^RESET%^" : "%^RED%^OFF%^RESET%^") +
+                 "]",
+             (
+                 : get_input_then_call,
+                   (
+                       : toggle_cc, CC_HIDE_DISABLE_LIMB:),
+                   "Toggle on "
+                   "(y/n): "
+                 :),
+             "d"),
+         new_menu_item(
+             "Hide non-vital stuns              [" +
+                 (this_body()->combat_config(CC_HIDE_SIMPLE_STUNS) ? "%^GREEN%^ON%^RESET%^" : "%^RED%^OFF%^RESET%^") +
+                 "]",
+             (
+                 : get_input_then_call,
+                   (
+                       : toggle_cc, CC_HIDE_SIMPLE_STUNS:),
+                   "Toggle on "
+                   "(y/n): "
+                 :),
+             "S"),
+         new_menu_item(
+             "Hide dodges                       [" +
+                 (this_body()->combat_config(CC_HIDE_DODGES) ? "%^GREEN%^ON%^RESET%^" : "%^RED%^OFF%^RESET%^") + "]",
+             (
+                 : get_input_then_call,
+                   (
+                       : toggle_cc, CC_HIDE_DODGES:),
+                   "Toggle on "
+                   "(y/n): "
+                 :),
+             "D"),
+         goto_main_menu_item, quit_item}));
+}
+
+void toggle_cc(int flag, string state)
+{
+   object shell = this_user()->query_shell_ob();
+   string *cconfig;
+   if (state != "y" && state != "n")
+   {
+      write("y or n only.\n");
+      return;
+   }
+
+   TBUG("What: " + flag + " state: " + state);
+   if (get_user_variable("cconfig") == 0)
+      shell->set_variable("cconfig", CC_SIZE);
+
+   cconfig = explode(get_user_variable("cconfig"), "");
+
+   // If variable was extended, pad it with 'n's.
+   if (sizeof(cconfig) < strlen(CC_SIZE))
+      cconfig = explode(sprintf("%-" + sizeof(CC_SIZE) + "'n's", implode(cconfig, "")), "");
+
+   if (flag < sizeof(CC_SIZE))
+      cconfig[flag] = state;
+
+   shell->set_variable("cconfig", implode(cconfig, ""));
+   update_ccmenu();
+}
 
 void create()
 {
    set_privilege(1);
 
    toplevel = new_menu(mud_name() + " Game Menu");
+   ccmenu = new_menu("Combat Config");
    soulmenu = new_menu("Soul Menu");
    reportmenu = new_menu("Reporter Menu");
    personalmenu = new_menu("Personal Menu");
@@ -280,6 +392,7 @@ void create()
    // Add items to the toplevel (main) menu.
    add_menu_item(toplevel, main_seperator);
    add_menu_item(toplevel, new_menu_item("Read news (news)", ( : simple_cmd:), "n"));
+   add_menu_item(toplevel, new_menu_item("Combat configuration", ccmenu, "c"));
    add_menu_item(toplevel, new_menu_item("Send or read mail (mail)", ( : start_mail:), "m"));
    add_menu_item(toplevel, new_menu_item("See who's on (who)", ( : simple_cmd:), "w"));
    add_menu_item(toplevel, new_menu_item("Get info about a person (finger)",
@@ -298,6 +411,7 @@ void create()
    add_menu_item(toplevel, quit_item);
    add_menu_item(toplevel, new_menu_item("Help", ( : simple_cmd:), "?"));
 
+   update_ccmenu();
    // Add items to the soul menu.
    add_menu_item(soulmenu, main_seperator);
    add_menu_item(soulmenu, new_menu_item("List souls",

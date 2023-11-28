@@ -49,6 +49,7 @@ void set_variable(string name, mixed value)
       default_variables();
    switch (name)
    {
+   case "cconfig":
    case "mode":
    case "emoji":
    case "frames":
@@ -68,6 +69,7 @@ void unset_variable(string name, mixed value)
       default_variables();
    switch (name)
    {
+   case "cconfig":
    case "mode":
    case "emoji":
    case "frames":
