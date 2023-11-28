@@ -217,13 +217,15 @@ string worn_attributes()
 
    if (sizeof(all) > 1)
    {
-      string *replaced = ({"hand", "foot", "leg", "arm", "paw", "claw", "head", "wrist"});
-      foreach (string r in replaced)
+      mapping replaced = (["hand":"hands",
+                           "foot":"feet", "leg":"legs", "arm":"arms", "paw":"paws", "claw":"claws", "head":"heads",
+                          "wrist":"wrists"]);
+      foreach (string r in keys(replaced))
       {
          if (member_array("left " + r, all) != -1 && member_array("right " + r, all) != -1)
          {
             all -= ({"left " + r, "right " + r});
-            all += ({r + "s"});
+            all += ({replaced[r]});
          }
       }
 
