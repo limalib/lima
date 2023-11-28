@@ -170,6 +170,7 @@
 #define EXIT_OBJ           "/std/complex_exit_obj"
 #define DOOR               "/std/door"
 #define SECRET_DOOR        "/std/secret_door"
+#define CLIMB_CHALLENGE    "/std/climb_challenge"
 #define FLAME              "/std/flame"
 #define HIDDEN_DOOR        "/std/hidden_door"
 #define HIDDEN_EXIT        "/std/hidden_exit"
