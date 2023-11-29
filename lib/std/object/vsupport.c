@@ -116,7 +116,7 @@ mixed direct_get_obj(object ob)
    if (environment(this_object()))
    {
       mixed result = environment(this_object())->direct_get_obj(ob);
-      if (result)
+      if (intp(result))
          return result;
    }
    if (environment(this_object()) != environment(this_body()))
