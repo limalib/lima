@@ -17,7 +17,12 @@ void do_pull_obj_str(object ob, string str)
    ob->do_pull_str(str);
 }
 
+void do_pull_str_obj(string str, object ob)
+{
+   ob->do_pull_str(str);
+}
+
 void create()
 {
-   add_rules(({"OBJ", "OBJ STR", "OBJ with OBJ"}), ({"yank"}));
+   add_rules(({"OBJ", "OBJ STR", "STR OBJ", "OBJ with OBJ"}), ({"yank"}));
 }

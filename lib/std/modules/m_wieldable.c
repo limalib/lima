@@ -146,6 +146,11 @@ mixed direct_wield_obj()
    return 1; /* Fall through */
 }
 
+mixed direct_dualwield_obj()
+{
+   return direct_wield_obj();
+}
+
 mixed direct_unwield_obj()
 {
    object who = owner(this_object());
@@ -208,9 +213,19 @@ mixed direct_wield_obj_in_str(object ob, string limb)
    return 1;
 }
 
+mixed direct_dualwield_obj_in_str(object ob, string limb)
+{
+   return direct_wield_obj_in_str(ob, limb);
+}
+
 mixed direct_wield_obj_with_str(object ob, string limb)
 {
    return direct_wield_obj_in_str(ob, limb);
+}
+
+mixed direct_dualwield_obj_with_str(object ob, string limb)
+{
+   return direct_dualwield_obj_with_str(ob, limb);
 }
 
 mixed direct_remove_obj()

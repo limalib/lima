@@ -265,11 +265,11 @@ void set_weapon_class(int x)
 }
 
 //Override in weapons if you want. Default is a 25% bonus
-//if you dual wield a weapon.
+//if you dual wield a weapon. At least 1.
 int query_weapon_class_bonus()
 {
    if (this_object()->query_dual_wielded())
-      return to_int(weapon_class*0.25);
+      return to_int(weapon_class*0.25) || 1;
 }
 
 int query_weapon_class()
