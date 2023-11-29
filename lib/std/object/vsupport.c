@@ -392,7 +392,7 @@ mixed indirect_search_obj_for_obj(object ob1, object ob2)
    return default_object_checks();
 }
 
-// FUNCTION direct_search_for_str
+//: FUNCTION direct_search_for_str
 // Default
 mixed direct_search_for_str(string str)
 {
@@ -492,8 +492,8 @@ mixed indirect_search_obj_for_str_with_obj(object ob1, string str, object ob2)
    return 1;
 }
 
-// FUNCTION do_search
-//  Default searching.
+//: FUNCTION do_search
+// Default searching.
 varargs void do_search(object with, string search_for)
 {
    string str = "$N $vsearch ";
