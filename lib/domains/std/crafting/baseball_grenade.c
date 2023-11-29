@@ -12,7 +12,7 @@ void setup()
            "Throw it or throw it at someone.");
   set_skill_used("combat/thrown/grenade");
   set_combat_messages("combat-firearm");
-  set_damage_type("blow");
+  set_damage_type("bludgeon");
   set_weapon_class(10);
   set_value(40);
   set_weight(1);

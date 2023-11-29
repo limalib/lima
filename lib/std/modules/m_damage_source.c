@@ -26,7 +26,7 @@ nosave int damage_bonus;
 private
 nosave int anti_disarm;
 private
-string *damage_type = ({"blow"});
+string *damage_type = ({"bludgeon"});
 private
 nosave mapping def_combat_messages = ([]);
 private
