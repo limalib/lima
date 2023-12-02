@@ -438,8 +438,8 @@ nomask varargs void login_handle_logon(int state, mixed extra, string arg)
          /*
          ** Done with the login sequence.  Pop our input handler now.
          */
-#ifdef USE_USER_MENU
          modal_pop();
+#ifdef USE_USER_MENU
          new (USER_MENU)->start_menu();
          return;
 #else
