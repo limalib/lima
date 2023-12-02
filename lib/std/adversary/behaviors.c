@@ -136,6 +136,8 @@ void adversary_met(object who)
       call_out("is_hunted_call", 1 + random(2), who);
       i_met(who);
    }
+   else
+      i_met(who);
 }
 
 //: FUNCTION adversary_moved

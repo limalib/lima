@@ -50,6 +50,7 @@ void set_variable(string name, mixed value)
    switch (name)
    {
    case "cconfig":
+   case "hints":
    case "mode":
    case "emoji":
    case "frames":
@@ -70,6 +71,7 @@ void unset_variable(string name, mixed value)
    switch (name)
    {
    case "cconfig":
+   case "hints":
    case "mode":
    case "emoji":
    case "frames":

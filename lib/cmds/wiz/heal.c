@@ -14,8 +14,7 @@ void main(string arg)
 
    if (!arg || arg == "me" || arg == "myself")
    {
-      this_body()->simple_action("$N $vclose $p eyes and $vglow warmly, healing
-$no.");
+      this_body()->simple_action("$N $vclose $p eyes and $vglow warmly, healing $no.");
       this_body()->heal_all();
       return;
    }
@@ -26,8 +25,7 @@ $no.");
    }
    if (target == this_body())
    {
-      this_body()->simple_action("$N $vclose $p eyes and $vglow warmly, healing
-$no.");
+      this_body()->simple_action("$N $vclose $p eyes and $vglow warmly, healing $no.");
       this_body()->heal_all();
       return;
    }
