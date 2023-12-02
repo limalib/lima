@@ -807,7 +807,7 @@ varargs string identify(mixed a)
 {
    int i, s;
    string ret;
-   mapping RealMap;
+   mapping real_map;
 
    if (undefinedp(a))
       return "UNDEFINED";
@@ -819,10 +819,12 @@ varargs string identify(mixed a)
       return "" + a;
    if (objectp(a))
    {
+      /*
       if (ret = a->GetKeyName())
          ret += " ";
       else
          ret = "";
+      */
       return "OBJ(" + ret + file_name(a) + ")";
    }
    if (stringp(a))
@@ -850,14 +852,14 @@ varargs string identify(mixed a)
    if (mapp(a))
    {
       ret = "([ ";
-      RealMap = (mapping)(a);
-      a = keys(RealMap);
+      real_map = (mapping)(a);
+      a = keys(real_map);
       s = sizeof(a);
       for (i = 0; i < s; i++)
       {
          if (i)
             ret += ", ";
-         ret += identify(a[i]) + " : " + identify(RealMap[a[i]]);
+         ret += identify(a[i]) + " : " + identify(real_map[a[i]]);
       }
       return ret + (s ? " " : "") + "])";
    }
