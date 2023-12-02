@@ -1,6 +1,16 @@
 inherit ARMOUR;
 
-   //Need mechanism to modify the stance skill and improve it when wearing these.
+void worn()
+{
+   environment()->add_skill_bonus("combat/defense/stance",50);
+   write("You feel your stance improve immediately.");
+}
+
+void removed()
+{
+   environment()->remove_skill_bonus("combat/defense/stance",50);
+   write("You feel your stance go back to normal after removing the sneakers.");
+}
 
 void setup()
 {
@@ -13,4 +23,5 @@ void setup()
        "levitation technology, the sole allows the wearer to literally hover a few millimeters above the ground.");
    set_slot("left foot");
    set_also_covers("right foot");
+   set_extra_mod("[stance]");
 }

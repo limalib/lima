@@ -11,7 +11,7 @@ void setup()
             "The room is well-lit with practical fluorescent lighting and is devoid of any decorative elements.\n"
             "There's a $lamp control panel with buttons and digital displays to operate the elevator. The elevator "
             "doors are $elevator_door.");
-   set_exits((["north":"n_hall3"]));
+   set_exits((["north":"n_hall3","west":"w_hall3"]));
    set_objects(
        (["/std/elevator_call_button":({"1/Maintenance", "^omega/room/elevator_center"}),
                 "/std/elevator_door":({"northwest", "^omega/room/elevator_center"}), "^std/junk/random_trash":1]));
@@ -39,6 +39,7 @@ string *query_hint(int level)
    if (level < 10)
    {
       return ({"The pile of trash can be searched for random items - 'search trash'.",
-               "After you find something you can 'salvage' it, and see what you found using 'materials'."});
+               "After you find something you can 'salvage' it, and see what you found using 'materials'.",
+               "A small area with a few monsters to fight can be found west of here. Talk to the NPC there."});
    }
 }

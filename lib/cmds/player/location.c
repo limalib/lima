@@ -91,3 +91,10 @@ void main(string arg)
 
    write(frame_render());
 }
+
+void player_menu_entry(string str)
+{
+   bare_init();
+   main(str);
+   done_outputing();
+}

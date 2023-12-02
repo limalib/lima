@@ -12,8 +12,10 @@ string query_hint(int level)
 
 void add_inventory()
 {
+   add_sell("^omega/armour/hyperspace_hoodie", 10);
    add_sell("^common/item/vdu", -1);
-   add_sell("^omega/armour/sneakers",5);
+   add_sell("^omega/armour/gravity_gloves",5);
+   add_sell("^omega/armour/sneakers", 5);
    add_sell("^std/consumable/pain_killers", -1);
 }
 
@@ -37,20 +39,15 @@ void setup()
          "say Step right up and behold the wonders of the universe! Our gadgets are so cool, even black holes envy "
          "them!",
          "say Looking for a device that can translate alien languages? You're in luck; our Universal Babble Blaster is "
-         "on "
-         "sale!",
+         "on sale! ... sadly also out of stock these days.",
          "say Space fashion tip: A well-equipped explorer is always a well-accessorized one. Trust me, I'm practically "
-         "a "
-         "space style guru!",
-         "say Need a gadget for those moments when you accidentally float away? Try our GravityGrip Gloves – they're "
-         "like "
-         "velcro for space!",
+         "a space style guru!",
+         "say Need a gadget for those moments when you accidentally float away? Try our GravityGrip Gloves - they're "
+         "like velcro for space!",
          "say Our levitating sneakers aren't just for show. They're scientifically proven to reduce tripping by 99.9% "
-         "in "
-         "any gravitational field!",
-         "say Why settle for a regular wristwatch when you can have a Time-Warp Chronometer? It not only tells time "
-         "but "
-         "predicts your next coffee break!",
+         "in any gravitational field!",
+         "say Why settle for a regular wristwatch when you can have a Freamon VDU? It not only tells time "
+         "but predicts your next coffee break!",
          "say Attention, starry-eyed shoppers! Today's special: Hyperspace Hoods – because even your hoodie should be "
          "faster than light!",
          "say Don't let cosmic rays cramp your style! Our Galactic Shades not only protect your eyes but make you look "

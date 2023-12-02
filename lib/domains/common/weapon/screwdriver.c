@@ -7,7 +7,7 @@ void setup()
    set_id("screwdriver");
    set_weight(0.3);
    set_value(0.2);
-   set_weapon_class(1);
+   set_weapon_class(2);
    set_combat_messages("combat-sword");
    set_damage_type("piercing");
    set_skill_used("combat/melee/improv");

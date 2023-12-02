@@ -2,7 +2,7 @@ inherit INDOOR_ROOM;
 
 void setup()
 {
-   set_area("omega_terminal", "landing_term");
+   set_area("omega_terminal", "maintenance");
    // set_weather(1);
    set_light(1);
    set_brief("Maintenance North Hallway");

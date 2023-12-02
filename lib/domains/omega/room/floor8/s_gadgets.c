@@ -4,20 +4,16 @@ void setup()
 {
    set_area("omega_terminal", "landing_term");
    set_brief("Galactic Gadgets");
-   set_long("The banking office of Omega Banking Services stands as a futuristic nexus of finance within the "
-            "cosmic expanse. The interior is a symphony of sleek, metallic surfaces and cutting-edge technology. "
-            "Luminescent panels embedded in the walls cast a soft, cool glow, creating an atmosphere of modern "
-            "sophistication. A series of hovering holographic displays andtransparent counters, constructed from "
-            "durable yet aesthetically pleasing materials, facilitate secure and transparent transactions.");
-   set_smell("The air carries a faint scent of fake floral perfumes.");
+   set_long("The Galactic Gadgets Electronics store itself is a vibrant hub of innovation, with holographic displays "
+            "showcasing the latest wearable tech for cosmic nomads.");
    set_listen("The subtle hum of advanced machinery underscores the atmosphere, reinforcing the station's commitment "
               "to cutting-edge financial services amid the vastness of space.");
 
    add_item("floor", (["look":"The floor, perhaps made of synthetic materials, maintains a spotless sheen, reflecting "
                               "the ambient light. "]));
    add_item("displays", "hovering holographic displays", "display", "holographic displays",
-            (["look":"Hovering holographic displays present real-time financial data and market trends, captivating "
-                     "the attention of clients."]));
+            (["look":"Hovering holographic displays present the latest in wearable tech. Use 'list' to see what is for "
+                     "sale."]));
 
    set_objects((["../../npc/floor8/zara_nebulon.c":1]));
    set_exits((["east":"s_hall2"]));

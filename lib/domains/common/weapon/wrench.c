@@ -12,4 +12,5 @@ void setup()
    set_damage_type("bludgeon");
    set_skill_used("combat/melee/club");
    set_salvageable((["metal":100 ]));
+   set_can_dual_wield(1);
 }

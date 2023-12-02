@@ -14,5 +14,5 @@ void setup()
    set_skill_used("combat/melee/club");
    set_ammo_type("11mm bullets");
    set_combat_messages("combat-torch");
-   set_salvageable((["textile":10, "metal":70, "nature":20]));
+   set_salvageable((["textile":10, "metal":70, "mineral":20]));
 }

@@ -47,7 +47,9 @@ void create_cabinet()
 {
    object s;
 
-   s = new (COINS, (random(5) + 5), "credit");
+   s = new ("/domains/std/consumable/bandage");
+   s->move(present("cabinet"));
+   s = new ("/domains/std/consumable/beer");
    s->move(present("cabinet"));
    s = new ("/domains/omega/armour/bomber_jacket");
    TBUG("creating jacket");

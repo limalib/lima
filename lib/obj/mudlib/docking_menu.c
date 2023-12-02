@@ -242,7 +242,7 @@ void bank_statement()
 {
    string bank = SHIP_D->query_bank(this_body());
    frame_init_user();
-   accent_text("You rental contract is tied to: " + upper_case(bank + " bank"));
+   accent_text("Your automatic withdrawals are tied to: " + upper_case(bank + " bank"));
    write(replace_string(ACCOUNT_D->bank_statement(bank, "credit", this_body()), " crd", " ¤  ") + "\n\n");
 }
 

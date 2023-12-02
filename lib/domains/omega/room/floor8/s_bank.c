@@ -3,8 +3,8 @@ inherit INDOOR_ROOM;
 void setup()
 {
    set_area("omega_terminal", "landing_term");
-   set_brief("OBS");
-   set_long("The banking office of Omega Banking Services stands as a futuristic nexus of finance within the "
+   set_brief("Omega Galactic Bank");
+   set_long("The banking office of Omega Galactic stands as a futuristic nexus of finance within the "
             "cosmic expanse. The interior is a symphony of sleek, metallic surfaces and cutting-edge technology. "
             "Luminescent panels embedded in the walls cast a soft, cool glow, creating an atmosphere of modern "
             "sophistication. A series of hovering holographic displays andtransparent counters, constructed from "

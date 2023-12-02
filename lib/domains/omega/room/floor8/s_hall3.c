@@ -3,7 +3,7 @@ inherit INDOOR_ROOM;
 void setup()
 {
    set_area("omega_terminal", "landing_term");
-   set_brief("Stellar Lane near OBS");
+   set_brief("Stellar Lane near Omega Galactic Bank");
    set_long("Bathed in a soft, artificial light that reflects off its sterile, metallic surfaces, the hallway "
             "stretches forward in clean lines. The walls, adorned with occasional access panels, bear subtle signs of "
             "wear and tear, evidence of the bustling activity that characterizes life on the station.\n" +

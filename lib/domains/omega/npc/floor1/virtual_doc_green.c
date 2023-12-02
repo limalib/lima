@@ -27,8 +27,8 @@ void setup()
               "mythings":"I dunno, it might trigger something I guess",
                  "5bags":"So 5 bags? What if I select the wrong one?",
                   "bag1":"Bag 1: A red leather bag containing medical supplies.",                        // Medic
-                  "bag2":"Bag 2: A backpack, that when opened reveals a laser drill and pair goggles.",  // Miner
-                  "bag3":"Bag 3: An attache briefcase containing product samples and a small notebook.", // Merchant
+                  "bag2":"Bag 2: A backpack, that when opened reveals a laser drill and pair goggles. [Incomplete]",  // Miner
+                  "bag3":"Bag 3: An attache briefcase containing product samples and a small notebook. [Incomplete]", // Merchant
                   "bag4":"Bag 4: A worn leather belt, holding various wrenches and tools.",              // Mechanic
                   "bag5":"Bag 5: A plastic bag containing 3 electronic tokens and some pistol.",         // Mercenary
                   "ays1":"Yes, bag number 1 it is.", "ays2":"Yes, I am going for bag number 2.",

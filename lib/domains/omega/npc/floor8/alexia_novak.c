@@ -21,8 +21,8 @@ void setup()
             "uniform that seamlessly blends corporate elegance with futuristic flair, she exudes confidence and "
             "approachability. Alexia often engages clients with a warm, holographically enhanced smile, embodying the "
             "perfect fusion of human touch and technological efficiency.");
-   set_bank_id("Omega Bank Services");
-   set_bank_name("Omega Bank Services");
+   set_bank_id("Omega Galactic");
+   set_bank_name("Omega Galactic");
    set_currency_type("credit");
    set_exchange_fee(5);
    set_actions(120,
