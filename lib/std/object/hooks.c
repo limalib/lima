@@ -49,7 +49,12 @@ void add_hook(string tag, function hook)
 void remove_hook(string tag, function hook)
 {
    if (hooks[tag])
+   {
+      int h_size = sizeof(hooks[tag]);
       hooks[tag] -= ({hook});
+      if (sizeof(hooks[tag]) == h_size)
+         error("Failed to remove tag: " + tag + " hook: " + sprintf("%O", hook) + "  Owner: " + function_owner(hook));
+   }
    if (!sizeof(hooks[tag]))
       map_delete(hooks, tag);
 }

@@ -126,9 +126,6 @@ varargs mixed move(mixed dest, string relation)
       env->call_hooks("object_left", HOOK_IGNORE, 0, this_object());
    dest->call_hooks("object_arrived", HOOK_IGNORE, 0, this_object());
 
-   if (!this_object()->is_body() && this_object()->is_living())
-      this_object()->adversary_moved();
-
    return MOVE_OK;
 }
 

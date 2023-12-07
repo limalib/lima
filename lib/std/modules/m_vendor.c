@@ -371,7 +371,7 @@ void buy_object(object ob)
    if (this_body()->test_skill("misc/life/haggle", to_int(cost), train_limit))
    {
       int increase = to_int(this_body()->query_cha() * CHA_MULT * cost / 100);
-      // TBUG("Selling " + ob->the_short() + " for " + cost + " increased by " + increase);
+      //TBUG("Selling " + ob->the_short() + " for " + cost + " increased by " + increase);
       cost += increase;
       money = MONEY_D->calculate_denominations(cost, currency_type);
       if (increase)
@@ -520,7 +520,7 @@ int test_sell(object ob)
 }
 
 protected
-int sell_object(object ob)
+int sell_object(object ob, int value)
 {
    float exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
    float cost;
@@ -530,12 +530,13 @@ int sell_object(object ob)
 
    if (!test_sell(ob))
       return 0;
-   cost = selling_cost(to_float(ob->query_value())) / exchange_rate;
+   cost = selling_cost(to_float(value)) / exchange_rate;
+   //TBUG("Selling cost: "+value+" -> "+cost);
 
    if (this_body()->test_skill("misc/life/haggle", to_int(cost), train_limit))
    {
       int decrease = to_int(this_body()->query_cha() * CHA_MULT_SELL * cost / 100);
-      // TBUG("Buying " + ob->the_short() + " for " + cost + " decreased by " + decrease);
+      //TBUG("Buying " + ob->the_short() + " for " + cost + " decreased by " + decrease);
       cost -= decrease;
       money = MONEY_D->calculate_denominations(decrease, currency_type);
       if (decrease)
@@ -594,7 +595,7 @@ void sell_items(int key, int amount)
          ob = item.objects[0];
       else
          ob = new (item.file, item.args...);
-      if (sell_object(ob))
+      if (sell_object(ob,item.value))
       {
          if (item.objects)
             item.objects -= ({ob});

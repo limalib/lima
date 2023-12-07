@@ -14,6 +14,8 @@ private
 int aggression_chance = 100;
 private
 int attack_delay = 5;
+private
+void behavior_hooks();
 
 //: FUNCTION aggressively_attack
 // void aggressively_attack();
@@ -44,7 +46,6 @@ void handle_attack(object who)
 void i_met(object who)
 {
    object item;
-
    if (who == this_object())
       foreach (item in all_inventory(environment()))
       {
@@ -60,6 +61,7 @@ void i_met(object who)
 // range 0 (never aggressive) to 100 (completely aggressive).
 void set_aggressive(int a)
 {
+   call_out("behavior_hooks",1);
    aggression_chance = a;
 }
 

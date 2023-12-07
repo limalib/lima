@@ -16,6 +16,7 @@ nosave string busy_func;
 nosave string busy_action;
 nosave int no_heals = 0;
 
+void adversary_met(object who);
 varargs void attacked_by(object who, int take_a_swing);
 void dispatch_opponent();
 void do_game_command(string str);
@@ -28,6 +29,8 @@ void add_hook(string tag, function hook);
 void remove_hook(string tag, function hook);
 void do_move_away();
 nomask object query_link();
+
+function adv_met_fn = ( : adversary_met:);
 
 void add_hunted(object who)
 {
@@ -148,10 +151,14 @@ void adversary_met(object who)
 void adversary_moved()
 {
    if (my_env)
-      my_env->remove_hook("object_arrived", ( : adversary_met:));
+   {
+      my_env->remove_hook("object_arrived", adv_met_fn);
+   }
 
    my_env = environment();
-   my_env->add_hook("object_arrived", ( : adversary_met:));
+   my_env->add_hook("object_arrived", adv_met_fn);
+   foreach (object liv in filter_array(all_inventory(my_env), ( : $1->is_living() && $1 != this_object() :)))
+      adversary_met(liv);
 }
 
 void behavior_hooks()
