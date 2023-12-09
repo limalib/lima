@@ -11,5 +11,6 @@ inherit CMD;
 private
 void main()
 {
-   write(MONEY_D->money_string(this_body()));
+   write("You have the following types of money:\n\t" +
+         implode(explode(MONEY_D->money_string(this_body()), "\n"), "\n\t"));
 }
