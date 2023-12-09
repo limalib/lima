@@ -738,14 +738,5 @@ int check_uniqueness(object ob)
    if (ob->is_unique() || ob->is_armour() || ob->is_weapon() || ob->is_vehicle())
       return 1;
 
-<<<<<<< HEAD
-=======
-   if (ob->is_armour())
-      return 1;
-   if (ob->is_weapon())
-      return 1;
-   if (ob->is_vehicle())
-      return 1;
->>>>>>> upstream/master
    return 0;
 }

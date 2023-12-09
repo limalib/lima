@@ -28,8 +28,6 @@
 // decide to repair or not. Be careful not to repair things you do not want
 // to keep. It does not pay to repair things you want to sell.
 
-#include <config.h>
-
 inherit CMD;
 inherit M_FRAME;
 inherit M_WIDGETS;

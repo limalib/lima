@@ -14,7 +14,6 @@
 // the time! Talk to a trainer to learn more about skills.
 
 #include <classes.h>
-#include <config.h>
 #include <config/skills.h>
 
 inherit CMD;

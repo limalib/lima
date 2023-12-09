@@ -6,7 +6,6 @@
 ** 950821, Deathblade: created.
 */
 
-#include <config.h>
 #include <mudlib.h>
 #include <security.h>
 #include <config/user_menu.h>

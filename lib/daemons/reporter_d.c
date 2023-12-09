@@ -9,7 +9,6 @@
 ** Created: 4-Sep-94  Deathblade
 */
 
-#include <config.h>
 #include <edit.h>
 #include <log.h>
 #include <mudlib.h>

@@ -12,8 +12,6 @@
 //
 // Shows your materials and all the materials in it.
 
-#include <config.h>
-
 inherit CMD;
 inherit M_FRAME;
 

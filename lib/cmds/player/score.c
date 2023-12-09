@@ -12,7 +12,6 @@
 //
 // Shows you various details about yourself.
 
-#include <config.h>
 #include <hooks.h>
 
 inherit CMD;
@@ -167,34 +166,8 @@ string score_cmd(object body, int width)
                          (body->query_next_xp() - body->query_experience()));
    else
       content += sprintf("%d XP - You could be level %d.\n", body->query_experience(), body->query_could_be_level());
-<<<<<<< HEAD
    content += "\n";
    content += MONEY_D->money_string(body) + "\n";
-=======
-   /*
-   money_info = "";
-   accounts = ACCOUNT_D->query_accounts(body);
-   if (!sizeof(accounts))
-   {
-       money_info += "";
-   }
-   else
-   {
-       i = 0;
-       foreach (string bank, float val in accounts)
-       {
-           money_info += sprintf("%d (in %s Bank)\n",
-                             to_int(val),
-                             capitalize(bank));
-           i++;
-       }
-   }
-   if (strlen(money_info))
-       content += money_info;
-*/
-   content += "\n";
-   content += money_string(body, width) + "\n";
->>>>>>> upstream/master
    content += stats_string(body, width) +
 #ifdef USE_KARMA
               karma_string(body, width) +
@@ -235,11 +208,7 @@ void main(string arg)
 
    content = score_cmd(body, width);
 
-<<<<<<< HEAD
    num_cur = sizeof(sizeof(body->query_money()));
-=======
-   num_cur = sizeof(body->query_currencies());
->>>>>>> upstream/master
    set_frame_header(" \nExp\n\n\nMoney" + repeat_string("\n", num_cur || 1) + "\nStats\n\n\n\n\nOther\n\n" +
 #ifdef USE_KARMA
                     "Karma\n\n" +

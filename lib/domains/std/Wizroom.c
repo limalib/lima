@@ -12,7 +12,7 @@ void setup()
             "splashed by flickering blue light, while an equally narrow "
             "flight leads downwards into the gloom. Two rocky passages leave "
             "the room. The northwest one is warm and sulfurous, while the "
-            "air  wafting from the south passage smells as though something "
+            "air wafting from the south passage smells as though something "
             "had recently died there. For some bizarre reason, there is an "
             "elevator door off to the west.\n"
             "A low doorway in the east wall allows access to the example "

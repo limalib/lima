@@ -8,7 +8,6 @@
 // Prints your current HP on all your limbs with AC stats and types.
 
 #include <classes.h>
-#include <config.h>
 #include <limbs.h>
 
 inherit CMD;

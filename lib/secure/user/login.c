@@ -6,7 +6,6 @@
 //
 
 #include <commands.h>
-#include <config.h>
 #include <config/user_menu.h>
 #include <daemons.h>
 #include <security.h>
