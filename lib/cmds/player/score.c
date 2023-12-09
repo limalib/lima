@@ -60,42 +60,6 @@ string stats_string(object body, int width)
 }
 
 private
-string money_string(object body, int width)
-{
-   string money_info = "";
-   string *curr;
-   int i;
-   curr = body->query_currencies();
-   if (!sizeof(curr))
-   {
-      money_info += "You are carrying no money.\n";
-   }
-   else
-   {
-      for (i = 0; i < sizeof(curr); i++)
-      {
-         mapping money = MONEY_D->calculate_denominations(body->query_amt_money(curr[i]), curr[i]);
-         string *denom_order = MONEY_D->query_denominations(curr[i]);
-         string *money_str = ({});
-         int j = 0;
-         while (j < sizeof(denom_order))
-         {
-            string denom = denom_order[j];
-            int count = money[denom];
-            if (count)
-               money_str += ({count + " " + denom + (count == 1 ? "" : "s")});
-            j++;
-         }
-         if (sizeof(curr) > 1)
-            money_info += sprintf("%s: %s", accent(capitalize(curr[i])), format_list(money_str) + "\n");
-         else
-            money_info += sprintf("%s", format_list(money_str) + "\n");
-      }
-   }
-   return money_info;
-}
-
-private
 string capacity_string(object body, int width)
 {
    string content;
@@ -203,29 +167,8 @@ string score_cmd(object body, int width)
                          (body->query_next_xp() - body->query_experience()));
    else
       content += sprintf("%d XP - You could be level %d.\n", body->query_experience(), body->query_could_be_level());
-   /*
-   money_info = "";
-   accounts = ACCOUNT_D->query_accounts(body);
-   if (!sizeof(accounts))
-   {
-       money_info += "";
-   }
-   else
-   {
-       i = 0;
-       foreach (string bank, float val in accounts)
-       {
-           money_info += sprintf("%d (in %s Bank)\n",
-                             to_int(val),
-                             capitalize(bank));
-           i++;
-       }
-   }
-   if (strlen(money_info))
-       content += money_info;
-*/
    content += "\n";
-   content += money_string(body, width) + "\n";
+   content += MONEY_D->money_string(body) + "\n";
    content += stats_string(body, width) +
 #ifdef USE_KARMA
               karma_string(body, width) +
@@ -266,7 +209,7 @@ void main(string arg)
 
    content = score_cmd(body, width);
 
-   num_cur = sizeof(body->query_currencies());
+   num_cur = sizeof(sizeof(body->query_money()));
    set_frame_header(" \nExp\n\n\nMoney" + repeat_string("\n", num_cur || 1) + "\nStats\n\n\n\n\nOther\n\n" +
 #ifdef USE_KARMA
                     "Karma\n\n" +

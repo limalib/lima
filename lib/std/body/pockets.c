@@ -184,16 +184,6 @@ void subtract_money(string type, int amount)
    add_money(currency, -amount);
 }
 
-//: FUNCTION query_currencies
-// This function will return the current "types" of money you have
-string *query_currencies()
-{
-   if (!money)
-      return ({});
-
-   return keys(money);
-}
-
 //: FUNCTION query_money
 // This function will return the complete money mapping
 mapping query_money()

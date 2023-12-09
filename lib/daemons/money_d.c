@@ -55,7 +55,8 @@ nosave mapping singulars = ([]);
 // e.g. lover case, without spaces and singular.
 string singular_name(string name)
 {
-   if (!name) return;
+   if (!name)
+      return;
    name = lower_case(trim(name));
    if (singulars[name])
       name = singulars[name];
@@ -418,6 +419,41 @@ mapping *handle_subtract_money(object player, float f_amount, string type)
       }
    }
    return ({substract, change});
+}
+
+string money_string(object body)
+{
+   string money_info = "";
+   mapping curr;
+   int i;
+   curr = body->query_money();
+   if (!sizeof(keys(curr)))
+   {
+      money_info += "You are carrying no money.\n";
+   }
+   else
+   {
+      foreach (string key, int amount in curr)
+      {
+         mapping money = MONEY_D->calculate_denominations(amount, key);
+         string *denom_order = MONEY_D->query_denominations(key);
+         string *money_str = ({});
+         int j = 0;
+         while (j < sizeof(denom_order))
+         {
+            string denom = denom_order[j];
+            int count = money[denom];
+            if (count)
+               money_str += ({count + " " + denom + (count == 1 ? "" : "s")});
+            j++;
+         }
+         if (sizeof(curr) > 1)
+            money_info += sprintf("%s: %s", capitalize(key), format_list(money_str) + "\n");
+         else
+            money_info += sprintf("%s", format_list(money_str) + "\n");
+      }
+   }
+   return money_info;
 }
 
 create()

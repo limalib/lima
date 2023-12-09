@@ -735,14 +735,8 @@ int check_uniqueness(object ob)
    // object would have variable changes in it.  For example, weapons
    // can have their wc reduced by wear and you'd rather someone not be
    // able to purchase a brand new sword after selling a broken one.
-   if (ob->is_unique())
+   if (ob->is_unique() || ob->is_armour() || ob->is_weapon() || ob->is_vehicle())
       return 1;
 
-   if (ob->is_armour())
-      return 1;
-   if (ob->is_weapon())
-      return 1;
-   if (ob->is_vehicle())
-      return 1;
    return 0;
 }
