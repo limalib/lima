@@ -9,8 +9,9 @@
 //: PLAYERCOMMAND
 //$$ see: stats
 // USAGE score
+//       score -t theme
 //
-// Shows you various details about yourself.
+// Shows you various details about yourself. Themes can be seem using the frames command, i.e. 'frames themes'
 
 #include <hooks.h>
 
@@ -177,17 +178,23 @@ string score_cmd(object body, int width)
 }
 
 private
-void main(string arg)
+void main(mixed *args)
 {
    object body;
    string content;
+   string arg;
    int num_cur;
    int width = default_user_width() - 11; // Size of left header and space between.
    body = this_body();
 
+   if (sizeof(args))
+      arg = args[ < 1];
+
    // Frame initializations
    frame_init_user();
    set_frame_left_header(); // This frame will use left header
+   if (sizeof(args) == 2 && valid_theme(args[0]))
+      set_theme(args[0]);
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
@@ -208,7 +215,7 @@ void main(string arg)
 
    content = score_cmd(body, width);
 
-   num_cur = sizeof(sizeof(body->query_money()));
+   num_cur = sizeof(keys(body->query_money() || ([])));
    set_frame_header(" \nExp\n\n\nMoney" + repeat_string("\n", num_cur || 1) + "\nStats\n\n\n\n\nOther\n\n" +
 #ifdef USE_KARMA
                     "Karma\n\n" +

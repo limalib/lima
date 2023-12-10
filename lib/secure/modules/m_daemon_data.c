@@ -13,8 +13,6 @@ inherit M_ACCESS;
 // front and the _d suffix, if any, removed from the end.  I.e. the file
 //"/daemons/stat_d.c" will save to "/data/daemons/stat.o".
 
-// ### hmm, maybe this module should have a remove() routine which calls
-// ### save_me() too.
 private
 nomask string create_file_name()
 {

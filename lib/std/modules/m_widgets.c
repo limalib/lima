@@ -48,7 +48,7 @@ nomask int i_emoji()
 // Returns true if the user is using a unicode theme.
 int uses_unicode()
 {
-   return member_array(this_user()->frames_theme(), ({"ascii", "lines", "none"})) == -1;
+   return member_array(this_user()->frames_style(), ({"ascii", "lines", "none"})) == -1;
 }
 
 //: FUNCTION default_user_width

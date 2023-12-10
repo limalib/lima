@@ -364,7 +364,7 @@ mapping *handle_subtract_money(object player, float f_amount, string type)
    if (is_currency(type))
    {
 
-      mapping money = player->query_money();
+      mapping money = player->query_money() || ([]);
       string *types = denominations[type];
       string currency = type;
       for (int i = sizeof(types) - 1; i >= 0; i--)
@@ -426,7 +426,7 @@ string money_string(object body)
    string money_info = "";
    mapping curr;
    int i;
-   curr = body->query_money();
+   curr = body->query_money() || ([]);
    if (!sizeof(keys(curr)))
    {
       money_info += "You are carrying no money.\n";

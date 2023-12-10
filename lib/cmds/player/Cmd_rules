@@ -1,1 +1,2 @@
 mudlist -dats:		[str]
+score  -t [str] str

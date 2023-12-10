@@ -25,7 +25,7 @@ void main(string arg)
    string *themes = query_frame_themes();
    string *colours = query_frame_colour_themes();
    string col;
-   string usertheme = this_user()->frames_theme();
+   string usertheme = this_user()->frames_style();
    string usercoltheme = this_user()->frames_colour();
    frame_init_user();
 

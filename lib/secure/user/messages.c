@@ -41,7 +41,7 @@ string terminal_mode()
    return mode || "plain";
 }
 
-string frames_theme()
+string frames_style()
 {
    string mode;
    if (query_shell_ob())

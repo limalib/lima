@@ -17,14 +17,14 @@
 #define THU 9  // Horisontal up
 #define TLU 10 // Left up
 
-#define FALLBACK_THEME "ascii"
+#define FALLBACK_STYLE "ascii"
 #define COL_GRADIENT 0
 #define COL_TITLE 1
 #define COL_ACCENT 2
 #define COL_WARNING 3
 
 private
-nosave mapping themes = (["single":({"┌", "─", "┬", "┐", "│", "├", "┼", "┤", "└", "┴", "┘"}),
+nosave mapping styles = (["single":({"┌", "─", "┬", "┐", "│", "├", "┼", "┤", "└", "┴", "┘"}),
                           "double":({"╔", "═", "╦", "╗", "║", "╠", "╬", "╣", "╚", "╩", "╝"}),
                            "ascii":({"+", "-", "-", "+", "|", "|", "|", "|", "+", "-", "+"}),
                            "lines":({"-", "-", "-", "-", " ", " ", "-", " ", "-", "-", "-"}),
@@ -47,7 +47,7 @@ nosave string *bits;
 
 /* Strings */
 private
-string title, header_content, footer_content, content, theme;
+string title, header_content, footer_content, content, style;
 /* Ints */
 private
 nosave int width, // Width of the frame, default user screen width
@@ -80,14 +80,14 @@ string use_colour(string *cols, int position, int width)
    return cols[col_index] != "" ? "<" + cols[col_index] + ">" : "";
 }
 
-void select_theme(string t)
+void set_style(string t)
 {
-   theme = t;
+   style = t;
 
-   if (member_array(theme, keys(themes)) != -1)
-      bits = themes[theme];
+   if (member_array(style, keys(styles)) != -1)
+      bits = styles[style];
    else
-      bits = themes[FALLBACK_THEME];
+      bits = styles[FALLBACK_STYLE];
 }
 
 string *query_frame_colour_themes()
@@ -95,9 +95,14 @@ string *query_frame_colour_themes()
    return sort_array(keys(colours), 1);
 }
 
-string *query_frame_themes()
+int valid_theme(string t)
 {
-   return keys(themes);
+   return member_array(t, query_frame_colour_themes()) != -1;
+}
+
+string *query_frame_styles()
+{
+   return keys(styles);
 }
 
 void set_frame_left_header()
@@ -145,7 +150,7 @@ void set_frame_title(string s)
 
 void set_width(int w)
 {
-   width = CLAMP(w,10,1000);
+   width = CLAMP(w, 10, 1000);
 }
 
 void set_title_margin(int hm)
@@ -162,7 +167,7 @@ void frame_init_user()
 {
    set_width(this_user()->query_screen_width() ? this_user()->query_screen_width() - 2 : 79);
    hcolours = (this_user()->frames_colour() != "none" ? colours[this_user()->frames_colour()] : colours["none"]);
-   select_theme(this_user()->frames_theme());
+   set_style(this_user()->frames_style());
    title_margin = 2;
    text_margin = 1;
    add_header = 0;
@@ -211,6 +216,11 @@ void set_frame_hcolours(string *hc)
    hcolours = hc;
 }
 
+void set_theme(string t)
+{
+   set_frame_hcolours(colours[t]);
+}
+
 private
 string simple_header()
 {
@@ -224,7 +234,7 @@ string create_header()
 {
    string out = "";
    int i = 0;
-   int simple_header = theme == "lines" || theme == "none";
+   int simple_header = style == "lines" || style == "none";
    int header_width = colour_strlen(title) + (text_margin * 2);
    string *headers = explode(header_content || "", "\n");
 
@@ -458,17 +468,17 @@ string query_frame_warning(string theme)
 
 string frame_demo_string(string theme, int w)
 {
-   return themes[theme][TRD] + themes[theme][TH] + themes[theme][TH] + themes[theme][TH] +
-          repeat_string(themes[theme][TH], (w / 2) - 6) + themes[theme][THD] + themes[theme][TH] + themes[theme][TH] +
-          themes[theme][TH] + repeat_string(themes[theme][TH], (w / 2) - 6) + themes[theme][TH] + themes[theme][TH] +
-          themes[theme][TH] + themes[theme][TLD];
+   return styles[style][TRD] + styles[style][TH] + styles[style][TH] + styles[style][TH] +
+          repeat_string(styles[style][TH], (w / 2) - 6) + styles[style][THD] + styles[style][TH] + styles[style][TH] +
+          styles[style][TH] + repeat_string(styles[style][TH], (w / 2) - 6) + styles[style][TH] + styles[style][TH] +
+          styles[style][TH] + styles[style][TLD];
 }
 
-string frame_colour_demo(string theme, string colour, int w)
+string frame_colour_demo(string style, string colour, int w)
 {
-   if (member_array(theme, keys(themes)) == -1)
-      theme = "single";
-   return h_colours(frame_demo_string(theme, w), colours[colour]);
+   if (member_array(style, keys(styles)) == -1)
+      style = "single";
+   return h_colours(frame_demo_string(style, w), colours[colour]);
 }
 
 string frame_render()
@@ -476,8 +486,8 @@ string frame_render()
    string out = "";
 
    if (!bits)
-      error("Need to set frame theme before render() using frame->set_theme().\n" +
-            "Current themes: " + format_list(query_frame_themes()) + ".");
+      error("Need to set frame style before render() using frame->set_style().\n" +
+            "Current styles: " + format_list(query_frame_styles()) + ".");
 
    if (left_header)
    {
