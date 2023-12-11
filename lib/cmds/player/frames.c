@@ -22,7 +22,7 @@ string frames_help()
 private
 void main(string arg)
 {
-   string *themes = query_frame_themes();
+   string *styles = query_frame_styles();
    string *colours = query_frame_colour_themes();
    string col;
    string usertheme = this_user()->frames_style();
@@ -46,7 +46,7 @@ void main(string arg)
 
    else if (sscanf(arg, "style %s", col) == 1)
    {
-      if (member_array(col, themes) != -1)
+      if (member_array(col, styles) != -1)
       {
          this_user()->query_shell_ob()->set_variable("frames", col);
          out("Frame style set to '" + col + "'.\n");
@@ -88,7 +88,7 @@ void main(string arg)
       printf("The following frame styles are supported:\n\n");
       printf("\t<bld>%-15.15s %s<res>", "Name", "Example");
 
-      foreach (string t in themes)
+      foreach (string t in styles)
       {
          printf("\t%-15.15s %s\n", t, frame_demo_string(t,20));
       }
