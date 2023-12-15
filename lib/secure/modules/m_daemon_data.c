@@ -2,6 +2,8 @@
 
 inherit M_ACCESS;
 
+int lima_save = 0;
+
 //: MODULE
 //
 // M_DAEMON_DATA simplifies the process of maintaining save files for daemons.
@@ -13,15 +15,19 @@ inherit M_ACCESS;
 // front and the _d suffix, if any, removed from the end.  I.e. the file
 //"/daemons/stat_d.c" will save to "/data/daemons/stat.o".
 
-private
 nomask string create_file_name()
 {
-   string ret = "/data" + file_name();
+   string ret = (lima_save && mud_name()=="LIMA" ? "/data/lima" : "/data") + file_name();
 
    if (ret[ < 2..] == "_d")
       ret = ret[0.. < 3];
 
    return ret;
+}
+
+void set_lima_save()
+{
+   lima_save = 1;
 }
 
 //: FUNCTION save_me

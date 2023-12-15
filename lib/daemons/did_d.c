@@ -161,3 +161,9 @@ void print_weblog_to_file(string fname)
 {
    write_file(fname, get_changelog_for_web(1), 1);
 }
+
+void create()
+{
+   set_lima_save();
+   ::create();
+}
