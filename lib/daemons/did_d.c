@@ -17,7 +17,7 @@ string version;
 string curver()
 {
    if (mud_name() == "LIMA")
-      return lima_version();
+      return lima_version()[5..];
    return version;
 }
 
