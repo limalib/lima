@@ -10,8 +10,8 @@
 inherit M_DAEMON_DATA;
 inherit M_GLOB;
 
-mapping did;
-string version="0.0.1";
+mapping did = ([]);
+string version;
 
 // Current version
 string curver()
@@ -24,6 +24,14 @@ string curver()
 void set_version(string s)
 {
    version = s;
+   did[s] = ({});
+}
+
+private
+string *help_me()
+{
+   return ({"No active mudlib version. Set your first version with:", "  didlog /newversion 1.0.0",
+            "  didlog help (for more)"});
 }
 
 int someone_did(string str)
@@ -35,6 +43,12 @@ int someone_did(string str)
       write("Sorry, but only full wizards may use the didlog.\n");
       return 0;
    }
+   if (!curver())
+   {
+      write(implode(help_me(), "\n"));
+      return;
+   }
+
    str = capitalize(this_user()->query_userid()) + " " + str;
    did[curver()] += ({({time(), str})});
    save_me();
@@ -109,7 +123,14 @@ string *versions()
 
 varargs void dump_did_info(int after, string *header, string pattern, function continuation)
 {
-   string *output = get_entries(after, header, pattern, curver());
+   string *output;
+
+   if (!curver())
+   {
+      output = help_me();
+   }
+   else
+      output = get_entries(after, header, pattern, curver());
 
    if (!output)
    {
@@ -124,7 +145,14 @@ varargs void dump_did_info(int after, string *header, string pattern, function c
 
 varargs string get_did_info(int after, string *header, string pattern, function continuation, string version)
 {
-   string *output = get_entries(after, header, pattern, version || curver());
+   string *output;
+
+   if (!curver())
+   {
+      output = help_me();
+   }
+   else
+      output = get_entries(after, header, pattern, version || curver());
 
    if (!output)
    {
