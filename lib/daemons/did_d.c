@@ -11,7 +11,7 @@ inherit M_DAEMON_DATA;
 inherit M_GLOB;
 
 mapping did;
-string version;
+string version="0.0.1";
 
 // Current version
 string curver()
