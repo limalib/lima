@@ -11,7 +11,8 @@
 #include <mudlib.h>
 #include <security.h>
 
-inherit __DIR__ "error_handler.c";
+// Commented out for now, crashes user input on several errors in succession.
+// inherit __DIR__ "error_handler.c";
 
 private
 mapping errors = ([]);
@@ -155,7 +156,6 @@ varargs string standard_trace(mapping mp, int flag)
  *
  * -Beek
  */
-/*
 string error_handler(mapping mp, int caught)
 {
    string ret;
@@ -167,7 +167,7 @@ string error_handler(mapping mp, int caught)
    write_file(logfile, ret);
 
    // If an object didn't load, they get compile errors.  Don't spam
-   // or confuse them 
+   // or confuse them
    if (what[0..23] == "*Error in loading object")
       return 0;
 
@@ -192,14 +192,14 @@ string error_handler(mapping mp, int caught)
                capitalize(userid), logfile, what, trace_line(mp["object"], mp["program"], mp["file"], mp["line"])));
    return 0;
 }
-*/
-// mapping query_error(string name)
-// {
-   // /* This MUST be secure */
-   // if (!check_privilege(1))
-      // return 0;
-   // return errors[name];
-// }
+
+mapping query_error(string name)
+{
+   /* This MUST be secure */
+   if (!check_privilege(1))
+      return 0;
+   return errors[name];
+}
 
 string ws = " \t\n";
 
@@ -408,12 +408,12 @@ string *parse_command_adjective_id_list()
 
 string *parse_command_prepos_list()
 {
-   return ({"in",  "from", "on",   "under", "behind", "beside", "of",   "for",   "to",   "with",  "at",
-            "off", "out",  "down", "up",    "around", "over",   "into", "about", "onto", "out of"}) +
-          ({"aboard",  "above",       "against",    "alongside",   "below",   "beneath", "besides", "by",
-            "inside",  "outside",     "through",    "underneath",  "upon",    "within",  "without", "alongside of",
-            "back of", "down from",   "inside of",  "round about", "near to", "next to", "over to", "outside of",
-            "up to",   "in front of", "in back of", "on top of",   "off of"});
+   return ({"in", "from", "on", "under", "behind", "beside", "of", "for", "to", "with", "at",
+            "off", "out", "down", "up", "around", "over", "into", "about", "onto", "out of"}) +
+          ({"aboard", "above", "against", "alongside", "below", "beneath", "besides", "by",
+            "inside", "outside", "through", "underneath", "upon", "within", "without", "alongside of",
+            "back of", "down from", "inside of", "round about", "near to", "next to", "over to", "outside of",
+            "up to", "in front of", "in back of", "on top of", "off of"});
 }
 
 string parse_command_all_word()
@@ -496,7 +496,8 @@ string parser_error_message(int kind, object ob, mixed arg, int flag)
       else
          return ret + "You can't reach it.\n";
       break;
-   case ERR_AMBIG: {
+   case ERR_AMBIG:
+   {
       mixed *descs = unique_array(arg, ( : parser_gen_pos($1, 1, 0) :));
       string str;
 

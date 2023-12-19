@@ -15,6 +15,7 @@
 #define CHANNEL_D     "/daemons/channel_d"
 #define DAMAGE_D      "/daemons/damage_d"
 #define DID_D         "/daemons/did_d"
+#define LIMA_D        "/daemons/lima_d"
 #define DOC_D 	      "/daemons/doc_d"
 #define RST_D 	      "/daemons/rst_d"
 #define GROUP_D       "/daemons/group_d"

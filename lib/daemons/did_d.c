@@ -10,7 +10,21 @@
 inherit M_DAEMON_DATA;
 inherit M_GLOB;
 
-mixed *did = ({});
+mapping did;
+string version;
+
+// Current version
+string curver()
+{
+   if (mud_name() == "LIMA")
+      return lima_version();
+   return version;
+}
+
+void set_version(string s)
+{
+   version = s;
+}
 
 int someone_did(string str)
 {
@@ -22,7 +36,7 @@ int someone_did(string str)
       return 0;
    }
    str = capitalize(this_user()->query_userid()) + " " + str;
-   did += ({({time(), str})});
+   did[curver()] += ({({time(), str})});
    save_me();
 
    who = filter_array(users(), ( : wizardp($1) :)) - ({this_user()});
@@ -37,28 +51,35 @@ void someone_didnt()
    if (!check_privilege("Mudlib:daemons"))
       error("Only Admins may remove didlogs.\n");
    if (sizeof(did))
-      did = did[0.. < 2];
+      did[curver()] = did[curver()][0.. < 2];
    save_me();
 }
 
 private
 nomask int start_index(int after)
 {
-   int index = sizeof(did);
+   int index = sizeof(did[curver()]);
+   if (after > time())
+      return 0;
 
-   while (index > 0 && did[index - 1][0] > after)
+   while (index > 0 && did[curver()][index - 1][0] > after)
       index--;
 
    return index;
 }
 
-private
-nomask string *get_entries(int after, string *header, string pattern)
+// private
+nomask string *get_entries(int after, string *header, string pattern, string v)
 {
    int index = start_index(after);
    string *output = header;
+   if (!v)
+      v = curver();
 
-   if (index >= sizeof(did))
+   if (!did[v])
+      did[v] = ({});
+
+   if (index >= sizeof(did[v]))
       return 0;
 
    if (!header)
@@ -67,10 +88,10 @@ nomask string *get_entries(int after, string *header, string pattern)
    if (pattern)
       pattern = translate(pattern, 1);
 
-   for (; index < sizeof(did); index++)
+   for (; index < sizeof(did[v]); index++)
    {
-      if (!pattern || regexp(did[index][1], pattern))
-         output += explode(sprintf("%s: %s", ctime(did[index][0]), did[index][1]), "\n") + ({""});
+      if (!pattern || regexp(did[v][index][1], pattern))
+         output += explode(sprintf("%s: %s", ctime(did[v][index][0]), did[v][index][1]), "\n") + ({""});
    }
 
    return output;
@@ -78,12 +99,17 @@ nomask string *get_entries(int after, string *header, string pattern)
 
 string *dump_entries()
 {
-   return did;
+   return did[curver()];
+}
+
+string *versions()
+{
+   return keys(did);
 }
 
 varargs void dump_did_info(int after, string *header, string pattern, function continuation)
 {
-   string *output = get_entries(after, header, pattern);
+   string *output = get_entries(after, header, pattern, curver());
 
    if (!output)
    {
@@ -96,9 +122,9 @@ varargs void dump_did_info(int after, string *header, string pattern, function c
    }
 }
 
-varargs string get_did_info(int after, string *header, string pattern, function continuation)
+varargs string get_did_info(int after, string *header, string pattern, function continuation, string version)
 {
-   string *output = get_entries(after, header, pattern);
+   string *output = get_entries(after, header, pattern, version || curver());
 
    if (!output)
    {
