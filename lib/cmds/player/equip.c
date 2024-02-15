@@ -17,7 +17,7 @@
 //---
 // You can repair your gear using the 'repair' verb using components from
 //'salvage' if you are next to a crafting bench. The components can be
-// seen in your 'pouch'.
+// seen by using the 'materials' command.
 //
 // You can easily salvage by using 'salvage all' which will salvage all
 // your damaged equipment. You can salvage other things by salvaging

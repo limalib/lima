@@ -17,7 +17,7 @@ void mudlib_setup()
   set_default_relation("under");
   set_long((this_object()->get_station_description()+"\n\n" || "")+"This is " + a_short() +
            " that allows you to craft items from materials you find. Materials are all in your "
-           "component 'pouch', and can be gained by salvaging items you "
+           "components ('materials'), and can be gained by salvaging items you "
            "find (salvaging items do not require " +
            a_short() +
 #ifndef CAN_UPGRADE_DOWNGRADE

@@ -16,7 +16,7 @@ void mudlib_setup()
    set_long("This is " + a_short() +
             " that allows you to create or break "
             "down materials. Materials are all in your "
-            "component 'pouch', and can be gained by salvaging items you "
+            "components ('materials'), and can be gained by salvaging items you "
             "find (salvaging items do not require " +
             a_short() +
             "):\n\n"

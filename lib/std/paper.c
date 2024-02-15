@@ -35,13 +35,12 @@ void mangle_text()
       if (!burnt)
       {
          burnt = 1;
-         my_text = "It's somewhat burnt, but reads as follows:\n" + my_text;
       }
       for (i = 0; i < text_size; i++)
          if (random(max_fuel) > query_num_decays())
             if (!(my_text[i] == ' ' && random(1)))
                my_text[i] = '?';
-      set_text(my_text);
+      set_text("It's somewhat burnt, but reads as follows:\n" + my_text);
    }
 }
 

@@ -4,6 +4,7 @@
 // USAGE width
 //       width <number>
 //       width auto
+//       width nowrap
 //
 // Allows you to see (or set) what the mud will use as your screen width when
 // formatting information. Some clients send the width of the terminal window,
@@ -20,6 +21,13 @@ void main(mixed width)
       this_user()->set_screen_width(0);
       out("Screen width set to <120>automatic detection<res>.\n\n" +
           "Set your client to not wrap or wrap at 5000 or more chars - " + mud_name() + " will take it from here.\n\n");
+      return;
+   }
+   if (width == "nowrap")
+   {
+      this_user()->set_screen_width(-1);
+      out("Wrapping disabled entirely. This can be useful for screen readers that do not like wrapped " +
+          "text or read it weirdly.\n\n");
       return;
    }
 

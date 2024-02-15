@@ -54,7 +54,6 @@ mixed light()
    mixed tmp = check_fuel();
    if (tmp != 1)
       return tmp;
-   start_decay();
    return ::light();
 }
 
@@ -74,7 +73,7 @@ void set_fuel(int x)
 
 void mudlib_setup()
 {
-   set_decay_time(FUEL_DELAY, 1);
+   set_decay_time(FUEL_DELAY);
    set_decay_action("The $o $vflicker a little.");
    set_last_decay_action(( : burn_out:));
 }

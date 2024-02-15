@@ -4,12 +4,12 @@
 #include <size.h>
 #endif
 
-#define TORSO "torso"
-#define HEAD "head"
 #define ARMS "arms"
-#define LEGS "legs"
-#define HANDS "hands"
 #define FEET "feet"
+#define HANDS "hands"
+#define HEAD "head"
+#define LEGS "legs"
+#define TORSO "torso"
 
 
  
