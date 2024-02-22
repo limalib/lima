@@ -92,20 +92,18 @@ int decay_it()
       action = decay_action;
 
    if (stringp(action))
+   {
       if (environment() && environment()->is_living())
-      {
          tell(environment(), action + "\n");
-      }
       else
-      {
          object_event(action);
-      }
+   }
    else
       evaluate(action);
 
    num_decays--;
 
-   if (!num_decays && auto_remove)
+   if (num_decays <= 0 && auto_remove)
       remove();
    if (!num_decays)
       return 0;
@@ -122,10 +120,11 @@ int state_update()
 
 void stop_decay()
 {
-   decays = 0;
+   STATE_D->remove_from_queue(this_object());
 }
 
 void mudlib_setup()
 {
    m_stateful::mudlib_setup();
+   this_object()->add_save(({"num_decays"}));
 }

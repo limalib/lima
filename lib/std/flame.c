@@ -7,7 +7,7 @@ int is_flame()
 {
    return 1;
 }
-int query_is_lit()
+int is_lit()
 {
    return 1;
 }

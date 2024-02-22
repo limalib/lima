@@ -21,7 +21,7 @@ int light_level = 1;
 private
 string burned_out_msg = "The $o is burned out.";
 
-int query_is_lit()
+int is_lit()
 {
    return is_lit;
 }

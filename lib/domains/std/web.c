@@ -52,7 +52,7 @@ varargs void do_search(object with, string item)
       write("Put your hand into _that_? Not likely.\n");
       return;
    }
-   if (with->query_is_lit() && with->is_flame())
+   if (with->is_lit() && with->is_flame())
    {
       do_light(with);
       return;

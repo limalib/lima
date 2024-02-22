@@ -29,7 +29,7 @@ nosave function light_hook = ( : lighting_extra_short:);
 private
 mixed source_filter;
 
-int query_is_lit()
+int is_lit()
 {
    return test_flag(F_LIGHTED);
 }
@@ -104,7 +104,7 @@ varargs void do_light(object with)
 
 mixed direct_light_obj()
 {
-   if (query_is_lit())
+   if (is_lit())
       return "It is already lit.\n";
    if (source_filter)
       return "You need to light it with something.\n";
@@ -113,14 +113,14 @@ mixed direct_light_obj()
 
 mixed direct_extinguish_obj()
 {
-   if (!query_is_lit())
+   if (!is_lit())
       return "It isn't lit.\n";
    return 1;
 }
 
 mixed direct_light_obj_with_obj(object ob, object with)
 {
-   if (query_is_lit())
+   if (is_lit())
       return "It is already lit.\n";
    if (!source_filter)
       return 1;
@@ -136,7 +136,7 @@ mixed indirect_light_obj_with_obj(object ob, object with)
    mixed sf;
    if (ob)
       sf = ob->query_source();
-   if (with->query_is_lit())
+   if (with->is_lit())
    {
       if (!sf)
          return 1;

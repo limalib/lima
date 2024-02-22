@@ -7,6 +7,7 @@
 #include <hooks.h>
 #include <light.h>
 
+inherit OBJ;
 inherit M_LIGHTABLE;
 inherit M_LIGHT_SOURCE;
 inherit M_DECAY;
@@ -31,9 +32,9 @@ void set_lit(int x)
    m_light_source::set_lit(x);
 }
 
-int query_is_lit()
+int is_lit()
 {
-   return m_lightable::query_is_lit();
+   return m_lightable::is_lit();
 }
 
 mixed check_fuel()
@@ -54,7 +55,16 @@ mixed light()
    mixed tmp = check_fuel();
    if (tmp != 1)
       return tmp;
+
+   //Call internal_add_to_queue() to make the light_object stateful when lit.
+   internal_add_to_queue();
    return ::light();
+}
+
+//This object is only stateful when it's lit. Otherwise it's not.
+int is_stateful()
+{
+   return is_lit();
 }
 
 void burn_out()
@@ -68,12 +78,14 @@ void burn_out()
 
 void set_fuel(int x)
 {
-   set_num_decays(x / FUEL_DELAY);
+   set_num_decays(x);
 }
 
 void mudlib_setup()
 {
+   m_decay::mudlib_setup();
    set_decay_time(FUEL_DELAY);
-   set_decay_action("The $o $vflicker a little.");
+   set_decay_action("The "+this_object()->short()+" flickers a little.");
+   set_decay_auto_remove(1);
    set_last_decay_action(( : burn_out:));
 }
