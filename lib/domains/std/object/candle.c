@@ -1,5 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+inherit OBJ;
 inherit LIGHT_OBJECT;
 inherit M_GETTABLE;
 

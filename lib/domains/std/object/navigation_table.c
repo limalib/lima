@@ -17,7 +17,7 @@ void setup()
 #ifdef USE_MASS
    set_mass(LARGE);
 #endif
-   set_objects((["/domains/std/objects/shovel":1, ]), "on");
+   set_objects((["/domains/std/object/shovel":1, ]), "on");
 }
 
 mixed indirect_get_obj_from_obj(object ob1, object ob2)

@@ -2,6 +2,7 @@
 
 // WIP
 
+inherit OBJ;
 inherit LIGHT_OBJECT;
 inherit M_GETTABLE;
 inherit M_READABLE;

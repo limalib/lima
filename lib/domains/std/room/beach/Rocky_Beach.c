@@ -23,7 +23,7 @@ void setup()
             "a lot of rocks.");
 
    set_hidden_exits("northeast", "northwest", "south", "southeast", "southwest", "north", "east", "west");
-   set_objects((["/domains/std/objects/ocean":1, "/domains/std/objects/debris":1, ]));
+   set_objects((["/domains/std/object/ocean":1, "/domains/std/object/debris":1, ]));
 }
 
 mixed wade(string str)

@@ -11,13 +11,13 @@
 inherit M_DAEMON_DATA;
 
 mapping quests = (["std":(["pirate:secretPsg":({
-                                                  "/domains/std/objects/dock_wall",
+                                                  "/domains/std/object/dock_wall",
                                                   5,
                                                   0,
                                                   0,
                                               }),
                                   "pirate:treasure":({
-                                                        "/domains/std/objects/sand_with_treasure",
+                                                        "/domains/std/object/sand_with_treasure",
                                                         10,
                                                         0,
                                                         "Congratulations! You completed the sample Pirate quest.",

@@ -10,7 +10,7 @@ void setup()
    set_long("This is north side of the cavern.  To the south you see a small east/west running river.  To the west and "
             "the east the rock walls of the cavern press in ominously.");
 
-   set_objects((["/domains/std/objects/gate":({"north", "North_Tunnel"})]));
+   set_objects((["/domains/std/object/gate":({"north", "North_Tunnel"})]));
 
    add_item("wall", "The cave well is your standard everyday rock.");
 

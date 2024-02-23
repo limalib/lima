@@ -29,7 +29,7 @@ mixed can_go_str(string dir)
 /*
  * Setup() is where you define what makes your room differant from
  * the other rooms on the mud.  Setup() in the Lima mudlib is used instead
- * of create() in the rooms/objects.
+ * of create() in the rooms/object.
  */
 void setup()
 {

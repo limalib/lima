@@ -39,9 +39,9 @@ void setup()
 
    set_hidden_exits("all");
 
-   set_objects((["/domains/std/objects/sand_castle":1,
-          "/domains/std/objects/sand_with_treasure":1, "/domains/std/objects/welcome_sign":1,
-                       "/domains/std/objects/ocean":1,
+   set_objects((["/domains/std/object/sand_castle":1,
+          "/domains/std/object/sand_with_treasure":1, "/domains/std/object/welcome_sign":1,
+                       "/domains/std/object/ocean":1,
 
    ]));
 }

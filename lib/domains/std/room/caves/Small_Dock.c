@@ -23,9 +23,9 @@ void setup()
                      "of getting it open.",
                 "open":"There doesn't seem to be a way to open it from here."]));
 
-   set_objects((["/domains/std/objects/river":1,
-             "/domains/std/objects/dock_wall":({"south", "/domains/lima/rooms/caves/Navigation_Room"}),
-                  "/domains/std/objects/dock":1, ]));
+   set_objects((["/domains/std/object/river":1,
+             "/domains/std/object/dock_wall":({"south", "/domains/lima/rooms/caves/Navigation_Room"}),
+                  "/domains/std/object/dock":1, ]));
 }
 
 string swim()

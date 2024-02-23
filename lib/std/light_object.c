@@ -7,7 +7,6 @@
 #include <hooks.h>
 #include <light.h>
 
-inherit OBJ;
 inherit M_LIGHTABLE;
 inherit M_LIGHT_SOURCE;
 inherit M_DECAY;

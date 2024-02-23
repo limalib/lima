@@ -16,11 +16,11 @@ void setup()
    add_item("legs", "leg", "There's nothing special about the table's legs.");
    add_item("surface", "There's nothing special about the table's surface.");
 
-   set_objects((["/domains/std/objects/navigation_table":1,
-                "/domains/std/objects/navigation_button":1,
-                        "/domains/std/objects/rock_wall":({
+   set_objects((["/domains/std/object/navigation_table":1,
+                "/domains/std/object/navigation_button":1,
+                        "/domains/std/object/rock_wall":({
                                                              "north",
                                                              "/domains/std/rooms/caves/Small_Dock",
                                                          }),
-                             "/domains/std/objects/maps":1, ]));
+                             "/domains/std/object/maps":1, ]));
 }

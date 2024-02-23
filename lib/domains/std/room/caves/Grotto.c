@@ -19,7 +19,7 @@ void setup()
    set_default_error("There are tales of mighty wizards who walk through walls, but unfortunately\nthese are but tales "
                      "without foundation.\n");
 
-   set_objects((["/domains/std/objects/dead_adventurer":1, "/domains/std/monster/troll":1, ]));
+   set_objects((["/domains/std/object/dead_adventurer":1, "/domains/std/monster/troll":1, ]));
 
    add_item("cave", "paint", "paintings", "grotto",
             "The paintings depict many forms of gruesome death."
