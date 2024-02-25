@@ -3,11 +3,18 @@
 private
 nosave int interval = 1;
 
+//: FUNCTION is_stateful
+// Override this to make the object stateful depending on what happens.
+// E.g. a torch might be stateful when lighted, but not when it's dark.
 int is_stateful()
 {
    return 1;
 }
 
+//: FUNCTION state_update
+// This function must return 1 by stateful objects to keep being called by STATE_D. If they do not, they're removed from
+// the queue. If they do, they're added to the queue again by STATE_D and set to be called after query_call_interval()
+// minutes has passed.
 int state_update()
 {
    return 1;
@@ -26,6 +33,8 @@ int set_call_interval(int i)
    interval = i;
 }
 
+//: FUNCTION query_call_interval
+// Return the call internal in minutes.
 int query_call_interval()
 {
    return interval;
