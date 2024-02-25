@@ -69,7 +69,7 @@ void setup()
     *  clearer.  for more information on what you can do see help exits.
     */
    set_exits((["west":"Wizroom",
-              "south":"Relations_And_Toys", "north":"/domains/std/rooms/V_Plains/4/7", "east":"Car_Wash", ]));
+              "south":"Relations_And_Toys", "north":"/domains/std/room/V_Plains/4/7", "east":"Car_Wash", ]));
 
    // This sets a special message to be seen when you enter the room on the other
    // side of the specified exit

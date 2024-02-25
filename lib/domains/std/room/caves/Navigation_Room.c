@@ -20,7 +20,7 @@ void setup()
                 "/domains/std/object/navigation_button":1,
                         "/domains/std/object/rock_wall":({
                                                              "north",
-                                                             "/domains/std/rooms/caves/Small_Dock",
+                                                             "/domains/std/room/caves/Small_Dock",
                                                          }),
                              "/domains/std/object/maps":1, ]));
 }

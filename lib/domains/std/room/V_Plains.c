@@ -5,7 +5,7 @@
 **
 ** Format for the object is:
 **
-**	/domains/std/rooms/v_plains/x/y
+**	/domains/std/room/v_plains/x/y
 **
 ** The data for the plains is pulled from v_plains.data.  It is an array
 ** of description-id values (in the first N non-comment lines).  Comments
