@@ -84,7 +84,7 @@ void mudlib_setup()
 {
    m_decay::mudlib_setup();
    set_decay_time(FUEL_DELAY);
-   set_decay_action("The "+this_object()->short()+" flickers a little.");
+   set_decay_action("$P $o flickers a little.");
    set_decay_auto_remove(1);
    set_last_decay_action(( : burn_out:));
 }

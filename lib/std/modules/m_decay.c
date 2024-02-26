@@ -31,6 +31,8 @@ void remove();
 // set_decay_action(string) causes 'string' to be printed this
 // object decays.  set_decay_action(function) causes the function
 // to be called instead.
+// If action contains a "$", it's assumed to be a message, and called via
+//  env()->simple_action(action,this_object());
 void set_decay_action(mixed action)
 {
    decay_action = action;
@@ -94,7 +96,12 @@ int decay_it()
    if (stringp(action))
    {
       if (environment() && environment()->is_living())
-         tell(environment(), action + "\n");
+      {
+         if (strsrch(action, "$") != -1)
+            environment()->simple_action(action, this_object());
+         else
+            tell(environment(), action + "\n");
+      }
       else
          object_event(action);
    }

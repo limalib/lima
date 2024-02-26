@@ -14,7 +14,7 @@ void setup()
    // Fuel for 10 decays, so 20 minutes all in all.
    set_fuel(10);
    set_die_msg("The $o burns up and a small pillar of smoke rises from the wick.");
-   set_decay_action("The " + this_object()->short() + " flickers and sputters a little.");
+   set_decay_action("$P $o flickers and sputters a little.");
 }
 
 string get_extra_long()
