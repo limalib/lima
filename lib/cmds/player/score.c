@@ -85,7 +85,7 @@ string capacity_string(object body, int width)
    //"058","064","070","076","076","082","190","226","220","214","208","202","196",
    content = slider_colours_sum(0.0 + capa, colours, width - 2) + "\n";
    content += "Carrying " + weight_to_string(capa, get_user_variable("metric") != 1) + " / " +
-              weight_to_string(enc_capa, get_user_variable("metric") != 1) + " - " + capa_string + ".";
+              weight_to_string(max, get_user_variable("metric") != 1) + " - " + capa_string + ".";
    return content;
 }
 
@@ -160,7 +160,7 @@ string score_cmd(object body, int width)
        sprintf("%s  (%s) - Level %d\n", name, wizardp(body->query_link()) ? "Wizard" : "Mortal", body->query_level());
 
    content += green_bar(xp - body->query_xp_for_level(body->query_level()),
-                        body->query_next_xp() - body->query_xp_for_level(body->query_level()), width - 2) +
+                        body->query_next_xp() - body->query_xp_for_level(body->query_level()), width - 3) +
               "\n";
    if (body->query_next_xp() - body->query_experience() > 0)
       content += sprintf("%d XP - Level %d in %d more points.\n", body->query_experience(), (body->query_level() + 1),

@@ -9,6 +9,16 @@ It works on 3 layers of interaction.
 - Planet management - you extend your corporations on planets and manage the flow of goods on and off planets.
 
 These 3 layers all interact, so you can e.g. land on a planet in your spacecraft and explore on foot.
+=======
+# How to test and contribute
+```
+#Stable 
+git clone --recurse-submodules https://github.com/fluffos/lima
 
-# License
-Same as original Lima Lib.
+#or use (for development)
+#git clone --recurse-submodules https://github.com/tsathoqqua/lima
+
+cd lima
+./build.sh
+./run.sh
+```

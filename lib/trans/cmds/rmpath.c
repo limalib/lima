@@ -5,7 +5,7 @@
 /* This command will remove a path from your current exec path */
 
 //: COMMAND
-//$$ see: addpath, showpath
+//$$ see: addpath, printpath
 // USAGE: rmpath <directory>
 //
 // This command will remove a path from your current exec paths.

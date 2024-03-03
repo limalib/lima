@@ -12,6 +12,8 @@
 // It's probably a good idea to set it to the same as your client' setting,
 // so they don't get confused when talking to each other.
 
+#define MIN_WIDTH 30
+
 inherit CMD;
 
 void main(mixed width)
@@ -45,9 +47,9 @@ void main(mixed width)
       return;
    }
 
-   if (width < 10)
+   if (width < MIN_WIDTH)
    {
-      out("Screen width must be 10 or greater.\n");
+      out("Screen width must be "+MIN_WIDTH+" or greater.\n");
       return;
    }
    this_user()->set_screen_width(width);

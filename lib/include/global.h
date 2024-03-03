@@ -29,8 +29,7 @@
 #define ZBUG(x) TELL_BUG("zifnab",(x))
 #define ZABUG(x) TELL_BUG("zakk", (x))
 #define TBUG(x) TELL_BUG("tsath",(x))
-#define TIBUG(x) TELL_BUG("tibalt",(x))
-#define SBUG(x) TELL_BUG("stanach",(x))
+#define ABUG(x) TELL_BUG("asmerian",(x))
 #define KBUG(x) TELL_BUG("kobol",(x))
 #define LBUG(x) TELL_BUG("loriel",(x))
 

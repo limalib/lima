@@ -70,25 +70,26 @@ void someone_didnt()
 }
 
 private
-nomask int start_index(int after)
+nomask int start_index(string version, int after)
 {
-   int index = sizeof(did[curver()]);
+   int index = sizeof(did[version]);
    if (after > time())
       return 0;
 
-   while (index > 0 && did[curver()][index - 1][0] > after)
+   while (index > 0 && did[version][index - 1][0] > after)
       index--;
 
    return index;
 }
 
-// private
+private
 nomask string *get_entries(int after, string *header, string pattern, string v)
 {
-   int index = start_index(after);
+   int index;
    string *output = header;
    if (!v)
       v = curver();
+   index = start_index(v, after);
 
    if (!did[v])
       did[v] = ({});
@@ -166,7 +167,7 @@ varargs string get_did_info(int after, string *header, string pattern, function 
 
 varargs void print_changelog_to_file(string file, int after, int show_date)
 {
-   int index = start_index(after);
+   int index = start_index(curver(), after);
    string output = "";
 
    if (show_date)

@@ -3,75 +3,87 @@
 /*
 ** didlog.c -- print out a portion of the DID_D log
 **
-** 950821, Deathblade: created
+** Aug 1995, Deathblade: created
+** Feb 2024, rewritten by Tsath to support versions and both a LIMA log and MUD log.
 */
 
 //: COMMAND
 //$$ see: I, lima
 // USAGE: didlog
-//       didlog <value>
-//       didlog /on
-//       didlog /off
+//    didlog -a|-all                   - Show entire didlog.
+//    didlog <number>                  - Show didlog for last <number> days.
+//    didlog -on|-off                  - Turn didlog on login on/off.
+//    didlog -vs|-versions             - Show the versions stored.
+//    didlog -h|-help                  - This help text.
+//    didlog -newversion [param]       - Set a new version (admin only).
+//    didlog -v|-ver|-version [param]  - Select this version>.
+//    didlog -p|-pattern [param]       - Match pattern.
+//
+//  Examples:\n"
+//    didlog 100                       - Find all changes in current version 100 days back.
+//    didlog -v 1.0 -a                 - Show entire version 1.0 didlog.
+//    didlog -v 1.0 -a -p limb         - Find all places in version 1.0 with 'limb'.
+//    didlog -v 1.0 200 -p limb        - Find places in version 1.0 days 200 back with 'limb'.
 //
 // Shows you the "did" log (ie log of changes recorded by wizards).
 // With no arguments it shows the log for the past day.
 // With an integer argument it will show the log for that many days back.
-// didlog /off turns didlog notification on login off.
-// didlog /on turns it back on again.
+// didlog -off turns didlog notification on login off.
+// didlog -on turns it back on again.
 
 #include <daemons.h>
 
 inherit CMD;
 
 private
+void print_help()
+{
+   out("didlog:\n"
+       "  didlog -a|-all                   - Show entire didlog.\n"
+       "  didlog <number>                  - Show didlog for last <number> days.\n"
+       "  didlog -on|-off                  - Turn didlog on login on/off.\n"
+       "  didlog -vs|-versions             - Show the versions stored.\n"
+       "  didlog -h|-help                  - This help text.\n\n"
+       "  didlog -newversion [param]       - Set a new version (admin only).\n"
+       "  didlog -v|-ver|-version [param]  - Select this version>.\n"
+       "  didlog -p|-pattern [param]       - Match pattern.\n\n"
+       "Examples:\n"
+       "  didlog 100                       - Find all changes in current version 100 days back.\n"
+       "  didlog -v 1.0 -a                 - Show entire version 1.0 didlog.\n"
+       "  didlog -v 1.0 -a -p limb         - Find all places in version 1.0 with 'limb'.\n"
+       "  didlog -v 1.0 200 -p limb        - Find places in version 1.0 days 200 back with 'limb'.\n\n"
+       "Arguments can be given in any order.\n"
+       );
+}
+
+private
 void main(string str)
 {
-   int ndays;
+   int ndays=1;
+   string days;
    string header;
    string pattern;
    string version;
+   string newversion;
+   string *args = explode(str || "", " ");
 
-   if (str && sscanf(str, "/version %s %s", pattern, str) == 2)
+   for (int location = 0; location < sizeof(args); location++)
    {
-      if (member_array(pattern, DID_D->versions()) != -1)
-         version = pattern;
-      else
-         out("Unknown version '" + pattern + "'.");
-   }
-
-   if (!str)
-      ndays = 1;
-   else if (str == "help" || str == "/help" && this_body())
-   {
-      out("didlog:\n"
-          "\tdidlog <days>|all        - Show didlog since <days> or all.\n"
-          "\tdidlog /version <name>   - Show all changes in <version>.\n"
-          "\tdidlog /on|/off          - Turn didlog on login on/off.\n"
-          "\tdidlog /newversion       - Set a new version (admin only).\n"
-          "\tdidlog /versions         - Show the versions stored.");
-      return;
-   }
-   else if (str == "/off" && this_body())
-   {
-      this_user()->set_didlog_off(1);
-      out("You will no longer receive didlog notifications.\n");
-      return;
-   }
-   else if (str == "/on" && this_body())
-   {
-      this_user()->set_didlog_off(0);
-      out("You will now receive didlog notifications.\n");
-      return;
-   }
-   else if (str == "/versions" && this_body())
-   {
-      out("The following versions are known: \n\t" + implode(sort_array(DID_D->versions(), 1), "\n\t") + "\n");
-      return;
-   }
-   else if (strlen(str) > 8 && str[0..10] == "/newversion" && this_body() && adminp(this_body()))
-   {
-      if (sscanf(str, "/newversion %s", pattern) == 1)
+      string a = args[location];
+      string parameter;
+      string next_param = (location + 1) < sizeof(args) ? args[location + 1] : 0;
+      if (strlen(a) > 1 && a[0] == '-')
+         parameter = a[1..];
+      switch (parameter)
       {
+         // Dirty returning statements up here.
+      case "versions":
+      case "vs":
+         out("The following versions are known: \n\t" + implode(sort_array(DID_D->versions(), 1), "\n\t") + "\n");
+         return;
+      case "newversion":
+      case "nw":
+         newversion = next_param;
          if (mud_name() == "LIMA")
          {
             out("Error: Set version in secure/simul_efun/misc.c for LIMA library.");
@@ -79,24 +91,49 @@ void main(string str)
             return;
          }
          DID_D->set_version(pattern);
-         out("Version set to '" + pattern + "'.");
+         out("Version set to '" + newversion + "'.");
          return;
-      }
-      else
-      {
-         out("Usage: didlog /version number");
+      case "on":
+         this_user()->set_didlog_off(0);
+         out("You will now receive didlog notifications.\n");
          return;
-      }
-   }
-   else if (!(ndays = to_int(str)))
-   {
-      if (sscanf(str, "%s %d", pattern, ndays) != 2)
-      {
-         pattern = str;
-         ndays = 1;
-      }
-      if (str == "all")
+      case "off":
+         this_user()->set_didlog_off(1);
+         out("You will no longer receive didlog notifications.\n");
+         return;
+      case "help":
+      case "h":
+         print_help();
+         return;
+         // End of dirt
+      case "version":
+      case "v":
+      case "ver":
+         version = next_param;
+         if (member_array(version, DID_D->versions()) == -1)
+         {
+            out("Unknown version '" + version + "'.");
+            version = 0;
+            return;
+         }
+         location++;
+         break;
+      case "all":
+      case "a":
          ndays = -1;
+         break;
+      case "pattern":
+      case "p":
+         pattern = next_param;
+         location++;
+         break;
+      default:
+         if (to_int(a) > 0)
+            ndays = to_int(a);
+         break;
+      }
+
+      parameter = 0;
    }
 
    if (ndays == 1)
@@ -107,6 +144,9 @@ void main(string str)
    }
    else
       header = sprintf("DID_D report for the past %d days" + (version ? " for " + version : ""), ndays);
+
+   if (strlen(pattern) > 0)
+      header += " matching '" + pattern + "'";
 
    out(DID_D->get_did_info(time() - ndays * 24 * 60 * 60, ({header, repeat_string("-", sizeof(header)), ""}), pattern,
                            0, version));

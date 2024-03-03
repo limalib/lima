@@ -24,7 +24,7 @@ void setup()
    set_which_guild("fighter");
 
    set_wielding("/domains/std/weapon/sword");
-   set_wearing("/domains/std/armour/platemail");
+   set_wearing("/domains/std/armour/fullplate");
 }
 
 void receive_outside_msg(string str)

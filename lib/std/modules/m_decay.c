@@ -93,6 +93,10 @@ int decay_it()
    else
       action = decay_action;
 
+   if (0)
+      TBUG("m_decay: action=" + action + " decay_begun: " + decay_begun + " num_decays: " + num_decays +
+           " auto_remove: " + auto_remove);
+
    if (stringp(action))
    {
       if (environment() && environment()->is_living())

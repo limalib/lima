@@ -257,6 +257,5 @@ string slider_colours_sum(int value, mapping colours, int width)
    }
 
    return_string = replace_string(return_string, x_char, "<015>" + x_char + "<" + colour_after_marker + ">");
-
    return "[" + return_string + "<res>]";
 }
