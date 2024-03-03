@@ -442,7 +442,14 @@ mixed parse_arg(int this_arg, mixed argv)
             result = filter(result, ( : !is_directory($1) :));
          if (!sizeof(result) && (this_arg & IS_OBFILE))
          {
-            object ob = get_object(argv);
+            object ob;
+            string error;
+            
+            // Attempt to load object and return 0 if we fail.
+            error= catch(ob = get_object(argv));
+            if (error)
+               return 0;
+
             if (ob)
             {
                string bname = base_name(ob);

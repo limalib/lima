@@ -139,9 +139,8 @@ object get_object(string arg)
       if (environment(this_body()) && !(ob = present(arg, environment(this_body()))))
          if (!(ob = find_body(arg)))
             if (!(ob = load_object(evaluate_path(arg))))
-               if (!(ob = load_object(evaluate_path(arg) + ".scr")))
-                  return 0;
-
+               return 0;
+               
    return ob;
 }
 

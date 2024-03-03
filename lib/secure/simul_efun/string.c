@@ -355,6 +355,8 @@ string time_to_string(int num, int short)
 // Two decimals max. The function returns grams if you
 // give weight below a kilo.
 //
+// If imperial = 1, we convert to imperial not metric.
+//
 // The default behaviour of this function can be changed by modifying #METRIC
 // in config.h.
 varargs string weight_to_string(float w, int imperial)
