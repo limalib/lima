@@ -2,7 +2,7 @@
 
 /* rewritten 7-Mar-98 by MonicaS */
 
-inherit "/obj/admtool/internal/base.c";
+inherit ADMTOOL_BASE;
 
 nomask string module_name()
 {

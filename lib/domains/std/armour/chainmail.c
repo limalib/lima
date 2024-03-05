@@ -1,9 +1,5 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-#ifdef USE_BODYSLOTS
-#include <bodyslots.h>
-#endif
-
 inherit ARMOUR;
 
 void setup()

@@ -16,6 +16,6 @@ void setup()
             " the west, and a button beside the door.\n$lamp");
    set_state_description("lamp_on", "\nThe lamp on the button beside the elevator is lit.\n");
    set_light(1);
-   set_objects((["/std/elevator_door":({"west", "/domains/std//elevator"}),
-          "/std/elevator_call_button":({"3/attic", "/domains/std//elevator"}), ]));
+   set_objects((["/std/elevator_door":({"west", "/domains/std/room/elevator"}),
+          "/std/elevator_call_button":({"3/attic", "/domains/std/room/elevator"}), ]));
 }

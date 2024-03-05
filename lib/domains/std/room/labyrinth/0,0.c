@@ -31,5 +31,5 @@ void setup()
       add_exit("south", __DIR__ "0,2.c");
    }
    set_long(desc + "as well as west out of the labyrinth.\n");
-   add_exit("west", "/domains/std/wizroom");
+   add_exit("west", "/domains/std/room/Wizroom");
 }

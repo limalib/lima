@@ -63,11 +63,11 @@ private
 string capacity_string(object body, int width)
 {
    string content;
-   int capa = body->query_capacity();
-   int enc_capa = body->query_encumbered_capacity();
-   int enc_heavy_capa = body->query_heavy_capacity();
-   int no_move = body->query_no_move_capacity();
-   int max = body->query_max_capacity();
+   float capa = body->query_capacity();
+   float enc_capa = body->query_encumbered_capacity();
+   float enc_heavy_capa = body->query_heavy_capacity();
+   float no_move = body->query_no_move_capacity();
+   float max = body->query_max_capacity();
    string capa_string;
    mapping colours =
        ([0.0 + enc_capa:"113", 0.0 + ((enc_heavy_capa * 0.8)):"119", 0.0 + ((enc_heavy_capa * 0.9)):"155", 0.0 +

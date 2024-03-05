@@ -46,7 +46,7 @@ void save_me()
       return;
    name = owner->query_userid();
 
-   if (strlen(name) > 5 && name[0..4] = "guest")
+   if (strlen(name) > 5 && name[0..4] == "guest")
       return;
 
    setup_for_save();

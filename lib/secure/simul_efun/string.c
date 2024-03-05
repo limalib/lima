@@ -365,7 +365,10 @@ varargs string weight_to_string(float w, int imperial)
   w = w * 1.0;
 #ifdef METRIC
   if (imperial)
-     ret = sprintf("%.2f lbs", round(w * KG_TO_LBS));
+  {
+     w = w * KG_TO_LBS;
+     ret = sprintf("%.2f lbs", w );
+  }
   else
      ret = w >= 1 ? sprintf("%.2f kg", round(w * 100) / 100) : sprintf("%d g", to_int(w * 1000.0));
   return replace_string(ret, ".00", "");

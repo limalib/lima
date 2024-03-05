@@ -12,8 +12,8 @@ void setup()
             "'(1) Lima', '(2) Church', '(3) Attic', '(4) Wiz hall'.$elevator_door");
    // Set destinations with filenames of where we can go and shorthands.
    set_destinations(
-       (["1/lima":"^std/Wizroom",
-            "2/church":"^std//Church", "3/attic":"^std//Attic", "4/wizhall":"^std//wiz_hall", ]));
+       (["1/lima":"^std/room/Wizroom",
+            "2/church":"^std/room/Church", "3/attic":"^std/room/Attic", "4/wizhall":"^std/room/wiz_hall", ]));
 
    // Set start position for elevator
    move_to("2/church");

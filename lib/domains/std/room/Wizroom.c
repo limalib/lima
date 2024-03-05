@@ -25,8 +25,8 @@ void setup()
    set_exits((["east":"Example_Room1", "south":"Monster_Room", "northwest":"Lava_Room", ]));
    set_objects(([STAIRS:({"Attic", "Shop"}),
                   "large_oak_door":({"northeast", "Quiet_Room"}), "portal":({"/domains/std/room/beach/Sandy_Beach"}),
-              "/std/elevator_door":({"west", "/domains/std/elevator"}),
-       "/std/elevator_call_button":({"1/lima", "/domains/std/elevator"}), "greeter":1, "map":1, ]));
+              "/std/elevator_door":({"west", "/domains/std/room/elevator"}),
+       "/std/elevator_call_button":({"1/lima", "/domains/std/room/elevator"}), "../monster/greeter":1, "../object/map":1, ]));
    set_default_error("Walking through walls is painful. Try a more pleasant "
                      "direction.\n");
    set_exit_msg("east", ({"$N $vwomble east.", "$N $vfritter away."}));

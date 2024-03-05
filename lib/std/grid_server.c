@@ -114,7 +114,7 @@ object virtual_create(string arg)
    if (!exit_e)
       exit_e = GRID_ROOM(x + 1, y);
 
-   room = new (ROOM);
+   room = new (OUTDOOR_ROOM);
    room->set_brief(brief_desc);
    room->set_long(ROOM_DESC(x, y));
    room->add_exit("north", exit_n);

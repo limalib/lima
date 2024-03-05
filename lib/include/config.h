@@ -34,7 +34,7 @@
 
 /* The players start room.
  * This is the default for where players start when they log in. */
-#define START "/domains/std/Wizroom"
+#define START "/domains/std/room/Wizroom"
 
 /* NOTE: if you define this, you have to modify the lib to save the correct
  * variables.*/
@@ -196,7 +196,7 @@
 #undef HANDLE_MANY_WIZARDS
 
 /* Define where your wizards start in the game by default. */
-#define WIZARD_START "/domains/std/Wizroom"
+#define WIZARD_START "/domains/std/room/Wizroom"
 
 /* Auto wiz means guest wizard only.  You still have to use the admtool
  * command to make the person a full wizard w/ a directory. */

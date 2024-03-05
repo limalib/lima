@@ -30,7 +30,7 @@ void setup()
             "e north.$lamp");
    set_state_description("lamp_on", "\nThere is a lit lamp beside the elevator.\n");
    set_light(1);
-   set_objects((["/std/elevator_door":({"west", "/domains/std//elevator"}),
-          "/std/elevator_call_button":({"4/wizhall", "/domains/std//elevator"}), ]));
+   set_objects((["/std/elevator_door":({"west", "/domains/std/room/elevator"}),
+          "/std/elevator_call_button":({"4/wizhall", "/domains/std/room/elevator"}), ]));
    set_exits((["north":"quest_room.scr", ]));
 }

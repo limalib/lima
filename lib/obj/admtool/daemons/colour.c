@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit "/obj/admtool/internal/base.c";
+inherit ADMTOOL_BASE;
 
 
 nomask string module_name() {

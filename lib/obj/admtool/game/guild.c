@@ -12,7 +12,7 @@
 
 #include <edit.h>
 
-inherit "/obj/admtool/internal/base.c";
+inherit ADMTOOL_BASE;
 
 nomask string module_name()
 {

@@ -2,7 +2,7 @@
 
 /* Tsath 2020, for DOMAIN_D control from admtool */
 
-inherit "/obj/admtool/internal/base.c";
+inherit ADMTOOL_BASE;
 
 nomask string module_name()
 {

@@ -1,6 +1,6 @@
 #include <limbs.h>
 
-inherit "/obj/admtool/internal/base.c";
+inherit ADMTOOL_BASE;
 inherit CLASS_LIMB;
 
 nomask string module_name()

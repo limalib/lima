@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit "/obj/admtool/internal/base.c";
+inherit ADMTOOL_BASE;
 
 #define SECS_PER_DAY (24 * 60 * 60)
 

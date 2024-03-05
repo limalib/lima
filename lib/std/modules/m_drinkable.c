@@ -27,7 +27,7 @@ object drink_source; //
 string the_short();
 string query_primary_id();
 float query_mass();
-void set_weight(int x);
+void set_weight(float x);
 void set_quantity(int x);
 void remove();
 int query_heal_value();
