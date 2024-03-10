@@ -7,7 +7,7 @@
 // Use an MMO like user menu, where users can create many characters under the the same user.
 // Default: yes
 // Type: boolean
-#define USE_USER_MENU
+#undef USE_USER_MENU
 
 // Max number of characters allowed per user. If you want only one, set USE_USER_MENU=no.
 // Default: 10

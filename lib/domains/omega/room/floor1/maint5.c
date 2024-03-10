@@ -10,4 +10,5 @@ void setup()
             "scratches and scuff marks that tell tales of countless breaks taken in haste.");
    set_exits((["south":"maint8", "west":"maint4"]));
    set_listen("You hear the background noise of air treatment systems and computer systems running behind the walls.");
+      set_objects((["^omega/mob/lunar_lurker":1, "^omega/mob/tech_gremlin":2]));
 }

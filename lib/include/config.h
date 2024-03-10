@@ -34,7 +34,7 @@
 
 /* The players start room.
  * This is the default for where players start when they log in. */
-#define START "/domains/std/room/Wizroom"
+#define START "/domains/omega/room/floor1/wakeup_room/"+this_body()->query_name()
 
 /* NOTE: if you define this, you have to modify the lib to save the correct
  * variables.*/
@@ -156,12 +156,15 @@
  ** 									                                                  **
  *************************************************************************/
 
+/* Use an MMO like user menu, where users can create many characters under the
+** the same user. If this is diabled, you will have 1 user per character (classic MUD setup).
+*/
+#undef USE_USER_MENU
+
 /* Define the character which allows you to call up previous command history.
  * ! will give you problems since it's used as input escape. */
 #define HISTORY_CHAR '%'
 
-/* Define the character which allows you to comment out a line in the shell
- * # recommended as default for other shells. */
 #define COMMENT_CHAR '#'
 
 /* Define this if players are allowed to have a plan as well as wizards. */
@@ -196,15 +199,15 @@
 #undef HANDLE_MANY_WIZARDS
 
 /* Define where your wizards start in the game by default. */
-#define WIZARD_START "/domains/std/room/Wizroom"
+#define WIZARD_START "/domains/std/Wizroom"
 
 /* Auto wiz means guest wizard only.  You still have to use the admtool
  * command to make the person a full wizard w/ a directory. */
-#define AUTO_WIZ
+#undef AUTO_WIZ
 
 /* Wizard Positions are merely a descriptive field to describe what the
  * wizard does.  Define this if you want to use it. */
-#define USE_WIZ_POSITION
+#undef USE_WIZ_POSITION
 
 /* Allow wizards to see hidden exits? */
 #define WIZARDS_SEE_HIDDEN_EXITS
@@ -245,7 +248,7 @@
  * NOTE: This is required to be changed in order to have a working
  * I3 system. Must be changed for anything to work!
  */
-#define ADMIN_EMAIL "billg@microsoft.com"
+#define ADMIN_EMAIL "tsath@limalib.dev"
 
 /* If this is undefined, anonymous ftp is allowed - undef it to prevent.
   Anon ftp users are limited to /ftp/pub.*/

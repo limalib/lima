@@ -5,8 +5,8 @@ inherit CLIMB_CHALLENGE;
 void setup()
 {
     set_fail_climb_message(({
-        "$N $vstumble over the barricade, but $vmake it across - a bit hurt.",
-        "$N $vstumble over the barricade, but $vmake it across - quite hurt.",
+        "$N $vstumble while climbing over the barricade, but $vmake it across - a bit hurt.",
+        "$N $vstumble while climbing over the barricade, but $vmake it across - quite hurt.",
     }));
 }
 
