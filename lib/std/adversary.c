@@ -82,6 +82,11 @@ mixed direct_diagnose_liv(object ob)
    return 1;
 }
 
+int is_adversary()
+{
+   return 1;
+}
+
 mixed direct_kill_liv(object ob)
 {
    if (query_ghost())
