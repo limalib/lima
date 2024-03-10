@@ -124,6 +124,13 @@ string diagnose()
    return HEALTH_MODULE::diagnose();
 }
 
+string query_in_room_desc()
+{
+  if (!this_object()->is_visible())
+    return "";
+  return ::query_in_room_desc() + conditionString();
+}
+
 /*
  * Ok, quick explanation:
  *

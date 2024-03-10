@@ -21,12 +21,30 @@ mixed can_verb_rule(string verb, string rule)
 
 void do_stand()
 {
-   environment(this_body())->do_verb_rule("stand");
+   if (!this_body()->query_prone())
+   {
+      write("You're already standing.");
+      return;
+   }
+   this_body()->simple_action("$N $vstand up.");
+   this_body()->stand_up();
 }
 
 void do_stand_wrd(string prep)
 {
-   environment(this_body())->do_verb_rule("stand", "WRD", prep);
+   if (prep!="up")
+   {
+      write("Stand what?");
+      return;
+   }
+
+   if (!this_body()->query_prone())
+   {
+      write("You're already standing.");
+      return;
+   }
+   this_body()->simple_action("$N $vstand up.");
+   this_body()->stand_up();
 }
 
 void do_stand_wrd_obj(string prep, object ob)

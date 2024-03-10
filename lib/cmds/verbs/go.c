@@ -56,6 +56,11 @@ mixed can_go_str(string str)
       return "You cannot move! What ARE you carrying?\n";
    }
 
+   if (this_body()->query_prone())
+   {
+      return "You are prone. Stand up first.";
+   }
+
    //If we have no move capacity we ignore that we cannot move.
    if (this_body()->query_no_move_capacity() && !can_move())
    {

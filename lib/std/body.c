@@ -231,7 +231,7 @@ void save_me()
    object shell_ob = link && link->query_shell_ob();
    string bodyid = lower_case(query_name());
 
-   //Never save guests
+   // Never save guests
    if (bodyid && strlen(bodyid) > 5 && bodyid[0..4] == "guest")
       return;
 
@@ -512,7 +512,7 @@ string the_short()
 }
 string in_room_desc()
 {
-   return base_in_room_desc() + query_idle_string();
+   return base_in_room_desc() + conditionString() + query_idle_string();
 }
 
 /* end of naming overrides */
