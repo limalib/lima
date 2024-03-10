@@ -25,6 +25,6 @@ MAY
     "pantry" : R + "pantry",
    ]) );
   set_objects( ([
-    "/domains/std/apple" : 1,
+    "/domains/std/consumable/apple" : 1,
    ]) );
 }

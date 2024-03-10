@@ -15,8 +15,8 @@
 // object                                 Function            Delay
 // -----------------------------------------------------------------------------
 // /secure/master                         <function>          17m 13s
-// /domains/std/harry#474                 <function>          19h 23m 53s
-// /domains/std/harry                     <function>          3s
+// /domains/std/monster/harry#474         <function>          19h 23m 53s
+// /domains/std/monster/harry             <function>          3s
 // /daemons/imud_d                        <function>          (107 calls)
 //
 // There are 3 call_outs active.

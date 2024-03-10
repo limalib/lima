@@ -2,6 +2,7 @@
 
 // Rust Aug 15 1994
 
+#include <config/user_menu.h>
 #include <ports.h>
 #include <security.h>
 
@@ -39,9 +40,13 @@ class finger get_finger_data(string userid)
 {
    class finger result;
    object user;
-   string *info;
+   mixed *info;
    mixed last;
    object mbox;
+
+#ifdef USE_USER_MENU
+   userid = USER_D->find_real_user(userid);
+#endif
 
    info = unguarded(1, (
                            : call_other, USER_D, "query_variable", userid,
@@ -58,6 +63,9 @@ class finger get_finger_data(string userid)
 #endif
 #ifdef EVERYONE_HAS_A_PLAN
                                  "plan",
+#endif
+#ifdef USE_USER_MENU
+                                 "bodies",
 #endif
                              })
                            :));
@@ -113,6 +121,10 @@ class finger get_finger_data(string userid)
 #endif
 #endif
 
+#ifdef USE_USER_MENU
+   result.bodies = info[<1];
+#endif
+
    mbox = MAILBOX_D->get_mailbox(userid);
    result.mail_count = mbox->query_message_count();
    result.mail_unread = mbox->query_unread_count();
@@ -139,9 +151,16 @@ class finger get_finger_data(string userid)
 
    if (is_file(WIZ_DIR + "/" + userid + "/.plan"))
       result.plan = read_file(WIZ_DIR + "/" + userid + "/.plan");
+#ifdef USE_USER_MENU
+#ifdef EVERYONE_HAS_A_PLAN
+   else if (info[ < 2])
+      result.plan = info[ < 2];
+#endif
+#else
 #ifdef EVERYONE_HAS_A_PLAN
    else if (info[ < 1])
       result.plan = info[ < 1];
+#endif
 #endif
 
    return result;

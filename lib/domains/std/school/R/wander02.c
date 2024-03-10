@@ -22,6 +22,6 @@ MAY );
 	"backward" : R "wander01",
       ]) );
     set_objects( ([
-    "/domains/std/dragon" : 1,
+    "/domains/std/monster/dragon" : 1,
       ]) );
 }

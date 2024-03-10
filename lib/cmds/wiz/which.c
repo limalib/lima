@@ -32,6 +32,6 @@ void main(string *argv)
       out("No such command found in your path.\n");
       return;
    }
-   outf("%s is found in: %s\n", argv[0], result[1]);
+   outf("%s%s\n", result[1], argv[0]);
    return;
 }

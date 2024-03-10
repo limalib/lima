@@ -1,9 +1,5 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-#ifdef USE_BODYSLOTS
-#include <bodyslots.h>
-#endif
-
 inherit CONTAINER;
 inherit M_OPENABLE;
 inherit M_WEARABLE;
@@ -17,15 +13,9 @@ void setup()
    set_default_relation("in");
    set_objects(([]));
    set_max_capacity(3 * MEDIUM);
-#ifdef USE_SIZE
-   set_size(SMALL);
-#endif
-#ifdef USE_MASS
-   set_mass(SMALL);
-#endif
-#ifdef USE_BODYSLOTS
-   set_slot(TORSO);
-#endif
+   set_weight(2);
+   set_slot("torso");
+
 }
 
 mixed ob_state()

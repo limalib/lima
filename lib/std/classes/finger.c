@@ -27,4 +27,5 @@ class finger
    string plan;
    int mail_count;
    int mail_unread;
+   mapping bodies;
 }

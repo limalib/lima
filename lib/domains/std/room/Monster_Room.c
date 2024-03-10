@@ -10,7 +10,7 @@ void setup()
             "introduced to other wizards. There aren't any around yet, since everybody is waiting for the combat "
             "sequences to be completed. The Grand Hall is to the north.");
    set_exits((["north":"Wizroom.c"]));
-   set_objects((["/domains/std/guild_guard":({"sorcery"})]));
+   set_objects((["/domains/std/monster/guild_guard":({"sorcery"})]));
 }
 
 string *query_hint(int level)

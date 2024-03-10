@@ -4,7 +4,6 @@ inherit INDOOR_ROOM;
 void setup(){
     set_brief("How to make basic boots");
     set_long(@MAY
-#include <bodyslots.h>
 inherit ARMOUR;
 inherit M_READABLE;
 
@@ -23,7 +22,7 @@ The inscription reads 'I am boots of swift, wear me, love me for I protect
 your feet everywhere you go.'
 KAAN
     );
-    set_size(SMALL);
+    set_weight(1);
     set_slot("feet");
 }
 MAY

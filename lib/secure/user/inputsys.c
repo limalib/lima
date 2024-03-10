@@ -355,6 +355,7 @@ nomask void dispatch_modal_input(mixed str)
    }
    else
    {
+      string error;
       /*
        ** Get the top handler, or fail if none are present/can be created.
        */
@@ -367,11 +368,18 @@ nomask void dispatch_modal_input(mixed str)
 
       dispatching_to = sizeof(modal_stack);
 
-      evaluate(info.input_func, str);
+      error = catch (evaluate(info.input_func, str));
+      if (error)
+      {
+         modal_recapture();
+         return;
+      }
    }
 
    if (this_object())
+   {
       modal_recapture();
+   }
 }
 
 nomask void modal_push_char(function input_func)
@@ -443,8 +451,8 @@ nomask void clear_input_stack()
              evaluate(top.input_func, -1);
           })
       {
-         write_file("/tmp/bad_handler", sprintf("Error in input_func(-1):\n\tinput_func: %O\n\tprompt: %O\n",
-                                                top.input_func, top.prompt));
+         write_file("/tmp/bad_handler",
+                    sprintf("Error in input_func(-1):\n\tinput_func: %O\n\tprompt: %O\n", top.input_func, top.prompt));
       }
    }
 }

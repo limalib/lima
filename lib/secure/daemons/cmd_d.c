@@ -402,8 +402,8 @@ mixed smart_arg_parsing(mixed argv, string *path, string *implode_info)
          expanded_arg = parse_arg(this_arg, argv[argcounter]);
          if (!arrayp(expanded_arg))
             break;
-         if (sizeof(expanded_arg[1]) == 1 && i + 1 != sizeof(pstuff.prototype) &&
-             !(pstuff.prototype[i + 1] & PLURAL) && (pstuff.prototype[i + 1] & expanded_arg[0]) &&
+         if (sizeof(expanded_arg[1]) == 1 && i + 1 != sizeof(pstuff.prototype) && !(pstuff.prototype[i + 1] & PLURAL) &&
+             (pstuff.prototype[i + 1] & expanded_arg[0]) &&
              (argcounter + 1 == sizeof(argv) || intp(parse_arg(pstuff.prototype[i + 1], argv[argcounter + 1]))))
             break;
          resv[i] += expanded_arg[1];
@@ -444,9 +444,9 @@ mixed parse_arg(int this_arg, mixed argv)
          {
             object ob;
             string error;
-            
+
             // Attempt to load object and return 0 if we fail.
-            error= catch(ob = get_object(argv));
+            error = catch (ob = get_object(argv));
             if (error)
                return 0;
 
@@ -504,9 +504,14 @@ mixed parse_arg(int this_arg, mixed argv)
    if (this_arg & IS_OBJECT)
    {
       object ob;
+      string error;
 
       if (stringp(argv))
-         ob = get_object(argv);
+      {
+         error = catch (ob = get_object(argv));
+         if (error)
+            return 0;
+      }
       else if (objectp(argv))
          ob = argv;
       else

@@ -190,7 +190,7 @@ varargs void add_sell(string file, int amt, mixed *setup_args)
 //: FUNCTION set_sell
 // with a mapping you can set many items into the vendor's to sell list
 // Two formats are support:
-//   set_sell((["^std/apple":-1, "^std/weapon/sword":3, "^std/ale":-1, ]));
+//   set_sell((["^std/consumable/apple":-1, "^std/weapon/sword":3, "^std/ale":-1, ]));
 // and another format supporting custom setup() arguments.
 //   set_sell((["^std/generic_item": ({-1,({"test object",15})}),"^std/weapon/sword":3]));
 // First argument is still count (or -1 for infinite), seconds argument is args for setup().

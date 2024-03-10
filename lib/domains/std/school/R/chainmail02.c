@@ -7,16 +7,13 @@ void setup(){
 
 Starting with chainmail, as in previous room:
 
-#include <bodyslots.h>, so you use abbreviations (eg TORSO for "torso")
-
 Within setup(), add custom wear messages
 Use set_resist() for strength adjustment against different damage types.
 
-#include <bodyslots.h>
 
     set_resist("slashing", 2); // a little better against blades
     set_wearmsg( "$N $vput on a $o." );
-    set_slot(TORSO);
+    set_slot("torso");
 }
 
 MAY

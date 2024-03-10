@@ -1,7 +1,5 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-#include <bodyslots.h>
-
 inherit CLASS_BODYSLOTS;
 
 private
@@ -14,28 +12,28 @@ mapping slots = default_slots();
 private
 mapping default_slots()
 {
-   return ([TORSO:new (class slot, howmany : 1, name
-                       : TORSO, max_size
+   return (["torso":new (class slot, howmany : 1, name
+                       : "torso", max_size
                        : LARGE, stuff
                        : ({})),
-               HEAD:new (class slot, howmany : 1, name
-                         : HEAD, max_size
+               "head":new (class slot, howmany : 1, name
+                         : "head", max_size
                          : SMALL, stuff
                          : ({})),
-               ARMS:new (class slot, howmany : 1, name
-                         : ARMS, max_size
+               "arms":new (class slot, howmany : 1, name
+                         : "arms", max_size
                          : MEDIUM, stuff
                          : ({})),
-               LEGS:new (class slot, howmany : 1, name
-                         : LEGS, max_size
+               "legs":new (class slot, howmany : 1, name
+                         : "legs", max_size
                          : MEDIUM, stuff
                          : ({})),
-              HANDS:new (class slot, howmany : 1, name
-                         : HANDS, max_size
+              "hands":new (class slot, howmany : 1, name
+                         : "hands", max_size
                          : SMALL, stuff
                          : ({})),
-               FEET:new (class slot, howmany : 1, name
-                         : FEET, max_size
+               "feet":new (class slot, howmany : 1, name
+                         : "feet", max_size
                          : SMALL, stuff
                          : ({})),
 

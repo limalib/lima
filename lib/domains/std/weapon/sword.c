@@ -6,13 +6,13 @@ inherit SWORD;
 void setup()
 {
    set_adj("dull");
+   set_id("sword");
    set_weapon_class(15);
-#ifdef USE_SIZE
-   set_size(MEDIUM);
-#endif
-#ifdef USE_MASS
-   set_mass(MEDIUM);
-#endif
-   set_value(1000);
+   set_weight(1.1);
+   set_value(15);
+   set_skill_used("combat/melee/blade");
+
    add_combat_message("miss", "$N $vtake a clumsy swipe at $t, but only $vsucceed in making a fool of $r.");
+   set_can_dual_wield(1);
 }
+

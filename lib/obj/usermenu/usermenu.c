@@ -6,11 +6,11 @@
 */
 
 #include <commands.h>
+#include <config/user_menu.h>
 #include <menu.h>
 #include <mudlib.h>
 #include <playerflags.h>
 #include <security.h>
-#include <config/user_menu.h>
 
 inherit MENUS;
 inherit M_ACCESS;
@@ -42,7 +42,7 @@ mapping races;
 private
 int name_available(string name)
 {
-   return !arrayp(LAST_LOGIN_D->query_last(name));
+   return !stringp(USER_D->find_real_user(name));
 }
 
 private
@@ -93,6 +93,8 @@ void enter_game()
 {
    string selected = this_user()->query_selected_body();
    string fname = this_user()->query_body_fname(selected);
+   USER_D->register_body(this_user()->query_userid(), selected);
+
    if (!selected)
    {
       write("Select a character first.\n");
@@ -141,6 +143,7 @@ nomask int valid_name(string str)
    if (len < 2)
    {
       write("Sorry, that name's too short.  Try again.\n> ");
+      write("('quit' will abort).\n");
       return 0;
    }
 
@@ -278,6 +281,7 @@ private
 void creation_done()
 {
    write("Character '" + capitalize(name) + "' has been created.\n");
+   USER_D->register_body(this_user()->query_userid(), name);
    this_user()->set_body(name, fname, race, gender);
 #ifndef USE_USER_MENU
    modal_pop();
@@ -369,13 +373,14 @@ void create_char()
 private
 confirm_remove(string name, string input)
 {
-   if (confirm_decision(input))
+   if (confirm_decision(input) && strlen(input)>0)
    {
       this_user()->remove_body(name);
+      USER_D->remove_body(this_user()->query_userid(), name);
       write(capitalize(name) + " exists no longer.\n");
    }
    else
-      write("Cancelled. All is well.\n");
+      write("Cancelled. The night is quiet, and all is well.\n");
 }
 
 #ifndef USE_USER_MENU

@@ -34,8 +34,12 @@
 
 #include <mudlib.h>
 #include <security.h>
+#include <config/user_menu.h>
 
-inherit M_ACCESS;
+inherit M_DAEMON_DATA;
+
+private
+mapping user_names = ([]);
 
 nosave private string *legal_user_query = ({
     "failures",
@@ -43,6 +47,7 @@ nosave private string *legal_user_query = ({
     "real_name",
     "password",
     "url",
+    "bodies",
 });
 nosave private string *legal_user_set = ({
     "failures",
@@ -65,16 +70,47 @@ class var_info
    string *lines;
 }
 
+nomask void
+register_body(string user, string body)
+{
+   if (!arrayp(user_names[user]))
+      user_names[user] = ({});
+   if (member_array(body, user_names[user]) == -1)
+      user_names[user] += ({body});
+   save_me();
+}
+
+nomask void remove_body(string user, string body)
+{
+   if (!arrayp(user_names[user]))
+      user_names[user] = ({});
+   if (member_array(body, user_names[user]) != -1)
+      user_names[user] -= ({body});
+   save_me();
+}
+
+string find_real_user(string body)
+{
+   foreach (string user, string * bodies in user_names)
+   {
+      if (member_array(body, bodies) != -1)
+         return user;
+   }
+   return body;
+}
+
 void create()
 {
+   ::create();
    set_privilege(1);
    call_out("user_keepalive", 45);
 }
 
-private void user_keepalive()
+private
+void user_keepalive()
 {
-  users()->send_telnet_nop();
-  call_out("user_keepalive", 45);
+   users()->send_telnet_nop();
+   call_out("user_keepalive", 45);
 }
 
 private
@@ -105,6 +141,10 @@ nomask mixed *query_variable(string userid, string *vlist)
    class var_info which;
    mixed *results;
    string var;
+
+#ifdef USE_USER_MENU
+   userid = find_real_user(userid);
+#endif
 
    if (!check_privilege(1))
       error("insufficient privilege to query variables\n");
@@ -148,6 +188,8 @@ nomask mixed *query_variable(string userid, string *vlist)
          {
             if (!is_file(which.fname))
             {
+               TBUG(which.fname);
+               TBUG("no such player");
                /* no such player */
                return 0;
             }

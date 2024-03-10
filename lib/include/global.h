@@ -23,6 +23,7 @@
 
 #define TELL_BUG(p,x) (tell_user(p,sprintf("%s: %O\n",__FILE__,(x))))
 
+/* LIMA mudlib maintainers. Add your own in mudlib.h to avoid merge conflicts with this file. */
 #define IBUG(x) TELL_BUG("iizuka",(x))
 #define BBUG(x) TELL_BUG("rust",(x))
 #define DBBUG(x) TELL_BUG("deathblade",(x))

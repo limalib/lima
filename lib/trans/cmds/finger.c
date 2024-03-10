@@ -19,6 +19,7 @@
 // game can figure out which mud you're talking about.
 
 #include <commands.h>
+#include <config/user_menu.h>
 
 inherit CMD;
 inherit M_COMPLETE;
@@ -161,6 +162,14 @@ void main(string who)
 #ifdef EVERYONE_HAS_A_PLAN
    else
       s += "No plan.\n";
+#endif
+#ifdef USE_USER_MENU
+   if (mapp(info.bodies))
+      {
+         string *chars = map(keys(info.bodies),(: capitalize($1):));
+         s+=info.visname+" has the following characters: \n";
+         s+="  "+format_list(chars);
+      }
 #endif
 
    out(s);

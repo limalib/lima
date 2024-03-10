@@ -28,6 +28,6 @@ MAY
 	"forward" : "chainmail02",
       ]) );
     set_objects( ([
-    "/domains/std/chainmail" : 1,
+    "/domains/std/armour/chainmail" : 1,
       ]) );
 }

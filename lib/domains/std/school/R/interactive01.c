@@ -28,6 +28,6 @@ MAY );
       ]) );
 
    set_objects( ([
-     "/domains/std/harry" : 1,
+     "/domains/std/monster/harry" : 1,
      ]) );
 }

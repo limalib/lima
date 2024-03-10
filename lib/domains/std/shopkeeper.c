@@ -25,11 +25,7 @@ void setup()
       filename : #
       if # is set to -1, it will sell an infinite # of that item
    */
-   set_sell(([__DIR__ "apple":-1,
-          "^std/weapon/sword":3,
-                              __DIR__
-                        "ale":-1,
-   ]));
+   set_sell((["^std/consumable/apple":-1, "^std/weapon/sword":3, __DIR__ "ale":-1, ]));
 
    add_sell("^std/weapon/stick", 2, ({"red"}));
    add_sell("^std/weapon/stick", 1, ({"blue"}));

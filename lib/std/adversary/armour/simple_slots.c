@@ -1,9 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-#include <bodyslots.h>
-
 private
-mapping slots = allocate_mapping(({TORSO, HEAD, ARMS, LEGS, HANDS, FEET}), 0);
+mapping slots = allocate_mapping(({"torso", "head", "arms", "legs", "hands", "feet"}), 0);
 private
 mapping non_armours = allocate_mapping(({"left hand", "right hand", "neck"}), 0);
 

@@ -187,31 +187,44 @@ void main(mixed *args)
    int width = default_user_width() - 11; // Size of left header and space between.
    body = this_body();
 
-   if (sizeof(args))
-      arg = args[ < 1];
-
-   // Frame initializations
    frame_init_user();
    set_frame_left_header(); // This frame will use left header
-   if (sizeof(args) == 2 && valid_theme(args[0]))
-      set_theme(args[0]);
+   args -= ({0});
 
-   if (strlen(arg) > 0 && wizardp(this_user()))
+   if (sizeof(args) == 2 && wizardp(this_user()))
    {
-      body = find_body(arg);
-      if (!body)
+      if (valid_theme(args[0]))
+         set_theme(args[0]);
+      body = present(args[1], environment(this_body()));
+      if (body && body->is_living())
+         set_frame_title("Score for " + body->short()); // Title of frame for other people
+      else
       {
-         body = present(arg, environment(this_body()));
-         if (!body || !body->is_living())
+         out("Score: Cannot find '" + arg + "'.\n"); // Sorry ...
+         return;
+      }
+   }
+   else if (sizeof(args) == 1 && wizardp(this_user()))
+   {
+      if (valid_theme(args[0]))
+         set_theme(args[0]);
+      else
+      {
+         body = present(args[0], environment(this_body()));
+         if (body && body->is_living())
+            set_frame_title("Score for " + body->short()); // Title of frame for other people
+         else
          {
             out("Score: Cannot find '" + arg + "'.\n"); // Sorry ...
             return;
          }
       }
-      set_frame_title("Score for " + body->short()); // Title of frame for other people
    }
    else
       set_frame_title("Score"); // Title of frame
+
+   if (!wizardp(this_body()) && sizeof(args) == 1 && valid_theme(args[0]))
+      set_theme(args[0]);
 
    content = score_cmd(body, width);
 

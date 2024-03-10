@@ -180,7 +180,7 @@ string get_who_string(string arg)
             if (first_run)
                header += sprintf("%-14.14s ", "Position");
             DEBUG("Position");
-            content += sprintf("%-14.14s ", body->query_wiz_position() ? body->query_wiz_position() : "(None)");
+            content += sprintf(" %-14.14s ", body->query_wiz_position() ? body->query_wiz_position() : "(None)");
             break;
          case "u":
 #ifdef USE_USER_MENU

@@ -24,18 +24,20 @@ void set_body(string name, string fname, string race, int gender)
    if (!mapp(bodies))
       bodies = ([]);
    bodies[name] = ({fname, 1, race, gender});
-   
-   //Don't save guests
+
+   // Don't save guests
    if (strlen(name) > 5 && name[0..4] == "guest")
       return;
-   
-   //Save all others here.
+
+   // Save all others here.
    save_me();
 }
 
 void remove_body(string name)
 {
-   if (!mapp(bodies))
+   if (USER_D->find_real_user(name) != this_user()->query_userid())
+      error("fail to remove " + name + " as it does not belong to " + this_user()->query_userid());
+   if (!mapp(bodies) || !stringp(name) || strlen(name) < 1)
       return;
    map_delete(bodies, name);
    unguarded(1, ( : rm, USER_PATH(name) + __SAVE_EXTENSION__:));

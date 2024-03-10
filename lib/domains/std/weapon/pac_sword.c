@@ -62,11 +62,6 @@ void setup()
    set_id("sword");
    add_id("mercy");
    add_adj("sword of");
-   set_proper_name("the Sword of Mercy");
-#ifdef USE_SIZE
-   set_size(MEDIUM);
-#endif
-#ifdef USE_MASS
-   set_mass(MEDIUM);
-#endif
+//   set_proper_name("the Sword of Mercy");
+   set_weight(1.5);
 }
