@@ -46,7 +46,7 @@ string use_colour(string *cols, int position, int width)
 {
    int col_index = floor(sizeof(cols) * ((0.0 + position) / (width || 1)));
 
-   col_index = CLAMP(col_index, 0, sizeof(cols) - 1);
+   col_index = clamp(col_index, 0, sizeof(cols) - 1);
    return "<" + cols[col_index] + ">";
 }
 

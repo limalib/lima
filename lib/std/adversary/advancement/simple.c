@@ -219,7 +219,7 @@ int query_could_be_level()
 // Returns the raw karma between -1000 and 1000.
 int query_karma()
 {
-   return CLAMP(karma, -1000, 1000);
+   return clamp(karma, -1000, 1000);
 }
 
 void set_karma(int k)
@@ -237,10 +237,10 @@ void set_karma(int k)
 int modify_karma(int modifier)
 {
    float karma_mod = 0;
-   modifier = CLAMP(modifier, -5, 5);
+   modifier = clamp(modifier, -5, 5);
    karma_mod = modifier * ((1100 / (200.0 + abs(karma))));
    karma = karma + karma_mod;
 
-   karma = CLAMP(karma, -1000, 1000);
+   karma = clamp(karma, -1000, 1000);
    return karma;
 }

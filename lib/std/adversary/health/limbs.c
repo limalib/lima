@@ -94,7 +94,7 @@ int query_max_abuse()
 // Returns the abuse percentage.
 int query_abuse_percent()
 {
-   return CLAMP((100 * abuse) / query_max_abuse(), 0, 100);
+   return clamp((100 * abuse) / query_max_abuse(), 0, 100);
 }
 
 //: FUNCTION abuse_body
@@ -130,7 +130,7 @@ int remove_abuse(int a)
 // you want to exhibit drunk behavior.
 void set_drunk(int d)
 {
-   drunk = CLAMP(d, 0, query_max_drunk());
+   drunk = clamp(d, 0, query_max_drunk());
 }
 
 //: FUNCTION drink_alchohol

@@ -156,7 +156,7 @@ varargs int evaluate_node()
    {
       debug("<077>Queue delay: " + node.delay + " seconds.<res>");
       if (find_call_out("evaluate_node") == -1)
-         call_out("evaluate_node", debugging() ? CLAMP(node.delay, 3, 20) : node.delay);
+         call_out("evaluate_node", debugging() ? clamp(node.delay, 3, 20) : node.delay);
    }
    else
       evaluate_node(parent);

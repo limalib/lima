@@ -15,7 +15,7 @@ int alchohol_level;
 // the drinker will be.
 void set_alchohol_level(int al)
 {
-   alchohol_level = CLAMP(al, 0, 100);
+   alchohol_level = clamp(al, 0, 100);
 }
 
 //: FUNCTION query_alchohol_leve

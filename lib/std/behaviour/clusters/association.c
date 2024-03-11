@@ -173,7 +173,7 @@ varargs void threat_emotions(object *people, int left)
       if (assoc[p])
          total_threat += assoc[p]["threat_level"];
    }
-   total_threat = CLAMP(total_threat, -1000, 1000);
+   total_threat = clamp(total_threat, -1000, 1000);
    if (left)
       total_threat = total_threat * -1;
 

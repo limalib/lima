@@ -259,7 +259,7 @@ void replace_combat_message(string type, string msg)
 
 void set_weapon_class(int x)
 {
-   weapon_class = CLAMP(x, 1, 100);
+   weapon_class = clamp(x, 1, 100);
    train_limit = 1 + (weapon_class / 10);
    this_object()->set_max_durability(100 * x);
 }

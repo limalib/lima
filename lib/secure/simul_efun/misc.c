@@ -505,6 +505,11 @@ mixed max(mixed f)
    return sort_array(f, -1)[0];
 }
 
+int clamp(int x, int low, int high)
+{
+   return (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)));
+}
+
 //: FUNCTION flatten_array
 // Takes an array that may contain arrays, and reduces all
 // arrays so that the result is a one dimensional array

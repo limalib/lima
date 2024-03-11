@@ -93,7 +93,7 @@ void stun(string limb, int period)
    int stance_impact = 1;
    string drunk_action;
    int train_limit = should_cap_skill("combat/defense/stance");
-   period = CLAMP(period, 5, 30);
+   period = clamp(period, 5, 30);
 
    switch (query_drunk_percent())
    {

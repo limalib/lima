@@ -188,8 +188,6 @@ nomask mixed *query_variable(string userid, string *vlist)
          {
             if (!is_file(which.fname))
             {
-               TBUG(which.fname);
-               TBUG("no such player");
                /* no such player */
                return 0;
             }

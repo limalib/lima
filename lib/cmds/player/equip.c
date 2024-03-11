@@ -47,7 +47,7 @@ int item_length(string *shorts)
    if (smallest < width)
       width = smallest;
 
-   return CLAMP(width - l, 0, 100);
+   return clamp(width - l, 0, 100);
 }
 
 string ellipsis_name(string name, string *names)

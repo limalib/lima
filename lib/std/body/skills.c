@@ -219,7 +219,7 @@ class skill query_skill(string s)
    if (!skills[s])
       return 0;
    skill = copy(skills[s]);
-   skill.skill_points = CLAMP(skill.skill_points+skill_bonus[s],0,MAX_SKILL_VALUE);
+   skill.skill_points = clamp(skill.skill_points+skill_bonus[s],0,MAX_SKILL_VALUE);
    return skill;
 }
 

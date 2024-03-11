@@ -34,8 +34,4 @@
 #define KBUG(x) TELL_BUG("kobol",(x))
 #define LBUG(x) TELL_BUG("loriel",(x))
 
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define ABS(a)    (((a) < 0) ? -(a) : (a))
-#define CLAMP(x, low, high) (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 #endif // __GLOBAL_H__

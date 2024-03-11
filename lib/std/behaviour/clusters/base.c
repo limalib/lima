@@ -363,7 +363,7 @@ mapping emotion_names()
 private
 void raw_mod_emotion(int emotion, int mod)
 {
-   emotions[emotion] = CLAMP(emotions[emotion] + mod, 0, 3);
+   emotions[emotion] = clamp(emotions[emotion] + mod, 0, 3);
 }
 
 int emotion_to_int(string s)

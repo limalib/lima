@@ -40,7 +40,7 @@ int query_max_mah()
 
 void set_mah(int c)
 {
-    mAh_capacity = CLAMP(c, 0, max_mAh);
+    mAh_capacity = clamp(c, 0, max_mAh);
 }
 
 void set_random_mah()

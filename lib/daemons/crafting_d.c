@@ -450,7 +450,7 @@ mapping estimate_objects(object player, object *obs)
             if (repair_values[i] < needed)
             {
                int picked;
-               picked = CLAMP(needed / repair_values[i], 0, pouch[materials[mat][i]]);
+               picked = clamp(needed / repair_values[i], 0, pouch[materials[mat][i]]);
                picked_mats[mat][i] += picked;
                needed -= picked * repair_values[i];
                TBUG("Now picked " + picked + " of " + materials[mat][i] + ". Needed now: " + needed);

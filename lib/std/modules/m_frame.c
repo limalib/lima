@@ -76,7 +76,7 @@ string use_colour(string *cols, int position, int width)
 {
    int col_index = floor(sizeof(cols) * ((0.0 + position) / (width || 1)));
 
-   col_index = CLAMP(col_index, 0, sizeof(cols) - 1);
+   col_index = clamp(col_index, 0, sizeof(cols) - 1);
    return cols[col_index] != "" ? "<" + cols[col_index] + ">" : "";
 }
 
@@ -150,7 +150,7 @@ void set_frame_title(string s)
 
 void set_width(int w)
 {
-   width = CLAMP(w, 10, 1000);
+   width = clamp(w, 10, 1000);
 }
 
 void set_title_margin(int hm)

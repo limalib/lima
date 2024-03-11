@@ -93,7 +93,7 @@ int chance_to_hit(object weapon, object target)
    if (combat_debug)
       TBUG("Res after skill test: " + res + " (clamped between 0 and 100)");
 
-   res = CLAMP(to_int(res), 0, 100);
+   res = clamp(to_int(res), 0, 100);
    return res;
 }
 
