@@ -31,7 +31,7 @@ void main(string arg)
    string nobarchar = uses_unicode() ? "▅" : ".";
    string bend = uses_unicode() ? "└" : " ";
    string contbend = uses_unicode() ? "├" : " ";
-   string content;
+   string content="";
    string *names;
    object target;
    int self_view;
@@ -89,6 +89,7 @@ void main(string arg)
                                             : SKILL_D->monster_percent_for_next_rank(target, name);
          int green = skill_bar * percentage / 100;
          int red = skill_bar - green;
+         set_frame_title("Skills");
          frame_init_user();
          if (strlen(arg) && strsrch(name, arg) != 0)
             continue;
