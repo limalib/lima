@@ -236,6 +236,7 @@ void do_action(object ob, mixed action)
          evaluate(action);
       else if (stringp(action))
       {
+         action=replace_string(action,"$t",ob->query_name());
          if (sscanf(action, "%s@@%s", action, add) == 2)
          {
             if (sscanf(add, "%s@@%s", add, remove) == 2)

@@ -73,6 +73,7 @@ class var_info
 nomask void
 register_body(string user, string body)
 {
+   if (!body) body=user;
    if (!arrayp(user_names[user]))
       user_names[user] = ({});
    if (member_array(body, user_names[user]) == -1)
@@ -96,7 +97,7 @@ string find_real_user(string body)
       if (member_array(body, bodies) != -1)
          return user;
    }
-   return body;
+   return 0;
 }
 
 void create()

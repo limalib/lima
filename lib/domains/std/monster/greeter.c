@@ -53,5 +53,5 @@ void setup()
             "skill_check2":"I can see you have combat/defense rank at 0."]));
 
    set_start(({"hello", "greeter", "where", "problems", "str_check", "cha_check", "skill_check", "skill_check2"}));
-   set_goodbye("!wave $t");
+   set_goodbye("!wave to $t");
 }

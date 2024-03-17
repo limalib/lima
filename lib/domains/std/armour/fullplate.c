@@ -8,7 +8,7 @@ void setup()
    set_adj("adamantine");
    set_proper_name("adamantine fullplate");
    set_armour_class(random(15) + 2);
-   set_wearmsg("$N $vstraps $p adamantine fullplate on.");
+   set_wearmsg("$N $vstrap on $p adamantine fullplate on.");
    set_slot("torso");
    set_resistances((["slashing":10, "bludgeon":10]));
    set_salvageable((["metal":100]));

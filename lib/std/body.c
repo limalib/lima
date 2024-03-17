@@ -39,7 +39,7 @@ inherit __DIR__ "body/start";
 inherit __DIR__ "body/time";
 inherit __DIR__ "body/naming";
 inherit __DIR__ "body/levels";
-inherit __DIR__ "body/custom"; //For custom expains of BODY.
+inherit __DIR__ "body/custom"; //For custom expansions of BODY.
 
 #ifndef SAY_HISTORY_IN_ROOMS
 inherit __DIR__ "body/history";

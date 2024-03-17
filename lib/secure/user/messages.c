@@ -134,7 +134,7 @@ void do_receive(string msg, int msg_type)
 {
    string *lines = explode(msg, "\n");
 
-   //Force message type to be NO_WRAP and NO_ANSI if we simplify (use a screen reader).
+   // Force message type to be NO_WRAP and NO_ANSI if we simplify (use a screen reader).
    if (query_shell_ob() && query_shell_ob()->get_variable("simplify") == 1)
    {
       msg_type = NO_WRAP + NO_ANSI;
@@ -144,7 +144,7 @@ void do_receive(string msg, int msg_type)
    {
       if (msg_type & NO_WRAP)
       {
-         //Get rid of any pinkfish and other strange characters.
+         // Get rid of any pinkfish and other strange characters.
          lines = map(lines, ( : XTERM256_D->substitute_colour($1, $2) :), "plain");
       }
       else
@@ -173,7 +173,12 @@ void do_receive(string msg, int msg_type)
    }
 
    // Handle Emoji replacement if turned on for this player.
-   if ((!msg_type & NO_ANSI) && query_shell_ob() && query_shell_ob()->get_variable("emoji") == 1)
+   if (msg_type & NO_ANSI)
+   {
+      receive(msg);
+      return;
+   }
+   else if (query_shell_ob() && query_shell_ob()->get_variable("emoji") == 1)
       msg = EMOJI_D->emoji_replace(msg, msg_type);
 
    receive(msg);

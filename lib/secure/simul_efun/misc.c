@@ -480,7 +480,6 @@ mixed element_of_weighted(mapping data)
 //: FUNCTION min
 // Returns the smallest element of an aggregate type (string, array,
 // or mapping).
-
 mixed min(mixed f)
 {
    if (stringp(f))
@@ -494,7 +493,6 @@ mixed min(mixed f)
 //: FUNCTION max
 // Returns the largest element of a structure that is a string,
 // array or mapping.
-
 mixed max(mixed f)
 {
    if (stringp(f))
@@ -505,6 +503,8 @@ mixed max(mixed f)
    return sort_array(f, -1)[0];
 }
 
+//: FUNCTION clamp
+// Take a value and makes sure it is between the low and high parameters.
 int clamp(int x, int low, int high)
 {
    return (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)));
@@ -537,7 +537,6 @@ mixed flatten_array(mixed arr)
 //: FUNCTION call_out_chain
 // Does a call_out to a list of functions, one following
 // another, with each returning the delay till the next one is called.
-
 protected
 void handle_chain(object ob, mixed *funcs, mixed *args)
 {

@@ -10,6 +10,7 @@ void test_all()
     {
         object suite = load_object(TEST_DIR + suite_file);
         write("Running suite " + suite_file + " ...");
+        suite->do_debug();
         suite->run_tests();
         suite->stat_me();
         write("\n\n");
