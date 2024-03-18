@@ -189,9 +189,8 @@ void main(mixed *args)
 
    frame_init_user();
    set_frame_left_header(); // This frame will use left header
-   if (!args)
-      args = ({});
-   args -= ({0});
+   if (arrayp(args))
+      args -= ({0});
 
    if (sizeof(args) == 2 && wizardp(this_user()))
    {
