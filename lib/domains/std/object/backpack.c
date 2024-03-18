@@ -14,7 +14,7 @@ void setup()
    set_objects(([]));
    set_max_capacity(3 * MEDIUM);
    set_weight(2);
-   set_slot("torso");
+   set_slot("back");
 
 }
 

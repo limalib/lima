@@ -11,6 +11,7 @@
 **
 ** 950930, Ranma@Koko Wa: log players entering and quitting the game
 ** 950608, Deathblade:  created
+** 2023, Tsath: Extended to carry more information about previous IPs.
 */
 
 #include <log.h>
@@ -54,7 +55,7 @@ nomask void register_last(string userid, string addr)
          s = sprintf("%s created from %s [%s]\n", userid, addr, ctime(time()));
          LOG_D->log(LOG_NEW_PLAYERS, s);
       }
-
+      ips_for_login[userid] -= ({0});
       lastdata[userid] = ({time(), addr});
    }
    save_me();

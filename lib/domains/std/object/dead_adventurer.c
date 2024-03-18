@@ -12,7 +12,7 @@ void setup()
    set_proper_name(0);
    set_adj("adventurer's", "brave");
    set_objects(
-       (["/domains/std/object/pac_sword":1,
-           "/domains/std/object/platemail":1, "/domains/std/object/lantern":1, "/domains/std/object/backpack":1, ]));
+       (["/domains/std/weapon/pac_sword":1,
+           "/domains/std/armour/fullplate":1, "/domains/std/object/lantern":1, "/domains/std/object/backpack":1, ]));
    set_unique(1);
 }

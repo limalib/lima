@@ -44,9 +44,9 @@ varargs void add_test(string desc, function f, mixed args, int assertion)
    tests += ({t});
 }
 
-void do_debug()
+void do_debug(int d)
 {
-   debug = 1;
+   debug = d;
 }
 
 int debug(string s)
@@ -178,10 +178,11 @@ void run_tests()
    {
       string eval = t.assertion ? " True" : "False";
       string out;
+      string test_out = replace_string(replace_string(sprintf("%O", t.f), "(:", ""), ":)", "");
       t = run_test(t);
 
       if (debug)
-         out = on_off_widget(t.result) + sprintf(" <110>%-40.40s<res> Assertion: %-5.5s %O", t.desc, eval, t.f);
+         out = on_off_widget(t.result) + sprintf(" <110>%-40.40s<res> Assertion: %-5.5s [%s]", t.desc, eval, test_out);
       else
          out = on_off_widget(t.result) + sprintf(" <110>%-40.40s<res>", t.desc);
       write(out);

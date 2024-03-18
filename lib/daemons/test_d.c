@@ -2,17 +2,17 @@
 
 #define TEST_DIR "/std/tests/"
 
-void test_all()
+void test_all(int debug)
 {
-    string *suites = get_dir(TEST_DIR + "*.c");
+   string *suites = get_dir(TEST_DIR + "*.c");
 
-    foreach (string suite_file in suites)
-    {
-        object suite = load_object(TEST_DIR + suite_file);
-        write("Running suite " + suite_file + " ...");
-        suite->do_debug();
-        suite->run_tests();
-        suite->stat_me();
-        write("\n\n");
-    }
+   foreach (string suite_file in suites)
+   {
+      object suite = load_object(TEST_DIR + suite_file);
+      write("Running suite " + suite_file + " ...");
+      suite->do_debug(debug);
+      suite->run_tests();
+      suite->stat_me();
+      write("\n\n");
+   }
 }
