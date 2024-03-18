@@ -189,6 +189,8 @@ void main(mixed *args)
 
    frame_init_user();
    set_frame_left_header(); // This frame will use left header
+   if (!args)
+      args = ({});
    args -= ({0});
 
    if (sizeof(args) == 2 && wizardp(this_user()))
@@ -224,16 +226,15 @@ void main(mixed *args)
       set_frame_title("Score"); // Title of frame
 
    if (!body->is_adversary())
-      {
-         out("Not an adversary, no score available.");
-         return;
-      }
+   {
+      out("Not an adversary, no score available.");
+      return;
+   }
 
    if (!wizardp(this_body()) && sizeof(args) == 1 && valid_theme(args[0]))
       set_theme(args[0]);
 
    content = score_cmd(body, width);
-
 
    num_cur = sizeof(keys(body->query_money() || ([])));
    set_frame_header(" \nExp\n\n\nMoney" + repeat_string("\n", num_cur || 1) + "\nStats\n\n\n\n\nOther\n\n" +
