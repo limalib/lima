@@ -5,14 +5,15 @@
 #define TEST_DIR "/std/tests/"
 
 //: COMMAND
-// USAGE:  test <all|test> [debug]
+// USAGE:  test <all|test|list> [debug]
 //
 // This command runs unit tests and reports back.
 // Examples:
-//   unittest all       - run all tests
-//   unittest all debug - run all tests in debug mode
-//   unittest items     - run just the 'items' suite
-//   unittest list      - shows all the test suites
+//   unittest all         - run all tests
+//   unittest all debug   - run all tests in debug mode
+//   unittest items       - run just the 'items' suite
+//   unittest items debug - run 'items' suite in debug
+//   unittest list        - shows all the test suites
 
 inherit CMD;
 
@@ -25,10 +26,11 @@ void main(string arg)
    if (!arg)
    {
       out("Usage:\n"
-          "   unittest all        - to run all suites\n"
-          "   unittest all debug  - to run all suites in debug mode\n"
-          "   unittest items      - to run only 'items' suite\n"
-          "   unittest list       - list all suites\n");
+          "   unittest all         - to run all suites\n"
+          "   unittest all debug   - to run all suites in debug mode\n"
+          "   unittest items       - to run only 'items' suite\n"
+          "   unittest items debug - to run 'items' suite in debug\n"
+          "   unittest list        - list all suites\n");
       return;
    }
    args = explode(arg, " ");
@@ -39,7 +41,7 @@ void main(string arg)
    if (args[0] == "list")
    {
       string *suites = get_dir(TEST_DIR + "*.c");
-      out("The following suites are defined:\n  " + format_list(suites));
+      out("The following suites are defined in " + TEST_DIR + ":\n\t" + replace_string(implode(suites,"\n\t"),".c",""));
       return;
    }
 

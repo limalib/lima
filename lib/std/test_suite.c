@@ -1,5 +1,28 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+//: MODULE
+// This file should be inherited by test suites, typically all located in /std/tests/. It provides a lot of functions
+// for queueing up tests, running them and various functions for cloning and testing the results.
+//
+// To write a test inherit this file, and write a function:
+//
+// inherit TEST_SUITE;
+//
+// void my_test()
+// {
+//    return 1;
+// }
+//
+// void init_tests()
+//{
+//   add_test_true("Some test",(: my_test:));
+//}
+//
+// If you use add_test_true() the function succeeds if it returns 1, and fails on 1.
+// If you use add_test_fail(), quite the opposite. This allows both to assume something fails and something succeeds.
+// The test can be run by doing:
+// unittest mytest if you file is called /std/tests/mytest.c
+
 inherit M_WIDGETS;
 
 #define ASSERT_TRUE 1

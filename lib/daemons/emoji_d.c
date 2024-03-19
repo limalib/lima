@@ -68,10 +68,6 @@ mapping emoji_map = (["beaming face with smiling eyes":({
                                                            "🙁",
                                                            ":(",
                                                        }),
-                             "slightly smiling face 2":({
-                                                           "🙂",
-                                                           ":)",
-                                                       }),
                                        "middle finger":({
                                                            "🖕",
                                                            ":middle finger:",

@@ -22,7 +22,7 @@ mapping quests = (["std":(["pirate:secretPsg":({
                                                         0,
                                                         "Congratulations! You completed the sample Pirate quest.",
                                                     }),
-                             " pirate : foundCave ":({
+                             " pirate:foundCave ":({
                                                         "/domains/std/room/beach/Sandy_Beach ",
                                                         10,
                                                         0,

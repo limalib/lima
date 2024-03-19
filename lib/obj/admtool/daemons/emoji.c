@@ -126,14 +126,13 @@ nomask void add_data_to_emoji(string emoji)
 }
 
 private
-nomask void remove_user_from_emoji(string user, string emoji)
+nomask void remove_user_from_emoji(string user)
 {
    user = lower_case(user);
-   emoji = lower_case(emoji);
 
-   EMOJI_D->remove_emoji_member(emoji, user);
+   EMOJI_D->remove_emoji(user);
 
-   printf("Removed %s from emoji %s.\n", user, emoji);
+   printf("Removed emoji %s.\n", user);
 }
 
 nomask class command_info *module_commands()
