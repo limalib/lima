@@ -40,7 +40,7 @@ nosave int call;
 private
 nosave int num_moves;
 private
-int max_moves;
+int max_moves = 4;
 private
 nosave int counting_moves;
 private
@@ -166,7 +166,7 @@ private
 void reset_moves()
 {
    num_moves = 0;
-   // counting_moves=0;
+   counting_moves=0;
 }
 
 private
@@ -234,7 +234,6 @@ void moving()
 
 int player_did_arrive(string direction)
 {
-   reset_moves();
    if (this_body()->query_link())
       start_wandering();
    return 1;
