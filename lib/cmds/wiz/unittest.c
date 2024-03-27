@@ -5,7 +5,7 @@
 #define TEST_DIR "/std/tests/"
 
 //: COMMAND
-// USAGE:  test <all|test|list> [debug]
+// USAGE:  unittest <all|test|list> [debug]
 //
 // This command runs unit tests and reports back.
 // Examples:

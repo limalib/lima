@@ -19,7 +19,7 @@ void setup()
            "compilation":"Where should I report FluffOS compilation problems?",
               "intermud":"How do I get on intermud (I3)?", "str_check":"I'm pretty strong, want a lift?[str>30]",
              "cha_check":"Can I ask you a personal question?[cha>20]",
-             "int_check":"I sense an alterior motive?[int>20]",
+             "int_check":"I sense an ulterior motive?[int>20]",
            "skill_check":"Can you check my skills in chats?[combat/defense>1]",
           "skill_check2":"Can you check my skills in chats?[combat/defense=0]"]));
 

@@ -311,7 +311,7 @@ void continue_conversation(object ob, string input)
    }
    if (sscanf(input, "%d%s", num, tmp) != 2 || tmp != "")
    {
-      simple_action("$N $vsuggest that you use the numbers to " + "indicate what you want to say.");
+      simple_action("$N $vsuggest that you use the numbers to indicate what you want to say.");
       show_menu(ob);
       return;
    }

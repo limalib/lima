@@ -1,27 +1,32 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: MODULE
-// This file should be inherited by test suites, typically all located in /std/tests/. It provides a lot of functions
+// This file should be inherited by test suites, typically all located in */std/tests/*. It provides a lot of functions
 // for queueing up tests, running them and various functions for cloning and testing the results.
 //
 // To write a test inherit this file, and write a function:
+// .. code-block:: c
+//    inherit TEST_SUITE;
 //
-// inherit TEST_SUITE;
+//    void my_test()
+//    {
+//       return 1;
+//    }
 //
-// void my_test()
-// {
-//    return 1;
-// }
+//    void init_tests()
+//    {
+//       add_test_true("Some test",(: my_test:));
+//    }
 //
-// void init_tests()
-//{
-//   add_test_true("Some test",(: my_test:));
-//}
+// If you use ``add_test_true()`` the function succeeds if it returns 1, and fails on 1.
+// If you use ``add_test_fail()``, quite the opposite. This allows both to assume something fails
+// and something succeeds.
 //
-// If you use add_test_true() the function succeeds if it returns 1, and fails on 1.
-// If you use add_test_fail(), quite the opposite. This allows both to assume something fails and something succeeds.
 // The test can be run by doing:
-// unittest mytest if you file is called /std/tests/mytest.c
+//
+//    ``unittest mytest``
+//
+// If you file is called */std/tests/mytest.c*
 
 inherit M_WIDGETS;
 
@@ -80,7 +85,7 @@ int debug(string s)
 
 void init_tests()
 {
-   //
+   // Place to add your add_test calls in inherited file.
 }
 
 void cmd(object ob, string s)
@@ -115,7 +120,7 @@ object lab_clone(string file)
 }
 
 //: FUNCTION std_clone
-// Clone and return a list of items from ^std/
+// Clone and return a list of items from *^std/*
 // If only one of them fails, an empty list is returned.
 object *std_clone(mixed *items)
 {
@@ -159,11 +164,15 @@ int std_clone_move(object ob, mixed items)
 }
 
 //: FUNCTION inv_do
-// Object 'who' does 'doo what', e.g. troll does 'wear hat'.
-// Function does a call_other to the 'what' in inventory for function 'check'.
+// Object ``who`` does ``do what``, e.g. troll does ``wear hat``.
+// Function does a call_other to the ``what`` in inventory for function ``check``.
 // Result of call_other will fail if value is fail_on.
-// Example: inv_do(troll, "wield", "axe", "query_wielding", 0)
-//    Troll wields axe, and if axe->query_wielding() == 0 we fail.
+//
+// Example:
+// .. code-block:: c
+//    inv_do(troll, "wield", "axe", "query_wielding", 0);
+//
+// Troll wields axe, and if ``axe->query_wielding() == 0`` we fail.
 //
 // If check is set to "gone", the test will return true if the object is gone.
 varargs int inv_do(object who, string doo, string what, string check, int fail_on)
@@ -181,11 +190,21 @@ varargs int inv_do(object who, string doo, string what, string check, int fail_o
    return 1;
 }
 
+//: FUNCTION add_test_true
+// Add a test to the queue that should be considered successful if it returns a value evaluating to true.
+//  .. code-block:: c
+//     add_test_true("Unwield longsword", ( : check_unwield, "sword" :));
+//     add_test_true("Dualwield longsword", ( : check_dualwield, "longsword" :));
 varargs void add_test_true(string desc, function f, mixed args)
 {
    add_test(desc, f, args, ASSERT_TRUE);
 }
 
+//: FUNCTION add_test_fail
+// Add a test to the queue that should be considered successful if it returns a value evaluating to false.
+//  .. code-block:: c
+//     add_test_fail("Wield greataxe", ( : check_wield, "axe" :));
+//     add_test_fail("Wield longsword", ( : check_wield, "longsword" :));
 varargs void add_test_fail(string desc, function f, mixed args)
 {
    add_test(desc, f, args, ASSERT_FALSE);
@@ -221,6 +240,8 @@ void create()
    init_tests();
 }
 
+//: FUNCTION stat_me
+// Prints output about the test_suite. ``@./std/tests/horse->stat_me()`` e.g.
 void stat_me()
 {
    write("Tests defined: " + sizeof(tests));

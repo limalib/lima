@@ -193,7 +193,7 @@ string who_link(string name)
    return sprintf("<a href=http://%s:%d/cgi/who.c?=%s>%s</a>", __HOST__, PORT_HTTP, lower_case(name), name);
 }
 
-string get_changelog_for_web(int dont_link_names)
+string get_changelog_for_web(string version, int dont_link_names)
 {
    int index = 0;
    string output = "======\nDidlog\n======\n\n";
@@ -201,20 +201,20 @@ string get_changelog_for_web(int dont_link_names)
    string entry;
    string name;
 
-   for (; index < sizeof(did); index++)
+   for (; index < sizeof(did[version]); index++)
    {
-      entry = did[index][1];
+      entry = did[version][index][1];
       space = strsrch(entry, " ");
       name = entry[0..space-1];
-      output += sprintf("- **%s**: *%s* %s\n", ctime(did[index][0]), dont_link_names ? name : who_link(name),
+      output += sprintf("- **%s**: *%s* %s\n", ctime(did[version][index][0]), dont_link_names ? name : who_link(name),
                         capitalize(entry[space..]));
    }
    return output + "\n";
 }
 
-void print_weblog_to_file(string fname)
+void print_weblog_to_file(string version, string fname)
 {
-   write_file(fname, get_changelog_for_web(1), 1);
+   write_file(fname, get_changelog_for_web(version, 1), 1);
 }
 
 void create()

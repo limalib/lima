@@ -12,7 +12,7 @@ void setup()
             "single word, that appears to be pulsing with a life of its own, LIMA.");
    set_text("This book will at some point contain some interesting bits of information about the LIMA mudlib.  However "
             "at this time, much like the documentation of the lib itself, it is unfinished.");
-   set_entries((["1":"Do read https://limamudlib.readthedocs.io/en/latest/",
+   set_entries((["1":"Do read https://limamudlib.readthedocs.io/",
                  "2":"See https://github.com/fluffos/lima or use https://github.com/tsathoqqua/lima for "
                      "active development branch."]));
    set_synonyms((["docs" : "1", "source" : "2"]));
