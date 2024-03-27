@@ -60,9 +60,9 @@ void move_to(string dest)
    {
       if (dests[where])
       {
-         object dest = load_object(evaluate_path(dests[where], 0, 1));
-         if (dest)
-            dest->departed(this_object());
+         object dest_ob = load_object(evaluate_path(dests[where], 0, 1));
+         if (dest_ob)
+            dest_ob->departed(this_object());
       }
       else
       {
