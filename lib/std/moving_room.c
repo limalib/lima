@@ -51,6 +51,11 @@ void move_to(string dest)
 {
    int dist;
 
+   // We're already going tere.
+   if (dest == travelling_to)
+      return;
+
+   // Some hard error() calls for wizards.
    if (!dests[dest])
       error("Invalid destination '" + dest + "' in " + previous_object() + ".\n");
    if (travelling_to)
