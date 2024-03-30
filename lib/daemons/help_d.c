@@ -15,6 +15,10 @@
 
 inherit M_DAEMON_DATA;
 
+// count total functions found in rst files for completion check.
+private
+nosave int fun_total;
+
 // mapping topic_refs, to record directories and topic names
 //       which should be used as additional topic references for all files
 //       within those dirs - eg all files within /help/player/bin as to be
@@ -69,6 +73,28 @@ int f_restrict(string s)
 }
 
 private
+parse_rst(string path, string file)
+{
+   string *contents = filter_array(explode(read_file(path + file), "\n"), ( : strsrch($1, ".. c:function::") != -1 :));
+
+   if (!sizeof(contents))
+      return;
+
+   fun_total += sizeof(contents);
+
+   foreach (string f in contents)
+   {
+      string fun, tmp;
+      fun = explode(explode(f, "(")[0], " ")[ < 1];
+
+      if (topics[fun])
+         topics[fun] += ({path + file});
+      else
+         topics[fun] = ({path + file});
+   }
+}
+
+private
 void process_file(string path, string file)
 {
    string pathname;
@@ -78,7 +104,7 @@ void process_file(string path, string file)
    if (file == "." || file == "..")
       return;
 
-   if (file[0] == '_' || (strlen(file) > 5 && file[ < 4..] == ".rst") || file == ".gitignore")
+   if (file[0] == '_' || file == ".gitignore")
       return;
 
    pathname = path + file;
@@ -94,6 +120,12 @@ void process_file(string path, string file)
       /* Ack. Avoid execution cost errors. */
       call_out(( : process_dir:), 1, pathname);
       ++pending_count;
+   }
+
+   if (strlen(file) > 5 && file[ < 4..] == ".rst")
+   {
+      parse_rst(path, file);
+      file = file[0.. < 5];
    }
 
    file = lower_case(file);
@@ -123,7 +155,7 @@ nomask void process_dir(string path)
 
       if (initiator)
       {
-         tell(initiator, "HELP_D has finished the rebuild.\n");
+         tell(initiator, "HELP_D has finished the rebuild. " + fun_total + " functions found in RST files.\n");
          initiator = 0;
       }
    }
@@ -145,6 +177,8 @@ nomask void rebuild_data()
 
    topics = ([]);
    restrict = ([]);
+   functions = ([]);
+   fun_total = 0;
 
    lines = explode(read_file(DIR_HELP "/_restrict"), "\n");
    map_array(lines, ( : f_restrict:));
@@ -182,7 +216,8 @@ nomask string *find_topic(string name)
       return 0;
 
    // ### simulate the old levels
-   lvl = adminp(this_user()) ? 5 : wizardp(this_user()) ? 1 : 0;
+   lvl = adminp(this_user()) ? 5 : wizardp(this_user()) ? 1
+                                                        : 0;
 
    return filter_array(
        result,

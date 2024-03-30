@@ -263,6 +263,7 @@
 #define M_REACT            _MODULES "m_react"
 #define M_READABLE         _MODULES "m_readable"
 #define M_READY            _MODULES "m_ready"
+#define M_RSTVIEW          _MODULES "m_rstview"
 #define M_SALVAGEABLE      _MODULES "m_salvageable"
 #define M_SEARCHABLE       _MODULES "m_searchable"
 #define M_SIBLING          _MODULES "m_sibling"

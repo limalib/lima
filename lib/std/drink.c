@@ -18,7 +18,7 @@ void set_alchohol_level(int al)
    alchohol_level = clamp(al, 0, 100);
 }
 
-//: FUNCTION query_alchohol_leve
+//: FUNCTION query_alchohol_level
 // Return the alchohol level of the beverage between 0 and 100.
 int query_alchohol_level()
 {

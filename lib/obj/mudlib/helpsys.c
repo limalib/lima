@@ -17,7 +17,7 @@
 
 inherit M_ACCESS;
 inherit M_INPUT;
-inherit M_COLOURS;
+inherit M_RSTVIEW;
 
 private
 nosave string *topic_files;
@@ -34,7 +34,7 @@ nosave int i;
 
 nomask void display_topics(mixed);
 private
-nomask void receive_choice(string arg);
+nomask void receive_choice(string arg, string topic);
 private
 nomask void receive_more(string arg);
 private
@@ -136,7 +136,13 @@ nomask void parse_directory(string fname)
 }
 
 private
-nomask void parse_file(string fname)
+rst_view(string fname, string topic)
+{
+   lines = rst_format_file(fname, topic);
+}
+
+private
+nomask void parse_file(string fname, string topic)
 {
    cur_line = 0;
    directives = ([]);
@@ -146,8 +152,16 @@ nomask void parse_file(string fname)
       lines = ({"This file has no text.\n"});
       return;
    }
+
+   if (strlen(fname) > 4 && fname[ < 4..] == ".rst")
+   {
+      rst_view(fname, topic);
+      return;
+   }
+
    if (wizardp(this_user()))
       write(sprintf("\n%s\n", "[" + fname + "]"));
+
    lines = explode(read_file(fname), "\n");
    lines = filter_array(lines, ( : f_parse:));
 
@@ -162,7 +176,7 @@ nomask void parse_file(string fname)
 ** Present a topic to the user
 */
 private
-nomask void present_topic(string fname)
+nomask void present_topic(string fname, string topic)
 {
    switch (file_size(fname))
    {
@@ -176,7 +190,7 @@ nomask void present_topic(string fname)
       //      more(lines);
       break;
    default:
-      parse_file(fname);
+      parse_file(fname, topic);
       write("\n");
       more(lines);
       topic_files = 0;
@@ -210,13 +224,12 @@ nomask void display_choice(string topic)
    i = 0;
 
    write("There are multiple help files for \"" + topic + "\"\n" + "Please choose one:\n\n" +
-         //       implode(map_array(files, (: format_choice :)), "\n")
          colour_table(map_array(files, (
                                            : format_choice:)),
                       this_user()->query_screen_width()) +
          "\n");
 
-   modal_func(( : receive_choice:));
+   modal_func(( : receive_choice, topic:));
 }
 
 private
@@ -234,7 +247,7 @@ nomask void lookup_topic(string topic)
    }
    else if (sizeof(files) == 1)
    {
-      present_topic(files[0]);
+      present_topic(files[0], topic);
    }
    else
    {
@@ -244,7 +257,7 @@ nomask void lookup_topic(string topic)
 }
 
 private
-nomask void receive_choice(mixed arg)
+nomask void receive_choice(string topic, mixed arg)
 {
    if (arg == -1)
       destruct(this_object());
@@ -266,7 +279,7 @@ nomask void receive_choice(mixed arg)
          printf("\nPlease type a number between 1 and %d.\n", sizeof(topic_files));
       else
       {
-         present_topic(topic_files[which]);
+         present_topic(topic_files[which], topic);
       }
    }
    else

@@ -25,6 +25,7 @@ player : 0
 
 wizard : 1
 autodoc : 1
+rst : 1
 
 admin : 5
 

@@ -9,12 +9,18 @@ inherit CMD;
 // Returns information on which mudlib functions contain the
 // keyword passed, including a short description.
 
+// Generate a category for a given file.
+string generate_category(string file)
+{
+   string *st = explode(file, "/");
+   return implode(st[1..sizeof(st)-2], "/");
+}
+
 mixed apropos(string s)
 {
    mapping filer = ([]);
    mapping topics;
    string output = "";
-   string *st;
    string pwd;
 
    topics = HELP_D->query_topics();
@@ -28,8 +34,7 @@ mixed apropos(string s)
       if (strsrch(key, s) != -1)
          foreach (string f in files)
          {
-            st = explode(f[6..], "/");
-            pwd = implode(st[0..sizeof(st)-2], "/");
+            pwd = generate_category(f);
             if (!arrayp(filer[pwd]))
                filer[pwd] = ({});
             filer[pwd] += ({key});
