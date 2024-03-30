@@ -22,11 +22,8 @@
 # This file is parsed by help_d.c.
 #
 player : 0
-
 wizard : 1
 autodoc : 1
-rst : 1
-
 admin : 5
 
 #
