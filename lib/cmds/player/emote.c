@@ -1,10 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// USAGE: emote message
+// USAGE
+//    ``emote message``
 //
 // Places any message you specify directly after your name.  For example,
-//"emote smiles." would have others see "Rust smiles.".
+//``emote smiles.`` would have others see "Rust smiles.".
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_GRAMMAR;

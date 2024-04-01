@@ -3,7 +3,7 @@
 //: FUNCTION terminal_mode
 // Returns "xterm", "ansi", or "vt100" or nothing if the user
 // has turned colours off.
-nomask string terminal_mode()
+string terminal_mode()
 {
    return get_user_variable("mode");
 }

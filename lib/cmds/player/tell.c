@@ -2,14 +2,18 @@
 
 //: PLAYERCOMMAND
 //
-// USAGE: tell <player> <message>
-//        tell <player>@<mudname> <message>
-//        tell /last
-//        tell /clear
+// USAGE
+// 
+//   |  ``tell <player> <message>``
+//   |  ``tell <player>@<mudname> <message>``
+//   |  ``tell /last``
+//   |  ``tell /clear``
 //
 // This command is used to tell others private messages. The second format
 // can be used to tell to people on other muds. The /last syntax will
 // display your tell history and the /clear syntax will clear it.
+//
+// .. TAGS: RST
 
 #include <commands.h>
 #include <playerflags.h>

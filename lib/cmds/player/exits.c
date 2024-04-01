@@ -1,9 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// Usage: exits
+// USAGE
+//    ``exits``
+//
 // Used with no arguments, this command shows you the possible exits for
 // the particular room you are in.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

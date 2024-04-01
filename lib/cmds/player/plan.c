@@ -2,10 +2,13 @@
 
 //: PLAYERCOMMAND
 //$$ see: finger
-// USAGE plan
+// USAGE
+//    ``plan``
 //
 // Takes you to an editor where you can enter or change your plan,
-// which everybody can see when they "finger" you.
+// which everybody can see when they ``finger`` you.
+//
+// .. TAGS: RST
 
 #include <edit.h>
 

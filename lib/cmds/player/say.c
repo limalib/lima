@@ -2,12 +2,17 @@
 
 //: PLAYERCOMMAND
 //
-// Syntax: <say MESSAGE>
-//         <say /last>
+// USAGE
+//
+//  |  ``say <message>``
+//  |  ``say /last``
 //
 // This command is used to talk with others in the same room as you.
 // It is done in a common language that everybody can understand.
 // The /last and /history syntaxes will display your say history.
+//
+// .. TAGS: RST
+
 
 inherit CMD;
 inherit M_GRAMMAR;

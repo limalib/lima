@@ -8,10 +8,15 @@
 
 //: PLAYERCOMMAND
 //$$ see: stats
-// USAGE score
-//       score -t theme
+// USAGE
 //
-// Shows you various details about yourself. Themes can be seem using the frames command, i.e. 'frames themes'
+//  |  ``score``
+//  |  ``score -t theme``
+//
+// Shows you various details about yourself. 
+// Themes can be seem using the frames command, i.e. ``frames themes``.
+//
+// .. TAGS: RST
 
 #include <hooks.h>
 

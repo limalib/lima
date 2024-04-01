@@ -2,10 +2,14 @@
 /* Tsath 2022 */
 
 //: PLAYERCOMMAND
-//$$ see: skills, stats, score, spells
-// USAGE hp
+//$$ see: skills, score, equip
+// USAGE 
+// 
+//     ``hp``
 //
 // Prints your current HP on all your limbs with AC stats and types.
+//
+// .. TAGS: RST
 
 #include <classes.h>
 #include <limbs.h>

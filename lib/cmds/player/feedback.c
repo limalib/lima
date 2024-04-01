@@ -9,9 +9,12 @@
 
 //: PLAYERCOMMAND
 //$$ see: idea, typo, bug, question
-// USAGE:  feedback
+// USAGE
+//    ``feedback``
 //
 // Allows you to give feedback on general or specific topics of relevance to the Mud.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

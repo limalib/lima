@@ -9,11 +9,13 @@
 //: PLAYERCOMMAND
 //$$ see: feelings, adverbs, semote
 //
-// USAGE::
-//    random
-//    random <name>
+// USAGE
+//   |  ``random``
+//   |  ``random <name>``
 //
 // This command will randomly select a feeling to execute.
+//
+// .. TAGS: RST
 
 #include <daemons.h>
 

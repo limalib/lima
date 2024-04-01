@@ -1,11 +1,14 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// USAGE: emoteapropos string
+// USAGE
+//    ``emoteapropos <string>``
 //
 // Finds all emotes/souls who's action contains the specified string.
 // For example, "emoteapropos smile" would match every emote/soul that includes
 //"smile" in the messages it sends.
+//
+// .. TAGS: RST
 
 #include <daemons.h>
 

@@ -2,9 +2,12 @@
 
 //: PLAYERCOMMAND
 //$$ see: inventory, score, equip
-// USAGE money
+// USAGE
+//   ``money``
 //
-// Displays how much money you are carrying. Short form of the 'score' command.
+// Displays how much money you are carrying. Short form of the ``score`` command.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

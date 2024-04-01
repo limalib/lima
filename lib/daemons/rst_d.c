@@ -165,7 +165,7 @@ void process_file(string fname)
    string *cmd_info = ({});
    string *module_info = ({});
    string *c_functions = ({});
-   string rstfile, rstout, description = "";
+   string rstfile, rstout = "", description = "";
    mixed *assoc;
    int i, len;
    int write_file = 0;
@@ -209,10 +209,12 @@ void process_file(string fname)
       break;
    }
 
-   // rstout = repeat_string("*", strlen(file_info[FILE_PRETTY])) + "\n";
-   rstout = file_info[FILE_PRETTY];
-   rstout += repeat_string("*", strlen(file_info[FILE_PRETTY])) + "\n\n";
-   rstout += "Documentation for the " + file_info[FILE_NAME] + " " + file_info[FILE_TYPE] + " in *" + fname + "*.\n\n";
+   if (file_info[FILE_TYPE] != "player command")
+   {
+      rstout = file_info[FILE_PRETTY];
+      rstout += repeat_string("*", strlen(file_info[FILE_PRETTY])) + "\n\n";
+      rstout += "Documentation for the " + file_info[FILE_NAME] + " " + file_info[FILE_TYPE] + " in *" + fname + "*.\n\n";
+   }
 
    len = sizeof(lines);
    while (i < len)
@@ -358,6 +360,7 @@ void process_file(string fname)
          }
          else
          {
+            /*
             if (strsrch(cinf, "USAGE") != -1)
             {
                // Ugly, but seems to cover most situations.
@@ -367,6 +370,7 @@ void process_file(string fname)
                rstout += trim(cinf) + "\n";
                continue;
             }
+            */
             if (trim(cinf) == "")
                usage = 0;
 

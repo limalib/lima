@@ -1,16 +1,19 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// USAGE:	title [new title]
+// USAGE
+//    ``title [new title]``
 //
 // without giving it a new title, shows you what your title is.
 // When you give it a new title, use $N for where you want your name to be.
 //
 // For example:
-//   title $N rocks!
+//   ``title $N rocks!``
 //
 // And then when I type 'title' I see:
-//   Rust rocks!
+//   ``Rust rocks!``
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_COLOURS;

@@ -1,10 +1,14 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// USAGE: describe
-//       describe <new description> - sets your description to new description
-// Takes you into a simple editor to enter your description
-// This command lets you enter the description people see when they look at you.
+// USAGE
+//
+//    |   ``describe``
+//    |   ``describe <new description>`` - sets your description to new description
+//
+// Takes you into a simple editor to enter your description. This command lets you enter the description people see when they look at you.
+//
+// .. TAGS: RST
 
 #include <commands.h>
 

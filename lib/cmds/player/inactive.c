@@ -1,14 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-// Jan 10, 94 by Rust
-// No longer works
-// Megaboz@ZorkMUD added help
-
 //: PLAYERCOMMAND
-// USAGE:	inactive
+// USAGE
+//    ``inactive``
 //
 // Puts you into inactive mode. This lets people know that you are
 // idling.  Hitting return takes you out of it when you are in it.
+//
+// .. TAGS: RST
 
 #include <playerflags.h>
 

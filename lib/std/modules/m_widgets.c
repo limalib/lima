@@ -99,8 +99,10 @@ string green_bar(int value, int max, int width)
 
    if (value > max)
       value = max;
-   green = (value * 1.00 / max) * (width)-1;
-   white = width - 2 - green;
+   green = (value * 1.00 / max) * (width-1);
+   white = width - 1 - green;
+
+   // TBUG("green: "+green+" white: "+white+ " value: "+value+" max: "+max);
 
    return sprintf("[" + (white <= 0 ? "<040>" : "<024>") + "%s<res><" + (uses_unicode() ? "238" : "007") + ">%s<res>]",
                   repeat_string(barchar, green), repeat_string(nobarchar, white));

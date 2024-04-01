@@ -7,15 +7,18 @@
 
 //: PLAYERCOMMAND
 //$$see: verbose
-// USAGE brief
-//      brief on
-//      brief off
+// USAGE 
+//    |  ``brief``
+//    |  ``brief on``
+//    |  ``brief off``
 //
 // Shows or sets whether you are using "brief" mode,
 // which ignores the room descriptions.
 // Use "brief" mode at your own risk - it greatly increases the chance
 // of missing important clues in the room descriptions,
 // and of upsetting creators whose masterpieces of text you are now ignoring.
+//
+// .. TAGS: RST
 
 #include <playerflags.h>
 #define USAGE "Usage: brief [on|off]\n"

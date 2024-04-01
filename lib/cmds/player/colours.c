@@ -2,23 +2,31 @@
 
 //: PLAYERCOMMAND
 //$$see: mode, palette
-// USAGE colours
-//      colours <name> <value>
-//      colours remove <value>
+// USAGE 
+//   |   ``colours``
+//   |   ``colours <name> <value>``
+//   |   ``colours remove <value>``
 //
 // This command handles customising the colours displayed in the mud -
 // ie changing them to suit your tastes
 // Some of types items displayed in the mud are allocated a "colour name",
 // which is then given a default "colour value"
 // eg "say" could be given a value "blue", in which case all "says" would
-// appear in blue. If you wish to have them appear in red, you would use::
-//     colours say red
+// appear in blue. If you wish to have them appear in red, you would use:
+//
+//   |   ``colours say red``
+//   |   ``colours say <021>``
+//
 // You can also use "bold" as a colour, with comma if necessary - eg::
-//     colour say bold,red
+//     ``colour say bold,red``
+//
 // You can clear your personalised setting, and revert to the mud default, with::
-//     colours remove say
-// Instead of colour names, check the 'palette' command and use numbers from there,
+//     ``colours remove say``
+//
+// Instead of colour names, check the ``palette`` command and use numbers from there,
 // from 001 to 255.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_COLOURS;

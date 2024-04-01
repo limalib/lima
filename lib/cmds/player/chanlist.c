@@ -12,10 +12,13 @@
 */
 
 //: PLAYERCOMMAND
-//$$see: channels, gossip, newbie, chan
-// USAGE:  chanlist
+//$$see: gossip, newbie, chan
+// USAGE
+//    ``chanlist``
 //
 // Shows currently existing channels available to you.
+//
+// .. TAGS: RST
 
 #include <channel.h>
 

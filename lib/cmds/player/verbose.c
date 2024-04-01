@@ -7,14 +7,18 @@
 
 //: PLAYERCOMMAND
 //$$ see: brief
-// USAGE verbose
-//      verbose on|off
+// USAGE
+//
+//  |  ``verbose``
+//  |  ``verbose on|off``
 //
 // This shows whether you are using verbose or brief mode, and allows you to
 // switch between them.
 //
 // Room descriptions are suppressed in "brief" mode, so beware of unexpected
 // encounters if you choose to use it...
+//
+// .. TAGS: RST
 
 #include <playerflags.h>
 #define USAGE "Usage: verbose [on|off]\n"

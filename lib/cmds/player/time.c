@@ -1,25 +1,25 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-/********************************************************
- *                                                      *
- *   uptime  -  reports how long the mud has been up.   *
-
- ** *  copied from ideaexchange where it was originally*
- *  created by beek@nightmare                     *
-
- *   copied by zifnab@zorkmud                           *
- *
- *********************************************************/
+/*
+ * uptime  -  reports how long the mud has been up.
+ * copied from ideaexchange where it was originally
+ * created by beek@nightmare
+ * copied by zifnab@zorkmud
+ */
 
 //: PLAYERCOMMAND
 //$$ see: timezone
-// USAGE time
+// USAGE
+//   ``time``
 //
 // Displays the current local time (where the mud server is located),
 // and the GMT conversion of that, and player's local time (if the
-// GMT offset has been entered using the "timezone" command)
+// GMT offset has been entered using the ``timezone`` command)
 // together with time the mud was last rebooted (on mud local time),
 // and how long it has been up.
+//
+// .. TAGS: RST
+
 
 #include <localtime.h>
 

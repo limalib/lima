@@ -17,7 +17,9 @@
 
 inherit M_ACCESS;
 inherit M_INPUT;
+inherit M_COLOURS;
 inherit M_RSTVIEW;
+inherit M_MDVIEW;
 
 private
 nosave string *topic_files;
@@ -142,6 +144,12 @@ rst_view(string fname, string topic)
 }
 
 private
+md_view(string fname, string topic)
+{
+   lines = md_format_file(fname, topic);
+}
+
+private
 nomask void parse_file(string fname, string topic)
 {
    cur_line = 0;
@@ -156,6 +164,12 @@ nomask void parse_file(string fname, string topic)
    if (strlen(fname) > 4 && fname[ < 4..] == ".rst")
    {
       rst_view(fname, topic);
+      return;
+   }
+
+   if (strlen(fname) > 3 && fname[ < 3..] == ".md")
+   {
+      md_view(fname, topic);
       return;
    }
 
@@ -175,7 +189,7 @@ nomask void parse_file(string fname, string topic)
 **
 ** Present a topic to the user
 */
-private
+private varargs
 nomask void present_topic(string fname, string topic)
 {
    switch (file_size(fname))
@@ -247,7 +261,7 @@ nomask void lookup_topic(string topic)
    }
    else if (sizeof(files) == 1)
    {
-      present_topic(files[0], topic);
+      present_topic(files[0]);
    }
    else
    {

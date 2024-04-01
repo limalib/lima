@@ -1,12 +1,20 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-//$$ see: color, colours, ansi, simplify, emoji
-// USAGE hints
-//      hints on
-//      hints off
-//      hints <item>
+//$$ see: color, colours, ansi, simplify, emoji, hint
+// USAGE
 //
+//   |  ``hints``
+//   |  ``hints on``
+//   |  ``hints off``
+//   |  ``hints <item>``
+//
+// ``hints on`` turns on hints for the MUD while you move around. It's highly recommended 
+// for new or inexperienced players. Some hints may pop up from the rooms you enter, whereas
+// others may be from items your have in your inventory - ``hints <item>`` can be used to 
+// check if there are any hints for a specific items usage.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_COLOURS;

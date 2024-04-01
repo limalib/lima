@@ -7,10 +7,14 @@
 
 //: PLAYERCOMMAND
 //$$ see: skills, hp, stats,score
-// USAGE materials
-//       materials all - show all materials on the MUD
+// USAGE 
+//
+//  |  ``materials``
+//  |  ``materials all`` - show all materials on the MUD
 //
 // Shows your materials and all the materials in it.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_FRAME;

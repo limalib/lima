@@ -9,9 +9,12 @@
 
 //: PLAYERCOMMAND
 //$$see: idea, typo, feedback, question
-// USAGE bug
+// USAGE
+//     ``bug``
 //
 // This command directs a report of a game bug to the proper place.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

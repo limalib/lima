@@ -255,6 +255,7 @@
 #define M_LIGHTABLE        _MODULES "m_lightable"
 #define M_LOCKABLE         _MODULES "m_lockable"
 #define M_LOCKPICK         _MODULES "m_lockpick"
+#define M_MDVIEW           _MODULES "m_mdview"
 #define M_MESSAGES         _MODULES "m_messages"
 #define M_MOUNTABLE        _MODULES "m_mountable"
 #define M_NPCSCRIPT        _MODULES "m_npcscript"

@@ -3,9 +3,12 @@
 // Rust wrote this and was a bad boy and didn't attach a header - Beek
 
 //: PLAYERCOMMAND
-// USAGE:	passwd
+// USAGE
+//    ``passwd``
 //
 // Changes your password.  Just type it, and follow the directions.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_INPUT;

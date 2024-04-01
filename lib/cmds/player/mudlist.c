@@ -1,19 +1,23 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// USAGE:	mudlist	or mudlist <pattern>
+// USAGE
+//
+//  |  ``mudlist``
+//  |  ``mudlist <pattern>``
 //
 // This command gives a full list of all muds and their addresses that
 // this mud knows about.  If you supply a pattern, the command only tells
 // you what muds match the pattern.
 //
-//
 // Examples:
 //
-// mudlist	-- get all muds
-// mudlist mud	-- get all muds that contain "mud" somewhere
-//			in their name
-// mudlist ^foo	-- get all muds whose name starts with "foo"
+//   |  ``mudlist``	- get all muds
+//   |  ``mudlist mud``	- get all muds that contain "mud" somewhere
+//	  |	                 in their name
+//   |  ``mudlist ^foo``	-- get all muds whose name starts with "foo"
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_GLOB;

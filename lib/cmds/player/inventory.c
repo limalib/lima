@@ -6,10 +6,14 @@
 // inventory commands.  *boggle*
 
 //: PLAYERCOMMAND
-// USAGE:  i
-//         inventory
+// USAGE
+//
+//  |   ``i``
+//  |   ``inventory``
 //
 // Shows you what you have in your inventory.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

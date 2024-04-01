@@ -17,11 +17,15 @@
 # assumed to have a min-level of 0 (players can see the
 # topics).  Level 99 means the help_d will ignore it.
 #
+# The file also supports subfolders in /help, e.g.
+# autodoc/player_command : 0 can be set as well as players 
+# needs access to this folder even if inside autodoc.
+#
 # And, of course, lines beginning with # are ignored
 #
 # This file is parsed by help_d.c.
 #
-player : 0
+autodoc/player_command : 0
 wizard : 1
 autodoc : 1
 admin : 5

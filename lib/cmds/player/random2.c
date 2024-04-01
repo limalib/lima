@@ -3,6 +3,17 @@
 #include <driver/runtime_config.h>
 inherit CMD;
 
+//: PLAYERCOMMAND
+//$$ see: feelings, adverbs, semote
+//
+// USAGE
+//   |  ``random2``
+//   |  ``random2 <name>``
+//
+// This command will randomly select a feeling to execute. This one might be slightly broke.
+//
+// .. TAGS: RST
+
 mapping data = ([]);
 mapping reverse = ([]);
 

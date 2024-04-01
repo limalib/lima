@@ -1,18 +1,23 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-//$$ see: color, colours, mode, frames
-// USAGE emoji
-//      emoji on
-//      emoji off
-//      emoji list
+//$$ see: color, colours, mode, frames, simplify
+// USAGE
 //
-// Typing "emoji" will show if your character is set to ascii like graphics
+//    |   ``emoji``
+//    |   ``emoji on``
+//    |   ``emoji off``
+//    |   ``emoji list``
+//
+// Typing ``emoji`` will show if your character is set to ascii like graphics
 // from the mud (used for small charts etc). These can be hard to use on
 // screen readers, so if you are using a screen reader it can be recommended
-// to be 'emoji off'.
+// to be ``emoji off`` - ``simplify on`` will set  alot of these settings 
+// correct for your screen reader.
 //
-// Use 'emoji list' for a list of supported emojis.
+// Use ``emoji list`` for a list of supported emojis.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_WIDGETS;

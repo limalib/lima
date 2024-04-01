@@ -1,14 +1,16 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-// _snoopable.c
+// snoopable.c
 // this space intentionally left blank
 // Megaboz@ZorkMUD added header and help
 
 //: PLAYERCOMMAND
-//$$ see: privacy
-// USAGE:  snoopable [on|off]
+// USAGE
+//    ``snoopable [on|off]``
 //
-// This does exactly what the name imples -- it sets whether you are snoopable.
+// This does exactly what the name imples - it sets whether you are snoopable.
+//
+// .. TAGS: RST
 
 #include <playerflags.h>
 

@@ -1,12 +1,15 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-//$$see : shell
-// USAGE: spew file [<startline>] [#<lines>]
+//$$see: shell
+// USAGE
+//    ``spew file [<startline>] [#<lines>]``
 //
 // Dumps contents of specified file to the screen as "says" from you,
 // one say per line.
 // Optional parameters for start line and number of lines to dump.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

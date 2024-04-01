@@ -4,7 +4,8 @@
 // --OH.
 
 //: PLAYERCOMMAND
-// USAGE suicide
+// USAGE
+//     ``suicide``
 //
 // This would allow you to completely obliterate your character from the game,
 // leaving no trace.
@@ -12,6 +13,8 @@
 // so we've disabled it.
 // If you really really do want to be removed completely and irrevocably,
 // then mail the request to one of the admins.
+//
+// .. TAGS: RST
 
 inherit M_INPUT;
 inherit CMD;

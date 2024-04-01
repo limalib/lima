@@ -8,9 +8,12 @@
 
 //: PLAYERCOMMAND
 //$$ see: bug, typo, feedback, idea
-// USAGE:  question
+// USAGE
+//    ``question``
 //
 // Allows you to send a question to the relevant place.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

@@ -10,9 +10,12 @@
 
 //: PLAYERCOMMAND
 //$$ see: bug, idea, feedback, question
-// USAGE:  typo
+// USAGE
+//    ``typo``
 //
 // This command directs a typo report to the proper place.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

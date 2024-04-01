@@ -7,11 +7,15 @@
 //                     the header. :-)  Go Mars!
 
 //: PLAYERCOMMAND
-// USAGE:  shout <message>
+// USAGE
+//    ``shout <message>``
 //
 // Allows you to 'shout' a message to the entire mud.
 //
-//[ Warning: this is here during the development of the mud. Do not abuse it. ]
+//*Warning: this is here during the development of the mud. Do not abuse it.*
+//
+// .. TAGS: RST
+
 
 inherit CMD;
 inherit M_GRAMMAR;

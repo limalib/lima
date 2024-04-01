@@ -11,13 +11,17 @@
 */
 
 //: PLAYERCOMMAND
-// USAGE:  mail
-//         mail <user>
-//         mail (<group>)
+// USAGE
+//   |   ``mail``
+//   |   ``mail <user>``
+//   |   ``mail (<group>)``
 //
 // Just type "mail" from anywhere in the mud, or type "mail foo" to send
-// mail to someone named 'foo'.  To send mail to a group, type "mail (foo)", where 'foo' is the name of the group you
-// want //to send to.
+// mail to someone named 'foo'.  To send mail to a group, type "mail (foo)", 
+// where 'foo' is the name of the group you
+// want to send to.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

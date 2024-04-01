@@ -3,7 +3,13 @@
 // Adapted to new user menu system, Tsath 2022
 
 //: PLAYERCOMMAND
-// Quit to the user menu.
+// USAGE
+//   ``quit``
+//
+// Quit the game.
+//
+// .. TAGS: RST
+
 
 #include <config/user_menu.h>
 

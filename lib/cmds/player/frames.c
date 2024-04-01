@@ -2,12 +2,19 @@
 
 //: PLAYERCOMMAND
 //$$ see: color, colours, ansi, emoji
-// USAGE frames
-//      frames list
-//      frames <type>
+// USAGE
 //
-// Use 'frames list' to show which frame themes are supported.
-// Use 'frames single' to set your frame theme to 'single'.
+//   |   ``frames``
+//   |   ``frames styles``
+//   |   ``frames style <name>``
+//   |   ``frames themes``
+//   |   ``frames theme <name>``
+//
+// Use ``frames styles`` to show which frame styles are supported.
+// Use ``frames style single`` to set your frame style to 'single'.
+// Use ``frames theme dusk`` to set your frame theme to 'dusk'.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_WIDGETS;

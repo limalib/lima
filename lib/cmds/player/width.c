@@ -1,16 +1,20 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// USAGE width
-//       width <number>
-//       width auto
-//       width nowrap
+// USAGE
+//
+//   |    ``width``
+//   |    ``width <number>
+//   |    ``width auto
+//   |    ``width nowrap
 //
 // Allows you to see (or set) what the mud will use as your screen width when
 // formatting information. Some clients send the width of the terminal window,
-// and if yours do that, you can use 'width auto' to set your width automatically.
-// It's probably a good idea to set it to the same as your client' setting,
+// and if yours do that, you can use ``width auto`` to set your width automatically.
+// It is probably a good idea to set it to the same as your client' setting,
 // so they don't get confused when talking to each other.
+//
+// .. TAGS: RST
 
 #define MIN_WIDTH 30
 

@@ -1,14 +1,17 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-// USAGE: converse
+// USAGE
+//    ``converse``
 //
 // Puts you into conversation mode, which means that anything you type
-// will act as if you are placing the "say" command before it.  Once in
+// will act as if you are placing the ``say`` command before it.  Once in
 // conversation mode, you exit the same way you do from the mail or
 // bulletin board editor, that is, by typing a '.' alone on a line.  You
 // may also issue commands while in conversation mode by putting a !
 // before whatever you type.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_INPUT;

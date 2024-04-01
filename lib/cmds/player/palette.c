@@ -1,9 +1,12 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: PLAYERCOMMAND
-//$$see: colours"," ansi
-// USAGE palette
+//$$see: colours, mode, frames
+// USAGE
+//    ``palette``
+//
 // Show even more possible colours you can use.
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_COLOURS;
