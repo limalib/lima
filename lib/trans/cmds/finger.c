@@ -2,11 +2,13 @@
 
 // Rust
 
-//: PLAYERCOMMAND
-// USAGE: finger  or
-//        finger player  or
-//        finger @mudname  or
-//        finger player@mudname
+//: COMMAND
+// USAGE
+//
+//  |   ``finger``
+//  |   ``finger player``
+//  |   ``finger @mudname``
+//  |   ``finger player@mudname``
 //
 // Gives you information about a player named.  If you do not mention a
 // particular mud, it searches for that player info here.  If you do not
@@ -17,6 +19,9 @@
 // The mud name doesn't have to be the complete name, and can be a
 // partial match, as long as you provide enough information so that the
 // game can figure out which mud you're talking about.
+//
+// .. TAGS: RST
+
 
 #include <commands.h>
 #include <config/user_menu.h>

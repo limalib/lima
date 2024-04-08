@@ -1,11 +1,15 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: ADMINCOMMAND
-// USAGE: listeners
-//        listeners <channel name>
+// USAGE: 
+//
+//    |  ``listeners``
+//    |  ``listeners <channel name>``
 //
 // Displays list of people listening to channels
 // Admin only
+//
+// .. TAGS: RST
 
 /*
 ** listeners.c -- displays info on people listening to channels

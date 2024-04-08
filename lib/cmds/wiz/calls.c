@@ -4,22 +4,24 @@
 // Improved by Tsath 2020 to show time better, plus better documentation.
 
 // : COMMAND
-// USAGE:  calls
+// USAGE:  ``calls``
 //
 // This command shows you the number of call_outs that are active. If a lot
 // of calls exist on same object to same function they will be abbreviated.
 //
 // Produces display like :
-// calls
+// ``calls``
 //
-// object                                 Function            Delay
-// -----------------------------------------------------------------------------
-// /secure/master                         <function>          17m 13s
-// /domains/std/monster/harry#474         <function>          19h 23m 53s
-// /domains/std/monster/harry             <function>          3s
-// /daemons/imud_d                        <function>          (107 calls)
+//   |  object                                 Function            Delay
+//   |  -----------------------------------------------------------------------------
+//   |  /secure/master                         <function>          17m 13s
+//   |  /domains/std/monster/harry#474         <function>          19h 23m 53s
+//   |  /domains/std/monster/harry             <function>          3s
+//   |  /daemons/imud_d                        <function>          (107 calls)
 //
 // There are 3 call_outs active.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

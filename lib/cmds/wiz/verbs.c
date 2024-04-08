@@ -1,34 +1,37 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE:  verbs  or   verbs <verb>
+// USAGE:  
+//
+//    |  ``verbs``
+//    |  ``verbs <verb>``
 //
 // This command will show you the rules that a certain verbs has,
 // or a list of all the verbs and their rules
 //
-// verbs
+// ``verbs``
 //
-// ffear: STR
-// move: OBJ
-// look: OBJ with OBJ, STR, at OBJ with OBJ, STR OBJ, for OBJ, for LIV, at OBJ, OBJ
-//,
-// open: OBJ with OBJ, up OBJ, OBJ
-// pour: OBJ in OBJ
-// get: OBJ with OBJ, OBJ out of OBJ, OBJ from OBJ, OBJ
-// wind: OBJ with OBJ, OBJ
-// put: OBJ in OBJ
-// give: OBJ to LIV
-// wait:
-// whisper: to LIV STR, STR to LIV, LIV STR
-// close: OBJ
-// fill: OBJ with OBJ, OBJ
-// exit: OBJ
-// go: in OBJ, into OBJ, on OBJ, over OBJ, to OBJ, around OBJ, up OBJ, down OBJ, STR
+//   |  ffear: STR
+//   |  move: OBJ
+//   |  look: OBJ with OBJ, STR, at OBJ with OBJ, STR OBJ, for OBJ, for LIV, at OBJ, OBJ
+//   |  open: OBJ with OBJ, up OBJ, OBJ
+//   |  pour: OBJ in OBJ
+//   |  get: OBJ with OBJ, OBJ out of OBJ, OBJ from OBJ, OBJ
+//   |  wind: OBJ with OBJ, OBJ
+//   |  put: OBJ in OBJ
+//   |  give: OBJ to LIV
+//   |  wait:
+//   |  whisper: to LIV STR, STR to LIV, LIV STR
+//   |  close: OBJ
+//   |  fill: OBJ with OBJ, OBJ
+//   |  exit: OBJ
+//   |  go: in OBJ, into OBJ, on OBJ, over OBJ, to OBJ, around OBJ, up OBJ, down OBJ, STR
 //
+// ``verbs go``
 //
-// verbs go
+//   |  go: in OBJ, into OBJ, on OBJ, over OBJ, to OBJ, around OBJ, up OBJ, down OBJ, STR
 //
-// go: in OBJ, into OBJ, on OBJ, over OBJ, to OBJ, around OBJ, up OBJ, down OBJ, STR
+// .. TAGS: RST
 
 inherit CMD;
 

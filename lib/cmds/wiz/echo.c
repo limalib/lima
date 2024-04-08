@@ -4,11 +4,11 @@
 
 //: COMMAND
 //$$ see: echoto, echoall, echom
-// USAGE:  echo <string>
+// USAGE:  ``echo <string>``
 //
 // This command will echo a message to the room exactly as you typed the string.
 //
-// echo You suddenly have a strange urge to kill something.
+// ``echo You suddenly have a strange urge to kill something.``
 //
 // All users in the room will see the following message on their screens;
 // You suddenly have a strange urge to kill something.
@@ -20,6 +20,8 @@
 // with players. (i.e. no faked deaths or any other messages of that nature).
 // Doing this is a direct violation of the mud policy and is grounds for
 // disciplinary action.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

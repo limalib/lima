@@ -2,20 +2,24 @@
 
 //: COMMAND
 //$$ see: feelings, m_messages, addemote, showemote, stupidemote, targetemote
-// USAGE:  rmemote <emote>
-//        rmemote <emote>  <rule>
+// USAGE:  
+//
+//   |  ``rmemote <emote>``
+//   |  ``rmemote <emote>  <rule>``
 //
 // This command allows you to remove an emote entirely, or in part
 // by removing just a particular rule.
 //
-// rmemote kick
+// ``rmemote kick``
 //
 //   this will remove the entire emote kick and all its rules.
 //
-// rmemote kick LIV
+// ``rmemote kick LIV``
 //
 //   this will remove only the rule and message for the LIV part of kick
 //   It will leave all other rules as is.
+//
+// ..TAGS: RST
 
 #include <daemons.h>
 

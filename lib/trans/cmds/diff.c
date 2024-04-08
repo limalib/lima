@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: diff <file1> <file2>
+// USAGE: ``diff <file1> <file2>``
 //
 // Finds the difference between two files.
+//
+// .. TAGS: RST
 
 /* This file is originally a part of the TMI distribution mudlib.
    Please retain this header if you use this code.

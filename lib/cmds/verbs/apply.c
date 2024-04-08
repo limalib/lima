@@ -5,6 +5,18 @@
 ** Tsath 2020-02-05
 */
 
+//: COMMAND
+// USAGE
+//
+//  |  ``apply <something> to <something>``
+//  |  ``apply bandage to left arm``
+//  |  ``apply for drivers license``
+//
+// For applying things to things or for things.
+//
+// .. TAGS: RST
+
+
 #include <move.h>
 #include <setbit.h>
 #include <verbs.h>

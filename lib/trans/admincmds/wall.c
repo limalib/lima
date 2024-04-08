@@ -1,10 +1,12 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: ADMINCOMMAND
-// USAGE:  wall <message>
+// USAGE:  ``wall <message>``
 //
 // Sends a broadcast message to anyone and everyone on the mud
 // Admin use only
+//
+// .. TAGS: RST
 
 #include <log.h>
 #include <mudlib.h>

@@ -1,12 +1,17 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
+
 //: MODULE
-// Inherit this module into anything that
-// is a source for fluid.  Rivers, fountains,
-// bee-hives, volcanoes, corpses, etc.
-// Fill and drink look for a fluid source.
-// To be able to drink directly from the
-// source, also inherit m_drink_source.
+// Inherit this module into anything that is a source for fluid.  Rivers, fountains,
+// bee-hives, volcanoes, corpses, etc. Fill and drink look for a fluid source.
+// To be able to drink directly from the source, also
+//
+// .. code-block:: c
+//
+//     inherit M_DRINK_SOURCE;
+//
 // in the environment.
+//
+// .. TAGS: RST
 #define PATH_TO_OBJECTS __DIR__
 
 void add_id(string x);

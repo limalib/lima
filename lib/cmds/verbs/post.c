@@ -7,8 +7,9 @@
 //
 
 //: COMMAND
-// Used mainly to post a message to a board
-// See also: boards
+// Used mainly to post a message to a board.
+//
+// .. TAGS: RST
 
 inherit VERB_OB;
 

@@ -2,16 +2,18 @@
 
 //: COMMAND
 //$$ see: feelings, m_messages, addemote, showemote, rmemote, targetemote
-// USAGE:  stupidemote <soul>
+// USAGE:  ``stupidemote <soul>``
 //
 // This command will add an emote with default rules of "" and "SR".
 //
-// stupidemote cry
+// ``stupidemote cry``
 //
-// If you then do a showemote cry
+// If you then do a ``showemote cry``
 //
-//    "" -> $N $vcry.
-//    "STR" -> $N $vcry $o.
+//  |  "" -> $N $vcry.
+//  |  "STR" -> $N $vcry $o.
+//
+// .. TAGS: RST
 
 #include <daemons.h>
 

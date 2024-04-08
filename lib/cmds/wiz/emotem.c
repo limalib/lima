@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: emote, echom
-// USAGE: emotem @<target> <message>
+// USAGE: ``emotem @<target> <message>``
 //
 // Sends a targetted message, using the M_MESSAGE syntax (as for souls).
 // As with other emotes, the senders name is prepended as part of the message.
@@ -10,10 +10,12 @@
 // as a "simple_action" - so presence of $t in the message would cause error.
 //
 //
-//>echom @fred $vtest the emotem command on $t
+// >``echom @fred $vtest the emotem command on $t``
 //
-//>You test the echom command on Fred
+// >You test the echom command on Fred
 // and Fred and onlookers would see suitably adjusted versions.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_GRAMMAR;

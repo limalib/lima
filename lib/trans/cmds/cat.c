@@ -2,12 +2,14 @@
 
 //: COMMAND
 //$$see: more,tail
-// USAGE cat [path/file]
+// USAGE ``cat [path/file]``
 //
 // Dumps the contents of the named file to your screen with no page breaks.
 // If no file name is given cat assumes the last file edited.
 //
-// cat /wiz/zifnab/backup_menu.c
+// ``cat /wiz/zifnab/backup_menu.c``
+//
+// .. TAGS: RST
 
 inherit CMD;
 

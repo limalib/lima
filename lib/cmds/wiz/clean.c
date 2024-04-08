@@ -2,8 +2,9 @@
 
 //: COMMAND
 //$$ see: dest, clone
-// USAGE:  clean
-//        clean <target>
+// USAGE:  
+//    |  ``clean``
+//    |  ``clean <target>``
 //
 // This command will destroy everything in your environment if
 // executed with no args. If given an argument it will destroy all
@@ -11,6 +12,8 @@
 // clone 20 barney's in your workroom.
 // It ignores add_items and living objects, so perhaps it's not so helpful
 // with those barneys after all ...
+//
+// .. TAGS: RST
 
 inherit CMD;
 

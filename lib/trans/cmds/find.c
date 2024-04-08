@@ -2,9 +2,12 @@
 
 //: COMMAND
 //$$ see: locate, grep
-// USAGE: find <pattern> <files>
+// USAGE
+//   ``find <pattern> <files>``
 //
 // Display lines containing match to specified target pattern, within specified files.
+//
+// .. TAGS: RST
 
 //  Created by Rust, Jul 10, 1995
 

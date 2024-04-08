@@ -1,8 +1,8 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit OBJ;
+inherit CONTAINER;
 inherit M_GETTABLE;
-inherit M_DRINK_CONTAINER;
+inherit M_FLUID_CONTAINER;
 inherit M_DRINKABLE;
 
 void setup()
@@ -13,4 +13,7 @@ void setup()
    set_num_drinks(5);
    set_drink_action("$N $vtake a drink from the bottle.");
    set_last_drink_action("$N $vtake a drink from the bottle, finishing it off.");
+   set_relations("in","within");
+   set_default_relation("in");
+   set_max_capacity(5);
 }

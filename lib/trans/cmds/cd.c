@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: mkdir, ls, pwd, ed
-// USAGE:  cd [directory|obj]
+// USAGE:  ``cd [directory|obj]``
 //
 // Most file commands assume you're talking about your current working
 // directory, if you do not specify a full path.  This command sets your
@@ -10,6 +10,8 @@
 // become your current working dir.
 //
 // With the 'obj' argument it moves you to the directory that 'obj' is in.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

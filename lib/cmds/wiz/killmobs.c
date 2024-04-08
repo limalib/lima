@@ -3,9 +3,11 @@
 // Tsath @ Nuke 2, 2020
 
 //: COMMAND
-// USAGE killmobs
+// USAGE ``killmobs``
 //
 // Kill mobs by name
+//
+// .. TAGS: RST
 
 inherit CMD;
 

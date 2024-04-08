@@ -7,10 +7,12 @@
 //             <name> - Reports out players ip name and number.
 
 //: COMMAND
-// USAGE: whoip
-//        whoip <ip address>
-//        whoip <ip number>
-//        whoip <player name>
+// USAGE: 
+//
+//     |  ``whoip``
+//     |  ``whoip <ip address>``
+//     |  ``whoip <ip number>``
+//     |  ``whoip <player name>``
 //
 // This command is very similar to who, however it shows
 // the ip name and number from which each player connected,
@@ -20,21 +22,21 @@
 // a given ip given as an argument, or alternatively a list of IPs that
 // the player logged in from.
 //
-// whoip
+// ``whoip``
 //
-// Lima Bean:  (Local Time is: Tue Sep 19 07:09:15 1995)
-//-------------------------------------------------------------------------
-// Name         IP number                 IP name
-//-------------------------------------------------------------------------
-// Ohara        137.92.12.102             student.canberra.edu.au
-// Wegster      204.57.174.131            wegster.telebyte.com
-// Valodin      204.254.197.7             exinos.ms.com
-// Zifnab       129.188.154.108           maniac1t.mot.com
-//-------------------------------------------------------------------------
-// Currently there are 4 players.
+//   |  Lima Bean:  (Local Time is: Tue Sep 19 07:09:15 1995)
+//   |  -------------------------------------------------------------------------
+//   |  Name         IP number                 IP name
+//   |  -------------------------------------------------------------------------
+//   |  Ohara        137.92.12.102             student.canberra.edu.au
+//   |  Wegster      204.57.174.131            wegster.telebyte.com
+//   |  Valodin      204.254.197.7             exinos.ms.com
+//   |  Zifnab       129.188.154.108           maniac1t.mot.com
+//   |  -------------------------------------------------------------------------
+//   |  Currently there are 4 players.
 //
 //
-//  whoip 129.188.154.108
+//   |  whoip 129.188.154.108
 //
 // There is 1 user from maniac1t.mot.com (129.188.154.108):
 // Zifnab
@@ -43,6 +45,8 @@
 // Zifnab
 // Beek
 // Tsath
+//
+// .. TAGS: RST
 
 #include <playerflags.h>
 #define DIVIDER "-------------------------------------------------------------------------\n"

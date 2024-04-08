@@ -4,9 +4,11 @@
 
 //: COMMAND
 //$$ see: clone, clean, scan
-// USAGE:  dest <object>
+// USAGE:  ``dest <object>``
 //
 // This command destroys an object in your inventory or in your environment.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

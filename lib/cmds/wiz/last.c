@@ -9,14 +9,14 @@
 */
 
 //: COMMAND
-// USAGE: last [-s] [-n count] [-d days] [-D days] [user1 user2 ...]
+// USAGE: ``last [-s] [-n count] [-d days] [-D days] [user1 user2 ...]``
 //
-//   -s       : be "silent" -- trim headers, displaying just the data
-//   -n count : only display this many users (the most recent)
-//   -d days  : display users logged in WITHIN this many days
-//   -D days  : display users logged in OLDER than this many days
+//   |  -s       : be "silent" -- trim headers, displaying just the data
+//   |  -n count : only display this many users (the most recent)
+//   |  -d days  : display users logged in WITHIN this many days
+//   |  -D days  : display users logged in OLDER than this many days
 //
-//   user...  : display login information for these users
+//   |  user...  : display login information for these users
 //
 // Note that the options can be combined, but you'll get an error if you
 // use -d and -D to, say, ask for all users logged in during the past 30
@@ -25,6 +25,8 @@
 // For each user found, their name is displayed, when they
 // logged in, if they are still on or when they logged out, and where they
 // connected from.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_WIDGETS;

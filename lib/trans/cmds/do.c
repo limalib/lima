@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: do cmd1;cmd2;cmd3
+// USAGE: ``do cmd1;cmd2;cmd3``
 //
 // Does multiple commands
+//
+// .. TAGS: RST
 
 inherit CMD;
 

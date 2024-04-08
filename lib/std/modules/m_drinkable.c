@@ -30,8 +30,6 @@ float query_mass();
 void set_weight(float x);
 void set_quantity(int x);
 void remove();
-int query_heal_value();
-void heal_from_drink();
 
 //: FUNCTION set_taste_action
 // set_taste_action( mixed x )
@@ -179,9 +177,11 @@ varargs void drink_it(object drinkee)
          drinkee->my_action(action, this_object());
    };
 
-   if (query_heal_value())
+   //These two are call_others to avoid a hard dependency between
+   //M_DRINKABLE and M_HEALING.
+   if (this_object()->query_heal_value())
    {
-      heal_from_drink();
+      this_object()->heal_from_drink();
    }
 
    reduce_drink_number();

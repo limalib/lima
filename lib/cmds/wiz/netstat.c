@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: netstat
+// USAGE: ``netstat``
 //
 // Displays a list of sockets with (stat) info on each one.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

@@ -79,7 +79,10 @@ int f_restrict(string s)
 private
 parse_rst(string path, string file)
 {
-   string *contents = filter_array(explode(read_file(path + file), "\n"), ( : strsrch($1, ".. c:function::") != -1 || strsrch($1, "TAGS: ") != -1 :));
+   string *contents = filter_array(explode(read_file(path + file), "\n"),
+                                   (
+                                       : strsrch($1, ".. c:function::") != -1 || strsrch($1, "TAGS: ") != -1
+                                       :));
 
    if (!sizeof(contents))
       return;
@@ -139,7 +142,7 @@ void process_file(string path, string file)
       ++pending_count;
    }
 
-   if (strlen(file) > 5 && file[ < 4..] == ".rst")
+   if (strlen(file) > 4 && file[ < 4..] == ".rst")
    {
       parse_rst(path, file);
       file = file[0.. < 5];
@@ -177,7 +180,11 @@ nomask void process_dir(string path)
 
       if (initiator)
       {
-         tell(initiator, "HELP_D has finished the rebuild. " + fun_total + " functions found in RST files.\n");
+         tell(initiator,
+              "HELP_D has finished the rebuild.\n" + //
+                  sprintf("  %5.5s", "" + fun_total) + " functions added to index.\n" +
+                  sprintf("  %5.5s", "" + sizeof(clean_array(flatten_array(values(topics))))) + " help files known.\n" +
+                  sprintf("  %5.5s", "" + sizeof(keys(topics))) + " topics found in index.\n");
          initiator = 0;
       }
    }
@@ -238,8 +245,7 @@ nomask string *find_topic(string name)
       return 0;
 
    // ### simulate the old levels
-   lvl = adminp(this_user()) ? 5 : wizardp(this_user()) ? 1
-                                                        : 0;
+   lvl = adminp(this_user()) ? 5 : wizardp(this_user()) ? 1 : 0;
 
    return filter_array(
        result,

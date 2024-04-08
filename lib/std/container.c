@@ -129,7 +129,7 @@ void remove_relations(string *rels...)
 // Set the relations which are legal for a complex container.  Example:
 // set_relations("on", "in", "under").  The first one is the default
 // relation (the one used by set_objects(), etc)
-void set_relations(string *rels...)
+void set_relations(string rels...)
 {
    /* Ok, a bit tricky here.  We can't remove relations if there is an
       object occupying that, so we remove all relations with no objects,
@@ -289,7 +289,7 @@ varargs void set_max_capacity(int cap, string relation)
    if (!valid_relation(relation))
    {
       if (!aliased_to)
-         error("Invalid relation");
+         error("set_max_capacity: Invalid relation '" + relation + "'.");
       relation = aliased_to;
    }
    relations[relation].max_capacity = cap;

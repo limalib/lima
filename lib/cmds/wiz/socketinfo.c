@@ -2,9 +2,11 @@
 
 //: COMMAND
 //$$ see: netstat
-// USAGE socketinfo
+// USAGE: ``socketinfo``
 //
 // Displays details of sockets
+//
+// .. TAGS: RST
 
 inherit CMD;
 

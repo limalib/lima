@@ -2,14 +2,16 @@
 
 //: COMMAND
 //$$ see: at
-// USAGE at <living> <command>
+// USAGE ``at <living> <command>``
 //
 // This command allows you to remotely perform a command
 // as if you were standing next to the person.
 //
-// at beek tickle beek
+// ``at beek tickle beek``
 //
 // Beek will see:  Zifnab tickles you.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

@@ -3,7 +3,7 @@
 // Simple cp, no -r yet.
 
 //: COMMAND
-// USAGE:  cp  <source> <destination>
+// USAGE:  ``cp  <source> <destination>``
 //
 // This command will allow you to copy files from source to
 // destination.  The source file must exist, the destination may or
@@ -13,27 +13,29 @@
 //
 // The optional flag f can be used to force it to overwrite -
 //
-// cp -f wizroom.c workroom.c
+// ``cp -f wizroom.c workroom.c``
 //
 // If you do not supply a full path name cp will assume that the
 // files will be in your current directory.
 //
-// cp wizroom.c workroom.c
+// ``cp wizroom.c workroom.c``
 //
 // I will now have a copy of wizroom.c named workroom.c in the
-//   current directory.
+// current directory.
 //
-// cp /domains/std/wizroom.c /wiz/zifnab/workroom.c
+// ``cp /domains/std/wizroom.c /wiz/zifnab/workroom.c``
 //
 // I now have a copy of wizroom.c in my home directory named workroom.c
 //
 // Like the *nix cp command, it can also be used with multiple source files
 //(eg using wildcard) provided the destination is a directory - eg
 //
-// cp s*.c /wiz/loriel/rooms/
+// ``cp s*.c /wiz/loriel/rooms/``
 //
 // This copies all files in current directory, which have a .c suffix, and
 //  which start with s, to the directory /wiz/loriel/rooms/.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

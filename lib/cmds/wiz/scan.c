@@ -2,10 +2,15 @@
 
 //: COMMAND
 // Wizard command "scan"
-// list the filenames of objects in an inventory.
-// optional flag -d for "deep" scan (ie recursive)
-// usage : "scan [-d]" to scan environment
-//         "scan [-d] ob" to scan object "ob"
+// USAGE: 
+//
+//  |  ``"scan [-d]" to scan environment``
+//  |  ``"scan [-d] ob" to scan object "ob"``
+//
+// List the filenames of objects in an inventory.
+// optional flag -d for "deep" scan (ie recrusive)
+//
+// .. TAGS: RST
 
 // Peregrin@ZorkMUD
 // Updated 1995/10/9 by Ohara,

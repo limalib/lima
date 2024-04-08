@@ -10,9 +10,8 @@
 #define WIZ_CHANNELS ({"wiz", "errors", "announce", "news"})
 
 void save_me();
-object query_shell_ob();
 
-varargs void receive_private_msg(string msg, object *exclude, int message_type, mixed other);
+varargs void receive_private_msg(string msg, int message_type, mixed other);
 
 private
 string *channel_list;
@@ -77,7 +76,7 @@ string *query_channel_list()
 
 void channel_rcv_string(string channel_name, string msg)
 {
-   receive_private_msg(msg);
+   receive_private_msg(msg, EMOJI_MSG);
 }
 
 void channel_rcv_soul(string channel_name, mixed *data)

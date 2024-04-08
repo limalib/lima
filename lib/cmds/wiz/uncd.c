@@ -3,9 +3,11 @@
 /* Beek: Nov 2 96 */
 
 //: COMMAND
-// USAGE: uncd
+// USAGE: ``uncd``
 //
 // Switch to previous working directory.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

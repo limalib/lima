@@ -11,6 +11,8 @@
 // Module designed to allow objects to follow other moving objects.
 // This module requires functionality from M_SMARTMOVE, M_TRIGGERS and
 // M_ACTIONS.
+//
+// .. TAGS: RST
 
 //: TODO
 //

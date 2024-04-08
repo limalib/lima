@@ -1,5 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+//: COMMAND
+// USAGE: ``smartmobs``
+//
+//  Shows what the mob is thinking about and where they are
+// located.
+//
+// .. TAGS: RST
+
 inherit CMD;
 
 private

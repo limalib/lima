@@ -1,12 +1,12 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: dataedit file
+// USAGE: ``dataedit file``
 //
-//'dataedit' allows you to edit .o files created by save_object(), without
+// ``dataedit`` allows you to edit .o files created by save_object(), without
 // having to directly edit the compressed form, and possibly make mistakes
 // causing the file to restore improperly.
-
+//
 // When you start up dataedit, the file is read, and the filename and variables
 // in the file appear at the top of the menu.  No changes are actually made on
 // disk until you exit with the 'q' command, or save the new version to a
@@ -15,44 +15,46 @@
 //
 // Here is a summary of the options available:
 //
-// d) Delete Variable:
+//   |  d) Delete Variable:
 //
 // Remove the specified variable and value.
 //
-// p) Print Expression:
+//   |  p) Print Expression:
 //
 // Print the value of a given expression.  The variables may be refered to
 // using '$varname'.  $$, or $ followed by an non-alphanumeric character
 // can be used to mean a literal $.
 //
-// q) Quit and Save:
+//   |  q) Quit and Save:
 //
 // Save the internal values to the file being edited, and quit.
 //
-// r) Rename Variable:
+//   |  r) Rename Variable:
 //
 // Create a new variable with the same value as an old variable, and delete
 // the old one.
 //
-// m) Merge Datafile:
+//   |  m) Merge Datafile:
 //
 // Merge values from another data file into the current datafile.  Arrays and
 // Mappings are merged by simply adding them; other values will produce mismatches
 // if the variable exists in both objects.  The original version is then kept.
 //
-// Q) Quit w/o Saving:
+//   |  Q) Quit w/o Saving:
 //
 // Quit, leaving the file on disk unmodified.
 //
-//=) Set Variable:
+//   |  =)  Set Variable:
 //
 // Set a variable (or define one, if it doesn't exist already) to a given value.
 // The value is any expression, as explained under Print Expression.
 //
-// s) Save as ...
+//   |  s) Save as ...
 //
 // Save the modified file under a new filename.  That filename becomes the
 // current filename.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

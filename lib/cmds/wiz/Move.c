@@ -3,14 +3,16 @@
 // Megaboz@ZorkMUD
 
 //: COMMAND
-// USAGE:  Move <object> <object>
+// USAGE:  ``Move <object> <object>``
 //
 // This command will move the first object into the second one,
 // both objects must be present in your environment.
 //
-// Move barney safe
+// ``Move barney safe``
 //
 //   This will put barney into the safe.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

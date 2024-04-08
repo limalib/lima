@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$see: rst
-// USAGE bk <filename>
+// USAGE ``bk <filename>``
 //
 // This command allows you to backup a file.
 // Given the argument, file, it assumes your current
@@ -14,6 +14,8 @@
 //
 // Also, if no ./bak/ directory exists, it automagically
 // creates one for you.
+//
+// .. TAGS: RST
 
 // 1998-Oct-13 : Halo@Timescapes        : Created.
 // 1999-Jan-28 : Rodney@Timescapes      : Updated date creation to be string, fixed

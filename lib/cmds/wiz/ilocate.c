@@ -1,11 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: ilocate <playername>
+// USAGE: ``ilocate <playername>``
 //
 // Sends out a "locate query" over intermud.
 // If the player is present another mud currently connected to intermud,
 // a reply is sent (subject to that mud's treatment of invisibility etc).
+//
+// .. TAGS: RST
 
 inherit CMD;
 

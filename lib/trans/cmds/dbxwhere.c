@@ -1,7 +1,12 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// See: dbx
+// USAGE: 
+//     ``dbxwhere [<who>]``
+//
+// Dump error stack for yourself or ``who``. See 'help dbx'.
+//
+// .. TAGS: RST
 
 /* Beek - 10/4/94 */
 /* ported to Zork 1/15/95 */

@@ -185,9 +185,6 @@ string emoji_replace(string input, int msg_type)
 {
    int replacements = -1;
 
-   if (msg_type & NO_WRAP || msg_type & NO_ANSI || msg_type & TREAT_AS_BLOB || msg_type & MSG_PROMPT)
-      return input;
-
    if (keys(emoji_map) == 0)
       return input;
 
@@ -204,4 +201,12 @@ string emoji_replace(string input, int msg_type)
       }
    }
    return input;
+}
+
+string *emoji_replace_array(string *input, int msg_type)
+{
+   string *out = ({});
+   foreach (string i in input)
+      out += ({emoji_replace(i, msg_type)});
+   return out;
 }

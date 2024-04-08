@@ -5,6 +5,16 @@
  * Tsath 2022/2023. Heavily inspired by frame layouts done by Diavolo@Merentha.
  */
 
+//: MODULE
+// This module creates fancy and colourful frames using unicode characters
+// and 256 colour based from XTERM256_D.
+//
+// .. TAGS: RST
+
+//: TODO
+// Styles and colours are hardcoded in here, and should be moved to admtool tool
+// or a config file.
+
 #define TRD 0  // Right down
 #define TH 1   // Horisontal
 #define THD 2  // Horisontal down
@@ -80,6 +90,8 @@ string use_colour(string *cols, int position, int width)
    return cols[col_index] != "" ? "<" + cols[col_index] + ">" : "";
 }
 
+//: FUNCTION set_style
+// Set a specific style if it exists.
 void set_style(string t)
 {
    style = t;
@@ -90,21 +102,30 @@ void set_style(string t)
       bits = styles[FALLBACK_STYLE];
 }
 
+//: FUNCTION query_frame_colour_themes
+// Returns a list of the frame colour themes available. The list is sorted alphabetically.
 string *query_frame_colour_themes()
 {
    return sort_array(keys(colours), 1);
 }
 
+//: FUNCTION valid_theme
+// Checks if string ``t`` is a valid theme, and returns 1 if it is, otherwise 0.
 int valid_theme(string t)
 {
    return member_array(t, query_frame_colour_themes()) != -1;
 }
 
+//: FUNCTION query_frame_styles
+// Returns all the implemented frame styles.
 string *query_frame_styles()
 {
    return keys(styles);
 }
 
+//: FUNCTION set_frame_left_header
+// Sets the frame into a mode where the header is not shown at the top,
+// but shown at the left side.
 void set_frame_left_header()
 {
    left_header = 1;
@@ -118,26 +139,36 @@ string colour_str(string t, string col)
    return "<" + col + ">" + t + "<res>";
 }
 
+//: FUNCTION title
+// Sets the title of the frame.
 string title(mixed t)
 {
    return colour_str("" + t, hcolours[COL_TITLE]);
 }
 
+//: FUNCTION accent
+// Takes a string and applies the accent colour to it.
 string accent(mixed t)
 {
    return colour_str("" + t, hcolours[COL_ACCENT]);
 }
 
+//: FUNCTION raw_accent
+// Returns the raw accent colour, i.e. the XXX number triplet.
 string raw_accent()
 {
    return hcolours[COL_ACCENT];
 }
 
+//: FUNCTION warning
+// Takes a string and applies the warning colour to it.
 string warning(mixed t)
 {
    return colour_str("" + t, hcolours[COL_WARNING]);
 }
 
+//: FUNCTION set_frame_title
+// Sets the frame title. Big surprise.
 void set_frame_title(string s)
 {
    if (XTERM256_D->colourp(s))
@@ -148,21 +179,30 @@ void set_frame_title(string s)
       title = s;
 }
 
+//: FUNCTION set_width
+// Sets the width of the frame. Minimum is 10, maximum is 1000. Other values will be capped.
 void set_width(int w)
 {
    width = clamp(w, 10, 1000);
 }
 
+//: FUNCTION set_title_margin
+// Sets the margin for the title. It's the space between the frame and the title.
 void set_title_margin(int hm)
 {
    title_margin = hm;
 }
 
+//: FUNCTION set_text_margin
+// Set the text margin.
 void set_text_margin(int tm)
 {
    text_margin = tm;
 }
 
+//: FUNCTION frame_init_user
+// Init the frame based on the user settings. This is normally always called before
+// the rendering to set the frame up correctly. See most commands using frames.
 void frame_init_user()
 {
    set_width(this_user()->query_screen_width() ? this_user()->query_screen_width() - 2 : 79);
@@ -175,6 +215,8 @@ void frame_init_user()
    left_header = 0;
 }
 
+//: FUNCTION set_frame_header
+// Set the frame header, works both vertically and horizontally.
 void set_frame_header(string hc)
 {
    string *header_lines;
@@ -200,22 +242,32 @@ void set_frame_header(string hc)
    add_header = 1;
 }
 
+//: FUNCTION set_frame_footer
+// Sets the frame footer.
 void set_frame_footer(string fc)
 {
    footer_content = fc;
    add_footer = 1;
 }
 
+//: FUNCTION set_frame_content
+// This is the main function to call for the main content of
+// the frame.
 void set_frame_content(string c)
 {
    content = c;
 }
 
+//: FUNCTION set_frame_hcolours
+// Inject the colour array raw into the frame. Don't call this unless you've read the source code
+// for M_FRAME.
 void set_frame_hcolours(string *hc)
 {
    hcolours = hc;
 }
 
+//: FUNCTION set_theme
+// Sets the frame theme.
 void set_theme(string t)
 {
    set_frame_hcolours(colours[t]);
@@ -451,21 +503,29 @@ varargs private string h_colours(string output, mixed colstring)
    return new_out;
 }
 
+//: FUNCTION query_frame_title
+// Returns the frame title.
 string query_frame_title(string theme)
 {
    return colours[theme][COL_TITLE];
 }
 
+//: FUNCTION query_frame_accent
+// Returns the frame accent colour given ``theme``.
 string query_frame_accent(string theme)
 {
    return colours[theme][COL_ACCENT];
 }
 
+//: FUNCTION query_frame_warning
+// Returns the frame warning colour given ``theme``.
 string query_frame_warning(string theme)
 {
    return colours[theme][COL_WARNING];
 }
 
+//: FUNCTION frame_demo_string
+// Returns a simple demo string.
 string frame_demo_string(string theme, int w)
 {
    return styles[style][TRD] + styles[style][TH] + styles[style][TH] + styles[style][TH] +
@@ -474,6 +534,8 @@ string frame_demo_string(string theme, int w)
           styles[style][TH] + styles[style][TLD];
 }
 
+//:FUNCTION frame_colour_demo
+// Do a frame colour demo using ``style`` using ``colour`` in width ``w``.
 string frame_colour_demo(string style, string colour, int w)
 {
    if (member_array(style, keys(styles)) == -1)
@@ -481,6 +543,8 @@ string frame_colour_demo(string style, string colour, int w)
    return h_colours(frame_demo_string(style, w), colours[colour]);
 }
 
+//: FUNCTION frame_render
+// Renders the final frame into a string for printing.
 string frame_render()
 {
    string out = "";

@@ -413,6 +413,57 @@ string random_item_short()
    return example.ids[0];
 }
 
+string ask_about_items(string item)
+{
+   int *keys = ({});
+   int num, item_lng, cost_lng, i;
+   string *item_names = ({});
+   string *cost_names = ({});
+   string out = "";
+   float exchange_rate;
+   currency_type = DOMAIN_D->query_currency();
+   exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
+
+   foreach (int key in keys(stored_items))
+   {
+      if (member_array(item, stored_items[key].ids) != -1 || strsrch(stored_items[key].short, item) != -1)
+      {
+         keys += ({key});
+      }
+   }
+
+   foreach (int key in keys)
+   {
+      if (clear_numbers)
+         cost_names += ({"" + pround(selling_cost(to_float(stored_items[key].value)) / (exchange_rate || 1), 2)});
+      else
+         cost_names += ({MONEY_D->currency_to_string(
+             selling_cost(to_float(stored_items[key].value)) / (exchange_rate || 1), currency_type)});
+
+      if (cost_lng < strlen(cost_names[ < 1]))
+         cost_lng = strlen(cost_names[ < 1]);
+
+      item_names += ({stored_items[key].short});
+      if (item_lng < strlen(item_names[ < 1]))
+         item_lng = strlen(item_names[ < 1]);
+   }
+
+   item_lng += 3;
+
+   switch (sizeof(keys))
+   {
+   case 0:
+      return "I don't sell anything like that.";
+   case 1:
+      num = stored_items[keys[0]].amount;
+      return "I have " + (num != -1 ? "" + num : "many") + " " + (num != 1 ? pluralize(item_names[0]) : item_names[0]) +
+             " for sale for " + cost_names[0] + ". " + replace_string(stored_items[keys[0]].long, "\n", " ");
+   default:
+      item_names = map(item_names, ( : add_article($1) :));
+      return "I have both " + format_list(item_names) + ". Which one of those are you interested in?";
+   }
+}
+
 //: FUNCTION query_items
 // gets called from the verb ask and the rule ask obj about str
 // The player commands buy and list use it too.
@@ -431,21 +482,16 @@ mixed query_items(string item, int flag)
    exchange_rate = to_float(MONEY_D->query_exchange_rate(currency_type));
 
    if (sizeof(stored_items) == 0 || !for_sale)
-   {
       return 0;
-   }
+
    if (item == "all")
-   {
       keys = keys(stored_items);
-   }
    else
    {
       foreach (int key in keys(stored_items))
       {
          if (member_array(item, stored_items[key].ids) != -1 || strsrch(stored_items[key].short, item) != -1)
-         {
             keys += ({key});
-         }
       }
    }
    if (sizeof(keys) == 0)
@@ -479,9 +525,8 @@ mixed query_items(string item, int flag)
    foreach (int key in keys)
    {
       num = stored_items[key].amount;
-      out += sprintf("   %-7d %-10s %-" + item_lng + "s %" + cost_lng + "s\n",
-                     key,
-                     num != -1 ? "" + num : "Many", item_names[i], cost_names[i]);
+      out += sprintf("   %-7d %-10s %-" + item_lng + "s %" + cost_lng + "s\n", key, num != -1 ? "" + num : "Many",
+                     item_names[i], cost_names[i]);
 
       if (flag)
          out += stored_items[key].long;

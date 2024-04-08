@@ -109,7 +109,7 @@ nomask void subscribe_group(string group)
 /* Check to see if the group is subscribed to */
 nomask int check_subscribed(string group)
 {
-   return news_data[group][0] == '#' ? 0 : 1;
+   return news_data[group] ? (news_data[group][0] == '#' ? 0 : 1) : 0;
 }
 
 /* Return a list of all subscribed groups.  Possibly this should be removed

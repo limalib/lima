@@ -3,14 +3,18 @@
 /* Megaboz's attempt at a home cmd  4-23-94 */
 
 //: COMMAND
-// USAGE:  home
-//         home <wizard name>
+// USAGE:  
+//
+//      |  ``home``
+//      |  ``home <wizard name>``
 //
 // This command will take you to your workroom assuming that there is
 // a file called workroom.c in your home directory.
 // If you do not have a workroom you will be placed in a "virtual"
 // temporary workroom.
 // You can also go to another wizards workroom by home <wizard's name>,
+//
+// .. TAGS: RST
 
 #include <playerflags.h>
 

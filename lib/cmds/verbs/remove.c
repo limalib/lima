@@ -7,10 +7,12 @@
 //
 
 //: COMMAND
-// Remove a post from a bulletin board
-// Remove equipment
-// Remove other things
-// See also: boards
+// Remove a post from a bulletin board, remove equipment, remove other things.
+// 
+//  |  ``remove helmet``
+//  |  ``remove all``
+//
+// .. TAGS: RST
 
 inherit VERB_OB;
 

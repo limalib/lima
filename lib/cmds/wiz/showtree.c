@@ -5,27 +5,31 @@
 inherit CMD;
 
 //: COMMAND
-// USAGE: showtree <function name> <object>
-//        showtree <object>
+// USAGE: 
+//
+//  |  ``showtree <function name> <object>``
+//  |  ``showtree <object>``
 //
 // Displays the location(s) of the specified function in the specified
 // object, together with any intermediate inheritance.
 //
 // If used without function nams, it displays the full inheritance tree.
 //
-//>showtree long here
+// >``showtree long here``
 //
-// Tracing definitions of long in /domains/std/Wizroom.c
-/// domains/std/Wizroom.c
-//  /std/indoor_room.c
-//    /std/base_room.c
+// Tracing definitions of long in */domains/std/Wizroom.c*
+// */domains/std/Wizroom.c*
+//  */std/indoor_room.c*
+//    */std/base_room.c*
 //      [defined]
-//      /std/container.c
+//      */std/container.c*
 //        [defined]
-//        /std/object.c
-//          /std/base_obj.c
-//            /std/object/description.c
+//        */std/object.c*
+//          */std/base_obj.c*
+//            */std/object/description.c*
 //              [defined]
+//
+// .. TAGS: RST
 
 varargs string print_tree(string file, string func, int indent)
 {

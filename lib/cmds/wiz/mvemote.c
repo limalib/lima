@@ -1,11 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: mvemote <target> <destination>
+// USAGE: ``mvemote <target> <destination>``
 //
 // Moves (ie renames) the specified soul to the specified destination.
 //
 // NOTE This is admin-only.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

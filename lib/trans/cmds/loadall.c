@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: loadall <dir>
+// USAGE: ``loadall <dir>``
 //
 // Removes and reloads all the files in a specified directory
+//
+// .. TAGS: RST
 
 /* To help with conversion testing */
 #include <mudlib.h>

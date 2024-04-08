@@ -2,10 +2,14 @@
 
 //: COMMAND
 //$$ see: who, people
-// USAGE where
-//      where <name1>, <name2> etc
+// USAGE 
+//
+//    |  ``where``
+//    |  ``where <name1>, <name2> etc``
 //
 // Displays where the targets are - filenames and short names of their environment.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

@@ -1,16 +1,18 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE:  which <cmd>
+// USAGE:  ``which <cmd>``
 //
 // This command will show you the path to the command you supply.
 //
 // Useful to see if you are executing a command out of your
 // directory or the real command.
 //
-// which ls
+// ``which ls``
 //
 // ls found in: /trans/cmds/
+//
+// .. TAGS: RST
 
 inherit CMD;
 

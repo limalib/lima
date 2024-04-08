@@ -4,14 +4,16 @@
 //  Created by Rust, Jul 10, 1995
 
 //: COMMAND
-// USAGE grep [-inv] <target> <files>
+// USAGE ``grep [-inv] <target> <files>``
 //
 // Locates and displays lines matching specified pattern within specified files.
 //
-// Flags :
-//-i for case insensitive comparison
-//-n to display line numbers
-//-v to invert slection - ie display lines NOT matching.
+// Flags:
+// 
+//   | -i for case insensitive comparison
+//   | -n to display line numbers
+//   | -v to invert slection - ie display lines NOT matching.
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_REGEX;

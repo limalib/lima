@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: heal <playername>
+// USAGE: ``heal <playername>``
 //
 // Completely heals the targetted player.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

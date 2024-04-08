@@ -3,11 +3,13 @@
 // This could print a tree, but that would take effort. -- Rust
 
 //: ADMINCOMMAND
-// USAGE: snoops
+// USAGE: ``snoops``
 //
 // Displays a list of wizards currently snooping, together with their targets.
 //
 // Admin only
+//
+// .. TAGS: RST
 
 inherit CMD;
 

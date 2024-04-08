@@ -4,13 +4,15 @@
 // By Beek - derived from codefor, which was derived from eval
 
 //: COMMAND
-// USAGE: treefor <lpc expression>
+// USAGE: ``treefor <lpc expression>``
 //
 // Shows the driver's internal representation of the expression.
 //
-//>treefor int x; int y; return x+y;
+// >``treefor int x; int y; return x+y;``
 //
 //(return ("binary op" "+" ("opcode_1" "local" 0)("opcode_1" "local" 1)))
+//
+// .. TAGS: RST
 
 inherit CMD;
 

@@ -5,12 +5,14 @@
 //
 
 //: ADMINCOMMAND
-// USAGE: removeguest <name>
+// USAGE: ``removeguest <name>``
 //
 // This command removes a guest from to the guestlist for when the mud
 // does not allow new players
 //
 // Admin only
+//
+// .. TAGS: RST
 
 #include <log.h>
 

@@ -18,9 +18,9 @@
 //       add_test_true("Some test",(: my_test:));
 //    }
 //
-// If you use ``add_test_true()`` the function succeeds if it returns 1 (anything that evaluates to true), and fails on 0.
-// If you use ``add_test_fail()``, quite the opposite. This allows both to assume something fails
-// and something succeeds.
+// If you use ``add_test_true()`` the function succeeds if it returns 1 (anything that evaluates to true), and fails on
+// 0. If you use ``add_test_fail()``, quite the opposite. This allows both to assume something fails and something
+// succeeds.
 //
 // The test can be run by doing:
 //
@@ -79,7 +79,7 @@ void do_debug(int d)
 
 int debug(string s)
 {
-   if (debug)
+   if (debug == 1)
       write(s);
 }
 
@@ -190,7 +190,6 @@ varargs int inv_do(object who, string doo, string what, string check, int fail_o
    return 1;
 }
 
-
 //: FUNCTION add_test_true
 // Add a test to the queue that should be considered successful if it returns a value evaluating to true.
 //  .. code-block:: c
@@ -221,19 +220,28 @@ void run_tests()
    {
       string eval = t.assertion ? " True" : "False";
       string out;
-      string test_out = replace_string(replace_string(sprintf("%O", t.f), "(:", ""), ":)", "");
+      string test_out = sprintf("%O", t.f);
       t = run_test(t);
 
-      if (debug)
-         out = on_off_widget(t.result) + sprintf(" <110>%-40.40s<res> Assertion: %-5.5s [%s]", t.desc, eval, test_out);
-      else
-         out = on_off_widget(t.result) + sprintf(" <110>%-40.40s<res>", t.desc);
-      write(out);
+      if (debug == 1)
+         write(on_off_widget(t.result) + sprintf(" <110>%-40.40s<res> Assertion: %-5.5s %s", t.desc, eval, test_out));
+      else if (debug == 0)
+         write(on_off_widget(t.result) + sprintf(" <110>%-40.40s<res>", t.desc));
       if (t.result)
          success++;
       else
          fail++;
    }
+}
+
+int query_success()
+{
+   return success;
+}
+
+int query_fail()
+{
+   return fail;
 }
 
 void create()

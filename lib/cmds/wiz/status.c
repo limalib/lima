@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: status
+// USAGE: ``status``
 //
 // Displays detailed info on system resources used.
+//
+// .. TAGS: RST
 
 #define DELIM write(repeat_string("-", 70) + "\n")
 

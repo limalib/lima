@@ -24,15 +24,11 @@ inherit M_DAEMON_DATA;
 private
 void continue_scan();
 private
-void prepare_ingame_pages();
-private
 int last_time;
 private
 mixed *files_to_do;
 private
 mixed *dirs_to_do;
-private
-string *ingame_files;
 
 private
 void delete_directory(string directory)
@@ -54,7 +50,7 @@ private
 void make_directories()
 {
    /* Assume that if the filesize is -1 that a directory needs to be created */
-   string *directories = ({"api", "daemon", "command", "player_command", "module", "mudlib", "verb", "ingame"});
+   string *directories = ({"api", "daemon", "command", "player_command", "module", "mudlib", "verb"});
 
    if (file_size(RST_DIR) == -1)
       mkdir(RST_DIR);
@@ -80,7 +76,6 @@ void scan_mudlib()
    {
       make_directories();
    }
-   prepare_ingame_pages();
    continue_scan();
 }
 
@@ -90,7 +85,6 @@ void scan_mudlib()
 void complete_rebuild()
 {
    last_time = 0;
-   prepare_ingame_pages();
    scan_mudlib();
 }
 
@@ -149,8 +143,6 @@ string command_link(string cmd, string type, int same_level)
       return "`" + cmd + " <" + (same_level ? "" : "mudlib/") + cmd + ".html>`_";
    if (type == "api")
       return "`" + cmd + " <" + (same_level ? "" : "api/") + cmd + ".html>`_";
-   if (type == "ingame")
-      return "`" + cmd + " <" + (same_level ? "../ingame/" : "ingame/") + cmd + ".html>`_";
 }
 
 void process_file(string fname)
@@ -213,7 +205,8 @@ void process_file(string fname)
    {
       rstout = file_info[FILE_PRETTY];
       rstout += repeat_string("*", strlen(file_info[FILE_PRETTY])) + "\n\n";
-      rstout += "Documentation for the " + file_info[FILE_NAME] + " " + file_info[FILE_TYPE] + " in *" + fname + "*.\n\n";
+      rstout +=
+          "Documentation for the " + file_info[FILE_NAME] + " " + file_info[FILE_TYPE] + " in *" + fname + "*.\n\n";
    }
 
    len = sizeof(lines);
@@ -336,11 +329,11 @@ void process_file(string fname)
 
    if (sizeof(cmd_info) > 0)
    {
-      string cfunch = file_info[FILE_TYPE] == "player command" ? "Player Command" : "Command";
+      string cfun = file_info[FILE_TYPE] == "player command" ? "Player Command" : "Command";
       int todoi = 1;
       int usage = 0;
 
-      rstout += cfunch + "\n" + repeat_string("=", strlen(cfunch)) + "\n\n";
+      rstout += cfun + "\n" + repeat_string("=", strlen(cfun)) + "\n\n";
       foreach (string cinf in cmd_info)
       {
          if (strlen(cinf) > 2 && (cinf[0..6] == "$$ see:" || cinf[0..5] == "$$see:"))
@@ -351,10 +344,7 @@ void process_file(string fname)
             {
                s = trim(s);
                // Might be a link to a help page
-               if (member_array(s, ingame_files) != -1)
-                  rstout += command_link(s, "ingame", 1) + " ";
-               else
-                  rstout += command_link(s, file_info[FILE_TYPE], 1) + " ";
+               rstout += command_link(s, file_info[FILE_TYPE], 1) + " ";
             }
             rstout += "\n\n";
          }
@@ -396,9 +386,9 @@ void process_file(string fname)
 
    if (sizeof(c_functions) > 0)
    {
-      string cfunch = "Functions";
+      string cfun = "Functions";
 
-      rstout += cfunch + "\n" + repeat_string("=", strlen(cfunch)) + "\n";
+      rstout += cfun + "\n" + repeat_string("=", strlen(cfun)) + "\n";
       foreach (string cfunc in c_functions)
       {
          rstout += cfunc;
@@ -439,18 +429,6 @@ void process_file(string fname)
       rm(rstfile);
       write_file(rstfile, rstout);
       printf("%s written to %s ...\n", fname, rstfile);
-   }
-}
-
-void prepare_ingame_pages()
-{
-   string *files = filter_array(get_dir("/help/player/*", -1), ( : $1[1] != -2 :));
-   ingame_files = ({});
-
-   foreach (mixed *file in files)
-   {
-      cp("/help/player/" + file[0], RST_DIR + "/ingame/" + file[0] + ".rst");
-      ingame_files += ({file[0]});
    }
 }
 
@@ -505,10 +483,6 @@ void write_indices()
    /* API index */
    files = get_dir(RST_DIR + "/mudlib/*.rst");
    make_index("Mudlib", "mudlib", files, RST_DIR + "/Mudlib.rst");
-
-   /* API index */
-   files = get_dir(RST_DIR + "/ingame/*.rst");
-   make_index("In game help files", "ingame", files, RST_DIR + "/Ingame.rst");
 
    cp("/USAGE", RST_DIR + "/Usage.rst");
 }

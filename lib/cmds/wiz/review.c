@@ -5,12 +5,14 @@
 
 //: COMMAND
 //$$ see: m_messages, msg
-// USAGE:  review
-//        review < playername >
+// USAGE:  
+//
+//    |  ``review``
+//    |  ``review < playername >``
 //
 // This command with no arguments will show you all your messages.
 // It can also be used to display the messages of another player,
-// by using "review <name>" where <name> is that player's name (lower case).
+// by using ``review <name>`` where <name> is that player's name (lower case).
 //
 // review
 //
@@ -24,6 +26,8 @@
 // vis: [$N $vfade into view.] You fade into view.
 // invis: [$N $vfade from view.] You fade from view.
 // menter: [$N $vappear in a puff of smoke.] You appear in a puff of smoke.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_MESSAGES;

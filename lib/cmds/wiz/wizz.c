@@ -4,9 +4,11 @@
 
 //: COMMAND
 //$$ see: goto, trans
-// USAGE wizz
+// USAGE ``wizz``
 //
 // This command returns you to the "wiz room" from anywhere on the mud.
+//
+// .. TAGS: RST
 
 #include <move.h>
 

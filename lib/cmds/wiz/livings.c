@@ -3,9 +3,11 @@
 // Tsath @ Nuke 2, 2020
 
 //: COMMAND
-// USAGE livings
+// USAGE ``livings``
 //
 // Give a count of living things (not players) on the MUD grouped by filename.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

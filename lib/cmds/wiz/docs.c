@@ -25,6 +25,8 @@ void main(mixed arg)
 {
    object ob;
    string *help_pages;
+   string *next_files = ({});
+
    int rst_files, md_files, other_files;
    mapping rst_categories = ([]);
    mapping rst_tag_cats = ([]);
@@ -46,18 +48,35 @@ void main(mixed arg)
             rst_tag_cats[parts[2]] = 0;
          if (member_array(f, rst_tags) != -1)
             rst_tag_cats[parts[2]]++;
+         else if (arg == parts[2])
+            next_files += ({f});
       }
    }
+
+   next_files = sort_array(next_files, 1);
 
    // Print overall file counts
    rst_files = sizeof(filter_array(help_pages, ( : $1[ < 4..] == ".rst" :)));
    md_files = sizeof(filter_array(help_pages, ( : $1[ < 3..] == ".md" :)));
    other_files = sizeof(help_pages) - md_files - rst_files;
-   write("                           Rst files: " + rst_files + "    MD files: " + md_files + "    Other files: " + other_files + "\n");
+   write("                           Rst files: " + rst_files + "    MD files: " + md_files +
+         "    Other files: " + other_files + "\n");
 
    // Print categories
    foreach (string cat, int val in rst_categories)
    {
-      write(sprintf("[%3.3s/%3.3s] %15.15s %s", "" + rst_tag_cats[cat], "" + val, cat, green_bar(rst_tag_cats[cat], val, width)));
+      write(sprintf("[%3.3s/%3.3s] %15.15s %s", "" + rst_tag_cats[cat], "" + val, cat,
+                    green_bar(rst_tag_cats[cat], val, width)));
+   }
+
+   if (sizeof(next_files))
+   {
+      if (sizeof(next_files) > 10)
+         next_files = next_files[0..9];
+      write("Next "+sizeof(next_files)+" files in " + arg + " category:\n");
+      foreach (string f in next_files)
+      {
+         write("  - "+f);
+      }
    }
 }

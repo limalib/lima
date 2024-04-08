@@ -3,13 +3,15 @@
 // Rust/Belboz
 
 //: COMMAND
-// USAGE:  pwd
+// USAGE:  ``pwd``
 //
 // Shows you what directory you are currently "in".
 //
-// pwd
+// ``pwd``
 //
-//  /wiz/zifnab/obj
+//  */wiz/zifnab/obj*
+//
+// .. TAGS: RST
 
 inherit CMD;
 

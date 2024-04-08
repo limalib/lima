@@ -1,10 +1,12 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE discuss <thing>
+// USAGE ``discuss <thing>``
 //
 // Invokes the annotation menu, allowing annotations to be added to objects,
 // and subsequently viewed and deleted.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

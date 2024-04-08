@@ -6,8 +6,13 @@ inherit CMD;
 #define MIN_LEN 3
 
 //: COMMAND
+// Usage
+//    ``apropos <string>``
+//
 // Returns information on which mudlib functions contain the
 // keyword passed, including a short description.
+//
+// .. TAGS: RST
 
 // Generate a category for a given file.
 string generate_category(string file)

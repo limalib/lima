@@ -5,6 +5,12 @@ Jezu @ LIMA July 6, 2023
 
 */
 
+//: ADMINCOMMAND
+//USAGE: ``master``
+//
+//  Reload the master object.
+//
+//  .. TAGS: RST
 
 #include <mudlib.h>
 

@@ -4,9 +4,11 @@
 
 //: COMMAND
 //$$ see: invis
-// USAGE: vis
+// USAGE: ``vis``
 //
 // This command will let you turn visible to players
+//
+// .. TAGS: RST
 
 #include <daemons.h>
 #include <setbit.h>

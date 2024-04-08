@@ -2,18 +2,20 @@
 
 //: COMMAND
 //$$ see: didlog
-// USAGE:  I <string>
+// USAGE  
+//       ``I <string>``
 //
 // This command produces the "did" log when you first log on.
 // The use of thes command allows you to let other wizards
 // know about any changes or additions that you made to the mud.
 //
-// I started adding help files for some wiz cmds
+//     ``I started adding help files for some wiz cmds``
 //
 // When logging in next time you (and other wizards) will see:
 //
-// Wed Aug 23 17:48:49 1995: Zifnab started adding help files for some wiz
-// cmds
+// Wed Apr 3 17:48:49 2024: Asmerian started adding help files for some wiz cmds
+//
+// .. TAGS: RST
 
 #include <daemons.h>
 

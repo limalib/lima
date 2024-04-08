@@ -6,6 +6,8 @@
 // Fluids can never be 'gotten'.
 // Most containers leak.  Inherit this module into
 // your container so that it will fill and pour.
+//
+// .. TAGS: RST
 
 int query_max_capacity();
 string the_short();
@@ -30,7 +32,7 @@ varargs int can_hold_fluid(mixed ob)
    return 1;
 }
 
-// ### Incompletelly implemented.
+// ### Incompletely implemented.
 void set_fluid_only(mixed x)
 {
    fluid_only = x;

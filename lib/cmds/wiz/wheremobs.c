@@ -3,9 +3,11 @@
 // Tsath @ Nuke 2, 2020
 
 //: COMMAND
-// USAGE wheremobs
+// USAGE ``wheremobs``
 //
 // Where are the mobs?
+//
+// .. TAGS: RST
 
 inherit CMD;
 

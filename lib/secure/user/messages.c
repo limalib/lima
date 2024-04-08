@@ -5,7 +5,8 @@ private
 nosave mapping translations = (["RESET":""]);
 private
 mapping colours;
-
+private
+int debug;
 void save_me();
 object query_shell_ob();
 int *query_window_size();
@@ -16,6 +17,12 @@ void set_screen_width(int width)
 {
    screen_width = width;
    this_user()->save_me();
+}
+
+int set_output_debug(int d)
+{
+   debug = d;
+   return debug;
 }
 
 int query_screen_width()
@@ -172,15 +179,11 @@ void do_receive(string msg, int msg_type)
       msg += "\n";
    }
 
-   // Handle Emoji replacement if turned on for this player.
-   if (msg_type & NO_ANSI)
-   {
-      receive(msg);
-      return;
-   }
-   else if (query_shell_ob() && query_shell_ob()->get_variable("emoji") == 1)
+   if ((msg_type & EMOJI_MSG) && query_shell_ob() && query_shell_ob()->get_variable("emoji") == 1)
       msg = EMOJI_D->emoji_replace(msg, msg_type);
 
+   if (debug)
+      msg = "[Debug: " + msg_type + "]\n" + msg;
    receive(msg);
 }
 

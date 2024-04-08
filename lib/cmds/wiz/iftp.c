@@ -7,9 +7,11 @@
 */
 
 //: COMMAND
-// USAGE iftp <mudname>
+// USAGE ``iftp <mudname>``
 //
 // Invokes the intermud ftp client.
+//
+// .. TAGS: RST
 
 inherit CMD;
 inherit M_COMPLETE;

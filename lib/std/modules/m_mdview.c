@@ -50,7 +50,7 @@ string md_format(string *file, string searchtext)
    foreach (string line in file)
    {
       if (!lines)
-         line = "<bld>[Markdown file: <220>" + upper_case(line[2..]) + "<res><bld>]<res>";
+         line = "<bld>[Markdown file: <220>" + line[2..] + ".md<res><bld>]<res>";
 
       if (is_synopsis(line))
       {

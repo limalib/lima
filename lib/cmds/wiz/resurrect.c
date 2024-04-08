@@ -1,10 +1,14 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE resurrect <playername>
-//       resurrect me!myself
+// USAGE
+// 
+//  |  ``resurrect <playername>``
+//  |  ``resurrect me!myself``
 //
 // Brings a dead player back to life
+//
+// .. TAGS: RST
 
 inherit CMD;
 

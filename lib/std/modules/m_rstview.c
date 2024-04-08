@@ -229,9 +229,9 @@ string reformat_see(string line)
 {
    // ## Ack! My deepest apoligies for this one. Let me know if you figure out what it does, I might have a job for you.
    return "<227>See<res>: " +
-          format_list(map(filter_array(explode(line, " "), (
-                                                               : $1[0] != '<'
-                                                               :)),
+          format_list(map(filter_array(explode(replace_string(line, "Command: ", ""), " "), (
+                                                                                                : $1[0] != '<'
+                                                                                                :)),
                           (
                               : $1[1..]
                               :))[1..]) +
@@ -299,17 +299,21 @@ string rst_format(string *file, string searchtext)
          continue;
       }
 
+      // If we have a pipe in the first empty space, trim it out, don't touch the rest.
+      if (strlen(line) > 3 && strlen(trim(line)) > 0 && trim(line)[0] == '|')
+         line = "<066>"+implode(explode(line, "|")[1..], "|")+"<res>";
+
       line = replace_italic(line); // Handles *italic* markers
       line = replace_inv(line);    // Handles `` markers
       if (searchtext)
-         line = replace_string(line, searchtext, "<010>" + searchtext + "<res>");
+         line = replace_string(line, searchtext, "<010> " + searchtext + "<res>");
       output += ({line});
       lines++;
    }
 
    out = implode(output, "\n");
-   out = replace_string(out, "\n\n", "\n");
-   return out;
+   out = replace_string(out, "\n\n\n", "\n\n");
+   return out + "<res>";
 }
 
 //: FUNCTION rst_format_file

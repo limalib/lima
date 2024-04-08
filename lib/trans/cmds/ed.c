@@ -1,7 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE:  ed [ filename ]
+// USAGE:  ``ed [ filename ]``
 //
 // The mud file editor.
 // With no file name supplied, the last file editted will be edited again.
@@ -9,6 +9,8 @@
 // then your ed prompt.
 //
 // Help for ed commands is available from within ed itself.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

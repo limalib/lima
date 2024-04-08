@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: halt
+// USAGE: ``halt``
 //
 // Stops all combat in the room
+//
+// .. TAGS: RST
 
 inherit CMD;
 

@@ -1,7 +1,12 @@
 /* Do not unwield the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// Unwield equipment
+// Unwield equipment that you are wielding.
+//
+//  |  ``unwield sword``
+//  |  ``unwield all``
+//
+// .. TAGS: RST
 
 inherit VERB_OB;
 

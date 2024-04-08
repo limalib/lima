@@ -1,12 +1,14 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE:  date
+// USAGE:  ``date``
 //
 // Displays the current date and time.  To display the date with your
 // current time, use the 'timezone' command.
 //
 //[ note: The timezone command is not currently available. ]
+//
+// .. TAGS: RST
 
 inherit CMD;
 

@@ -4,20 +4,24 @@
 
 //: COMMAND
 //$$ see: wizz, trans
-// USAGE: goto <player>
-//       goto <room>
+// USAGE: 
+//
+//     |``goto <player>``
+//     |  ``goto <room>
 // The goto command is a simple method of teleportation which can move you
 // either to a specific room or to whatever room a certain player is in.
 //
 // If the room is in your current directory,
 // the filename indicates the destination.
 //
-// eg	goto workroom.c
+// eg	``goto workroom.c``
 //
 // If the room is not in your current directory,
 // the full path (/directory/filename) format should be used.
 //
-// eg	goto /wiz/azy/workroom.c
+// eg	``goto /wiz/azy/workroom.c``
+//
+// .. TAGS: RST
 
 #include <move.h>
 #include <security.h>

@@ -6,9 +6,11 @@
 
 //: COMMAND
 //$$ see: treefor
-// USAGE: codefor <lpc expression>
+// USAGE: ``codefor <lpc expression>``
 //
 // Displays a "disassembly" of the LPC expression.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

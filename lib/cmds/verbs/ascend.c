@@ -4,6 +4,16 @@
  * Written by Tigran, September 7, 2000
  */
 
+//: COMMAND
+// USAGE
+//
+//  |  ``ascend`` - if there's only one thing to ascend
+//  |  ``ascend the grand staircase``
+//
+// Go down something that can be ascended.
+//
+// .. TAGS: RST
+
 inherit VERB_OB;
 
 void do_ascend_obj(object ob)

@@ -3,10 +3,12 @@
 /* todo.c -- log todos */
 
 // COMMAND
-// USAGE todo
+// USAGE ``todo``
 //
 // Invokes the reporting system for "todos" - enters an editor allowing you
 // to post to the todo newsgroup (or file, depending on configuration).
+//
+// .. TAGS: RST
 
 inherit CMD;
 
