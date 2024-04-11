@@ -16,10 +16,8 @@ void setup()
              "from the open kitchen waft through the air, inviting patrons to indulge in a diverse menu of "
              "cosmic-inspired dishes and innovative beverages that are truly out of this world.");
 
-   add_item("sign", (["look":"Please ask biff about (swords, keys, etc),\n"
-                             "       buy (sword or sword #) from biff,\n"
-                             "       sell (sword, first sword etc) to biff.\n",
-                        "read":"Something will be here soon!", ]));
+   add_item("menu", (["look":"Use 'list' to look at the menu.\nOr 'ask employee about pizza'",
+                        "read":"Use 'list' to see the menu.", ]));
 
    set_objects((["../../npc/floor8/cafe_employee.c":1]));
    set_exits((["west":"e_cafe1", "south":"e_hall1"]));

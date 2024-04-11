@@ -18,8 +18,8 @@ void setup()
    set_name(name);
    add_id("employee");
    set_proper_name(name);
-   set_in_room_desc(name+" the Stellar Bites employee is smiling at you from behind the counter.");
-   set_long(name+" wears that typically fake smile today.");
+   set_in_room_desc(name + " the Stellar Bites employee is smiling at you from behind the counter.");
+   set_long(name + " wears that typically fake smile today.");
 
    /* Determines what type of currency we'll use */
    set_currency_type("credit");
@@ -34,7 +34,9 @@ void setup()
       filename : #
       if # is set to -1, it will sell an infinite # of that item
    */
-   set_sell((["^std/apple":-1, "^std/weapon/sword":3, "^std/ale":-1, ]));
+   set_sell((["^common/consumable/vegan_astro_wrap":-1,
+                   "^common/consumable/pizza_slice":-1, "^common/consumable/blueberry_muffin":10,
+              "^common/consumable/chocolate_muffin":10, ]));
 
    /* We would set this so that the vendor stores weaps/armour in a storage
       room.  See help on set_unique_inventory.  storage.c in the rooms subdir has
