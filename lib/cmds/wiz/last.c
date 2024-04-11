@@ -81,7 +81,8 @@ void main(mixed *arg, mapping flags)
    times = filter(LAST_LOGIN_D->query_times(), ( : $1[0] >= $(minimum) && $1[0] <= $(maximum) :));
 
    if (!flags["s"])
-      outf("%d users. %s to %s.\n%s", sizeof(times), ctime(minimum), ctime(maximum), simple_divider());
+      outf("%d users. %s to %s.\n%s", sizeof(times), minimum == 0 ? "From the beginning of time" : ctime(minimum),
+           ctime(maximum), simple_divider());
 
    if (!flags["s"] && count && sizeof(times) > count)
       outf("... skipping %d users.\n", sizeof(times) - count);

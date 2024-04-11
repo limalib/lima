@@ -1,9 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// Usage: replace <str1> <str2> <file>
+// Usage: ``replace <str1> <str2> <file>``
 //
 // replaces all the instances of str1 with str2 in file(s)
+//
+// .. TAGS: RST
 
 inherit M_GLOB;
 inherit CMD;

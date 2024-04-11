@@ -1,11 +1,13 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// Usage: renew <object>
+// Usage: ``renew <object>``
 //
 // Takes the specified cloned object, dests it, updates its base
 // file (NOT its inherits), reclones it and replaces it to its
 // original environment.
+//
+// .. TAGS: RST
 
 #include <commands.h>
 

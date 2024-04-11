@@ -1,13 +1,17 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: locate <target>
-//        locate -u
+// USAGE: 
+//
+//     |  ``locate <target>``
+//     |  ``locate -u``
 //
 // Find any file containing the specified target within its name.
 //
 // The system relies on a database of filenames for speed.
 // To rebuild that database, use a -u flag.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

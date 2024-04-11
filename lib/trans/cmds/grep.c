@@ -13,6 +13,7 @@
 //   | -i for case insensitive comparison
 //   | -n to display line numbers
 //   | -v to invert slection - ie display lines NOT matching.
+//
 // .. TAGS: RST
 
 inherit CMD;

@@ -6,12 +6,16 @@
 inherit CMD;
 
 //: COMMAND
-// USAGE : more <object(s)>
-//         more <filename(s)>
+// USAGE : 
+//
+//       |  ``more <object(s)>``
+//       |  ``more <filename(s)>``
 //
 //  Prints out the lines of a file
-
+//
 // we will recieve  : ({ array of files })
+//
+// .. TAGS: RST
 
 private
 void main(mixed *arg, mapping flags, string stdin)

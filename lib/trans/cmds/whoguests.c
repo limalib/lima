@@ -5,12 +5,14 @@
 //
 
 //: COMMAND
-// USAGE: whoguests
+// USAGE: ``whoguests``
 //
 //  This command lists the names of guests allowed for when the mud
 //  does not allow new players
 //
 // Admin only
+//
+// .. TAGS: RST
 
 #include <log.h>
 

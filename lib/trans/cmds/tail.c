@@ -1,11 +1,15 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: tail <file(s)>
-//        tail -n<number> <files>
+// USAGE: 
+//
+//     |  ``tail <file(s)>``
+//     |  ``tail -n<number> <files>``
 //
 //  Prints out the last few lines of a file.
 // Optional -n flag for number of lines to display (default 10).
+//
+// .. TAGS: RST
 
 #include <mudlib.h>
 inherit CMD;

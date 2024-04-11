@@ -5,9 +5,11 @@
 
 //: COMMAND
 //$$ see: snoop, snoops
-// USAGE: unsnoop <user>
+// USAGE: ``unsnoop <user>``
 //
 // Stops snooping the target.
+//
+// .. TAGS: RST
 
 #include <log.h>
 

@@ -5,9 +5,11 @@
 
 //: COMMAND
 //$$ see: addpath, rmpath
-// USAGE: printpath
+// USAGE: ``printpath``
 //
 // This command will show you your current list of exec paths.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

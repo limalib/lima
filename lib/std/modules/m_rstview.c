@@ -117,9 +117,11 @@ string replace_quote(string s)
 private
 string replace_italic(string s)
 {
-   string *parts = explode(s, "*");
+   string *parts;
    string out = "";
    int on = 1;
+   s = replace_string(s, "\\*", "[ESC_STAR]");
+   parts = explode(s, "*");
 
    // Don't replace stars in function lines.
    if (is_fun(s))
@@ -138,6 +140,8 @@ string replace_italic(string s)
          on = 0;
       }
    }
+
+   out = replace_string(out, "[ESC_STAR]", "*");
    return out;
 }
 
@@ -224,7 +228,10 @@ string *replace_code(string *lines, string searchtext)
 
    return lines;
 }
-
+//: Function reformat_see
+// Replaces any occurence of the word command with  a blanck space, then creates an array of substrings with space as the delimiter.
+// Filters out any words that start with the character "<", then does a transformation on the filtereed array starting at the 1st char
+// and removing the "<". It then formats the list into a string and prints out the resulting string.
 string reformat_see(string line)
 {
    // ## Ack! My deepest apoligies for this one. Let me know if you figure out what it does, I might have a job for you.
@@ -301,7 +308,7 @@ string rst_format(string *file, string searchtext)
 
       // If we have a pipe in the first empty space, trim it out, don't touch the rest.
       if (strlen(line) > 3 && strlen(trim(line)) > 0 && trim(line)[0] == '|')
-         line = "<066>"+implode(explode(line, "|")[1..], "|")+"<res>";
+         line = "<066>" + implode(explode(line, "|")[1..], "|") + "<res>";
 
       line = replace_italic(line); // Handles *italic* markers
       line = replace_inv(line);    // Handles `` markers

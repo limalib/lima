@@ -3,7 +3,7 @@
 // Rust
 
 //: COMMAND
-// USAGE:  mv  source destination
+// USAGE:  ``mv  source destination``
 //
 // This command will allow you to move files from source to
 // destination.  The source file must exist, the destination may or
@@ -17,15 +17,17 @@
 // If you do not supply a full path name mv will assume that the
 // files will be in your current directory.
 //
-// mv wizroom.c workroom.c
+// ``mv wizroom.c workroom.c``
 //
 // I will now have workroom.c in the current directory and wizroom.c
 //   will no longer exist.
 //
-// cp /domains/std/wizroom.c /wiz/zifnab/workroom.c
+// ``cp /domains/std/wizroom.c /wiz/zifnab/workroom.c``
 //
 // I now have workroom.c in my home directory and wizroom.c no longer
 // exists.
+//
+// .. TAGS: RST
 
 inherit CMD;
 

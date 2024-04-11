@@ -27,10 +27,10 @@
 //
 // I now have a copy of wizroom.c in my home directory named workroom.c
 //
-// Like the *nix cp command, it can also be used with multiple source files
+// Like the \*nix cp command, it can also be used with multiple source files
 //(eg using wildcard) provided the destination is a directory - eg
 //
-// ``cp s*.c /wiz/loriel/rooms/``
+// ``cp s\*.c /wiz/loriel/rooms/``
 //
 // This copies all files in current directory, which have a .c suffix, and
 //  which start with s, to the directory /wiz/loriel/rooms/.
