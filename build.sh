@@ -10,5 +10,5 @@ cp -f local_options ./driver/src/
 cd build
 cmake ../driver -DPACKAGE_UIDS=OFF
 
-make install
+make -j `nproc` install
 cd ..
