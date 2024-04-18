@@ -152,6 +152,11 @@ maximum byte transfer : 10000
 # of memory.   If this value is 0, no area will be reserved.
 reserved size : 0
 
+# Telnet extensions support
+enable mssp: 1
+enable mxp : 1
+enable gmcp : 1
+
 # If you set this, the driver doesn't do any handling of runtime errors,
 # other than to turn the heartbeats of objects off.  Information about the
 # error is passed in a mapping to the error_handler() function in the master

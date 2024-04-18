@@ -20,34 +20,37 @@
 // .. TAGS: RST
 
 inherit CMD;
+inherit M_FRAME;
 
 #define SYNTAX "Usage: groups [-a | -d] [groupname] [name 1] [name 2] ... \n"
 
 private
-string banner = "==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==\n";
-
-private
-nomask void print_groups(mapping groups);
+nomask string *print_groups(mapping groups);
 
 private
 void main(string arg)
 {
    mapping groups;
    string this_group;
+   string output = " \n";
+   string header;
    mixed valid;
    mixed not ;
    string *arglist;
 
+   frame_init_user();
+   set_frame_title("Mail Groups");
+   set_frame_left_header();
+   header = title(mud_name()) + "\n";
    groups = this_body()->query_perm("groups");
    if (!groups)
       groups = ([]);
 
    if (!arg || arg == "")
    {
-      out(banner);
-      outf("Groups of %s, and their members:\n\n", mud_name());
-      print_groups(GROUP_D->get_group_data());
-      out(banner);
+      string *sarg = print_groups(GROUP_D->get_group_data());
+      header += sarg[0];
+      output += sarg[1];
 
       if (!mapp(groups) || !sizeof(groups))
       {
@@ -55,11 +58,16 @@ void main(string arg)
          return;
       }
 
-      outf("%s, your personal groups are:\n\n", this_body()->query_name());
+      header += "\n" + title(this_body()->query_name()) + "<res>\n";
+      output += " \n\n";
 
-      print_groups(groups);
+      sarg = print_groups(groups);
+      header += sarg[0];
+      output += sarg[1];
 
-      out(banner);
+      set_frame_header(header);
+      set_frame_content(output);
+      out(frame_render());
       return;
    }
 
@@ -129,20 +137,19 @@ void main(string arg)
          map_delete(groups, this_group);
       this_body()->set_perm("groups", groups);
    }
-   return;
+   out(frame_render());
 }
 
 private
-nomask void print_groups(mapping groups)
+nomask string *print_groups(mapping groups)
 {
-   map_array(sort_array(keys(groups), 1),
-             (
-                 : out(sprintf("%s: %s\n", $1,
-                               implode(map_array(sort_array($2[$1], 1), (
-                                                                            : capitalize:)),
-                                       ", ")))
-                 :),
-             groups);
+   string header = "";
+   string content = "";
+   foreach (string k, string * members in groups)
+   {
+      header += sprintf("%s\n", k);
+      content += sprintf("%s\n", implode(map_array(sort_array(members, 1), ( : capitalize:)), ", "));
+   }
 
-   out("\n");
+   return ({header, content});
 }

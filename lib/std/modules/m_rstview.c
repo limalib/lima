@@ -1,7 +1,5 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit M_COLOURS;
-
 //: MODULE
 // Inherit this module to gain access to reStructured text functions for formatting
 // and creating layout suitable for the MUD. The RST source is parsed into colour
@@ -212,10 +210,11 @@ string *replace_code(string *lines, string searchtext)
       if (is_fun(lines[i]))
       {
          fun = explode(explode(lines[i], "(")[0], " ")[ < 1];
+         fun = trim(fun);
          if (fun == searchtext)
-            lines[i] = replace_string(lines[i], fun, "<010><ul1>" + fun + "<ul0><res> ");
+            lines[i] = replace_string(lines[i], fun, "<ul1><010>" + fun + "<ul0><res> ");
          else
-            lines[i] = replace_string(lines[i], fun, "<221><ul1>" + fun + "<ul0><res> ");
+            lines[i] = replace_string(lines[i], fun, "<ul1><221>" + fun + "<ul0><res> ");
       }
       foreach (string k in keywords)
          lines[i] = replace_types(lines[i], k, "<039>" + k + "<res>");
@@ -228,21 +227,39 @@ string *replace_code(string *lines, string searchtext)
 
    return lines;
 }
-//: Function reformat_see
-// Replaces any occurence of the word command with  a blanck space, then creates an array of substrings with space as the delimiter.
-// Filters out any words that start with the character "<", then does a transformation on the filtereed array starting at the 1st char
-// and removing the "<". It then formats the list into a string and prints out the resulting string.
+
+private
 string reformat_see(string line)
 {
    // ## Ack! My deepest apoligies for this one. Let me know if you figure out what it does, I might have a job for you.
    return "<227>See<res>: " +
-          format_list(map(filter_array(explode(replace_string(line, "Command: ", ""), " "), (
-                                                                                                : $1[0] != '<'
-                                                                                                :)),
-                          (
-                              : $1[1..]
-                              :))[1..]) +
+          implode(map(filter_array(explode(replace_string(line, "Command: ", ""), " "), (
+                                                                                            : $1[0] != '<'
+                                                                                            :)),
+                      (
+                          : $1[1..]
+                          :))[1..],
+                  ", ") +
           "\n";
+}
+
+private
+string mark_bad_reference(string line)
+{
+   string *cmds = explode(line, ", ");
+   string *existing_cmds = CMD_D->query_cmds();
+   string out = line[0..4];
+   foreach (string cmd in cmds)
+   {
+      if (strlen(cmd) > 6 && cmd[6..10] == "See: ")
+         cmd = cmd[10..];
+
+      if (member_array(cmd, existing_cmds) == -1)
+         out += "<009>" + cmd + "<res>, ";
+      else
+         out += cmd + ", ";
+   }
+   return out[0.. < 9] + "<res>.";
 }
 
 //: FUNCTION rst_format
@@ -271,6 +288,7 @@ string rst_format(string *file, string searchtext)
       if (strlen(line) > 5 && line[0..3] == "See:")
       {
          line = reformat_see(line);
+         line = mark_bad_reference(line);
       }
 
       // Code blocks
@@ -313,7 +331,7 @@ string rst_format(string *file, string searchtext)
       line = replace_italic(line); // Handles *italic* markers
       line = replace_inv(line);    // Handles `` markers
       if (searchtext)
-         line = replace_string(line, searchtext, "<010> " + searchtext + "<res>");
+         line = replace_string(line, searchtext, "<010>" + trim(searchtext) + "<res>");
       output += ({line});
       lines++;
    }

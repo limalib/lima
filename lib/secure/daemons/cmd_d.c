@@ -62,6 +62,11 @@ void create()
    set_privilege(1);
 }
 
+mapping query_cmds()
+{
+   return flatten_array(values(cmd_info));
+}
+
 private
 void parse_verb_defs(string dir, string filecontents)
 {

@@ -13,33 +13,24 @@
  * Written by Tigran 05-08-2000
  */
 
-/* Define this if you want the say history to save in the body's save file.
- * Personally, I think that is going overboard, but someone might want it.
- * This might later be moved to <config.h> -- Tigran
- */
-#undef SAY_HISTORY_SAVES
 
-void save_me();
-
-#ifndef SAY_HISTORY_SAVES
-nosave
-#endif
-    private string *say_history = ({});
+nosave private string *say_history = ({});
 
 void add_say_history(string add)
 {
    int size;
 
-   /* Strip trailing \n's */
+   // Strip trailing \n's
    if (add[ < 1] == '\n')
       add = add[0.. < 2];
-   /* Add the history item to the end of the array */
-   say_history += ({add});
+
+   // Add the history item to the end of the array in plain text
+   say_history += ({XTERM256_D->substitute_colour(add, "plain")});
+
+   // Trim the end of the history if larger than CHANNEL_HISTORY_SIZE.
    size = sizeof(say_history);
    if (size > CHANNEL_HISTORY_SIZE)
-   {
       say_history = say_history[(size - CHANNEL_HISTORY_SIZE)..];
-   }
 }
 
 string *list_say_history()

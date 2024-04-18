@@ -8,7 +8,9 @@ mkdir -p build
 cp -f local_options ./driver/src/
 
 cd build
+
+# Add packages as needed here.
 cmake ../driver -DPACKAGE_UIDS=OFF
 
-make install
+make -j `nproc` install
 cd ..

@@ -36,7 +36,7 @@ mixed do_say_str(string str)
       string *out = ({});
    case "/last":
    case "/history":
-      out = ({"History of says:\n"});
+      out = ({"History of says:"});
       msgs = this_body()->list_say_history();
       if (sizeof(msgs))
          out += msgs;
@@ -45,7 +45,7 @@ mixed do_say_str(string str)
       more(out);
       break;
    default:
-      msgs = this_body()->action(({this_body()}), "%^SAY%^$N $vsay:%^RESET%^ $o", punctuate(str));
+      msgs = this_body()->action(({this_body()}), "%^SAY%^$N $vsay:%^RESET%^ $o<res>", punctuate(str));
       this_body()->inform(({this_body()}), msgs, others);
       this_body()->add_say_history(msgs[0]);
       others->add_say_history(msgs[1]);

@@ -38,6 +38,14 @@ nomask varargs void ed(string file, mixed func)
    error("ed() not available\n");
 }
 
+//: FUNCTION message
+// The message() efun is not used by the LIMA mudlib, as we use M_MESSAGES
+// for all messages sent to users.  See M_MESSAGES documentation.
+nomask varargs void message(mixed msgclass, string message, mixed target, mixed exclude)
+{
+   error("message() not available\n");
+}
+
 //: FUNCTION exec
 // The exec efun is never used by the LIMA mudlib, since only bodies are
 // reconnected.

@@ -18,7 +18,7 @@ head -n:	[file*]
 in		obj str*
 loadall		dir
 ls -npsl	[file|dir*]
-mkdir		fname
+mkdir		fname*
 more		[obfile*]
 mv -rf		file* fname|dir|file
 renew		obj

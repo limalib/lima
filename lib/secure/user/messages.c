@@ -187,6 +187,14 @@ void do_receive(string msg, int msg_type)
    receive(msg);
 }
 
+//:FUNCTION receive_message
+// Receive message is used in connection with the message() efun, which is not
+// available when using the LIMA mudlib. Read the help pages for M_MESSAGES instead. 
+void receive_message(string type, string message)
+{
+   error("LIMA does not use interactive->receive_message().\nSee documentation for M_MESSAGES.");
+}
+
 /*
 void do_receive(string msg, int msg_type) {
     if (msg_type & NO_ANSI) {

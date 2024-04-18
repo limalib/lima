@@ -94,7 +94,17 @@ nomask void create_domain(int no_domain_dir, string domain)
       string dirname = "/domains/" + domain;
 
       mkdir(dirname);
-      printf("Created %s\n", dirname);
+
+      mkdir(dirname + "/armour");
+      mkdir(dirname + "/consumable");
+      mkdir(dirname + "/item");
+      mkdir(dirname + "/mob");
+      mkdir(dirname + "/npc");
+      mkdir(dirname + "/obj");
+      mkdir(dirname + "/room");
+      mkdir(dirname + "/weapon");
+
+      printf("Created %s and standard directories.\n", dirname);
 
       printf("Setting protection level of %s\n", dirname);
       write_error(SECURE_D->set_protection(dirname, 1, capitalize(domain + ":")));
