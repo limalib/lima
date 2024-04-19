@@ -120,9 +120,13 @@ void main(string arg)
       return;
    }
    arglist = arglist[2..];
+   if (!groups[this_group])
+   {
+      outf("Group %s does not exist.\n", this_group);
+      return;
+   }
    valid =
-       filter_array(arglist, ( : member_array($(groups[this_group]), $1) != -1 :));
-
+       filter_array(arglist, ( : member_array($1, $(groups[this_group])) != -1 :));
    not = clean_array(arglist - valid);
    valid = clean_array(valid);
 
@@ -131,11 +135,12 @@ void main(string arg)
 
    if (sizeof(valid))
    {
-      out(sprintf("Removed: %s.\n", implode(valid, ", ")));
+      out(sprintf("Removed: %s from %s.\n", implode(valid, ", "),this_group));
       groups[this_group] -= valid;
       if (!sizeof(groups[this_group]))
          map_delete(groups, this_group);
       this_body()->set_perm("groups", groups);
+      return;
    }
    out(frame_render());
 }
