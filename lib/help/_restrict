@@ -30,6 +30,7 @@ wizard : 1
 autodoc : 1
 admin : 5
 
+
 #
 # we want the help_d to ignore this directory; the hint system
 # uses it instead
