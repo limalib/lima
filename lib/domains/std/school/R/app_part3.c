@@ -12,7 +12,7 @@ when coding ANYTHING with color if color is allowed in what you are coding.
 
 2) Descriptions are for painting pictures in the mind: Think of it as telling a
 short story about a room, item, etc. Remember, while writing it, how your
-favorite author describes his settings, and apply that to your setting. 
+favourite author describes his settings, and apply that to your setting. 
 
 3) If the room has a ceiling, walls and a floor, you must have descriptions for
 all of those: Even if it's just something as simple as "The ceiling is high

@@ -3,13 +3,12 @@ FREQUENTLY ASKED QUESTIONS
 
 Q Does Lima work on Windows ?
 
-A No - MudOS does not support Windows.
-  However, it does compile satisfactorily on Cygwin, a Linux emulator
-  which runs on Windows.
+A Yes, if you use Windows Subsystem for Liux (WSL)
+  See https://limamudlib.readthedocs.io/Installation.html.
 
 Q Does Lima work with other drivers ?
 
-A No - it was written specifically for MudOS.
+A No - it was written specifically for FlussOS.
   It could be converted for other drivers (eg LDMUD or DGD),
   but that would involve a lot of work.
 
@@ -17,7 +16,7 @@ Q Does Lima work on OS X? (or other versions of *nix)
 
 A It should do. However we don't test on all versions.
   Report any problems compiling the driver on Lima Bean 
- (lima.mudlib.org:7878) and by email to marius@mudos.org (with full details)
+ (limalib.dev:7878)
 
 Q Why doesn't the mud work - says it can't find the mudlib directory ?
 
@@ -90,9 +89,6 @@ Q How do I get my new verb to work properly ?
 
 A Best way to find what is wrong is to use the "parse" command in front of 
   the verb - eg "parse smash apple" to see why "smash apple" isn't working.
-  You need to have debugging enabled in the driver, which can be done be
-  recompiling the driver starting with "./build.MudOS debug", then "make",
-  "make install" etc.
 
 Q How do I find/fix errors in my code ?
 

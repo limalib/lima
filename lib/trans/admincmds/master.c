@@ -1,16 +1,16 @@
-/*
+/* Do not remove the headers from this file! see /USAGE for more info. */
 
+/*
 Added the 'master' command which reloads the master object.
 Jezu @ LIMA July 6, 2023
-
 */
 
 //: ADMINCOMMAND
-//USAGE: ``master``
+// USAGE: ``master``
 //
-//  Reload the master object.
+// Reload the master object.
 //
-//  .. TAGS: RST
+// .. TAGS: RST
 
 #include <mudlib.h>
 

@@ -19,7 +19,7 @@
 //   this will remove only the rule and message for the LIV part of kick
 //   It will leave all other rules as is.
 //
-// ..TAGS: RST
+// .. TAGS: RST
 
 #include <daemons.h>
 

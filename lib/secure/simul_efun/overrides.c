@@ -161,7 +161,7 @@ varargs void shout()
 }
 
 //: FUNCTION say
-// The say() efun is not used by the LIMA mudlib, in favor of the extensive
+// The say() efun is not used by the LIMA mudlib, in favour of the extensive
 // messaging system in the body.  Consider using this_body()->other_action()
 // instead of say().
 void say(string m)

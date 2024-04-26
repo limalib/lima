@@ -13,7 +13,7 @@
 //
 // will try to create a directory named *obj* and one called *npc* in my current directory.
 //
-// ..TAGS: RST
+// .. TAGS: RST
 
 inherit CMD;
 

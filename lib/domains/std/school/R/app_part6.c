@@ -9,7 +9,7 @@ sentences should go smoothly, and not be chopped up. If your description starts
 wit the sentence like in #4, and is followed by "A large bowl sits in the
 middle of the floor. The walls are lined with burned out torches." It's kinda
 like saying" This is here. That is there. Oh, and this has this other thing."
-It tends to confuse players. Again, remember how your favorite Author writes
+It tends to confuse players. Again, remember how your favourite Author writes
 descriptions and apply that.
 
 

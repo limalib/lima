@@ -1,14 +1,10 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-/*
-   release_a_member( object )// Will remove a player from the guild,
-                 // and may record the fact on a player's
-                 // revoke list to stop reentry. This is
-                 // dependant on set_guild_begone()
-
-*/
+inherit M_CONVERSATION;
 
 varargs void targetted_action();
+void add_a_member(object who);
+void release_a_member(object who);
 
 private
 string which_guild;
@@ -27,6 +23,7 @@ void guildmsg_new_conflict(object who, string why)
 void guildmsg_welcome_back(object who)
 {
    targetted_action("$N $vwelcome $t back to the $o.", who, GUILD_D->query_guild_title(which_guild));
+   CHANNEL_D->cmd_channel(which_guild, "/off");
 }
 void guildmsg_not_member(object who)
 {
@@ -35,7 +32,7 @@ void guildmsg_not_member(object who)
 }
 void guildmsg_already_member(object who)
 {
-   targetted_action("$N $vpeer quizzically at $t and $vsay, \"You already belong to our guild.\"", who);
+   targetted_action("$N $vpeer quizzically at $t and $vsay, \"You already belong to our association.\"", who);
 }
 void guildmsg_refuse_entry(object who, string why)
 {
@@ -44,26 +41,85 @@ void guildmsg_refuse_entry(object who, string why)
 void guildmsg_welcome(object who)
 {
    targetted_action("$N $vwelcome $t to the $o.", who, GUILD_D->query_guild_title(which_guild));
+   CHANNEL_D->cmd_channel(which_guild, "/on");
 }
+
 void guildmsg_leave_nicely(object who)
 {
-   targetted_action("$N $vbid $t farewell.", who);
+   targetted_action("$N $vbid $t farewell, \"Perhaps another time?\".", who);
+   CHANNEL_D->cmd_channel(which_guild, "/off");
 }
+
 void guildmsg_leave_badly(object who)
 {
    targetted_action("$N $vsay, \"So be it, $tp. Leave this place.\"", who);
+   CHANNEL_D->cmd_channel(which_guild, "/off");
 }
 void guildmsg_leave_as_enemy(object who)
 {
    targetted_action("$N $vsnarl, \"So be it, $tp. You have chosen your doom.\"", who);
+   CHANNEL_D->cmd_channel(which_guild, "/off");
 }
 
 /* --------------------------------------------------- */
+
+void pager_install()
+{
+}
+
+void more_specials_help()
+{
+   write("\n\n" + read_file("/cmds/gangs/" + which_guild + "/SPECIALS_HELP"));
+}
+
+string guild_name()
+{
+   return GUILD_D->query_guild_abbrev(which_guild);
+}
+
+void setup_guild_conversation()
+{
+   string *start = ({"pager", "specials"});
+
+   add_options((["join":"Can I join " + guild_name() + "?",
+              "release":"I need to leave " + guild_name() + " ...",
+                "pager":"Would a pager be useful for me in " + guild_name() + "?",
+         "pager_module":"If I have an empty pager module, can you put a " + guild_name() + " program on it?",
+        "pager_install":"Okay, then I'll give you one.", "comms":"Can we communicate somehow?",
+             "specials":"Which special skills can I learn?", ]));
+
+   add_responses((["join":(
+                              : add_a_member($1)
+                              :),
+                "release":(
+                              : release_a_member($1)
+                              :),
+                  "pager":"Yes, we use those to coordinate our activities. Go find or buy a pager somewhere and a "
+                          "pager module.@@pager_module,comms",
+           "pager_module":"No, but I can swap that empty one for one with our program on it.@@pager_install",
+          "pager_install":"That's fine, give it to me when we're done chatting and I'll swap it for you.",
+                  "comms":"Yes, try 'chan " + which_guild + " /on'. That should tune you in.",
+               "specials":({"Let me see... have a look here", (
+                                                                  : more_specials_help:)}),
+   ]));
+   add_start(start);
+}
+
+string *filter_start(string *a, object body)
+{
+   if (body->query_member_guild(which_guild))
+      a += ({"release"});
+   else
+      a += ({"join"});
+
+   return a;
+}
 
 protected
 nomask void set_which_guild(string new_guild)
 {
    which_guild = new_guild;
+   setup_guild_conversation();
 }
 
 mixed do_guild_check(object who)
@@ -78,20 +134,6 @@ string query_which_guild()
 {
    return which_guild;
 }
-// ### this seems unused since add_a_member() has its own check
-#if 0
-void check_a_member()
-{
-    mixed p = do_guild_check();
-
-    if ( p )
-    {
-	this_body()->simple_action("The Guildmaster snarls at $N, "
-				   "\"As a member of $O, I cannot allow "
-				   "you membership.\"", p);
-    }
-}
-#endif /* 0 */
 
 void recheck_a_member(object who)
 {
@@ -133,8 +175,8 @@ void add_a_member(object who)
       }
       else
       {
-         guildmsg_welcome(who);
          who->add_guild(which_guild, 1);
+         guildmsg_welcome(who);
       }
    }
 }
@@ -174,4 +216,42 @@ void release_a_member(object who)
       who->ban_guild(which_guild, 3);
       return;
    }
+}
+
+mixed guild_master_receive(object target)
+{
+   string questState;
+
+   if (base_name(target) == "/domains/std/guild/item/pager_module")
+   {
+      if (!target->query_module_name())
+      {
+         this_object()->simple_action("$N $vsay, \"An empty module, just a second ...\".");
+         target->set_module_name(which_guild);
+         this_object()->targetted_action("$N $vhand $n1 a programmed module back.", this_body());
+         return 0;
+      }
+      else
+      {
+         this_object()->simple_action(
+             "$N $vsay, \"There's also a program on that one, but it can be reset later ... give me a second.\".");
+         target->set_module_name(which_guild);
+         this_object()->targetted_action("$N $vhand $n1 a programmed module back.", this_body());
+         return 0;
+      }
+   }
+   else
+   {
+      this_object()->simple_action("$N $vsay, \"Why would I want that?\".");
+      return 0;
+   }
+}
+
+mixed indirect_give_obj_to_liv(object ob, object liv)
+{
+   if (base_name(ob) == "/domains/std/guild/item/pager_module")
+   {
+      return 1;
+   }
+   return 0;
 }

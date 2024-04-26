@@ -49,15 +49,33 @@ void add_option(string key, mixed act)
    options[key] = act;
 }
 
+void add_options(mapping m)
+{
+	options += m;
+}
+
 void add_response(string key, mixed act)
 {
    responses[key] = act;
+}
+
+void add_responses(mapping m)
+{
+	responses += m;
 }
 
 void add_to_start(string key)
 {
    if (member_array(key, default_start) == -1)
       default_start += ({key});
+}
+
+varargs void add_start(mixed *a, object target)
+{
+	if (target)
+		start[target] += a;
+	else
+		default_start += a;
 }
 
 void set_can_talk(int i)

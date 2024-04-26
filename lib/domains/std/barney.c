@@ -58,7 +58,7 @@ void setup()
    set_gender(1);
    set_proper_name("Barney the Dinosaur");
    set_in_room_desc("Barney the dinosaur");
-   set_long("It's everyone's favorite purple dinosaur!");
+   set_long("It's everyone's favourite purple dinosaur!");
    emotes = SOUL_D->list_emotes();
    adverbs = SOUL_D->get_adverbs();
    call_out(( : do_my_thing:), 5);
