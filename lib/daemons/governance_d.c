@@ -1,7 +1,9 @@
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
 /*
 ** Governance daemon for controlling elections and governance 
 ** for many different things.
-** Tsath 2020 (another Corona lock-up creation)
+** Tsath 2020 (another Covid-19 lock-up creation)
 */
 
 inherit M_DAEMON_DATA;

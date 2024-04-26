@@ -157,6 +157,7 @@ void process_file(string fname)
    string *cmd_info = ({});
    string *module_info = ({});
    string *c_functions = ({});
+   string *tags = ({});
    string rstfile, rstout = "", description = "";
    mixed *assoc;
    int i, len;
@@ -203,10 +204,13 @@ void process_file(string fname)
 
    if (file_info[FILE_TYPE] != "player command")
    {
+      string type = file_info[FILE_TYPE];
+      if (type == "mudlib")
+         type = "functions for the mudlib";
       rstout = file_info[FILE_PRETTY];
       rstout += repeat_string("*", strlen(file_info[FILE_PRETTY])) + "\n\n";
       rstout +=
-          "Documentation for the " + file_info[FILE_NAME] + " " + file_info[FILE_TYPE] + " in *" + fname + "*.\n\n";
+          "Documentation for the " + file_info[FILE_NAME] + " " + type + " in *" + fname + "*.\n\n";
    }
 
    len = sizeof(lines);
@@ -311,6 +315,11 @@ void process_file(string fname)
             LOG_D->log(LOG_AUTODOC, "Bad header tag: " + fname + " line " + i + ": " + line + "\n");
          }
       }
+      else if (lines[i][0..10] == "// .. TAGS:")
+      {
+         tags += ({lines[i][12..]});
+         i++;
+      }
       else
          i++;
    }
@@ -324,6 +333,14 @@ void process_file(string fname)
       {
          rstout += mi;
       }
+      rstout += "\n";
+   }
+
+   // If we have lose tags floating around, dump them at the top of the file.
+   if (sizeof(tags) > 0)
+   {
+      foreach (string t in tags)
+         rstout += ".. TAGS: " + t + "\n";
       rstout += "\n";
    }
 
