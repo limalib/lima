@@ -715,6 +715,7 @@ void add_favour(object body, string guild, int favour)
    if (!body)
       return;
    who = body->query_name();
+   guild=lower_case(guild);
 
    if (!guild_favour_score[guild])
       guild_favour_score[guild] = 0;

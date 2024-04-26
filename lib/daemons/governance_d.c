@@ -1,7 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 /*
-** Governance daemon for controlling elections and governance 
+** Governance daemon for controlling elections and governance
 ** for many different things.
 ** Tsath 2020 (another Covid-19 lock-up creation)
 */
@@ -16,50 +16,52 @@ mapping managers = ([]);
 
 void set_leader(string what, string leader)
 {
-    leaders[what] = leader;
-    save_me();
+   leaders[what] = leader;
+   save_me();
 }
 
 string query_leader(string what)
 {
-    return leaders[what];
+   return leaders[what];
 }
 
 void add_manager(string what, string manager)
 {
-    if (!managers[what])
-        managers[what] = ({});
-    managers[what] += ({manager});
-    save_me();
+   if (!managers[what])
+      managers[what] = ({});
+   managers[what] += ({manager});
+   save_me();
 }
 
 void remove_manager(string what, string manager)
 {
-    if (!managers[what])
-        return;
-    managers[what] -= ({manager});
-    save_me();
+   if (!managers[what])
+      return;
+   managers[what] -= ({manager});
+   save_me();
 }
 
 string *query_managers(string what)
 {
-    return managers[what] || ({});
+   return managers[what] || ({});
 }
 
 string leader_board()
 {
-    string out = "";
-    out += sprintf("  %16s  %40s\n", "Leader", "Association");
-    out += simple_divider();
-    foreach (string leader, string assoc in leaders)
-    {
-        out += sprintf("  %16s  %40s\n", capitalize(leader), capitalize(assoc));
-    }
+   string out = "";
+   out += sprintf("  %-16s  %-20s %-s\n", "Association", "Leader", "Managers");
+   out += simple_divider();
+   foreach (string assoc, string leader in leaders)
+   {
+      string *mngrs = map(query_managers(assoc), ( : capitalize($1):));
 
-    return out;
+      out += sprintf("  %-16s  %-20s %-s\n", capitalize(assoc), capitalize(leader), implode(mngrs, " "));
+   }
+
+   return out;
 }
 
 void create()
 {
-    ::create();
+   ::create();
 }
