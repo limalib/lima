@@ -319,6 +319,7 @@
 #define TEMP_WORKROOM     "/obj/mudlib/TWorkroom"
 
 #define CMD               "/obj/secure/cmd"
+#define SPECIAL           "/obj/secure/special"
 #define MAILBOX           "/obj/secure/mailbox"
 #define MAILER_DIR        "/obj/secure/mailers"
 #define MAILER            MAILER_DIR "/mailer"

@@ -52,7 +52,7 @@ class menu build_guild_menu(string guild)
 
 void start_mission(int tier, string name, string guild, mapping mats, string reply)
 {
-   if (reply == "y" || reply == "Y")
+   if (lower_case(trim(reply)) == "y")
    {
       write("Starting mission.\n");
       foreach (string mat, int cnt in mats)
@@ -69,7 +69,7 @@ void start_mission(int tier, string name, string guild, mapping mats, string rep
 
 void start_favour(int tier, string name, int cost, string guild, string reply)
 {
-   if (reply == "y" || reply == "Y")
+   if (lower_case(trim(reply)) == "y")
    {
       if (GUILD_D->query_favour_score(guild) >= cost)
       {
@@ -178,7 +178,7 @@ class menu build_guild_favour_menu(string guild)
 {
    class menu m;
    int count = 1;
-   int guild_tier = GUILD_D->query_guild_tier(guild);
+   int guild_tier = GUILD_D->query_guild_tier(guild) || 1;
    mapping favours = GUILD_D->query_favours(guild_tier);
 
    m = new_menu("[-- " + sprintf("%-30s", capitalize(guild) + " Favour") + "                   -----]");

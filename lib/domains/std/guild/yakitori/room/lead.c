@@ -24,7 +24,7 @@ void setup()
     set_exits((["east":"kitchen",
                "south":"mission",
     ]));
-    set_objects((["../mob/gang_lead":1, "^std/guild/item/favour_board":({"yakitori"}), "^std/guild/item/ledger":({"yakitori"})]));
+    set_objects((["../mob/guild_lead":1, "^std/guild/item/favour_board":({"yakitori"}), "^std/guild/item/ledger":({"yakitori"})]));
     add_item("electric fan", "fan", "It's a very nice fan, keeps the smell of oils almost out of this room.");
     add_item("window", "small window", "It's a small window with iron bars infrot of it. It's open slightly.");
     add_item("walls", "wall", "White walls, seems painted recently?");

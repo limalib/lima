@@ -715,7 +715,7 @@ void add_favour(object body, string guild, int favour)
    if (!body)
       return;
    who = body->query_name();
-   guild=lower_case(guild);
+   guild = lower_case(guild);
 
    if (!guild_favour_score[guild])
       guild_favour_score[guild] = 0;
@@ -895,7 +895,7 @@ void load_favours()
 
       if (!name)
       {
-         write("Missing // FAVOUR: string for '" + item + "'.\n");
+         write("Missing '// FAVOUR:' string for '" + item + "'.\n");
          continue;
       }
 
@@ -1016,6 +1016,8 @@ varargs int start_favour(int tier, string name, string guild, int end_time)
       active_buffs += ({buff_ob});
       save_me();
    }
+   else
+      TBUG("Failed");
 }
 
 object *query_active_missions()

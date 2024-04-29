@@ -69,7 +69,7 @@ void pager_install()
 
 void more_specials_help()
 {
-   write("\n\n" + read_file("/cmds/gangs/" + which_guild + "/SPECIALS_HELP"));
+   write("\n\n" + read_file("/cmds/guild/" + which_guild + "/SPECIALS_HELP"));
 }
 
 string guild_name()

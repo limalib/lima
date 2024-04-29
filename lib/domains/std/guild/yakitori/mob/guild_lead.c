@@ -11,7 +11,7 @@ void setup()
 {
     set_name("Mr Nakamura");
     set_in_room_desc("Mr Nakamura, a nicely dressed tall asian man stands here.");
-    add_id("lead", "nakamura", "boss", "gang lead", "man", "asian", "tall man");
+    add_id("lead", "nakamura", "boss", "guild lead", "man", "asian", "tall man");
     set_gender(1);
     set_level(100);
     set_proper_name("Mr Nakamura");
