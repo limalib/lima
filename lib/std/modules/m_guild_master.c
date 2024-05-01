@@ -1,6 +1,9 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+#include <config/guild.h>
+
 inherit M_CONVERSATION;
+inherit M_RSTVIEW;
 
 varargs void targetted_action();
 void add_a_member(object who);
@@ -63,13 +66,13 @@ void guildmsg_leave_as_enemy(object who)
 
 /* --------------------------------------------------- */
 
-void pager_install()
+void artefact_install()
 {
 }
 
 void more_specials_help()
 {
-   write("\n\n" + read_file("/cmds/guild/" + which_guild + "/SPECIALS_HELP"));
+   write("\n\n" + rst_format_file("/cmds/guild/" + which_guild + "/SPECIALS_HELP.rst"));
 }
 
 string guild_name()
@@ -79,14 +82,15 @@ string guild_name()
 
 void setup_guild_conversation()
 {
-   string *start = ({"pager", "specials"});
+   string *start = ({"artefact", "specials"});
 
    add_options((["join":"Can I join " + guild_name() + "?",
-              "release":"I need to leave " + guild_name() + " ...",
-                "pager":"Would a pager be useful for me in " + guild_name() + "?",
-         "pager_module":"If I have an empty pager module, can you put a " + guild_name() + " program on it?",
-        "pager_install":"Okay, then I'll give you one.", "comms":"Can we communicate somehow?",
-             "specials":"Which special skills can I learn?", ]));
+                "release":"I need to leave " + guild_name() + " ...",
+               "artefact":"Would a " + GUILD_ARTEFACT + " be useful for me in " + guild_name() + "?",
+        "artefact_module":"If I have an empty " + GUILD_ARTEFACT + " " + GUILD_ARTEFACT_PLUGIN + ", can you put a " +
+                              guild_name() + " program on it?",
+       "artefact_install":"Okay, then I'll give you one.", "comms":"Can we communicate somehow?",
+               "specials":"Which special skills can I learn?", ]));
 
    add_responses((["join":(
                               : add_a_member($1)
@@ -94,10 +98,11 @@ void setup_guild_conversation()
                 "release":(
                               : release_a_member($1)
                               :),
-                  "pager":"Yes, we use those to coordinate our activities. Go find or buy a pager somewhere and a "
-                          "pager module.@@pager_module,comms",
-           "pager_module":"No, but I can swap that empty one for one with our program on it.@@pager_install",
-          "pager_install":"That's fine, give it to me when we're done chatting and I'll swap it for you.",
+               "artefact":"Yes, we use those to coordinate our activities. Go find or buy a " + GUILD_ARTEFACT +
+                              " somewhere and a " GUILD_ARTEFACT + " " + GUILD_ARTEFACT_PLUGIN +
+                              ".@@artefact_module,comms",
+        "artefact_module":"No, but I can swap that empty one for one with our program on it.@@artefact_install",
+       "artefact_install":"That's fine, give it to me when we're done chatting and I'll swap it for you.",
                   "comms":"Yes, try 'chan " + which_guild + " /on'. That should tune you in.",
                "specials":({"Let me see... have a look here", (
                                                                   : more_specials_help:)}),
@@ -222,7 +227,7 @@ mixed guild_master_receive(object target)
 {
    string questState;
 
-   if (base_name(target) == "/domains/std/guild/item/pager_module")
+   if (base_name(target) == "/domains/std/guild/item/artefact_module")
    {
       if (!target->query_module_name())
       {
@@ -249,7 +254,7 @@ mixed guild_master_receive(object target)
 
 mixed indirect_give_obj_to_liv(object ob, object liv)
 {
-   if (base_name(ob) == "/domains/std/guild/item/pager_module")
+   if (base_name(ob) == "/domains/std/guild/item/artefact_module")
    {
       return 1;
    }

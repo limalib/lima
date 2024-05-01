@@ -3,6 +3,8 @@
  * Standard Mission object.
  */
 
+#include <config/guild.h>
+
 private
 string name;
 private
@@ -124,15 +126,15 @@ void notify_guild_members(string s)
 {
    object *members = filter_array(bodies(), ( : member_array(guild, $1->guilds_belong()) != -1 :));
    members = filter_array(members, (
-                                       : present("guild_pager_ob", $1) &&
-                                             member_array(guild, present("guild_pager_ob", $1)->query_guilds()) != -1
+                                       : present("guild_artefact_ob", $1) &&
+                                             member_array(guild, present("guild_artefact_ob", $1)->query_guilds()) != -1
                                        :));
    tell(members, s);
 }
 
-void pager_message(string m)
+void artefact_message(string m)
 {
-   notify_guild_members("Your pager ba-bweeps, \"%^GREEN%^" + upper_case(m) + ".%^RESET%^\".\n");
+   notify_guild_members("Your " + GUILD_ARTEFACT + " ba-bweeps, \"%^GREEN%^" + upper_case(m) + ".%^RESET%^\".\n");
 }
 
 void setup(string g)
@@ -152,7 +154,7 @@ void remove()
       GUILD_D->add_log(guild, "Tier " + tier + " mission '" + name + "' completed.");
    else
       GUILD_D->add_log(guild, "Tier " + tier + " mission '" + name + "' failed.");
-   pager_message(guild + " mission ended. Thank you for your assistance");
+   artefact_message(guild + " mission ended. Thank you for your assistance");
    query_mission_ctrl()->end_mission();
    call_out("real_remove", 5);
 }
@@ -191,6 +193,6 @@ void create(string g)
       return;
    query_mission_ctrl();
 
-   call_out("pager_message", 2, guild + " mission just started. Tune into our channel");
+   call_out("artefact_message", 2, guild + " mission just started. Tune into our channel");
    begin_mission();
 }

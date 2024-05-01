@@ -1,5 +1,8 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+
+#include <config/guild.h>
+
 inherit CONTAINER;
 inherit M_GETTABLE;
 
@@ -7,13 +10,13 @@ int level = 1;
 string *guild_modules = ({});
 
 void module_received();
-void pager_moved();
+void artefact_moved();
 
 void setup()
 {
-    set_id("pager", "guild_pager_ob");
+    set_id(GUILD_ARTEFACT, "guild_artefact_ob");
     add_adj("L" + level);
-    set_long("A simple pager from Freamon Electronic Ltd. It looks like it is working and usable. "
+    set_long("A simple "+GUILD_ARTEFACT+". It looks like it is working and usable. "
              "This simple L1 model comes with one module built in, and " +
              level + " slot for expansion modules.");
     add_relation("in");
@@ -23,7 +26,7 @@ void setup()
     add_hook("object_arrived", (
                                    : module_received:));
     add_hook("move", (
-                         : pager_moved:));
+                         : artefact_moved:));
     set_value(120);
 }
 
@@ -61,7 +64,7 @@ int inventory_visible()
 
 void module_received()
 {
-    this_body()->simple_action("$N $vinsert a module into a small hatch on $p pager. It disappears with a snap.");
+    this_body()->simple_action("$N $vinsert a "+GUILD_ARTEFACT_PLUGIN+" into a small hatch on $p "+GUILD_ARTEFACT+". It disappears with a snap.");
 }
 
 void owner_killed(object ob)
@@ -69,7 +72,7 @@ void owner_killed(object ob)
     TBUG("Mob killed: " + ob);
 }
 
-void pager_moved()
+void artefact_moved()
 {
     TBUG("Environment: " + environment());
     if (environment() && environment()->is_body())
@@ -92,16 +95,16 @@ mixed direct_use_obj()
 
 void do_use()
 {
-    object pager_menu = new (PAGER_MENU, level);
+    object artefact_menu = new (ARTEFACT_MENU, level);
     object *modules = all_inventory();
     if (sizeof(modules))
-        pager_menu->init_guild_modules(modules);
-    pager_menu->start_menu();
+        artefact_menu->init_guild_modules(modules);
+    artefact_menu->start_menu();
 }
 
 mixed indirect_put_obj_wrd_obj(object ob1, string wrd, object ob2)
 {
-    if (ob1 && ob1->is_pager_module())
+    if (ob1 && ob1->is_artefact_module())
     {
         object *modules = all_inventory();
         if (!ob1->query_module_name())
@@ -111,11 +114,11 @@ mixed indirect_put_obj_wrd_obj(object ob1, string wrd, object ob2)
         if (sizeof(modules) < level)
             return 1;
     }
-    return "#That doesn't seem to fit into the pager.";
+    return "#That doesn't seem to fit into the "+GUILD_ARTEFACT+".";
 }
 
 // Can be put into things.
 mixed indirect_get_obj_from_obj(object ob1, string wrd, object ob2)
 {
-    return "#Things inserted into the pager seems to be permanently installed.";
+    return "#Things inserted into the "+GUILD_ARTEFACT+" seems to be permanently installed.";
 }

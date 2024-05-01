@@ -1,5 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+#include <config/guild.h>
+
 inherit OBJ;
 inherit M_GETTABLE;
 
@@ -10,7 +12,7 @@ void setup(string g)
 {
    if (g)
       guild = g;
-   set_id("pager module", "module");
+   set_id(GUILD_ARTEFACT_PLUGIN, "module");
    set_adj(guild);
    add_save(({"guild", "letter"}));
    set_value(50);
@@ -18,12 +20,12 @@ void setup(string g)
 
 string long()
 {
-   return "A pager module. Insert it into a pager for it to work." +
+   return "A " + GUILD_ARTEFACT_PLUGIN + ". Insert it into a " + GUILD_ARTEFACT + " for it to work." +
           (guild ? " This one has a label on it saying '" + capitalize(guild) + "'."
-                 : " This module is empty, ready for a program to be installed.");
+                 : " This " + GUILD_ARTEFACT_PLUGIN + " is empty, ready to be filled.");
 }
 
-int is_pager_module()
+int is_artefact_module()
 {
    return 1;
 }

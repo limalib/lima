@@ -1,7 +1,11 @@
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
 /*
 ** Tsath 2020
 ** Favour 
 */
+
+#include <config/guild.h>
 
 private
 string name;
@@ -120,14 +124,14 @@ void notify_guild_members(string s)
                                                  : member_array(guild, $1->guilds_belong()) != -1
                                                  :));
     members = filter_array(members, (
-                                        : present("guild_pager_ob", $1) && member_array(guild, present("guild_pager_ob", $1)->query_guilds()) != -1
+                                        : present("guild_artefact_ob", $1) && member_array(guild, present("guild_artefact_ob", $1)->query_guilds()) != -1
                                         :));
     tell(members, s);
 }
 
-void pager_message(string m)
+void artefact_message(string m)
 {
-    notify_guild_members("Your pager twirples, \"%^GREEN%^" + upper_case(m) + ".%^RESET%^\".\n");
+    notify_guild_members("Your "+GUILD_ARTEFACT+" twirples, \"%^GREEN%^" + upper_case(m) + ".%^RESET%^\".\n");
 }
 
 void setup(string g)
@@ -142,7 +146,7 @@ void create(string g)
     if (!clonep())
         return;
     query_mission_ctrl();
-    call_out("pager_message",
+    call_out("artefact_message",
              2,
              guild + " new buff \"" + name + "\"");
 }

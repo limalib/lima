@@ -1,7 +1,10 @@
 
--=-=-=-=-=-=-=-=-  ASSOCIATION SPECIALS IN LF ELECTRONICS  -=-=-=-=-=-=-=-=-
+ASSOCIATION SPECIALS IN LF ELECTRONICS
+**************************************
 
-[override]
+override
+========
+
   Override basic electronics to bypass their normal function or make them work
   for you.
 

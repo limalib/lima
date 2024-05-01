@@ -311,7 +311,7 @@
 #define IFTP_OB           "/obj/mudlib/iftp_ob"
 #define NEWSREADER        "/obj/mudlib/newsreader"
 #define NNTP_OB           "/obj/mudlib/nntp"
-#define PAGER_MENU        "/obj/mudlib/pager_menu"
+#define ARTEFACT_MENU     "/obj/mudlib/artefact_menu"
 #define PARTY_MENU        "/obj/mudlib/party_menu"
 #define PLAYER_MENU       "/obj/mudlib/plmenu"
 #define PLAYER_SHELL      "/obj/mudlib/pshell"
