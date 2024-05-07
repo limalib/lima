@@ -1,12 +1,17 @@
-$$ see: bug, idea, typo, discipline
- Following are the rules set up by the Administration of this MUD. You, as
- a player or visitor, to the MUD, are responsible for knowing and abiding
- by these rules.  They have been set up to make the MUD a more enjoyable
- playing experience for everyone involved.  Failure to do so can result in
- a number of punishments, to be detailed in related documents.
+Rules
+#####
 
- Rule Book for the MUD:
-------------------------
+See: `bug <../player_command/bug.html>`_ `idea <../player_command/idea.html>`_ `typo <../player_command/typo.html>`_ `discipline <discipline.html>`_
+
+Following are the rules set up by the Administration of this MUD. You, as
+a player or visitor, to the MUD, are responsible for knowing and abiding
+by these rules.  They have been set up to make the MUD a more enjoyable
+playing experience for everyone involved.  Failure to do so can result in
+a number of punishments, to be detailed in related documents.
+
+Rule Book for the MUD
+=====================
+
  * Second characters are permitted on this MUD, BUT, only under the following
     circumstances:
     + They must be played as separate, individual characters.  This means that
