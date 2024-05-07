@@ -5,8 +5,10 @@ void setup()
    set_area("omega_terminal", "landing_term");
    // set_weather(1);
    set_light(1);
-   set_brief("East Hallway 1");
-   set_long("A hallway leading to the East Landing. You see the Stellar Bites café just north of here.");
+   set_brief("Star Alley near Stellar bites seating area");
+   set_long("The eastern hallway in the space station extends ahead, its metallic walls reflecting the soft ambient "
+            "lighting. Doors sporadically punctuate the corridor, leading to various compartments.\n"
+            "The Stellar bites Cafe is north of here.");
    set_state_description("electronic_door_off", "closed");
    set_state_description("electronic_door_on", "open");
    set_exits((["west":"e_hall2", "east":"e_hall", "north":"e_cafe"]));
