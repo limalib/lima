@@ -325,7 +325,7 @@ string rst_format(string *file, string searchtext)
       }
 
       // If we have a pipe in the first empty space, trim it out, don't touch the rest.
-      if (strlen(line) > 3 && strlen(trim(line)) > 0 && trim(line)[0] == '|')
+      if (strlen(line) > 3 && strlen(trim(line)) > 0 && trim(line)[0] == '|' && line[0]!='|')
          line = "<066>" + implode(explode(line, "|")[1..], "|") + "<res>";
 
       line = replace_italic(line); // Handles *italic* markers

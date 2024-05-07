@@ -219,7 +219,6 @@ nomask void rebuild_data()
    map_array(lines, ( : f_restrict:));
 
    dirs = filter(get_dir(DIR_HELP "/*"), ( : $(restrict)[$1] != 99 :));
-   TBUG(dirs);
 
    pending_count = 0;
    map_array(dirs, ( : process_file, DIR_HELP "/" :));

@@ -63,7 +63,6 @@ void make_directories()
 }
 
 //: FUNCTION scan_mudlib
-//
 // Recursively searches the mudlib for files which have been changed
 // since the last time the docs were updated, and recreates the documentation
 // for those files.
@@ -80,7 +79,6 @@ void scan_mudlib()
 }
 
 //: FUNCTION complete_rebuild
-//
 // Rebuild all the data, regardless of modification time
 void complete_rebuild()
 {
