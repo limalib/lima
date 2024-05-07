@@ -10,12 +10,56 @@
 // M_CONVERSATION for doing interactive conversations with NPCs.
 //
 // Three things are needed to run conversations::
-//   * A set of conversations options - set_options()
-//   * A set of matching replies for the options - set_responses()
-//   * A set of options to start from - set_start()
+//   - A set of conversations options - set_options()
+//   - A set of matching replies for the options - set_responses()
+//   - A set of options to start from - set_start()
 //
 // Both the replies and the options have special syntaxes that is used to control
 // the interactions. See the functions below for syntax descriptions.
+//
+// This module supports filtering out certain options depending on the *stats* or *skills* of 
+// the player. These requirements are specified in the options the players can chose and will
+// be limited accordingly. The filters are just added to the end of the reply option string,
+// examples follow below.
+//
+// Special option syntax:
+//   - [str>10] - only shown if strength larger than 10
+//   - [str=10] - only shown if strength equals 10
+//   - [str<10] - only shown if strength less than 10.
+//
+// Stats are: str, agi, int, con, cha.
+//
+// Example: 
+//     ``"I can probably lift that tree trunk for you?[str>60]"``
+//
+// This also works for skills for <, > and =:
+//
+// Example: 
+//     ``"I can shoot that pistol right out of your hand [combat/ranged/pistol>3]"``
+//
+// The numbers for skills refer to the ranks from 1-20. (See SKILL_D documentation)
+//
+// For responses (from the NPC), some extra syntax allows you to open up new options and/or 
+// close others. The responses can also be different types
+//
+// Special option syntax:
+//  
+//    ``@@add options@@remove options``
+//
+// The options can be seperated by "," to include more options.
+//
+// Example: 
+//     ``"I'll say something.@@add_option1,add_option2@@remove_option3"``
+//
+// A response can be 4 different things:
+//
+//   - A simple string that will be said by the NPC - "Hi there!"
+//   - An emote that must be performed - "!wave"
+//   - A function pointer - (: check_quest item :)
+//   - An array combined of all three things above.
+//
+// Example:
+//     ``set_responses("hello":({"Hi there!","!wave",(: check_quest_item:) }));``
 //
 // .. TAGS: RST
 
@@ -160,21 +204,6 @@ int check_option(string key)
 // Set a mapping of keys and options. These options are typically things the player says in the conversation and can
 // select from. Only keys added using set_start() will be shown initially. Other options can be introduced later in the
 // conversation using the add and remove syntax described in the set_responses() function.
-//
-// Special option syntax:
-//   * [str>10] - only shown if strength larger than 10
-//   * [str=10] - only shown if strength equals 10
-//   * [str<10] - only shown if strength less than 10.
-//
-// Stats are: str, agi, int, con, cha.
-//
-// Example: "I can probably lift that tree trunk for you?[str>60]"
-//
-// This also works for skills for <, > and =:
-//
-// Example: "I can shoot that pistol right out of your hand [combat/ranged/pistol>3]"
-//
-// The numbers for skills refer to the ranks from 1-20. (See SKILL_D documentation)
 void set_options(mapping m)
 {
    options = m;
@@ -183,21 +212,6 @@ void set_options(mapping m)
 //: FUNCTION set_responses
 // Set a mapping of keys (that must match the option keys), and responses. The responses use a special syntax described
 // below, that will allow adding and removing new options.
-//
-// Special option syntax:
-// @@add options@@remove options
-// The options can be seperated by "," to include more options.
-//
-// Example: "I'll say something.@@add_option1,add_option2@@remove_option3"
-//
-// A response can be 4 different things:
-//   * A simple string that will be said by the NPC - "Hi there!"
-//   * An emote that must be performed - "!wave"
-//   * A function pointer - (: check_quest item :)
-//   * An array combined of all three things above.
-//
-// Example:
-// set_responses("hello":({"Hi there!","!wave",(: check_quest_item:) }));
 void set_responses(mapping m)
 {
    responses = m;

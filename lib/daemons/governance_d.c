@@ -14,6 +14,16 @@ mapping leaders = ([]);
 private
 mapping managers = ([]);
 
+mapping copy_leaders()
+{
+   return copy(leaders);
+}
+
+mapping copy_managers()
+{
+   return copy(managers);
+}
+
 void set_leader(string what, string leader)
 {
    leaders[what] = leader;
@@ -33,12 +43,14 @@ void add_manager(string what, string manager)
    save_me();
 }
 
-void remove_manager(string what, string manager)
+int remove_manager(string what, string manager)
 {
+   int s = sizeof(managers[what]);
    if (!managers[what])
       return;
    managers[what] -= ({manager});
    save_me();
+   return sizeof(managers)<> s;
 }
 
 string *query_managers(string what)
@@ -53,7 +65,7 @@ string leader_board()
    out += simple_divider();
    foreach (string assoc, string leader in leaders)
    {
-      string *mngrs = map(query_managers(assoc), ( : capitalize($1):));
+      string *mngrs = map(query_managers(assoc), ( : capitalize($1) :));
 
       out += sprintf("  %-16s  %-20s %-s\n", capitalize(assoc), capitalize(leader), implode(mngrs, " "));
    }

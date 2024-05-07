@@ -97,6 +97,9 @@ nosave private string *filtered_dirs =
 
 string *mod_name(string file)
 {
+   string *file_info;
+   string clean_file;
+
    string subdir = 0;
    if (strlen(file) > 9 && file[0..8] == "/daemons/")
       subdir = "daemon";
@@ -118,7 +121,42 @@ string *mod_name(string file)
       subdir = "api";
 
    sscanf(file, "%s.c", file);
-   return ({file[strsrch(file, "/", -1) + 1..], subdir});
+   if (subdir == "player command" || subdir == "command" || subdir == "verb")
+      file_info = ({explode(file, "/")[ < 1], subdir});
+   else
+      file_info = ({implode(explode(file, "/")[ < 2..], "-"), subdir});
+   clean_file = explode(file, "/")[ < 1];
+
+   // This sets FILE_PRETTY
+   switch (file_info[FILE_TYPE])
+   {
+   case "daemon":
+      file_info += ({"Daemon " + clean_file + "\n"});
+      break;
+   case "player command":
+      file_info += ({"Player Command *" + clean_file + "*\n"});
+      break;
+   case "verb":
+      file_info += ({"Verb *" + clean_file + "*\n"});
+      break;
+   case "command":
+      file_info += ({"Command *" + clean_file + "*\n"});
+      break;
+   case "module":
+      file_info += ({"Module *" + clean_file + "*\n"});
+      break;
+   case "mudlib":
+      file_info += ({"Mudlib *" + clean_file + "*\n"});
+      break;
+   case "api":
+      file_info += ({clean_file + "\n"});
+      break;
+   default:
+      file_info += ({clean_file + "\n"});
+      break;
+   }
+
+   return file_info;
 }
 
 string func_name(string bar)
@@ -129,20 +167,27 @@ string func_name(string bar)
 
 string command_link(string cmd, string type, int same_level)
 {
+   string name;
+   // For API's, do "simul_efun: misc" and "user: misc".
+   if (type == "api" || type == "mudlib")
+      return "`" + replace_string(cmd, "-", ": ") + " <" + (same_level ? "" : type + "/") + cmd + ".html>`_";
+
+   // Prettier names for daemons, e.g. Daemon: foo_d
+   if (type == "daemon")
+      return "`Daemon: " + replace_string(cmd, "daemons-", "") + " <" + (same_level ? "" : "daemon/") + cmd +
+             ".html>`_";
+
+   // For all others use just the last part of the filename
+   name = implode(explode(cmd, "-")[1..], "");
+
    if (type == "player command")
       return "`" + cmd + " <" + (same_level ? "" : "player_command/") + cmd + ".html>`_";
    if (type == "verb")
       return "`" + cmd + " <" + (same_level ? "" : "verb/") + cmd + ".html>`_";
    if (type == "command")
       return "`Command: " + cmd + " <" + (same_level ? "" : "command/") + cmd + ".html>`_";
-   if (type == "daemon")
-      return "`Daemon: " + cmd + " <" + (same_level ? "" : "daemon/") + cmd + ".html>`_";
    if (type == "module")
-      return "`Module: " + cmd + " <" + (same_level ? "" : "module/") + cmd + ".html>`_";
-   if (type == "mudlib")
-      return "`" + cmd + " <" + (same_level ? "" : "mudlib/") + cmd + ".html>`_";
-   if (type == "api")
-      return "`" + cmd + " <" + (same_level ? "" : "api/") + cmd + ".html>`_";
+      return "`Module: " + name + " <" + (same_level ? "" : "module/") + cmd + ".html>`_";
 }
 
 void process_file(string fname)
@@ -173,35 +218,6 @@ void process_file(string fname)
 
    rstfile = RST_DIR + "/" + replace_string(file_info[FILE_TYPE], " ", "_") + "/" + file_info[FILE_NAME] + ".rst";
 
-   // This sets FILE_PRETTY
-   switch (file_info[FILE_TYPE])
-   {
-   case "daemon":
-      file_info += ({"Daemon " + file_info[FILE_NAME] + "\n"});
-      break;
-   case "player command":
-      file_info += ({"Player Command *" + file_info[FILE_NAME] + "*\n"});
-      break;
-   case "verb":
-      file_info += ({"Verb *" + file_info[FILE_NAME] + "*\n"});
-      break;
-   case "command":
-      file_info += ({"Command *" + file_info[FILE_NAME] + "*\n"});
-      break;
-   case "module":
-      file_info += ({"Module *" + file_info[FILE_NAME] + "*\n"});
-      break;
-   case "mudlib":
-      file_info += ({"Mudlib *" + file_info[FILE_NAME] + "*\n"});
-      break;
-   case "api":
-      file_info += ({file_info[FILE_NAME] + "\n"});
-      break;
-   default:
-      file_info += ({file_info[FILE_NAME] + "\n"});
-      break;
-   }
-
    if (file_info[FILE_TYPE] != "player command")
    {
       string type = file_info[FILE_TYPE];
@@ -209,8 +225,7 @@ void process_file(string fname)
          type = "functions for the mudlib";
       rstout = file_info[FILE_PRETTY];
       rstout += repeat_string("*", strlen(file_info[FILE_PRETTY])) + "\n\n";
-      rstout +=
-          "Documentation for the " + file_info[FILE_NAME] + " " + type + " in *" + fname + "*.\n\n";
+      rstout += "Documentation for the " + file_info[FILE_NAME] + " " + type + " in *" + fname + "*.\n\n";
    }
 
    len = sizeof(lines);

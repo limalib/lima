@@ -114,7 +114,8 @@ string iwrap(string str)
 
 //: FUNCTION chr
 // Return a string from a character.
-// Example::
+// Example:
+//
 //    chr(120) -> "x"
 string chr(int i)
 {
@@ -123,7 +124,8 @@ string chr(int i)
 
 //: FUNCTION ord
 // Return a char value from a single length string.
-// Example::
+// Example:
+//
 //    ord("x") -> 120
 int ord(string x)
 {
@@ -134,7 +136,8 @@ int ord(string x)
 
 //: FUNCTION swapcase
 // Swaps uppercase to lowercase and lower to upper.
-// Example::
+// Example:
+//
 //    swapcase("jOHN") -> "John"
 string swapcase(string s)
 {
@@ -236,7 +239,8 @@ int is_letter(int c)
 
 //: FUNCTION format_list
 // Formats an array of strings into a string seperated by commas and ended by "and" as a default seperator.
-// Example::
+// Example:
+//
 //   format_list(({"apple","pear","banana"})) -> "apple, pear, and banana"
 string format_list(string *list, string separator)
 {
@@ -253,7 +257,8 @@ string format_list(string *list, string separator)
 
 //: FUNCTION tidy_list
 // Formats an array of strings into a formatted list including count of items.
-// Example::
+// Example:
+//
 //  tidy_list(({"apple","pear","banana","apple"})) -> "a pear, 2 apple, and a banana"
 string tidy_list(mixed items, string separator)
 {
@@ -317,7 +322,8 @@ string title_capitalize(string instring)
 //: FUNCTION time_to_string
 // Return a nicely string formatted version of a number of seconds.
 // Default is long format short=1 for shorter format.
-// Examples::
+// Examples:
+//
 //   time_to_string(500)   -> "8 minutes, 20 seconds"
 //   time_to_string(500,1) -> "8m 20s"
 //

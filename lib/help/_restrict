@@ -26,6 +26,7 @@
 # This file is parsed by help_d.c.
 #
 autodoc/player_command : 0
+fluffos: 1
 wizard : 1
 autodoc : 1
 admin : 5

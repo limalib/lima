@@ -42,6 +42,7 @@ string call_trace()
    return res;
 }
 
+
 // There should be an | operator for this.
 
 //: FUNCTION clean_array
@@ -94,7 +95,6 @@ string *rev_explode(string arr_in, string delim)
 // Logically 2 arrays should be equivalent, but aren't with ==.
 // cmp knows they are.  This is mainly useful when you want to compare
 // mappings and arrays.
-
 int cmp(mixed a, mixed b)
 {
    int i;
@@ -136,9 +136,7 @@ int cmp(mixed a, mixed b)
 // Inserts the contents of the array of the first argument into
 // The array in the second argument before the nth element of the array,
 // where n is the 3rd argument passed to insert.
-
 // Rust hacked at this to make it a bit more intuitive...
-
 mixed insert(mixed to_insert, mixed into_array, int where)
 {
 // ### (db) I don't see any particular need to program defensively...
@@ -894,7 +892,8 @@ varargs string get_stack(int x)
 
 //: FUNCTION pround
 // Preceision round a float into a string with a specific number of decimals.
-// Example::
+// Example:
+//
 //     pround(3.14152526,4) -> "3.1415"
 string pround(float f, int p)
 {
@@ -903,7 +902,8 @@ string pround(float f, int p)
 
 //: FUNCTION nnew
 // Clone a number of the same files with the same arguments and return them.
-// Example::
+// Example:
+//
 //     nnew(3,"/domains/std/consumable/beer")->move(this_body());
 object *nnew(int count, string file, string args...)
 {

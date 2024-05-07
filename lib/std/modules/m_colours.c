@@ -52,7 +52,8 @@ string use_colour(string *cols, int position, int width)
 
 //: FUNCTION gradient_string
 // Given a string, spread the colour array equally over the string length.
-// Example::
+// Example:
+//
 //   gradient_string("Hello world",({"118","119","120","121","122","123"}))
 string gradient_string(string str, string *cols)
 {
