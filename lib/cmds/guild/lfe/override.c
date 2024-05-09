@@ -6,6 +6,8 @@
 //
 // Override basic electronics to bypass their normal function or make them work
 // for you.
+//
+// .. TAGS: RST
 
 inherit SPECIAL;
 

@@ -1,5 +1,6 @@
 Rules
 #####
+.. TAGS: RST
 
 See: `bug <../player_command/bug.html>`_ `idea <../player_command/idea.html>`_ `typo <../player_command/typo.html>`_ `discipline <discipline.html>`_
 
@@ -15,7 +16,7 @@ Rule Book for the MUD
  * Second characters are permitted on this MUD, BUT, only under the following
     circumstances:
     + They must be played as separate, individual characters.  This means that
-      the two characters may not be logged into the mud at the same time.
+      the two characters may not be logged into the MUD at the same time.
       A character who has gone "net-dead," or has lose link still counts as a
       logged in character.
     + The characters may not be switched with the intent to pass items or
@@ -44,7 +45,7 @@ Rule Book for the MUD
     the game less enjoyable for everyone, and can, in some cases, erase
     player files or crash the game.  On the other hand, good and honest
     reporting of bugs, ideas and typoes are much appreciated by the Staff
-    of Zork Mud.
+    of the MUD.
 
  * Deliberate link-death is illegal. Any use of link-death, such as to
     prevent death, or to prevent punishment or damage, or any other clever

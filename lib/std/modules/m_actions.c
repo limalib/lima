@@ -4,6 +4,11 @@
 #include <daemons.h>
 #include <mudlib.h>
 
+//: MODULE
+// This module adds functions in monsters so they can do actions or respond to actions.
+//
+// .. TAGS: RST
+
 void add_hook(string, function);
 void remove_hook(string, function);
 object query_target();
@@ -52,7 +57,6 @@ string *query_actions()
 }
 
 //: FUNCTION set_delay_time
-// void set_delay_time(int);
 // Sets the amount of time between possible actions. The minimum value
 // is 5, which is default and is fine for most situations. For a large
 // number of action objects, increasing this number (and increasing the
@@ -191,7 +195,6 @@ void action_movement()
 
 void start_actions()
 {
-
    add_hook("move", ( : action_movement:));
    if (env = environment(this_object()))
    {

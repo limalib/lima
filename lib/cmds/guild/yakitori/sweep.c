@@ -5,6 +5,8 @@
 //      sweep <someone>
 //
 //Sweep someones feet or limbs they use to move around with.
+//
+// .. TAGS: RST
 
 
 /*

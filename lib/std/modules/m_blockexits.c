@@ -1,5 +1,11 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+//: MODULE
+// Module for NPCs that need to block exits for players - and stop doing so
+// under certain conditions.
+//
+// .. TAGS: RST
+
 private
 mixed handle_blocks(string str);
 private

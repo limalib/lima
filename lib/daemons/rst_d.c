@@ -467,7 +467,7 @@ void make_index(string header, string type, string *files, string filename)
    string output;
    output = repeat_string("*", strlen(header)) + "\n";
    output += header + "\n";
-   output += repeat_string("*", strlen(header)) + "\n\n";
+   output += repeat_string("*", strlen(header)) + "\n\n.. TAGS: RST\n";
 
    if (sizeof(files))
       foreach (string file in files)

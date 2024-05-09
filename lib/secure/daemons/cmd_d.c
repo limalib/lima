@@ -62,11 +62,6 @@ void create()
    set_privilege(1);
 }
 
-mapping query_cmds()
-{
-   return flatten_array(values(cmd_info));
-}
-
 private
 void parse_verb_defs(string dir, string filecontents)
 {
@@ -568,4 +563,11 @@ mixed parse_arg(int this_arg, mixed argv)
       return -2;
 
    return result;
+}
+
+varargs mapping query_cmds(string path)
+{
+   if (path)
+      cache_dir(path);
+   return path ? cmd_info[path] : flatten_array(values(cmd_info));
 }

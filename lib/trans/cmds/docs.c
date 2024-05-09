@@ -5,11 +5,14 @@
 //: COMMAND
 // USAGE
 //   |  ``docs``
-//   |  ``docs refresh`` - rebuild HELP_D.
+//   |  ``docs refresh``    - rebuild HELP_D.
+//   |  ``docs playerdoc``  - recreate /help/player/commands.rst
 //
 // This command shows status of the documentation.
 //
 // .. TAGS: RST
+
+#include <commands.h>
 
 inherit CMD;
 inherit M_WIDGETS;
@@ -21,9 +24,31 @@ void update_stats()
 }
 
 private
+void update_playerdoc()
+{
+   string out = "Commands\n========\n\n"
+                ".. TAGS: RST\n.. INFO: This help file is created using 'docs playerdoc'. Don't "
+                "edit manually.\n\nThe following commands are currently available:\n\n";
+   string *verbs = map(get_dir(CMD_DIR_VERBS + "/*.c"), ( : $1[0.. < 3] :));
+   CMD_D->find_cmd_in_path("who", ({CMD_DIR_PLAYER}));
+   out += colour_table(CMD_D->query_cmds(CMD_DIR_PLAYER + "/"), 80);
+   out += "\n\nYou can also try many \"real life verbs\", which have no help because they use\n"
+          "real english syntax.  For example:\n"
+          "   ``look at rust``\n"
+          "   ``move the yellow table``\n\n"
+          "The following verbs are currently available:\n\n";
+   out += colour_table(verbs, 80);
+   out += "\n\nSome of the verbs have aliases, like 'repair' can be 'fix' or 'patch'.\n";
+
+   write_file("/help/player/commands.rst", out, 1);
+   write("Done: commands.rst updated.");
+}
+
+private
 void main(mixed arg)
 {
    object ob;
+   string *checked_dirs = ({"autodoc", "player", "admin", "wizard"});
    string *help_pages;
    string *next_files = ({});
 
@@ -37,18 +62,21 @@ void main(mixed arg)
    help_pages = clean_array(flatten_array(values(HELP_D->query_topics())));
    if (arg == "refresh")
       return update_stats();
+   if (arg == "playerdoc")
+      return update_playerdoc();
 
    foreach (string f in filter_array(help_pages, ( : $1[ < 4..] == ".rst" :)))
    {
       string *parts = explode(f, "/");
-      if (sizeof(parts) > 3 && parts[0] == "help" && parts[1] == "autodoc")
+      if (sizeof(parts) > 2 && parts[0] == "help" && member_array(parts[1], checked_dirs) != -1)
       {
-         rst_categories[parts[2]]++;
-         if (!rst_tag_cats[parts[2]])
-            rst_tag_cats[parts[2]] = 0;
+         string category = parts[ < 2];
+         rst_categories[category]++;
+         if (!rst_tag_cats[category])
+            rst_tag_cats[category] = 0;
          if (member_array(f, rst_tags) != -1)
-            rst_tag_cats[parts[2]]++;
-         else if (arg == parts[2])
+            rst_tag_cats[category]++;
+         else if (arg == category)
             next_files += ({f});
       }
    }
@@ -73,10 +101,10 @@ void main(mixed arg)
    {
       if (sizeof(next_files) > 10)
          next_files = next_files[0..9];
-      write("Next "+sizeof(next_files)+" files in " + arg + " category:\n");
+      write("Next " + sizeof(next_files) + " files in " + arg + " category:\n");
       foreach (string f in next_files)
       {
-         write("  - "+f);
+         write("  - " + f);
       }
    }
 }

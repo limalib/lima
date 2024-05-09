@@ -1,5 +1,6 @@
 Privacy
 =======
+.. TAGS: RST
 
 See:  `snoopable <../player_command/snoopable.html>`_ 
 

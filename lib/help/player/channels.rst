@@ -3,6 +3,8 @@ Channels
 
 See: `gossip <gossip.html>`_ `newbie <newbie.html>`_ `new <new.html>`_ `feelings <../player_command/feelings.html>`_ 
 
+.. TAGS: RST
+
 Channels are a means of commnunication with other players on the MUD.
 Players may listen to a channel to take part in conversation with players
 that are not even in the same room.

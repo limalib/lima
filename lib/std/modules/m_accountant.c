@@ -23,6 +23,8 @@ nosave int was_busy;
 // ``set_bank_name()`` are needed to define the bank actions.
 //
 // Your accountant should inherit from LIVING or ADVERSARY.
+//
+// .. TAGS: RST
 
 //: FUNCTION set_currency_type
 // Sets the type of currency the bank will deposit.

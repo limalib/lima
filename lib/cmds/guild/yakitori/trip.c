@@ -12,6 +12,8 @@
 // your arm in front and your leg behind. After that all you have to do is drive
 // through your opponent and he will automatically lose his balance and you will
 // take him down effortlessly.
+//
+// .. TAGS: RST
 
 inherit SPECIAL;
 

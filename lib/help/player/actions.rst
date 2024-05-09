@@ -1,6 +1,8 @@
 Communicating With the mud
 ##########################
 
+.. TAGS: RST
+
 The Lima mudlib is able to understand a wide range of user input,
 which is unlike most other MU*'s which normally require very terse and
 specific commands.  However, it is a computer game, not an english professor.

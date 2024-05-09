@@ -1,5 +1,6 @@
 Unalias
 =======
+.. TAGS: RST
 
 USAGE:  
    ``unalias  <alias>``

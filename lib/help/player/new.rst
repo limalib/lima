@@ -1,6 +1,7 @@
 Welcome to the MUD!
 *******************
- 
+.. TAGS: RST
+
 If you are *new* to the world of mudding, this document should help you get on your way.  If you are a veteran, or simply experienced with MUDs, you may as well bypass this document all together.
  
 What is a MUD?

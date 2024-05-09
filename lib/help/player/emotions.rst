@@ -1,5 +1,6 @@
 Feelings
 ========
+.. TAGS: RST
 
 USAGE: 
   ``feelings <pattern>``

@@ -1,53 +1,53 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-/*
-** bodystats.c -- body statistics (characteristics)
-**
-** This module should be inherited into anything requiring physical
-** statistics/characteristics.  Typically, this will be used by a
-** player's body, or an NPC.
-**
-** Stat values have the range: [0,100].  Typical values:
-**
-**	10	Joe Human
-**	20	Newbie Hero (average value at character creation time)
-**	50	Mid-level experience
-**	80	Master/high-level
-**	90	History will remember you
-**	95	Frightening
-**	100	Pure god-like status
-**
-** Statistics have a number of basic values which are "rolled" at
-** character creation time.  These differentiate starting characters
-** from one another.
-**
-**	Strength:	physical stature, power, brute force
-**		Weakling vs. strong/powerful
-**
-**	Agility:	body control, speed, flexibility
-**		Uncoordinated vs. excellent control
-**
-**	Intelligence:	inherent capability for learning
-**		Dumb vs. smart/capable
-**
-**	Willpower:	drive, stamina
-**		Unmotivated vs. driven/fanatical
-**
-** A good number of statistics are derived from the base statistics.
-**
-**	Constitution:	physical/mental stamina, sturdiness
-**		Elf vs. dwarf
-**
-**	Wisdom:		collected knowledge
-**		Naive vs. wise
-**
-**	Charisma:	natural attraction, leadership, persuasion
-**		Nobody vs. great leader/speaker
-**
-**  Mana:   intellectual capacity, magic ability, reflex
-**      Distraught vs. Contemplative Guru
-**
-*/
+//: MODULE
+// bodystats.c -- body statistics (characteristics)
+//
+// This module should be inherited into anything requiring physical
+// statistics/characteristics.  Typically, this will be used by a
+// player's body, or an NPC.
+//
+// Stat values have the range: [0,100].  Typical values:
+//
+//	10	Joe Human
+//	20	Newbie Hero (average value at character creation time)
+//	50	Mid-level experience
+//	80	Master/high-level
+//	90	History will remember you
+//	95	Frightening
+//	100	Pure god-like status
+//
+// Statistics have a number of basic values which are "rolled" at
+// character creation time.  These differentiate starting characters
+// from one another.
+//
+//	Strength:	physical stature, power, brute force
+//		Weakling vs. strong/powerful
+//
+//	Agility:	body control, speed, flexibility
+//		Uncoordinated vs. excellent control
+//
+//	Intelligence:	inherent capability for learning
+//		Dumb vs. smart/capable
+//
+//	Willpower:	drive, stamina
+//		Unmotivated vs. driven/fanatical
+//
+// A good number of statistics are derived from the base statistics.
+//
+//	Constitution:	physical/mental stamina, sturdiness
+//		Elf vs. dwarf
+//
+//	Wisdom:		collected knowledge
+//		Naive vs. wise
+//
+//	Charisma:	natural attraction, leadership, persuasion
+//		Nobody vs. great leader/speaker
+//
+//  Mana:   intellectual capacity, magic ability, reflex
+//      Distraught vs. Contemplative Guru
+//
+// .. TAGS: RST
 
 #include <classes.h>
 #include <config/stats.h>
@@ -361,7 +361,6 @@ nomask void set_wil(int stat)
    recompute_derived();
 }
 
-// ### these should come from skills
 int skill_wis_sum()
 {
 #ifndef USE_SKILLS

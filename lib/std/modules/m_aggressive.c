@@ -8,6 +8,12 @@
 // 12 May, 1998: Iizuka updated to support the new adversary code.
 // 27 June, 2020: Tsath updated to not use hooks since they're already in adversary.
 
+//: MODULE
+// Module for agressive monsters that will attack players given a specific chance to do so.
+// Module will check if player is a wizard, and not attack the wizard.
+//
+// .. TAGS: RST
+
 void start_fight(object who);
 
 private
@@ -61,7 +67,7 @@ void i_met(object who)
 // range 0 (never aggressive) to 100 (completely aggressive).
 void set_aggressive(int a)
 {
-   call_out("behavior_hooks",1);
+   call_out("behavior_hooks", 1);
    aggression_chance = a;
 }
 

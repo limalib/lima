@@ -1,11 +1,14 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-/*
-** M_ASSISTANCE for having mobs help each other when under attack
-** Tsath, 2020
-*/
 inherit M_MESSAGES;
 
+//: MODULE
+// M_ASSISTANCE for having mobs help each other when under attack. This module
+// requires M_MESSAGES for the grunt work.
+//
+// .. TAGS: RST
+
+private
 string helper;
 
 void add_helper(string h)

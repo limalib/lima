@@ -5,6 +5,8 @@
 //This Karate technique consists of throwing a Mawashi geri (Roundhouse) to the
 //midsection of the opponent as a distraction then following with a Choku-zuki
 //(Jab) with the lead hand to the chin.
+//
+// .. TAGS: RST
 
 inherit SPECIAL;
 

@@ -1,5 +1,6 @@
 Becoming a wizard
 =================
+.. TAGS: RST
 
 Right now, becoming a wizard on the MUD has no firm requirements.
 
