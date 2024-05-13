@@ -4,15 +4,17 @@
 
 //: COMMAND
 // USAGE
-//   |  ``docs``
-//   |  ``docs refresh``    - rebuild HELP_D.
+//   |  ``docs``            - show status of RST compliant documentation
+//   |  ``docs <topic>``    - show next 10 files to be done in this topic
+//   |  ``docs refresh``    - rebuild HELP_D
 //   |  ``docs playerdoc``  - recreate /help/player/commands.rst
-//
-// This command shows status of the documentation.
 //
 // .. TAGS: RST
 
 #include <commands.h>
+
+#define COMMANDS_HELP "/help/player/commands.rst"
+#define COMMANDS_HELP_WIDTH 80
 
 inherit CMD;
 inherit M_WIDGETS;
@@ -31,16 +33,16 @@ void update_playerdoc()
                 "edit manually.\n\nThe following commands are currently available:\n\n";
    string *verbs = map(get_dir(CMD_DIR_VERBS + "/*.c"), ( : $1[0.. < 3] :));
    CMD_D->find_cmd_in_path("who", ({CMD_DIR_PLAYER}));
-   out += colour_table(CMD_D->query_cmds(CMD_DIR_PLAYER + "/"), 80);
+   out += colour_table(CMD_D->query_cmds(CMD_DIR_PLAYER + "/"), COMMANDS_HELP_WIDTH);
    out += "\n\nYou can also try many \"real life verbs\", which have no help because they use\n"
           "real english syntax.  For example:\n"
           "   ``look at rust``\n"
           "   ``move the yellow table``\n\n"
           "The following verbs are currently available:\n\n";
-   out += colour_table(verbs, 80);
+   out += colour_table(verbs, COMMANDS_HELP_WIDTH);
    out += "\n\nSome of the verbs have aliases, like 'repair' can be 'fix' or 'patch'.\n";
 
-   write_file("/help/player/commands.rst", out, 1);
+   write_file(COMMANDS_HELP, out, 1);
    write("Done: commands.rst updated.");
 }
 

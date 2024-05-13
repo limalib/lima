@@ -19,6 +19,7 @@
 #define DOC_D 	      "/daemons/doc_d"
 #define DOMAIN_D      "/daemons/domain_d"
 #define EMOJI_D       "/daemons/emoji_d"
+#define EVENT_D       "/daemons/event_d"
 #define GOVERNANCE_D  "/daemons/governance_d"
 #define GROUP_D       "/daemons/group_d"
 #define GUEST_D       "/daemons/guest_d"

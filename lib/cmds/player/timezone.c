@@ -22,14 +22,14 @@ void main(string val)
    if (!strlen(val))
    {
       actual = to_float(this_body()->query_tz());
-      outf("Your timezone setting is %f\n", actual);
+      outf("Your timezone setting is %s\n", pround(actual,1));
       return;
    }
-   if (actual)
+   if (actual>=-12 || actual <=12)
    {
       this_body()->set_tz(actual);
       actual = to_float(this_body()->query_tz());
-      outf("Your new timezone setting is %f\n", actual);
+      outf("Your new timezone setting is %s\n", pround(actual,1));
       return;
    }
    // Add handling for strings - eg "EST" -> -5.0

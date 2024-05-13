@@ -1,3 +1,5 @@
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
 /*
 ** state_d.c -- Changes states for objects on the MUD
 ** Tsath 2020-07-10 (Created)

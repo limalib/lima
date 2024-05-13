@@ -1,7 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 /*
- * uptime  -  reports how long the mud has been up.
+ * time  -  reports how long the mud has been up.
  * copied from ideaexchange where it was originally
  * created by beek@nightmare
  * copied by zifnab@zorkmud
@@ -20,79 +20,59 @@
 //
 // .. TAGS: RST
 
-
 #include <localtime.h>
 
 inherit CMD;
+inherit M_FRAME;
 
-#define MIN 60
-#define HOUR (60 * MIN)
-#define DAY (24 * HOUR)
-#define WEEK (7 * DAY)
+private
+string week_view()
+{
+   string day = EVENT_D->time_to_weekday();
+   string out = "";
+
+   foreach (string d in EVENT_D->week_days())
+   {
+      out += "[" + (d == day ? "<190>" : "") + d + "<res>] ";
+   }
+   return out + "\n";
+}
 
 private
 void main(string notused)
 {
-   int tm = uptime();
-   int tm1 = time();
-   string tm2 = ctime(tm1);
-   int tm3 = tm1 - uptime();
-   string tm4 = ctime(tm3);
-   int tm5;
-   string str;
-   mixed local = localtime(tm1);
-   int offset = local[LT_GMTOFF];
-   string gmt;
-   int x;
+   int time = time();
+   string restarted_at = ctime(time - uptime());
+   string str = "";
+   mixed local = localtime(time);
    mixed my_offset;
 
    my_offset = this_body()->query_tz();
    if (intp(my_offset) || floatp(my_offset))
-   {
       my_offset = to_int(3600.0 * my_offset);
-      tm5 = tm1 + my_offset;
-   }
-   gmt = ctime(tm1 - offset);
-   outf("Local MUD time %s. \n", tm2);
-   outf("GMT            %s.\n", gmt);
+
+   str += sprintf("<190>%s<res> -  %d game days / real day\n", EVENT_D->time_to_str(), EVENT_D->game_days_per_day());
+   str += week_view() + "\n";
+   str += sprintf("%s.\n", ctime(time));
+   str += sprintf("%s.\n", ctime(time - local[LT_GMTOFF]));
    my_offset = this_body()->query_tz();
    if (intp(my_offset) || floatp(my_offset))
    {
       my_offset = to_int(3600.0 * my_offset);
-      tm5 = tm1 + my_offset;
-      outf("Player time    %s.\n", ctime(tm1 + my_offset));
+      str += sprintf("\n%s.\n", ctime(time + my_offset));
    }
-   out(mud_name() + " restarted on " + tm4 + ". \n \n");
-   str = mud_name() + " has been up for ";
-   if (x = (tm / WEEK))
-   {
-      str += x + "w ";
-      tm -= x * WEEK;
-   }
-
-   if (x = (tm / DAY))
-   {
-      str += x + "d ";
-      tm -= x * DAY;
-   }
-
-   if (x = (tm / HOUR))
-   {
-      str += x + "h ";
-      tm -= x * HOUR;
-   }
-
-   if (x = (tm / MIN))
-   {
-      str += x + "m ";
-      tm -= x * MIN;
-   }
-
-   if (tm)
-      str += tm + "s ";
+   str += sprintf("\n" + mud_name() + " restarted on " + restarted_at + ". \n");
+   str += mud_name() + " has been up for " + time_to_string(uptime());
 
    str = str[0.. < 2] + ".\n";
-   out(str);
+
+   // Create the frame
+   frame_init_user();
+   set_frame_left_header();
+   set_frame_title("Game Time & Real Time");
+   set_frame_content(str);
+   set_frame_header("Game Time\n\n\nLocal MUD\nGMT\n\nTimezone\n\nUptime");
+   out(frame_render());
 }
 
 void player_menu_entry(string str)
