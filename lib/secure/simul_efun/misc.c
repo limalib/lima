@@ -788,18 +788,6 @@ mixed *sort_by_value(mixed arr, function value_func)
    return sort_array(arr, ( : evaluate($(value_func), $1) - evaluate($(value_func), $2) :));
 }
 
-/* Replacement for the dump_socket_status() efun */
-string dump_socket_status()
-{
-   string ret = "Fd    State      Mode       Local Address          Remote Address\n"
-                "--  ---------  --------  ---------------------  ---------------------\n";
-   foreach (mixed *item in socket_status())
-   {
-      ret += sprintf("%2d  %|9s  %|8s  %-21s  %-21s\n", item[0], item[1], item[2], item[3], item[4]);
-   }
-   return ret;
-}
-
 string lima_version()
 {
    return "Lima 1.1a3";

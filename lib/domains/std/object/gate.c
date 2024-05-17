@@ -23,6 +23,8 @@ void setup(string dir, string dest)
    set_id("gate");
    set_adj("rusty", "rusty gate");
    set_long("The gate is very rusty and doesnt look like it could stop anything anymore");
-   setup_door("rusty gate", dir, dest);
+   set_sibling_ident("rusty gate");
+   set_door_direction("dir");
+   set_door_destination(dest);
    set_flag(ATTACHED);
 }

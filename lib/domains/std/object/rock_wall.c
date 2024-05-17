@@ -30,5 +30,8 @@ void setup()
    set_long("You are unable to quite see where it slides.");
    set_close_msg("The rock slides back.");
    set_open_msg("The rock slides open, allowing you to exit northwards.");
-   setup_door("dock wall", "north", "/domains/std/room/caves/Small_Dock");
+   set_sibling_ident("dock wall");
+   set_door_direction("north");
+   set_door_destination("/domains/std/room/caves/Small_Dock");
+
 }

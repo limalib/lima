@@ -28,5 +28,7 @@ void setup(string dir, string room)
    set_id("door");
    set_adj("large oak", "large", "oak");
    set_long("It is about 10 feet tall, and very beautiful.");
-   setup_door("large oak door", dir, room);
+   set_sibling_ident("large oak door");
+   set_door_direction(dir);
+   set_door_destination(room);
 }

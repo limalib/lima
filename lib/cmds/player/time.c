@@ -21,6 +21,7 @@
 // .. TAGS: RST
 
 #include <localtime.h>
+#include <config/time.h>
 
 inherit CMD;
 inherit M_FRAME;
@@ -51,8 +52,10 @@ void main(string notused)
    if (intp(my_offset) || floatp(my_offset))
       my_offset = to_int(3600.0 * my_offset);
 
+#ifdef USE_GAME_TIME
    str += sprintf("<190>%s<res> -  %d game days / real day\n", EVENT_D->time_to_str(), EVENT_D->game_days_per_day());
    str += week_view() + "\n";
+#endif
    str += sprintf("%s.\n", ctime(time));
    str += sprintf("%s.\n", ctime(time - local[LT_GMTOFF]));
    my_offset = this_body()->query_tz();
@@ -69,9 +72,16 @@ void main(string notused)
    // Create the frame
    frame_init_user();
    set_frame_left_header();
+
+#ifdef USE_GAME_TIME
    set_frame_title("Game Time & Real Time");
-   set_frame_content(str);
    set_frame_header("Game Time\n\n\nLocal MUD\nGMT\n\nTimezone\n\nUptime");
+#else
+   set_frame_title("Time");
+   set_frame_header("Local MUD\nGMT\n\nTimezone\n\nUptime");
+#endif
+
+   set_frame_content(str);
    out(frame_render());
 }
 

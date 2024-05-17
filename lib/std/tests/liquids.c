@@ -1,6 +1,6 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit TEST_SUITE;
+inherit M_TEST_SUITE;
 object troll, keg;
 
 int clone_actors()

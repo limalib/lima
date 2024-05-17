@@ -29,7 +29,7 @@ int in_queue(object ob)
 //: FUNCTION add_to_queue
 // Adds ob to queue, to be scheduled at NOW + add_to_time in minutes.
 // If force=1, the object is added even if already in queue.
-varargs void add_to_queue(object ob, int add_to_time, int force)
+varargs void add_to_queue(object ob, int add_to_time, int force, mixed extra)
 {
    int update_time;
 
@@ -40,7 +40,7 @@ varargs void add_to_queue(object ob, int add_to_time, int force)
       if (!queue[update_time])
          queue[update_time] = ({});
 
-      queue[update_time] += ({ob});
+      queue[update_time] += ({({ob, extra})});
    }
 }
 
@@ -48,7 +48,7 @@ varargs void add_to_queue(object ob, int add_to_time, int force)
 // Useful for faster testing, should probably not be used in the real mudlib.
 // If it's this brief, then use a call_out(). See add_to_queue for documentation.
 // This function adds seconds, and not minutes.
-varargs void add_to_queue_secs(object ob, int add_to_time, int force)
+varargs void add_to_queue_secs(object ob, int add_to_time, int force, mixed extra)
 {
    int update_time;
    if (ob && ob->query_call_interval() && (force || !in_queue(ob)))
@@ -58,8 +58,18 @@ varargs void add_to_queue_secs(object ob, int add_to_time, int force)
       if (!queue[update_time])
          queue[update_time] = ({});
 
-      queue[update_time] += ({ob});
+      queue[update_time] += ({({ob, extra})});
    }
+}
+
+//: FUNCTION add_to_queue_at_time
+// Add to queue at a specific time. No checks, no requirements.
+varargs void add_to_queue_at_time(mixed ob, int update_time, mixed extra)
+{
+   if (!queue[update_time])
+      queue[update_time] = ({});
+
+   queue[update_time] += ({({ob, extra})});
 }
 
 //: FUNCTION remove_from_queue
@@ -68,10 +78,12 @@ varargs void remove_from_queue(object ob)
 {
    foreach (int update_time, object * targets in queue)
    {
-      foreach (object target in targets)
+      foreach (mixed *target in targets)
       {
-         if (target == ob)
-            queue[update_time] -= ({ob});
+         if (target[0] == ob)
+         {
+            queue[update_time] -= ({target});
+         }
       }
    }
 }
@@ -93,12 +105,14 @@ void process_queue()
          continue;
       }
       // Walk through each target in targets and check if they are still stateful and return true on state_update().
-      foreach (object target in targets)
+      foreach (mixed *target in targets)
       {
-         if (target && !target->is_stateful())
+         if (stringp(target[0]))
+            target[0] = load_object(target[0]);
+         if (target[0] && !target[0]->is_stateful(target[1]))
             continue;
-         if (update_time < time() && target->state_update())
-            add_to_queue(target, 0, 1);
+         if (update_time < time() && target[0]->state_update(target[1]))
+            add_to_queue(target[0], 0, 1, target[1]);
       }
 
       // Remove old timestamps from the queue
@@ -141,7 +155,7 @@ string stat_me()
    string squeue = "";
    foreach (int update_time, object * targets in queue)
    {
-      string *str_targets = map(targets, ( : sprintf("%O", $1) :));
+      string *str_targets = map(targets, ( : sprintf("%O", $1[0]) + " " + sprintf("%O", $1[1]) :));
       squeue += " In " + (update_time - time()) + " seconds:\n";
       squeue += "\t" + format_list(str_targets) + "\n";
    }

@@ -149,33 +149,6 @@ mixed query_door_destination()
    return query_method_destination("go");
 }
 
-//: FUNCTION setup_exits
-// Set the name of the direction and the location to which the door's exit
-// will lead.
-// DEPRICATED! -- Use set_door_destination() and set_door_description()
-//                instead.
-void setup_exits(string dir, string room)
-{
-   add_method("go", room, ( : door_check:));
-   set_door_direction(dir);
-}
-
-//: FUNCTION setup_door
-// Set up the key parts of the door.
-// The first argument is the string to which the door responds and should
-// match its sibling, the second argument is the direction of the exit the
-// door covers, and the third argument is the object to which the exit leads.
-// This should be called only once, from setup().
-// DEPRECATED! -- Use set_door_destination, set_door_direction(), and
-//                set_sibling_ident() instead.
-
-void setup_door(string ident, string dir, string room)
-{
-   set_sibling_ident(ident);
-   set_door_direction(dir);
-   set_door_destination(room);
-}
-
 varargs void set_locked(string x, string y)
 {
    m_lockable::set_locked(x, y);

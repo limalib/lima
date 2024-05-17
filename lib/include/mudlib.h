@@ -195,7 +195,6 @@
 #define SIGN               "/std/sign"
 #define SPELL              "/std/spell"
 #define STOCK_MASTER       "/std/stock_master"
-#define TEST_SUITE         "/std/test_suite"
 #define VERB_OB            "/std/verb_ob"
 #define WANDERING_MONSTER  "/std/wandering_monster"
 #define WATER              "/std/water"
@@ -225,6 +224,7 @@
 #define M_REGEX            _MODULES "m_regex"
 #define M_SMARTMOVE        _MODULES "m_smartmove"
 #define M_STATEFUL         _MODULES "m_stateful"
+#define M_TEST_SUITE       _MODULES "m_test_suite"
 #define M_WIDGETS          _MODULES "m_widgets"
 
 /* for area objects */ 

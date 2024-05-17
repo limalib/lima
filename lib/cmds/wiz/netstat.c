@@ -1,6 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
+//$$ see: socketinfo
 // USAGE: ``netstat``
 //
 // Displays a list of sockets with (stat) info on each one.

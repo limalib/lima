@@ -1,7 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: 
+// USAGE:
 //
 //     |  ``tail <file(s)>``
 //     |  ``tail -n<number> <files>``
@@ -13,14 +13,6 @@
 
 #include <mudlib.h>
 inherit CMD;
-
-string tail(string file_contents, int n)
-{
-   if (!file_contents)
-      out("ERROR: file too large.\n");
-   else
-      out(implode(explode(file_contents, "\n")[ < n..], "\n"));
-}
 
 private
 void main(mixed *arg, mapping flags, string stdin)
@@ -37,6 +29,6 @@ void main(mixed *arg, mapping flags, string stdin)
    }
    for (i = 0; i < sizeof(arg[0]); i++)
    {
-      tail(read_file(arg[0][i]), n);
+      more(tail(arg[0][i], n));
    }
 }
