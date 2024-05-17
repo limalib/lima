@@ -54,7 +54,9 @@ void set_sibling_room(mixed room)
    cached_sibling = 0;
 }
 
-private
+//: FUNCTION respond_to_sibling_ident
+// For the siblings to be able to find each other, this public function returns
+// true if the ident matches.
 int respond_to_sibling_ident(string id)
 {
    return our_ident == id;
