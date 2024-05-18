@@ -111,7 +111,7 @@ void process_queue()
             target[0] = load_object(target[0]);
          if (target[0] && !target[0]->is_stateful(target[1]))
             continue;
-         if (update_time < time() && target[0]->state_update(target[1]))
+         if (target[0] && update_time < time() && target[0]->state_update(target[1]))
             add_to_queue(target[0], 0, 1, target[1]);
       }
 
