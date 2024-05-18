@@ -186,9 +186,8 @@ varargs void schedule_event(string timing, mixed ob, string extra)
          foreach (int m in m_ar)
          {
             string s = sprintf("%s %2.2d:%2.2d:00", week_day(d), h, m);
-            TBUG(s);
             TBUG("Will run in " + time_to_string(str_to_time(s) - time()));
-            // STATE_D->add_to_queue_at_time(ob, str_to_time(s) - (3600 * ADJUST_HOURS), extra);
+            STATE_D->add_to_queue_at_time(ob, str_to_time(s) - (3600 * ADJUST_HOURS), extra);
          }
 }
 
