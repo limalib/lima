@@ -156,7 +156,7 @@ string stat_me()
    foreach (int update_time, object * targets in queue)
    {
       string *str_targets = map(targets, ( : sprintf("%O", $1[0]) + " " + sprintf("%O", $1[1]) :));
-      squeue += " In " + (update_time - time()) + " seconds:\n";
+      squeue += " In " + time_to_string(update_time - time()) + " seconds:\n";
       squeue += "\t" + format_list(str_targets) + "\n";
    }
 
