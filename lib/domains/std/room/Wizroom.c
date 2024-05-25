@@ -51,3 +51,20 @@ mixed query_hint(int level)
             "Read the source by using 'more here' or 'cd here' to go to the directory of this file.",
             "Use 'talk to greeter' for some basic information about the LIMA Mudlib."});
 }
+
+// These functions are for testing STATE_D and EVENT_D and schedules.
+// Use:
+// @EVENT_D->register_event("00 12 *","/domains/std/room/Wizroom","ding")
+// to schedule the event to run. Cancel it with
+// @EVENT_D->unregister_event("/domains/std/room/Wizroom","ding")
+
+int is_stateful(string d)
+{
+   return d == "ding" ? 1 : 0;
+}
+
+int state_update(string d)
+{
+   tell_from_outside(this_object(), "A grandfather clock somewhere goes, \"Ding! Dong!\".");
+   return 0;
+}

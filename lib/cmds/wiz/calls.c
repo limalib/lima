@@ -25,8 +25,6 @@
 
 inherit CMD;
 
-#define CHOMP(x) replace_string(x, "/domains/", "^")
-
 private
 void main()
 {
@@ -40,9 +38,9 @@ void main()
    // We do not have any ANSI here, but also don't want emojis.
    set_output_flags(NO_ANSI);
 
-   outf("%-45s%-25s%-10s\n", "Object", "Function", "Delay");
+   outf("%-55s%-25s%-10s\n", "Object", "Function", "Delay");
    if (!simplify())
-      outf("%82'-'s\n", "");
+      outf("%92'-'s\n", "");
 
    foreach (data in call_out_stuff)
    {
@@ -78,12 +76,13 @@ void main()
       {
          if (sizeof(t) == 1)
          {
-            outf("%-45s%-25s%-10s\n", CHOMP(ob), f, t[0]);
+            outf("%-55s%-25s%-10s\n", shorten_filename(ob), f, t[0]);
          }
          else
-            outf("%-45s%-25s%-10s\n", CHOMP(ob), f, "(" + sizeof(t) + " calls)");
+            outf("%-55s%-25s%-10s\n", shorten_filename(ob), f, "(" + sizeof(t) + " calls)");
       }
    }
 
    outf("\nThere are %d call_outs active.\n", sizeof(call_out_stuff));
+   outf("\nActive states:\n%s", STATE_D->stat_me());
 }

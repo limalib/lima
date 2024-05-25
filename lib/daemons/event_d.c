@@ -31,11 +31,11 @@
 inherit M_DAEMON_DATA;
 
 private
-nosave string *day_names;
+mapping events = ([]);
 
-int register_event()
-{
-}
+// Nothing saved below here.
+private
+nosave string *day_names;
 
 //: FUNCTION week_day
 // If given an integer argument, returns the name of the day.
@@ -126,11 +126,11 @@ varargs int str_to_time(string date)
    total = (adjusted_time() - (adjusted_time() % (SECS_PER_DAY / GAME_DAYS_PER_DAY))) + delta +
            ((SECS_PER_DAY / GAME_DAYS_PER_DAY) * skip_days);
 
-      TBUG("skip_days: " + skip_days + " game_day: " + game_day + " real_day: " + real_day);
+   // TBUG("skip_days: " + skip_days + " game_day: " + game_day + " real_day: " + real_day);
 
    // This part adds a week if we're planning for things in the past.
    if (total - adjusted_time() < 0)
-      total += DAYS_PER_WEEK * (SECS_PER_DAY/GAME_DAYS_PER_DAY);
+      total += DAYS_PER_WEEK * (SECS_PER_DAY / GAME_DAYS_PER_DAY);
 
    // Subtract adjustment to total before returning real timestamp.
    return total - (ADJUST_HOURS * 3600);
@@ -177,6 +177,9 @@ varargs void schedule_event(string timing, mixed ob, string extra)
    int *m_ar, *h_ar, *d_ar;
    sscanf(timing, "%s %s %s", minutes, hours, days);
 
+   if (!ob)
+      return;
+
    m_ar = range(minutes, "minute");
    h_ar = range(hours, "hour");
    d_ar = range(days, "day");
@@ -184,16 +187,52 @@ varargs void schedule_event(string timing, mixed ob, string extra)
    foreach (int d in d_ar)
       foreach (int h in h_ar)
          foreach (int m in m_ar)
-         {
-            string s = sprintf("%s %2.2d:%2.2d:00", week_day(d), h, m);
-            TBUG("Will run in " + time_to_string(str_to_time(s) - time()));
-            STATE_D->add_to_queue_at_time(ob, str_to_time(s) - (3600 * ADJUST_HOURS), extra);
-         }
+            STATE_D->add_to_queue_at_time(ob, str_to_time(sprintf("%s %2.2d:%2.2d:00", week_day(d), h, m)),
+                                          extra); // - (3600 * ADJUST_HOURS), extra);
+}
+
+void register_event(string timing, string file, string extra)
+{
+   if (!extra)
+      extra = "scheduled";
+   if (!events[file])
+      events[file] = ([]);
+   events[file][extra] = timing;
+   save_me();
+}
+
+void unregister_event(string file, string extra)
+{
+   map_delete(events[file], extra);
+   if (!sizeof(keys(events[file])))
+      map_delete(events, file);
+   save_me();
+}
+
+void run_scheduler()
+{
+   foreach (string file, mapping m in events)
+      foreach (string extra, string timing in m)
+      {
+         if (file_length(file) > 0 || file_length(file + ".c") > 0)
+            schedule_event(timing, file, extra);
+         else
+            write("** Not scheduling jobs for file '" + file + "' since it does not exist.");
+      }
+   if (find_call_out("run_scheduler") == -1)
+      call_out("run_scheduler", 86400 / 24);
+}
+
+mapping query_events()
+{
+   return events;
 }
 
 void create()
 {
    day_names = explode(DAY_NAMES, ",");
+   ::create();
+   run_scheduler();
 }
 
 /*

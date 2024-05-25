@@ -64,8 +64,8 @@ inherit M_FRAME;
 // inherit M_WIDGETS;
 
 #define WHO_FORMAT "%s:  (Local Time is: %s) %28s\n%s"
-#define DEBUG(arg)                                                                                                     \
-   if (debug && member_array(arg, msgs) == -1)                                                                         \
+#define DEBUG(arg)                             \
+   if (debug && member_array(arg, msgs) == -1) \
    msgs += ({arg})
 
 string *msgs = ({});
@@ -170,9 +170,8 @@ string get_who_string(string arg)
             content += sprintf(
                 "%-20s ",
                 environment(body)
-                    ? filepath_ellipsis(
-                          replace_string(replace_string(file_name(environment(body)), "/domains/", "^"), "/wiz/", "~"),
-                          20)
+                    ? filename_ellipsis((environment(body)),
+                                        20)
                     : "(lost?)");
             break;
          case "t":

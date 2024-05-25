@@ -32,6 +32,8 @@ int in_queue(object ob)
 varargs void add_to_queue(object ob, int add_to_time, int force, mixed extra)
 {
    int update_time;
+   if (!extra)
+      extra = "scheduled";
 
    if (ob && ob->query_call_interval() && (force || !in_queue(ob)))
    {
@@ -51,6 +53,8 @@ varargs void add_to_queue(object ob, int add_to_time, int force, mixed extra)
 varargs void add_to_queue_secs(object ob, int add_to_time, int force, mixed extra)
 {
    int update_time;
+   if (!extra)
+      extra = "scheduled";
    if (ob && ob->query_call_interval() && (force || !in_queue(ob)))
    {
       update_time = (time()) + add_to_time;
@@ -66,8 +70,17 @@ varargs void add_to_queue_secs(object ob, int add_to_time, int force, mixed extr
 // Add to queue at a specific time. No checks, no requirements.
 varargs void add_to_queue_at_time(mixed ob, int update_time, mixed extra)
 {
+   if (!extra)
+      extra = "scheduled";
+
    if (!queue[update_time])
       queue[update_time] = ({});
+
+   foreach (mixed *ar in queue[update_time])
+   {
+      if (base_name(ar[0]) == base_name(ob) && ar[1] == extra)
+         return;
+   }
 
    queue[update_time] += ({({ob, extra})});
 }
@@ -95,9 +108,6 @@ void process_queue()
    int t = time();
    foreach (int update_time, object * targets in queue)
    {
-      // Strip away any objects from the queue that are now 0 (destroyed/removed).
-      queue[update_time] -= ({0});
-
       // If targets array is empty, just delete the entire entry - and on we go.
       if (!sizeof(targets))
       {
@@ -109,6 +119,13 @@ void process_queue()
       {
          if (stringp(target[0]))
             target[0] = load_object(target[0]);
+
+         // Strip away any objects from the queue that are now 0 (destroyed/removed).
+         if (!target[0])
+         {
+            queue[update_time] -= ({target});
+            continue;
+         }
          if (target[0] && !target[0]->is_stateful(target[1]))
             continue;
          if (target[0] && update_time < time() && target[0]->state_update(target[1]))
@@ -147,7 +164,13 @@ void create()
       return;
    }
    capture_all_statefuls();
+   EVENT_D->run_scheduler();
    set_heart_beat(1);
+}
+
+mapping queue()
+{
+   return queue;
 }
 
 string stat_me()
@@ -155,13 +178,13 @@ string stat_me()
    string squeue = "";
    foreach (int update_time, object * targets in queue)
    {
-      string *str_targets = map(targets, ( : sprintf("%O", $1[0]) + " " + sprintf("%O", $1[1]) :));
-      squeue += " In " + time_to_string(update_time - time()) + " seconds:\n";
-      squeue += "\t" + format_list(str_targets) + "\n";
+      foreach (mixed *t in targets)
+      {
+         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(t[0]), t[1], time_to_string(update_time - time(), 1));
+      }
    }
 
-   return "STATE_D:\n-------\n" + "Queue Length: " + sizeof(keys(queue)) +
-          "\n"
-          "\n" +
-          squeue;
+   return sprintf("%-55s%-25s%-10s\n", "Object", "Arguments", "Delay") +
+          sprintf("%92'-'s\n", "") +
+          squeue + "\nThere are " + sizeof(flatten_array(values(STATE_D->queue()))) / 2 + " statefuls in queue.";
 }

@@ -21,11 +21,6 @@ inherit CMD;
 
 #define PAD "    "
 
-string better_filename(string s)
-{
-   return replace_string(replace_string(s, "/domains/", "^"), "/wiz/", "~");
-}
-
 // scan the inventory of an object.
 string scan_object(object ob, int depth, int deep_scan)
 {
@@ -45,7 +40,7 @@ string scan_object(object ob, int depth, int deep_scan)
    l = sizeof(inv);
    while (l--)
    {
-      retstr += pad + better_filename(file_name(inv[l])) + " -> " +
+      retstr += pad + shorten_filename(file_name(inv[l])) + " -> " +
                 ((tempstr = inv[l]->short()) ? "\"" + tempstr + "\" " : "[no short]") + "\n" +
                 (deep_scan ? scan_object(inv[l], depth + 1, deep_scan) : "");
    }

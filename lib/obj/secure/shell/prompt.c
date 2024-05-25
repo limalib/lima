@@ -78,8 +78,7 @@ void set_prompt(string s)
 string smart_path(string pwd_string)
 {
    pwd_string = replace_string(pwd_string, wiz_dir(this_user()), "~");
-   pwd_string = replace_string(pwd_string, WIZ_DIR + "/", "~");
-   pwd_string = replace_string(pwd_string, "/domains/", "^");
+   pwd_string = shorten_filename(pwd_string);
 
    return pwd_string == "/" ? "/" : pwd_string + "/";
 }
