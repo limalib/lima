@@ -102,6 +102,16 @@ varargs void remove_from_queue(object ob)
 }
 
 private
+object *find_targets(string t)
+{
+   object *t_ar = ({});
+   t_ar = filter(objects(), ( : base_name($1) == $(t) :));
+   if (sizeof(t_ar) > 1)
+      t_ar = filter(t_ar, ( : clonep($1) :));
+   return t_ar;
+}
+
+private
 void process_queue()
 {
    int processed;
@@ -118,7 +128,12 @@ void process_queue()
       foreach (mixed *target in targets)
       {
          if (stringp(target[0]))
-            target[0] = load_object(target[0]);
+         {
+            object *t_ar = find_targets(target[0]);
+            foreach (object o in t_ar)
+               queue[update_time] += ({({o, target[1]})});
+            continue;
+         }
 
          // Strip away any objects from the queue that are now 0 (destroyed/removed).
          if (!target[0])
