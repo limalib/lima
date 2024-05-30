@@ -113,9 +113,6 @@ time to reset : 1800
 # strings, 6 bits per byte.
 maximum bits in a bitfield : 1200
 
-# Max number of local variables in a function.
-maximum local variables : 30
-
 # Maximum amount of "eval cost" per thread - execution is halted when 
 # it is exceeded.
 maximum evaluation cost : 2000000
