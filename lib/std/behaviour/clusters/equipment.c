@@ -19,13 +19,21 @@ void init_equipment_cluster()
 {
    // If any of these ones return true we stop here, and navigate somewhere else
    create_node(NODE_SELECTOR, "equipment_seq", ({"upgrade_true", "hurt", "find_heal"}));
+
+   // Add equipment sequence to root sequence.
    add_child("root_sequence", "equipment_seq");
    create_node(NODE_SUCCEEDER, "upgrade_true", ({"upgrade_seq"}));
+
+   // Look for better armour
    create_node(NODE_SELECTOR, "upgrade_seq", ({"find_armour_in_inventory", "find_armour_in_room"}));
+
+   // Heal ourselves if needed
    create_node(NODE_SEQUENCE, "hurt", ({"safe_to_heal", "use_heal"}));
    create_node(NODE_SEQUENCE, "find_heal", ({"take_from_room", "use_heal"}));
    create_node(NODE_LEAF, "safe_to_heal");
    create_node(NODE_LEAF, "use_heal");
+
+   // Can we find something useful to pick up?
    create_node(NODE_LEAF, "take_from_room");
    create_node(NODE_LEAF, "find_armour_in_inventory");
    create_node(NODE_LEAF, "find_armour_in_room");
@@ -85,13 +93,9 @@ int take_from_room()
    consumables = filter_array(all_inventory(environment()), ( : $1->is_healing() :));
 
    if (sizeof(consumables))
-   {
       pick = choice(consumables);
-   }
    if (!pick)
-   {
       return EVAL_FAILURE;
-   }
 
    // Grab it!
    do_game_command("get " + pick->short());

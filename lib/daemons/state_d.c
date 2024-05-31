@@ -130,9 +130,14 @@ void process_queue()
          if (stringp(target[0]))
          {
             object *t_ar = find_targets(target[0]);
-            foreach (object o in t_ar)
-               queue[update_time] += ({({o, target[1]})});
-            continue;
+            if (sizeof(t_ar) > 1)
+            {
+               foreach (object o in t_ar)
+                  queue[update_time] += ({({o, target[1]})});
+               continue;
+            }
+            //If we only have one, handle it now.
+            target[0] = t_ar[0];
          }
 
          // Strip away any objects from the queue that are now 0 (destroyed/removed).

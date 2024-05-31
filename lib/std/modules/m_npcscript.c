@@ -38,12 +38,36 @@ mapping scripts = ([]);
 int step_pause = 3;
 string running_script;
 int running_step;
+private
+int recovery_time = 30;
+private
+int started_at;
 
 //: FUNCTION create_script
 // Creates a new script with 'name'.
 void create_script(string name)
 {
    scripts[name] = ({});
+}
+
+int query_recovery_time()
+{
+   return recovery_time;
+}
+
+void set_recovery_time(int rt)
+{
+   recovery_time = rt;
+}
+
+int is_stateful(string state)
+{
+   return 1;
+}
+
+void recover()
+{
+   // Override to add your own recovery function.
 }
 
 //: FUNCTION add_steps
@@ -105,6 +129,11 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    return ss;
 }
 
+int started_at()
+{
+   return started_at;
+}
+
 //: FUNCTION execute_script
 // Run a script for the mob by "name".
 void execute_script(string name)
@@ -113,12 +142,31 @@ void execute_script(string name)
    // Also, disable conversations
    this_object()->exit_conversations();
    this_object()->set_can_talk(0);
+   STATE_D->add_to_queue(this_object(), 60 * recovery_time, 1, "recovery");
 
    // Stop actions we might have running
    stop_actions();
    running_script = name;
    running_step = 0;
+   started_at = time();
    call_out("next_step", step_pause);
+}
+
+int state_update(string state)
+{
+   if (state == "recovery")
+   {
+      if (running_script)
+      {
+         recover();
+         running_script = 0;
+         running_step = 0;
+         started_at = 0;
+      }
+   }
+   else if (member_array(state, keys(scripts)) != -1)
+      execute_script(state);
+   TBUG("Unknown state update: " + state);
 }
 
 // Internal public function so it can be called via call_out().

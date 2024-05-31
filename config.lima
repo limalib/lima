@@ -88,12 +88,6 @@ master file : /secure/master
 simulated efun file : /secure/simul_efun
 
 #
-# file to swap to.  not used if time to swap is 0
-# (not used by Lima)
-#
-swap file : /secure/swap/MudOS_swapfile
-
-#
 # Directory to save binaries in.  (if BINARIES is defined)
 # (not used by Lima)
 #
@@ -110,7 +104,7 @@ time to clean up : 7200
 # Machine with too many players and too little memory: 900 (15 minutes)
 # Machine with few players and lot of memory: 10000
 # Machine with infinite memory: 0 (never swap).
-time to swap : 1800
+time to swap : 0
 
 # How many seconds until an object is reset again.
 time to reset : 1800
@@ -118,9 +112,6 @@ time to reset : 1800
 # Maximum number of bits in a bit field. They are stored in printable
 # strings, 6 bits per byte.
 maximum bits in a bitfield : 1200
-
-# Max number of local variables in a function.
-maximum local variables : 30
 
 # Maximum amount of "eval cost" per thread - execution is halted when 
 # it is exceeded.
@@ -147,10 +138,6 @@ maximum read file size : 200000
 # max number of bytes you allow to be read and written with read_bytes 
 # and write_bytes
 maximum byte transfer : 10000
-
-# Reserve an extra memory area from malloc(), to free when we run out
-# of memory.   If this value is 0, no area will be reserved.
-reserved size : 0
 
 # Telnet extensions support
 enable mssp: 1
