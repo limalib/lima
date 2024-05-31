@@ -142,7 +142,7 @@ void execute_script(string name)
    // Also, disable conversations
    this_object()->exit_conversations();
    this_object()->set_can_talk(0);
-   STATE_D->add_to_queue(this_object(), 60 * recovery_time, 1, "recovery");
+   STATE_D->add_to_queue_at_time(this_object(), (time() + (60 * recovery_time)), "recovery");
 
    // Stop actions we might have running
    stop_actions();
