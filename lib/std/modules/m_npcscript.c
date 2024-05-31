@@ -50,11 +50,18 @@ void create_script(string name)
    scripts[name] = ({});
 }
 
+//: FUNCTION query_recovery_time
+// Returns the time in minutes before recover() is called
+// and the script is aborted.
 int query_recovery_time()
 {
    return recovery_time;
 }
 
+//: FUNCTION set_recovery_time
+// Set the time in minutes before the script should have finished
+// and the recover() function is called in the NPC and the script
+// is aborted.
 void set_recovery_time(int rt)
 {
    recovery_time = rt;
@@ -65,6 +72,10 @@ int is_stateful(string state)
    return 1;
 }
 
+//: FUNCTION recover
+// Override this function in your NPC inheriting M_NPCSCRIPT.
+// It will be called after the minutes set using ``set_recovery_time()``
+// are up.
 void recover()
 {
    // Override to add your own recovery function.
@@ -129,6 +140,8 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    return ss;
 }
 
+//: FUNCTION started_at
+// Returns a timestamp for when the script was launched.
 int started_at()
 {
    return started_at;
