@@ -162,10 +162,14 @@ int state_update(string state)
          running_script = 0;
          running_step = 0;
          started_at = 0;
+         return;
       }
    }
    else if (member_array(state, keys(scripts)) != -1)
+   {
       execute_script(state);
+      return;
+   }
    TBUG("Unknown state update: " + state);
 }
 
