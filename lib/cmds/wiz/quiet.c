@@ -18,6 +18,7 @@ void main(mixed *arg)
    object ob;
 
    ob = arg[0];
+   ob->stop_actions();
    ob->set_actions(100, 0);
    outf("%s has been quieted.",ob->short());
 
