@@ -17,9 +17,11 @@
  * one to load keeps it's default state, and the second one to load
  * copies the first.
  *
- * Note: in order for this to work, you have to call setup_door AFTER
- * set_locked and set_closed, otherwise it will happily update the sibling,
- * overriding the values we got from it.
+ * Note: setup_door() is deprecated. Use this approach instead:
+ *     set_sibling_ident("service hatch");
+ *     set_door_direction(dir);
+ *     set_door_destination(room);
+ *
  */
 
 inherit EXIT_OBJ;
