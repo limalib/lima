@@ -5,7 +5,8 @@
 //: COMMAND
 // USAGE:  ``quiet <object>``
 //
-// This command 
+// This command silences an NPC in the room you are in if they use M_ACTIONS for
+// all their chatter.
 //
 // .. TAGS: RST
 

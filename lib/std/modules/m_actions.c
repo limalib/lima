@@ -147,7 +147,7 @@ void actions()
 {
    if (!this_object()->query_target() && sizeof(my_actions))
       do_game_command(choice(my_actions));
-   if (query_listeners() && find_call_out("actions") == -1)
+   if (my_actions && query_listeners() && find_call_out("actions") == -1)
    {
       call_out("actions", delay_time);
    }
