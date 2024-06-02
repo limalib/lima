@@ -9,6 +9,7 @@
 //
 // Note: setup_door() is deprecated. Use this approach instead:
 //
+// .. code-block:: c
 //   set_sibling_ident("oak door");
 //   set_door_direction(dir);
 //   set_door_destination(room); 

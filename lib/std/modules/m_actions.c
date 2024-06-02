@@ -195,6 +195,10 @@ void action_movement()
 
 void start_actions()
 {
+   //If we have no actions, stop here.
+   if (!arrayp(my_actions))
+      return;
+
    add_hook("move", ( : action_movement:));
    if (env = environment(this_object()))
    {
@@ -214,11 +218,9 @@ void stop_actions()
 }
 
 //: FUNCTION set_actions
-// protected void set_actions(int chance, string *actions);
 // This function sets a list of actions and a delay,
 // and chooses one to be executed time each time that delay elapses.
 // This function should only be called from within setup().
-protected
 void set_actions(int delay, string *actions)
 {
    delay_time = delay;
