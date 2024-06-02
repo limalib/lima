@@ -167,6 +167,8 @@ void execute_script(string name)
 
 int state_update(string state)
 {
+   // If this is a recovery update, then check that a script is running, and call
+   // recover() if there is.
    if (state == "recovery")
    {
       if (running_script)
@@ -175,15 +177,18 @@ int state_update(string state)
          running_script = 0;
          running_step = 0;
          started_at = 0;
-         return;
       }
+      return;
    }
+   // If this is a script name, execute it.
    else if (member_array(state, keys(scripts)) != -1)
    {
       execute_script(state);
       return;
    }
-   TBUG("Unknown state update: " + state);
+
+   // Let people know we were told to do something we do not know how to do.
+   this_object()->do_game_command("mumble " + state);
 }
 
 // Internal public function so it can be called via call_out().
@@ -242,7 +247,7 @@ void next_step()
    running_step++;
    if (running_step >= sizeof(scripts[running_script]))
    {
-      //Reset script tracking.
+      // Reset script tracking.
       running_script = 0;
       running_step = 0;
       started_at = 0;
