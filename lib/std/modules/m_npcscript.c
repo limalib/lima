@@ -242,6 +242,11 @@ void next_step()
    running_step++;
    if (running_step >= sizeof(scripts[running_script]))
    {
+      //Reset script tracking.
+      running_script = 0;
+      running_step = 0;
+      started_at = 0;
+
       // Enable conversation again
       this_object()->set_can_talk(1);
       // Start actions from M_ACTIONS if we had any running.
