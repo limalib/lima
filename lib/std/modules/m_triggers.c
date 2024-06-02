@@ -60,7 +60,6 @@ mixed try_to_match(string str, string rule)
 {
    class pattern pat;
    mixed left, right;
-
    if (!str || !rule || !patterns[rule])
       return str;
 
@@ -90,7 +89,8 @@ varargs void check_msg(string str, int type)
    {
       if (pat.type_to_listen && !(type & pat.type_to_listen))
          continue;
-      if (!pat.pattern || str == pat.pattern || sscanf(str, pat.pattern, left, right))
+      if (!pat.pattern || str == pat.pattern || sscanf(str, pat.pattern, left, right) ||
+          member_array(str, explode(pat.pattern, "|")) != -1)
       {
          left = try_to_match(left, pat.left);
          right = try_to_match(right, pat.right);
