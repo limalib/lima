@@ -64,8 +64,8 @@ inherit M_FRAME;
 // inherit M_WIDGETS;
 
 #define WHO_FORMAT "%s:  (Local Time is: %s) %28s\n%s"
-#define DEBUG(arg)                             \
-   if (debug && member_array(arg, msgs) == -1) \
+#define DEBUG(arg)                                                                                                     \
+   if (debug && member_array(arg, msgs) == -1)                                                                         \
    msgs += ({arg})
 
 string *msgs = ({});
@@ -76,6 +76,7 @@ string get_who_string(string arg)
    string header = "";
    int first_run = 1;
    int debug;
+   int path_mod = 20;
    object *b = bodies() - ({0});
    string bad_flags = "";
    string *args = ({});
@@ -167,12 +168,13 @@ string get_who_string(string arg)
                break;
             if (first_run)
                header += sprintf("%-20s ", "Path");
-            content += sprintf(
-                "%-20s ",
-                environment(body)
-                    ? filename_ellipsis((environment(body)),
-                                        20)
-                    : "(lost?)");
+            if (path_mod == 20 && strlen(header) + 30 < this_user()->query_screen_width())
+            {
+               header = replace_string(header, "Path", sprintf("%-20s", "Path"));
+               path_mod = 40;
+            }
+            content += sprintf("%-" + path_mod + "s ",
+                               environment(body) ? filename_ellipsis((environment(body)), path_mod) : "(lost?)");
             break;
          case "t":
             DEBUG("Titles");
@@ -210,7 +212,7 @@ string get_who_string(string arg)
                break;
             DEBUG("Idle times");
             if (first_run)
-               header += sprintf("%-8.8s", "Idle");
+               header += sprintf("%-8.8s ", "Idle");
             content += sprintf("%-8.8s ",
                                query_idle(body->query_link()) ? convert_time(query_idle(body->query_link()), 2) : "");
             break;

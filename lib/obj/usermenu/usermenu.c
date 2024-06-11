@@ -437,7 +437,7 @@ void create()
    quit_item = new_menu_item("Quit", ( : quit_game:), "q");
    goto_main_menu_item = new_menu_item("Return to main menu", toplevel, "m");
 
-   main_seperator = new_seperator("--------------------------------------------------");
+   main_seperator = new_seperator("---------------------------------------------------------------");
    if (clonep())
       call_out(( : quit_idle_menu:), USER_MENU_TIMEOUT);
 
