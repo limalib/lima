@@ -77,6 +77,7 @@ string get_who_string(string arg)
    int first_run = 1;
    int debug;
    int path_mod = 20;
+   int env_mod = 25;
    object *b = bodies() - ({0});
    string bad_flags = "";
    string *args = ({});
@@ -161,7 +162,13 @@ string get_who_string(string arg)
                break;
             if (first_run)
                header += sprintf("%-25.25s", "Environment");
-            content += sprintf("%-25.25s ", environment(body) ? environment(body)->get_brief() : "(Nowhere)");
+            if (env_mod == 25 && strlen(header) + 30 < this_user()->query_screen_width())
+            {
+               header = replace_string(header, "Environment", sprintf("%-31s", "Environment"));
+               env_mod = 45;
+            }
+            content += sprintf("%-" + env_mod + "." + env_mod + "s ",
+                               environment(body) ? environment(body)->get_brief() : "(Nowhere)");
             break;
          case "f":
             if (!wizardp(this_user()))
@@ -170,7 +177,7 @@ string get_who_string(string arg)
                header += sprintf("%-20s ", "Path");
             if (path_mod == 20 && strlen(header) + 30 < this_user()->query_screen_width())
             {
-               header = replace_string(header, "Path", sprintf("%-20s", "Path"));
+               header = replace_string(header, "Path", sprintf("%-24s", "Path"));
                path_mod = 40;
             }
             content += sprintf("%-" + path_mod + "s ",
