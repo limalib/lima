@@ -9,7 +9,7 @@ void setup()
             "wear and tear, evidence of the bustling activity that characterizes life on the station.\n" +
             "The OGB bank is to the west of here.");
    add_item("floor", "The floor, a smooth, low-gravity surface, allows for effortless movement. ");
-   set_exits((["north":"waiting_room8", "south":"s_hall2", "west":"s_bank"]));
+   set_exits((["north":"waiting_room", "south":"s_hall2", "west":"s_bank"]));
    // set_objects(([""]));
     set_listen("You hear people running through the terminal. " +
                "It sounds like a busy terminal with people coming and going");

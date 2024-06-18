@@ -14,7 +14,7 @@ void setup()
    add_item("wall", "walls", "surfaces",
             (["look":"Once a gleaming testament to engineering, are now coated in layers of thick, greasy grime."]));
 
-   set_exits((["east":"waiting_room1"]));
+   set_exits((["east":"waiting_room"]));
    set_objects(
        (["^omega/npc/floor1/rigel_fluxx":1,
                  "^common/item/barricade":({"barricade", "up", "w_hall2", 50}), "^omega/item/control_terminal":1]));

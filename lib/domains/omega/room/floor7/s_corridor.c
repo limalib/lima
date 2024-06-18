@@ -9,7 +9,7 @@ void setup()
     set_long("A Wide corridor leading to the north and south through trading area.");
     set_state_description("electronic_door_off", "closed");
     set_state_description("electronic_door_on", "open");
-    set_exits((["north":"waiting_room7",
+    set_exits((["north":"waiting_room",
                 "south":"s_corridor1",
                 "east" : "omega_pets",
                 "west" : "omega_robotics",

@@ -5,7 +5,7 @@ void setup()
    set_area("omega_terminal", "landing_term");
    // set_weather(1);
    set_light(1);
-   set_brief("Central Elevator room - 8th Floor");
+   set_brief("Central Elevator room - Landing terminal");
    set_long(
        "The 8th floor waiting room of the Omega Station, the sleek design and clean lines create an atmosphere of "
        "futuristic elegance. Bathed in a soft, ambient glow, the room is adorned with comfortable, cushioned chairs "

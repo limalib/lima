@@ -21,14 +21,17 @@ void setup()
             "different floor or destination within the space station. The buttons are touch-sensitive, "
             "responding to a gentle press with a soft glow.");
    // Set destinations with filenames of where we can go and shorthands.
-   set_destinations((["1/Maintenance":"^omega/room/floor1/waiting_room1",
-                         "2/waiting2":"^omega/room/floor2/waiting_room2",
-                        "3/cafeteria":"^omega/room/floor3/waiting_room3", "4/labs":"^omega/room/floor4/waiting_room4",
-                         "5/waiting5":"^omage/room/floor5/waiting_room5",
-            "6/Upper Living Quarters":"^omega/room/floor6/waiting_room6",
-                    "7/Omega Trading":"^omega/room/floor7/waiting_room7",
-                 "8/Landing Terminal":"^omega/room/floor8/waiting_room8",
-                "9/Stargate Terminal":"^omega/room/floor9/stargate_term", ]));
+   set_destinations((["1/Maintenance":"^omega/room/floor1/waiting_room",
+                        "2/cafeteria":"^omega/room/floor3/waiting_room",
+                 "3/Landing Terminal":"^omega/room/floor8/waiting_room",
+                "4/Stargate Terminal":"^omega/room/floor9/stargate_term",
+       /*
+       "4/labs":"^omega/room/floor4/waiting_room4",
+   "6/Upper Living Quarters":"^omega/room/floor6/waiting_room6",
+                "5/waiting5":"^omage/room/floor5/waiting_room5",
+           "7/Omega Trading":"^omega/room/floor7/waiting_room7",
+                "2/waiting2":"^omega/room/floor2/waiting_room2",*/
+   ]));
 
    set_room_chat(
        ({ELV "\"Ladies and gentlemen, this is a reminder to secure any loose objects "
@@ -48,13 +51,13 @@ void setup()
        60, 10);
 
    // Set start position for elevator
-   move_to("8/Landing Terminal");
+   move_to("3/Landing Terminal");
 
    // Set the distance from and to each destination in seconds
    set_default_distance(10);
 
    // Set an elevator door direction and default location
-   set_objects((["/std/elevator_door":({"southeast", "waiting_room8"})]));
+   set_objects((["/std/elevator_door":({"southeast", "waiting_room"})]));
 
    // Spawn the buttons on the wall automatically.
    // This *must* be done after the set_destinations() cal.

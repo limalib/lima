@@ -15,7 +15,7 @@ void setup()
    add_item("wall", "walls", "surfaces",
             (["look":"Once a gleaming testament to engineering, are now coated in layers of thick, greasy grime."]));
 
-   set_exits((["south":"waiting_room1", "north":"n_hall2"]));
+   set_exits((["south":"waiting_room", "north":"n_hall2"]));
    // set_objects(([""]));
    set_listen("You hear the background noise of air treatment systems and computer systems running behind the walls.");
 }

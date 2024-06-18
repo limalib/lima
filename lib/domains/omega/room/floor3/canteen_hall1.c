@@ -9,7 +9,7 @@ void setup()
             "ambiance throughout the corridor. The hallway itself is sleek and streamlined, with polished metallic "
             "walls. The floor beneath your feet is made of "
             "durable composite material, designed to withstand heavy foot traffic and occasional spills.");
-   set_exits((["south":"waiting_room3", "north":"canteen_hall2"]));
+   set_exits((["south":"waiting_room", "north":"canteen_hall2"]));
    add_item("floor", "The surface has a subtle texture that provides traction and minimizes the risk of slipping, "
                      "ensuring safe passage for the station's inhabitants.");
    add_item("display", "displays",

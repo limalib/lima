@@ -11,7 +11,7 @@ void setup()
             "The Stellar bites Cafe is north of here.");
    set_state_description("electronic_door_off", "closed");
    set_state_description("electronic_door_on", "open");
-   set_exits((["west":"waiting_room8", "east":"e_hall2", "north":"e_cafe2"]));
+   set_exits((["west":"waiting_room", "east":"e_hall2", "north":"e_cafe2"]));
    set_exit_msg("north", "$N $vpass through the automatic doors into Stellar Bites.");
 
    set_listen("You hear people running through the terminal. " +

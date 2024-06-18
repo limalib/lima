@@ -5,7 +5,7 @@ void setup()
    set_area("omega_terminal", "mall_term");
    // set_weather(1);
    set_light(1);
-   set_brief("Central Elevator room - 1st Floor");
+   set_brief("Central Elevator room - Maintenance floor");
    set_long("The elevator room on the maintenance floor of the space station is a functional and utilitarian space. It "
             "features a compact and sturdy design to accommodate the station's vertical transport needs efficiently. "
             "The room is well-lit with practical fluorescent lighting and is devoid of any decorative elements.\n"

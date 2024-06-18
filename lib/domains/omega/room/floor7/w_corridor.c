@@ -10,7 +10,7 @@ void setup()
     set_state_description("electronic_door_off", "closed");
     set_state_description("electronic_door_on", "open");
     set_exits((["west":"w_corridor1",
-                "east":"waiting_room7",
+                "east":"waiting_room",
     ]));
     // set_objects(([""]));
     set_listen("You hear people running through the terminal. " +

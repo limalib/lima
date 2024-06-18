@@ -14,7 +14,7 @@ void setup()
             "orderly flow, facilitating movement throughout the station.");
    set_state_description("electronic_door_off", "closed");
    set_state_description("electronic_door_on", "open");
-   set_exits((["east":"waiting_room8", "west":"w_hall2", ]));
+   set_exits((["east":"waiting_room", "west":"w_hall2", ]));
    // set_objects(([""]));
    set_listen("You hear people running through the terminal. " +
               "It sounds like a busy terminal with people coming and going");

@@ -20,7 +20,7 @@ void setup()
    set_exits(([]));
    set_objects((["/std/elevator_call_button":({"9/Stargate Terminal", "^omega/room/elevator_center"}),
                         "/std/elevator_door":({"northwest", "^omega/room/elevator_center"}),
-                  "^common/item/node_portal":({"/domains/omega/room/floor8/waiting_room8"})]));
+                  "^common/item/node_portal":({"/domains/omega/room/floor8/waiting_room"})]));
 
    set_room_chat(({"A starcruiser quickly whizzes by above the dome.",
                    "You see a large freighter moving in, getting ready to dock.",
