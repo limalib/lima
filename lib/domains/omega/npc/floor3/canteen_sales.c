@@ -78,13 +78,15 @@ void setup()
    add_steps(
        "lunch",
        ({
-           step(SCRIPT_ACTION, (: set_for_sale, 0:)),
+           step(SCRIPT_ACTION, (
+                                   : set_for_sale, 0
+                                   :)),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
            step(SCRIPT_ACTION, "say Well, time for some lunch."),
            step(SCRIPT_ACTION, "go south@@go south@@go south@@hum"),
            step(SCRIPT_WAIT, 5),
            step(SCRIPT_ACTION, "push button"),
-           step(SCRIPT_TRIGGER, "The elevator door opens.", "go northwest"),
+           step(SCRIPT_TRIGGER, "The elevator door opens.|The lamp briefly blinks.", "go northwest"),
            step(SCRIPT_DESC, "Liam Johnson, leaning against the elevator panel."),
            step(SCRIPT_TRIGGER, "The elevator door closes.", "push 8"),
            step(SCRIPT_TRIGGER, "Elevator speaker says, \"You have arrived at Landing Terminal\".", "go southeast"),
@@ -97,7 +99,7 @@ void setup()
            step(SCRIPT_ACTION, "emote eats a sandwich.@@emote stands up."),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
            step(SCRIPT_ACTION, "say That was delicious! Back to the work!@@go south@@go west@@push button"),
-           step(SCRIPT_TRIGGER, "The elevator door opens.", "go northwest"),
+           step(SCRIPT_TRIGGER, "The elevator door opens.|The lamp briefly blinks.", "go northwest"),
            step(SCRIPT_DESC, "Liam Johnson, leaning against the elevator panel."),
            step(SCRIPT_TRIGGER, "The elevator door closes.", "push 3"),
            step(SCRIPT_TRIGGER, "Elevator speaker says, \"You have arrived at cafeteria\".", "go southeast"),
@@ -105,8 +107,21 @@ void setup()
            step(SCRIPT_WAIT, 10),
            step(SCRIPT_ACTION, "go north@@go north@@go north@@hum"),
            step(SCRIPT_ACTION, "say That was a great lunch, now back to work."),
-           step(SCRIPT_ACTION, (: set_for_sale, 1:)),
+           step(SCRIPT_ACTION, (
+                                   : set_for_sale, 1
+                                   :)),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier looks bored behind the counter."),
            step(SCRIPT_ACTION, "grin@@emote sits down behind the counter."),
        }));
+   EVENT_D->schedule_event("45 11 *", this_object(), "lunch");
+   set_recovery_time(10);
+}
+
+void recover()
+{
+   object canteen_room = load_object("/domains/omega/room/floor3/canteen_area_sw");
+   tell_from_outside(environment(this_object()), "Liam Johnson hurries back to the canteen.");
+   this_object()->move(canteen_room);
+   tell_from_outside(environment(this_object()), "Liam Johnson hurries into the room.");
+   do_game_command("say Sorry, I got a bit lost.");
 }
