@@ -121,7 +121,7 @@ int simple_craft(object body, string what)
    money = MONEY_D->handle_subtract_money(this_body(), MAT_CRAFT_COST, craft_currency_type);
    body->add_material(material, number);
    body->my_action("$N $vpay to craft a $o for " + MONEY_D->currency_to_string(MAT_CRAFT_COST, craft_currency_type) +
-                       ". You give " + MONEY_D->currency_to_string(money[0], craft_currency_type) + 
+                       ". You give " + MONEY_D->currency_to_string(money[0], craft_currency_type) +
                        (sizeof(money[1])
                             ? " and get " + MONEY_D->currency_to_string(money[1], craft_currency_type) + " as change"
                             : "") +

@@ -22,7 +22,6 @@
 //
 // .. TAGS: RST
 
-
 #include <commands.h>
 #include <config/user_menu.h>
 
@@ -159,8 +158,8 @@ void main(string who)
                "Email Address: %s\n"
                "%s",
                first_line, info.nickname, info.level, info.real_name, info.position,
-               info.idle == -1 ? "Left at" : "On since", info.last_login ? ctime(info.last_login) : "<unknown>",
-               idle, info.connect_from, mailstring, info.email, info.home_page);
+               info.idle == -1 ? "Left at" : "On since", info.last_login ? ctime(info.last_login) : "<unknown>", idle,
+               info.connect_from, mailstring, info.email, info.home_page);
 
    if (info.plan)
       s += "Plan:\n" + info.plan + "\n";
@@ -170,11 +169,11 @@ void main(string who)
 #endif
 #ifdef USE_USER_MENU
    if (mapp(info.bodies))
-      {
-         string *chars = map(keys(info.bodies),(: capitalize($1):));
-         s+=info.visname+" has the following characters: \n";
-         s+="  "+format_list(chars);
-      }
+   {
+      string *chars = map(keys(info.bodies), ( : capitalize($1) :));
+      s += info.visname + " has the following characters: \n";
+      s += "  " + format_list(chars);
+   }
 #endif
 
    out(s);

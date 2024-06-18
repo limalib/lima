@@ -2,7 +2,6 @@
 
 inherit WEAPON;
 
-
 void setup()
 {
    set_id("greataxe", "axe");

@@ -7,27 +7,27 @@
 */
 
 object query_body();
-private int gmcp;
-
+private
+int gmcp;
 
 void gmcp_enable()
 {
-    TBUG("GMCP enabled");
-    gmcp=1;
+   TBUG("GMCP enabled");
+   gmcp = 1;
 }
 
 int uses_gmcp()
 {
-    TBUG("uses_gmcp?");
-    return has_gmcp();
+   TBUG("uses_gmcp?");
+   return has_gmcp();
 }
 
 void gmcp_message(string s)
 {
-    if (!s)
-        return;
-    if (uses_gmcp())
-    {
-        send_gmcp(s);
-    }
+   if (!s)
+      return;
+   if (uses_gmcp())
+   {
+      send_gmcp(s);
+   }
 }

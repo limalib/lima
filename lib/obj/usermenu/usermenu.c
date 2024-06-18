@@ -373,7 +373,7 @@ void create_char()
 private
 confirm_remove(string name, string input)
 {
-   if (confirm_decision(input) && strlen(input)>0)
+   if (confirm_decision(input) && strlen(input) > 0)
    {
       this_user()->remove_body(name);
       USER_D->remove_body(this_user()->query_userid(), name);

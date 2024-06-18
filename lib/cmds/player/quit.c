@@ -10,7 +10,6 @@
 //
 // .. TAGS: RST
 
-
 #include <config/user_menu.h>
 
 inherit CMD;
@@ -18,7 +17,7 @@ inherit CMD;
 private
 void main()
 {
-   string name=this_body()->query_name();
+   string name = this_body()->query_name();
 
    this_body()->quit();
    if (name && strlen(name) > 5 && name[0..4] == "Guest")

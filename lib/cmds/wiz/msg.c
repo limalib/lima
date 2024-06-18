@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: m_messages, review
-// USAGE:  
+// USAGE:
 //
 //      |``msg <message type> clear``
 //      |  ``msg <message type> <message>

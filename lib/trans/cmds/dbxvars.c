@@ -1,12 +1,12 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: 
+// USAGE:
 //     ``dbxvars <ob> <var>``
 //
 // Finds functions in an objects, e.g.:
 //
-//  |   ``dbxvars /std/body name`` 
+//  |   ``dbxvars /std/body name``
 //  |   Matches:
 //  |   proper_name         : 0
 //  |   old_fnames          : ({ /* sizeof() == 2 */

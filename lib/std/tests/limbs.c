@@ -17,7 +17,8 @@ int clone_actors()
 
 int clone_items()
 {
-   return std_clone_move(troll, ({"weapon/greataxe", "weapon/longsword", "armour/gloves", "armour/leather_jacket", "armour/kevlar_vest"}));
+   return std_clone_move(troll, ({"weapon/greataxe", "weapon/longsword", "armour/gloves", "armour/leather_jacket",
+                                  "armour/kevlar_vest"}));
 }
 
 int check_wield(string w)

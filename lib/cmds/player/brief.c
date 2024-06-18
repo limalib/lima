@@ -7,7 +7,7 @@
 
 //: PLAYERCOMMAND
 //$$see: verbose
-// USAGE 
+// USAGE
 //    |  ``brief``
 //    |  ``brief on``
 //    |  ``brief off``

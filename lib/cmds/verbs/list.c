@@ -48,15 +48,16 @@ mixed can_list_str()
    return test_vendor();
 }
 
-private show_frame(string *parts)
+private
+show_frame(string *parts)
 {
-   if (!parts) 
+   if (!parts)
    {
-      write(find_vendor()->short()+" has nothing for sale right now.");
+      write(find_vendor()->short() + " has nothing for sale right now.");
       return;
    }
    frame_init_user();
-   set_frame_title(find_vendor()->query_named_possessive()+" shop");
+   set_frame_title(find_vendor()->query_named_possessive() + " shop");
    set_frame_header(parts[0]);
    set_frame_content(parts[1]);
    set_frame_footer(parts[2]);

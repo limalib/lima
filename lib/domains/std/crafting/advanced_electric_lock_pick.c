@@ -1,7 +1,6 @@
 inherit MATERIAL;
 inherit M_LOCKPICK;
 
-
 // CRAFTING:advanced lock pick
 
 void setup()

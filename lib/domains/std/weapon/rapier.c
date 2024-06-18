@@ -1,18 +1,18 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
-//Example rapier that modified a skill when wielded, and removes it again when unwielded.
-//Notice custom property "skillfull".
+// Example rapier that modified a skill when wielded, and removes it again when unwielded.
+// Notice custom property "skillfull".
 
 inherit SWORD;
 
 void wielded()
 {
-   environment()->add_skill_bonus("combat/defense/stance",200);
+   environment()->add_skill_bonus("combat/defense/stance", 200);
 }
 
 void unwielded()
 {
-   environment()->remove_skill_bonus("combat/defense/stance",200);
+   environment()->remove_skill_bonus("combat/defense/stance", 200);
 }
 
 void setup()

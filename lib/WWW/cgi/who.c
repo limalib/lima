@@ -109,8 +109,8 @@ string main(mixed data)
                "%s",
                info.visname, MUD_NAME, info.visname, MUD_NAME, stripped(first_line), info.nickname, info.level,
                info.real_name, info.position, info.idle == -1 ? "Left at" : "On since",
-               info.last_login ? ctime(info.last_login) : "<unknown>", idle, info.connect_from, mailstring,
-               info.email, info.home_page);
+               info.last_login ? ctime(info.last_login) : "<unknown>", idle, info.connect_from, mailstring, info.email,
+               info.home_page);
 
    if (info.plan)
       s += "Plan:\n" + info.plan + "\n";

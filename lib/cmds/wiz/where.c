@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: who, people
-// USAGE 
+// USAGE
 //
 //    |  ``where``
 //    |  ``where <name1>, <name2> etc``

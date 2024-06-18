@@ -13,7 +13,7 @@
 
 //: COMMAND
 //$$ see : renew
-// USAGE 
+// USAGE
 //
 //    |  ``update <filename>``
 //    |  ``update <object>``

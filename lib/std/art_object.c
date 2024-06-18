@@ -5,7 +5,6 @@
 inherit OBJ;
 inherit M_GETTABLE;
 
-
 string *hard_materials = ({"marble", "silver", "tin", "copper", "wooden", "lead", "carved bone", "gold"});
 string *soft_materials = ({"cloth", "silk", "hemp"});
 string *colours =

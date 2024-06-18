@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: I, didlog
-// USAGE: 
+// USAGE:
 //
 //     |  ``lima``
 //     |  ``lima /versions``
@@ -58,6 +58,5 @@ void main(string str)
 
    header = "LIMA changes " + (version ? " for " + version : "");
 
-   out(LIMA_D->get_did_info(time() + 10000, ({header, repeat_string("-", sizeof(header)), ""}), pattern,
-                            0, version));
+   out(LIMA_D->get_did_info(time() + 10000, ({header, repeat_string("-", sizeof(header)), ""}), pattern, 0, version));
 }

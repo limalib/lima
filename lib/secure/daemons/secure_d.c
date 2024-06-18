@@ -228,8 +228,7 @@ void create()
       ]),
                               }),
       ]);
-      domains = (["mail":([]),
-                   "admin":([]), "admin-channels":([]), "approval":([]), "std":([]), "mudlib":([]), ]);
+      domains = (["mail":([]), "admin":([]), "admin-channels":([]), "approval":([]), "std":([]), "mudlib":([]), ]);
       domainlists = ([]);
       wizards = ([]);
       save_data();

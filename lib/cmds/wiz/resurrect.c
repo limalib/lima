@@ -2,7 +2,7 @@
 
 //: COMMAND
 // USAGE
-// 
+//
 //  |  ``resurrect <playername>``
 //  |  ``resurrect me!myself``
 //

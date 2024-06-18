@@ -54,7 +54,7 @@ nomask class command_info *module_commands()
             : "t", proto
             : "[msg type]", desc
             : "test message type", args
-            : ({"Which msg?\n"+format_list(MESSAGES_D->combat_messages())}), action
+            : ({"Which msg?\n" + format_list(MESSAGES_D->combat_messages())}), action
             : (
                 : test_message:)),
 

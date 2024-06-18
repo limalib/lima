@@ -632,21 +632,21 @@ void FTP_CMD_port(class ftp_session info, string arg)
    {
    case 0:
       info.dataPipe = unguarded(1, (
-                                        : new (SOCKET, SKT_STYLE_CONNECT, sprintf("%s %d", $(ip), $(port)),
-                                               (
-                                                   : FTP_DATA_read:),
-                                               (
-                                                   : FTP_DATA_close:))
-                                        :));
+                                       : new (SOCKET, SKT_STYLE_CONNECT, sprintf("%s %d", $(ip), $(port)),
+                                              (
+                                                  : FTP_DATA_read:),
+                                              (
+                                                  : FTP_DATA_close:))
+                                       :));
       break;
    case 1:
       info.dataPipe = unguarded(1, (
-                                        : new (SOCKET, SKT_STYLE_CONNECT_B, sprintf("%s %d", $(ip), $(port)),
-                                               (
-                                                   : FTP_DATA_read:),
-                                               (
-                                                   : FTP_DATA_close:))
-                                        :));
+                                       : new (SOCKET, SKT_STYLE_CONNECT_B, sprintf("%s %d", $(ip), $(port)),
+                                              (
+                                                  : FTP_DATA_read:),
+                                              (
+                                                  : FTP_DATA_close:))
+                                       :));
       break;
    default:
       return;
@@ -959,8 +959,7 @@ void FTP_CMD_stor(class ftp_session info, string arg)
 
    /* Reset the file position flag. */
    info.filepos = 0;
-   info->cmdPipe->send(
-       sprintf("150 Opening %s mode data connection for %s.\n", info.binary ? "binary" : "ascii", arg));
+   info->cmdPipe->send(sprintf("150 Opening %s mode data connection for %s.\n", info.binary ? "binary" : "ascii", arg));
 }
 
 private

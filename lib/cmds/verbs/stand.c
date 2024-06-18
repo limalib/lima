@@ -32,7 +32,7 @@ void do_stand()
 
 void do_stand_wrd(string prep)
 {
-   if (prep!="up")
+   if (prep != "up")
    {
       write("Stand what?");
       return;

@@ -52,22 +52,13 @@ void pattern_setup()
        "simple_pred", "and_pred");
    add_sub_pattern("and_pred", "%s", ( : $1:), "simple_pred");
 
-   add_sub_pattern(
-       "simple_pred", "is not %s", function(string name) {
-          return ( : $1 != $(name) :);
-       });
-   add_sub_pattern(
-       "simple_pred", "is %s", function(string name) {
-          return ( : $1 == $(name) :);
-       });
+   add_sub_pattern("simple_pred", "is not %s", function(string name) { return ( : $1 != $(name) :); });
+   add_sub_pattern("simple_pred", "is %s", function(string name) { return ( : $1 == $(name) :); });
    add_sub_pattern(
        "simple_pred", "starts with %s", function(string prefix) {
           return ( : starts_with($1, $(prefix)) :);
        });
-   add_sub_pattern(
-       "simple_pred", "ends with %s", function(string suffix) {
-          return ( : ends_with($1, $(suffix)) :);
-       });
+   add_sub_pattern("simple_pred", "ends with %s", function(string suffix) { return ( : ends_with($1, $(suffix)) :); });
    add_sub_pattern("simple_pred", 0, 1);
 }
 

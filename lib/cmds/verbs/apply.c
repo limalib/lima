@@ -16,7 +16,6 @@
 //
 // .. TAGS: RST
 
-
 #include <move.h>
 #include <setbit.h>
 #include <verbs.h>

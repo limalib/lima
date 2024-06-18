@@ -149,14 +149,14 @@ nomask void force_game_command(string str)
    set_this_player(save_this_user);
 }
 
-//:FUNCTION read_help_topic
+//: FUNCTION read_help_topic
 // read_help_topic(str)   -- set time <str> was read to right now.
 void read_help_topic(string str)
 {
    topic_to_time[str] = time();
 }
 
-//:FUNCTION query_help_topic
+//: FUNCTION query_help_topic
 // query_help_topic(str)  -- return time <str> was read. if not read, return 0
 int query_help_topic(string str)
 {

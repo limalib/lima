@@ -12,7 +12,6 @@ inherit M_GETTABLE;
 inherit M_MESSAGES;
 inherit M_READY;
 
-
 private
 int charges = -1;
 private

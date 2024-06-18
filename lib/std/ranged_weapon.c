@@ -2,7 +2,6 @@
 
 inherit WEAPON;
 
-
 private
 nosave int counter;
 private

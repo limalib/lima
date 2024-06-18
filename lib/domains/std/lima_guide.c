@@ -15,5 +15,5 @@ void setup()
    set_entries((["1":"Do read https://limamudlib.readthedocs.io/",
                  "2":"See https://github.com/fluffos/lima or use https://github.com/tsathoqqua/lima for "
                      "active development branch."]));
-   set_synonyms((["docs" : "1", "source" : "2"]));
+   set_synonyms((["docs":"1", "source":"2"]));
 }

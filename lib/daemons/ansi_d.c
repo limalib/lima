@@ -82,8 +82,7 @@ void create()
 
    translations = translations + defaults;
 
-   null_translations = map(
-       translations, function() { return ""; });
+   null_translations = map(translations, function() { return ""; });
    identity_translations = map(translations, ( : "%^" + $1 + "%^" :));
 }
 
@@ -91,8 +90,7 @@ void resync()
 {
    translations = translations + defaults;
 
-   null_translations = map(
-       translations, function() { return ""; });
+   null_translations = map(translations, function() { return ""; });
    identity_translations = map(translations, ( : "%^" + $1 + "%^" :));
 
    save_me();

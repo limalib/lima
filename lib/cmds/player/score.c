@@ -13,7 +13,7 @@
 //  |  ``score``
 //  |  ``score -t theme``
 //
-// Shows you various details about yourself. 
+// Shows you various details about yourself.
 // Themes can be seem using the frames command, i.e. ``frames themes``.
 //
 // .. TAGS: RST
@@ -44,7 +44,7 @@ string pretty_bonus(int b)
 private
 string stats_string(object body, int width)
 {
-   string content="";
+   string content = "";
    content = sprintf("BASE SCORES: Str %-4d%s  Agi %-4d%s  Int %-4d%s  Wil  %-4d%s\n" +
                          "DERIVED    : Con %-4d%s  Wis %-4d%s  Cha %-4d%s  Mana %-4d%s\n",
                      body->query_str(), (pretty_bonus(body->query_str() - body->query_str_pure())), body->query_agi(),
@@ -67,7 +67,7 @@ string stats_string(object body, int width)
 private
 string capacity_string(object body, int width)
 {
-   string content="";
+   string content = "";
    float capa = body->query_capacity();
    float enc_capa = body->query_encumbered_capacity();
    float enc_heavy_capa = body->query_heavy_capacity();
@@ -97,7 +97,7 @@ string capacity_string(object body, int width)
 private
 string karma_string(object body, int width)
 {
-   string content="";
+   string content = "";
    int karma = body->query_karma();
    string status = "";
    int marker = 65 * ((karma + 1000) / 2000.0);
@@ -150,7 +150,7 @@ string karma_string(object body, int width)
 private
 string score_cmd(object body, int width)
 {
-   string content="";
+   string content = "";
    string name;
    //   mapping accounts;
    int xp = 1;

@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: didlog
-// USAGE  
+// USAGE
 //       ``I <string>``
 //
 // This command produces the "did" log when you first log on.

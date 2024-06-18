@@ -166,7 +166,7 @@ private
 void reset_moves()
 {
    num_moves = 0;
-   counting_moves=0;
+   counting_moves = 0;
 }
 
 private

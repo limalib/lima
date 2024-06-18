@@ -347,7 +347,7 @@ nomask int is_write_restricted(string group)
       return 0;
    /* If the domains doesn't exist that is in the restriction, we might
     * as well stop here because the rest of the calls will fail, */
-   if (member_array(restrict[0], SECURE_D -> query_domains()) == -1)
+   if (member_array(restrict[0], SECURE_D->query_domains()) == -1)
       return 0;
    /* If the first character of the restriction is a capital letter the
     * user must be a lord of the domain */
@@ -359,7 +359,7 @@ nomask int is_write_restricted(string group)
       else
          return 1;
    }
-   if (member_array(restrict[0], SECURE_D -> query_domains(whoami)) > -1)
+   if (member_array(restrict[0], SECURE_D->query_domains(whoami)) > -1)
       return 0;
    return 1;
 }
@@ -416,7 +416,7 @@ nomask int is_read_restricted(string group)
       return 0;
    /* If the domains doesn't exist that is in the restriction, we might
     * as well stop here because the rest of the calls will fail, */
-   if (member_array(restrict[1], SECURE_D -> query_domains()) == -1)
+   if (member_array(restrict[1], SECURE_D->query_domains()) == -1)
       return 1;
    /* If the first character of the restriction is a capital letter the
     * user must be a lord of the domain */
@@ -428,7 +428,7 @@ nomask int is_read_restricted(string group)
       else
          return 1;
    }
-   if (member_array(restrict[1], SECURE_D -> query_domains(whoami)) > -1)
+   if (member_array(restrict[1], SECURE_D->query_domains(whoami)) > -1)
       return 0;
    return 1;
 }

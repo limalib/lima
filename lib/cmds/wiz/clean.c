@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: dest, clone
-// USAGE:  
+// USAGE:
 //    |  ``clean``
 //    |  ``clean <target>``
 //

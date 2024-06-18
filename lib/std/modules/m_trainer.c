@@ -157,7 +157,7 @@ varargs int stat_train_cost(string statstr)
 void train_stat(string s)
 {
    string abr;
-   object b=this_body();
+   object b = this_body();
    int cost = stat_train_cost(s);
 
    if (undefinedp(stat_abrevs[s]))
@@ -184,7 +184,7 @@ void train_stat(string s)
    call_other(b, "inc_mod_" + abr);
    b->refresh_stats();
 
-   //Need this one again to update potential price hike. Must be done after stat increase.
+   // Need this one again to update potential price hike. Must be done after stat increase.
    add_option("stat_" + s, "Train my " + s + ", please. [" + stat_train_cost(s) + " " + currency + "]");
 }
 

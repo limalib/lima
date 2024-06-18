@@ -122,7 +122,7 @@ class finger get_finger_data(string userid)
 #endif
 
 #ifdef USE_USER_MENU
-   result.bodies = info[<1];
+   result.bodies = info[ < 1];
 #endif
 
    mbox = MAILBOX_D->get_mailbox(userid);

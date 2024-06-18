@@ -6,9 +6,9 @@
 ** 950821, Deathblade: created.
 */
 
+#include <config/user_menu.h>
 #include <mudlib.h>
 #include <security.h>
-#include <config/user_menu.h>
 
 void sw_body_handle_new_logon();
 nomask string query_userid();

@@ -7,7 +7,7 @@
 
 //: PLAYERCOMMAND
 //$$ see: skills, hp, stats,score
-// USAGE 
+// USAGE
 //
 //  |  ``materials``
 //  |  ``materials all`` - show all materials on the MUD

@@ -19,10 +19,10 @@ void main(mixed *arg)
 
    ob = arg[0];
 
-   //Give objects a chance before dested.
+   // Give objects a chance before dested.
    ob->do_remove();
 
-   //Message about the dest.
+   // Message about the dest.
    if (ob->short())
    {
       this_body()->do_player_message("destruct", ob);

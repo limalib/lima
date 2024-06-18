@@ -32,9 +32,9 @@
 ** 950823, Deathblade: created
 */
 
+#include <config/user_menu.h>
 #include <mudlib.h>
 #include <security.h>
-#include <config/user_menu.h>
 
 inherit M_DAEMON_DATA;
 
@@ -73,7 +73,8 @@ class var_info
 nomask void
 register_body(string user, string body)
 {
-   if (!body) body=user;
+   if (!body)
+      body = user;
    if (!arrayp(user_names[user]))
       user_names[user] = ({});
    if (member_array(body, user_names[user]) == -1)

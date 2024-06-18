@@ -10,18 +10,18 @@ inherit M_CRAFTING;
 
 void mudlib_setup()
 {
-  ::mudlib_setup();
-  set_id("crafting station", "station");
-  set_in_room_desc("A crafting station is positioned against the wall");
-  add_relation("under", LARGE);
-  set_default_relation("under");
-  set_long((this_object()->get_station_description()+"\n\n" || "")+"This is " + a_short() +
-           " that allows you to craft items from materials you find. Materials are all in your "
-           "components ('materials'), and can be gained by salvaging items you "
-           "find (salvaging items do not require " +
-           a_short() +
+   ::mudlib_setup();
+   set_id("crafting station", "station");
+   set_in_room_desc("A crafting station is positioned against the wall");
+   add_relation("under", LARGE);
+   set_default_relation("under");
+   set_long((this_object()->get_station_description() + "\n\n" || "") + "This is " + a_short() +
+            " that allows you to craft items from materials you find. Materials are all in your "
+            "components ('materials'), and can be gained by salvaging items you "
+            "find (salvaging items do not require " +
+            a_short() +
 #ifndef CAN_UPGRADE_DOWNGRADE
-           ").\n\n");
+            ").\n\n");
 #endif
 #ifdef CAN_UPGRADE_DOWNGRADE
            ").\n\n"
@@ -35,9 +35,7 @@ void mudlib_setup()
            "\tsalvage all (see 'help equip')\n"
            "\n");
 #endif
-  set_max_capacity(LARGE, "under");
-  /* This probably isn't a very good capacity for under */
-  add_method("crawl under", this_object(), (
-                                               : enter_check:),
-             ({"$N $vcrawl under the crafting station."}));
+           set_max_capacity(LARGE, "under");
+           /* This probably isn't a very good capacity for under */
+           add_method("crawl under", this_object(), ( : enter_check:), ({"$N $vcrawl under the crafting station."}));
 }

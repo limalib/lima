@@ -8,10 +8,11 @@
 //
 // With no arguments, you are sent into the general help menu.  You may instead, pass a topic as an argument.
 //
-// Within the help system, when you are at the 
+// Within the help system, when you are at the
 //     ``Help topic? [?]``
 //
-// prompt, you can enter another topic for help on that.  Do not enter 'help' as you do from the command line.  Just the topic name.
+// prompt, you can enter another topic for help on that.  Do not enter 'help' as you do from the command line.  Just the
+// topic name.
 //
 // If there are more than one topic with the same name that you select, you will be given the option of selecting which
 // //match you wish to read.

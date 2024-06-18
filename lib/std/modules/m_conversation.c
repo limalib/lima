@@ -17,7 +17,7 @@
 // Both the replies and the options have special syntaxes that is used to control
 // the interactions. See the functions below for syntax descriptions.
 //
-// This module supports filtering out certain options depending on the *stats* or *skills* of 
+// This module supports filtering out certain options depending on the *stats* or *skills* of
 // the player. These requirements are specified in the options the players can chose and will
 // be limited accordingly. The filters are just added to the end of the reply option string,
 // examples follow below.
@@ -29,26 +29,26 @@
 //
 // Stats are: str, agi, int, con, cha.
 //
-// Example: 
+// Example:
 //     ``"I can probably lift that tree trunk for you?[str>60]"``
 //
 // This also works for skills for <, > and =:
 //
-// Example: 
+// Example:
 //     ``"I can shoot that pistol right out of your hand [combat/ranged/pistol>3]"``
 //
 // The numbers for skills refer to the ranks from 1-20. (See SKILL_D documentation)
 //
-// For responses (from the NPC), some extra syntax allows you to open up new options and/or 
+// For responses (from the NPC), some extra syntax allows you to open up new options and/or
 // close others. The responses can also be different types
 //
 // Special option syntax:
-//  
+//
 //    ``@@add options@@remove options``
 //
 // The options can be seperated by "," to include more options.
 //
-// Example: 
+// Example:
 //     ``"I'll say something.@@add_option1,add_option2@@remove_option3"``
 //
 // A response can be 4 different things:

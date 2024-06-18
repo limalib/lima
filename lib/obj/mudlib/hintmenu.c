@@ -74,7 +74,7 @@ void view_dir(string s)
 {
    string *files = get_dir("/help/hints/" + s + "/*") - ({".", "..", "README"});
    string *questions = map(files, ( : read_file("/help/hints/" + $(s) + "/" + $1, 1, 1) :));
-   MENU m = new_menu("%^HINTS%^"+replace_string(s, "_", " ")+"%^RESET%^");
+   MENU m = new_menu("%^HINTS%^" + replace_string(s, "_", " ") + "%^RESET%^");
    MENU_ITEM item;
    function f;
 
@@ -125,10 +125,10 @@ void create()
    }
    //    if(sizeof(sections)%2)
    add_menu_item(toplevel, blank_seperator);
-   //add_menu_item(toplevel, main_seperator);
-   //add_menu_item(toplevel, quit_item);
+   // add_menu_item(toplevel, main_seperator);
+   // add_menu_item(toplevel, quit_item);
    add_menu_item(toplevel, blank_seperator);
-   //add_menu_item(toplevel, main_seperator);
+   // add_menu_item(toplevel, main_seperator);
    set_menu_prompt(toplevel, "[#q] ");
    allow_empty_selection(toplevel);
    set_no_match_function(toplevel, ( : quit_if_cr:));

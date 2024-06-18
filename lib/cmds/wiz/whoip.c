@@ -7,7 +7,7 @@
 //             <name> - Reports out players ip name and number.
 
 //: COMMAND
-// USAGE: 
+// USAGE:
 //
 //     |  ``whoip``
 //     |  ``whoip <ip address>``

@@ -13,7 +13,6 @@
  * Written by Tigran 05-08-2000
  */
 
-
 nosave private string *say_history = ({});
 
 void add_say_history(string add)

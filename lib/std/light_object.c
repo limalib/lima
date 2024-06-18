@@ -55,12 +55,12 @@ mixed light()
    if (tmp != 1)
       return tmp;
 
-   //Call internal_add_to_queue() to make the light_object stateful when lit.
+   // Call internal_add_to_queue() to make the light_object stateful when lit.
    internal_add_to_queue();
    return ::light();
 }
 
-//This object is only stateful when it's lit. Otherwise it's not.
+// This object is only stateful when it's lit. Otherwise it's not.
 int is_stateful()
 {
    return is_lit();

@@ -4,15 +4,16 @@
 
 //: MODULE
 // This module handles an object that has a corrsponding sibling. Typically used for doors, where two door objects in
-// two different rooms should act as one object. Could also be used for teleporters, one-way mirrors, and other things where
-// the object is on two rooms, but should be considered as one object. Elevator doors use this functionality as well.
+// two different rooms should act as one object. Could also be used for teleporters, one-way mirrors, and other things
+// where the object is on two rooms, but should be considered as one object. Elevator doors use this functionality as
+// well.
 //
 // Note: setup_door() is deprecated. Use this approach instead:
 //
 // .. code-block:: c
 //   set_sibling_ident("oak door");
 //   set_door_direction(dir);
-//   set_door_destination(room); 
+//   set_door_destination(room);
 //
 // .. TAGS: RST
 

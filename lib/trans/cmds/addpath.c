@@ -4,7 +4,7 @@
 
 //: COMMAND
 //$$ see: printpath, rmpath
-// USAGE 
+// USAGE
 //       ``addpath [directory]``
 //
 // This command will add a new path to your current exec path,

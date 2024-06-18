@@ -207,9 +207,9 @@ mapping dump_entries()
 // Returns a text containing an index of page numbers and synonyms
 string synonym_index()
 {
-   string ret = capitalize(query_id()[0])+" Index:\n";
-   string *entries=({});
-   string rsyn=choice(keys(synonyms));
+   string ret = capitalize(query_id()[0]) + " Index:\n";
+   string *entries = ({});
+   string rsyn = choice(keys(synonyms));
    if (!mapp(synonyms) || !sizeof(keys(synonyms)))
       return 0;
 
@@ -217,8 +217,9 @@ string synonym_index()
    {
       entries += ({"   [" + sprintf("%2.2s", entry) + "] - " + syn + "\n"});
    }
-   ret+=implode(sort_array(entries,0),"");
-   return ret + "\n('read " + rsyn + " in "+query_id()[0]+"' or 'read "+synonyms[rsyn]+" in "+query_id()[0]+"')\n";
+   ret += implode(sort_array(entries, 0), "");
+   return ret + "\n('read " + rsyn + " in " + query_id()[0] + "' or 'read " + synonyms[rsyn] + " in " + query_id()[0] +
+          "')\n";
 }
 
 //: FUNCTION set_synonyms

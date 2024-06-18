@@ -6,7 +6,6 @@
 inherit ADMTOOL_BASE;
 inherit CLASS_STATMODS;
 
-
 nomask string module_name()
 {
    return "races";

@@ -79,8 +79,7 @@ string format_subj(int id)
       return sprintf("%d  *** REMOVED ***", id);
    else
       subject = msg.subject;
-   return sprintf("%d  %s (%s, %s)", id, subject[0..34], msg.poster,
-                  intp(msg.time) ? ctime(msg.time)[4..9] : msg.time);
+   return sprintf("%d  %s (%s, %s)", id, subject[0..34], msg.poster, intp(msg.time) ? ctime(msg.time)[4..9] : msg.time);
 }
 
 string show_msg(int id)

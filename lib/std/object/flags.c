@@ -41,7 +41,7 @@ nosave mapping non_persist_flags;
 private
 mapping persist_flags;
 
-#define BITMASK(w) (1 << ((w)&0x1F))
+#define BITMASK(w) (1 << ((w) & 0x1F))
 
 private
 void init_vars()

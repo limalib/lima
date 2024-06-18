@@ -105,7 +105,9 @@ nomask void add_quest_domain(string domain)
       return;
    }
 
-   modal_simple(( : add_quest, domain:), "Format: [quest]:[taskname], example 'pirate:foundCave'.\nWhat quest/task name?");
+   modal_simple((
+                    : add_quest, domain:),
+                "Format: [quest]:[taskname], example 'pirate:foundCave'.\nWhat quest/task name?");
 }
 
 private

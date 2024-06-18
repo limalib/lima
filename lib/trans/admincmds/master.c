@@ -19,7 +19,7 @@ inherit CMD;
 private
 void main()
 {
-  destruct(master());
-  master();
-  tell(this_user(), "Master object reloaded.\n");
+   destruct(master());
+   master();
+   tell(this_user(), "Master object reloaded.\n");
 }

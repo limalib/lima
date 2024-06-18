@@ -4,7 +4,7 @@
 //$$see: dbx
 // USAGE: ``dbxframe [<who>] <frame number>``
 //
-// Check the last error recording the yourself or ``who``. 
+// Check the last error recording the yourself or ``who``.
 // Do 'help dbx' for more info.
 //
 // .. TAGS: RST

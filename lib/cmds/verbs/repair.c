@@ -75,8 +75,8 @@ void do_repair_obj(object ob)
       if (estimate[0])
       {
          write("\t%^MENU_CHOICE%^r%^RESET%^: Use materials to Repair " + ob->short() + "?\n" +
-                   "\t%^MENU_CHOICE%^m%^RESET%^: Use only money, " + CRAFTING_D->repair_cost_string(ob) +
-                   ", instead?\n" + "\t%^MENU_CHOICE%^Q%^RESET%^: Quit (default)");
+               "\t%^MENU_CHOICE%^m%^RESET%^: Use only money, " + CRAFTING_D->repair_cost_string(ob) + ", instead?\n" +
+               "\t%^MENU_CHOICE%^Q%^RESET%^: Quit (default)");
          modal_simple(( : repair_with_what, ob:));
       }
       else
@@ -127,10 +127,10 @@ void do_repair_obs(object *obs)
    if (estimate[0])
    {
       write("\t%^MENU_CHOICE%^r%^RESET%^: Use materials to Repair?\n"
-             "\t%^MENU_CHOICE%^m%^RESET%^: Use only Money, " +
-             to_int(only_money) +
-             ", instead?\n"
-             "\t%^MENU_CHOICE%^Q%^RESET%^: Quit (default)");
+            "\t%^MENU_CHOICE%^m%^RESET%^: Use only Money, " +
+            to_int(only_money) +
+            ", instead?\n"
+            "\t%^MENU_CHOICE%^Q%^RESET%^: Quit (default)");
       modal_simple(( : repair_with_what, filtered_obs:));
    }
    else

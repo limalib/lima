@@ -49,7 +49,7 @@ mixed can_go_str(string str)
    if (this_body()->query_driving_vehicle())
       env = environment(env);
 
-   //If we have no move capacity, it means we're a non-combatant, and should be allowed to move.
+   // If we have no move capacity, it means we're a non-combatant, and should be allowed to move.
    if (this_body()->query_no_move_capacity() && this_body()->query_capacity() >= this_body()->query_no_move_capacity())
    {
       this_body()->simple_action("$N $vfail to move due to the load $n0 $vare carrying.");
@@ -61,7 +61,7 @@ mixed can_go_str(string str)
       return "You are prone. Stand up first.";
    }
 
-   //If we have no move capacity we ignore that we cannot move.
+   // If we have no move capacity we ignore that we cannot move.
    if (this_body()->query_no_move_capacity() && !can_move())
    {
       this_body()->simple_action("$N $vwiggle on the ground trying to move.");

@@ -3,7 +3,6 @@
 inherit WEAPON;
 inherit M_THROWABLE;
 
-
 void setup()
 {
    set_adj("simple");

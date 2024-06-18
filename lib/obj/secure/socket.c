@@ -46,42 +46,42 @@ void set_write_callback(function f)
 
 string stat_me()
 {
-   string out="";
+   string out = "";
    switch (style)
    {
    case SKT_STYLE_LISTEN:
-      out+=sprintf("%O: listening at %O\n", this_object(), addr);
-      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out += sprintf("%O: listening at %O\n", this_object(), addr);
+      out += sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_CONNECT:
-      out+=sprintf("%O: connected to %O\n", this_object(), socket_address(fdOwned));
-      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out += sprintf("%O: connected to %O\n", this_object(), socket_address(fdOwned));
+      out += sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_UDP:
-      out+=sprintf("%O: UDP at %O\n", this_object(), socket_address(fdOwned));
-      out+=sprintf("    read_func=%O\n", read_func);
+      out += sprintf("%O: UDP at %O\n", this_object(), socket_address(fdOwned));
+      out += sprintf("    read_func=%O\n", read_func);
       break;
 
    case SKT_STYLE_LISTEN_M:
-      out+=sprintf("%O: (mud) listening at %O\n", this_object(), addr);
-      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out += sprintf("%O: (mud) listening at %O\n", this_object(), addr);
+      out += sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_CONNECT_M:
-      out+=sprintf("%O: (mud) connected to %O\n", this_object(), socket_address(fdOwned));
-      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out += sprintf("%O: (mud) connected to %O\n", this_object(), socket_address(fdOwned));
+      out += sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
 
    case SKT_STYLE_INT_ACQUIRE:
-      out+=sprintf("%O: accepted connection from %s\n", this_object(), socket_address(fdOwned));
-      out+=sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
+      out += sprintf("%O: accepted connection from %s\n", this_object(), socket_address(fdOwned));
+      out += sprintf("    read_func=%O  close_func=%O\n", read_func, close_func);
       break;
    }
 
    if (sizeof(write_queue))
-      out+=sprintf("queue: %O\n", write_queue);
+      out += sprintf("queue: %O\n", write_queue);
 
    return out;
 }

@@ -3,7 +3,7 @@
 //: PLAYERCOMMAND
 //$$see: feelings, random, semote
 //
-// USAGE 
+// USAGE
 //
 //   ``adverbs [pattern]``
 //

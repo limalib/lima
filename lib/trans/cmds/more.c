@@ -6,7 +6,7 @@
 inherit CMD;
 
 //: COMMAND
-// USAGE : 
+// USAGE :
 //
 //       |  ``more <object(s)>``
 //       |  ``more <filename(s)>``

@@ -9,9 +9,9 @@
 //   |  ``hints off``
 //   |  ``hints <item>``
 //
-// ``hints on`` turns on hints for the MUD while you move around. It's highly recommended 
+// ``hints on`` turns on hints for the MUD while you move around. It's highly recommended
 // for new or inexperienced players. Some hints may pop up from the rooms you enter, whereas
-// others may be from items your have in your inventory - ``hints <item>`` can be used to 
+// others may be from items your have in your inventory - ``hints <item>`` can be used to
 // check if there are any hints for a specific items usage.
 //
 // .. TAGS: RST

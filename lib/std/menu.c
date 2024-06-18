@@ -469,15 +469,15 @@ void display_current_menu()
       return;
    }
    rightwidth = max(map(filter_array(current_menu.items, (
-                                                              : !(((MENU_ITEM)$1)->seperator)
-                                                              :)),
+                                                             : !(((MENU_ITEM)$1)->seperator)
+                                                             :)),
                         (
                             : strlen(((MENU_ITEM)$1)->description)
                             :)));
    // This stuff is getting as ugly as Amylaar closures =P
    leftwidth = max(map(filter_array(current_menu.items, (
-                                                             : stringp(((MENU_ITEM)$1)->choice_name)
-                                                             :)),
+                                                            : stringp(((MENU_ITEM)$1)->choice_name)
+                                                            :)),
                        (
                            : strlen(((MENU_ITEM)$1)->choice_name)
                            :)) +

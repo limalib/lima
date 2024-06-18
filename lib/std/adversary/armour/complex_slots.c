@@ -13,26 +13,26 @@ private
 mapping default_slots()
 {
    return (["torso":new (class slot, howmany : 1, name
-                       : "torso", max_size
-                       : LARGE, stuff
-                       : ({})),
-               "head":new (class slot, howmany : 1, name
+                         : "torso", max_size
+                         : LARGE, stuff
+                         : ({})),
+             "head":new (class slot, howmany : 1, name
                          : "head", max_size
                          : SMALL, stuff
                          : ({})),
-               "arms":new (class slot, howmany : 1, name
+             "arms":new (class slot, howmany : 1, name
                          : "arms", max_size
                          : MEDIUM, stuff
                          : ({})),
-               "legs":new (class slot, howmany : 1, name
+             "legs":new (class slot, howmany : 1, name
                          : "legs", max_size
                          : MEDIUM, stuff
                          : ({})),
-              "hands":new (class slot, howmany : 1, name
+            "hands":new (class slot, howmany : 1, name
                          : "hands", max_size
                          : SMALL, stuff
                          : ({})),
-               "feet":new (class slot, howmany : 1, name
+             "feet":new (class slot, howmany : 1, name
                          : "feet", max_size
                          : SMALL, stuff
                          : ({})),

@@ -105,7 +105,7 @@ int query_ghost()
 #ifdef USE_KARMA
 //: FUNCTION karma_impact
 // Override and return a number between -5 and 5 to impact karma
-// when killed by someone. 
+// when killed by someone.
 // Notice: Requires USE_KARMA defined.
 int karma_impact()
 {
@@ -129,9 +129,9 @@ string diagnose()
 // Returns a description for the room for the adversary.
 string query_in_room_desc()
 {
-  if (!this_object()->is_visible())
-    return "";
-  return ::query_in_room_desc() + conditionString();
+   if (!this_object()->is_visible())
+      return "";
+   return ::query_in_room_desc() + conditionString();
 }
 
 /*

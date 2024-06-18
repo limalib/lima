@@ -22,8 +22,8 @@ inherit CMD;
 private
 void main(string arg)
 {
-   string name=this_body()->query_name();
-   if (name && strlen(name)>5 && name[0..4]=="Guest")
+   string name = this_body()->query_name();
+   if (name && strlen(name) > 5 && name[0..4] == "Guest")
    {
       out("Not saving guest, sorry.");
       return;

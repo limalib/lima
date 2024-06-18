@@ -100,7 +100,11 @@ varargs string save_things_to_string(int recursep)
 
    map["#base_name#"] = base_name(this_object());
    if (save_recurse)
-      map["#inventory#"] = filter(all_inventory(), ( : !$1->do_not_restore() && !$1->is_living() :))->save_to_string(1) - ({0});
+      map["#inventory#"] = filter(all_inventory(), (
+                                                       : !$1->do_not_restore() && !$1->is_living()
+                                                       :))
+                               ->save_to_string(1) -
+                           ({0});
 
    return save_variable(map);
 }

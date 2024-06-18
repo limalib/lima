@@ -2,7 +2,6 @@
 
 inherit TORCH;
 
-
 void setup()
 {
    set_adj("magic");

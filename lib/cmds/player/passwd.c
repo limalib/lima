@@ -63,11 +63,11 @@ private
 void main()
 {
    string name = lower_case(this_body()->query_name());
-   if (strlen(name)>5 && name[0..4]=="guest")
-      {
-         write("Guests cannot change password.");
-         return;
-      }
+   if (strlen(name) > 5 && name[0..4] == "guest")
+   {
+      write("Guests cannot change password.");
+      return;
+   }
 
    modal_simple(( : confirm_current_password:), "Enter your current password: ", 1);
 }

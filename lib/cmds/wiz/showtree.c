@@ -5,7 +5,7 @@
 inherit CMD;
 
 //: COMMAND
-// USAGE: 
+// USAGE:
 //
 //  |  ``showtree <function name> <object>``
 //  |  ``showtree <object>``

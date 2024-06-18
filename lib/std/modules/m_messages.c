@@ -453,7 +453,7 @@ void inform(object *who, string *msgs, mixed others)
       if (done[who[i]])
          continue;
       done[who[i]]++;
-      tell(who[i], msgs[i], MSG_INDENT | 128 );
+      tell(who[i], msgs[i], MSG_INDENT | 128);
    }
    if (arrayp(others))
       map_array(others - who, ( : tell_from_outside($1, $(msgs[ < 1]), MSG_INDENT | EMOJI_MSG) :));

@@ -6,6 +6,6 @@ inherit M_POWER;
 
 void mudlib_setup()
 {
-    set_id("battery","power cell","cell");
-    set_max_mah(1000*random(20));
+   set_id("battery", "power cell", "cell");
+   set_max_mah(1000 * random(20));
 }

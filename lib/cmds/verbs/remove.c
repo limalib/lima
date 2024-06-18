@@ -8,7 +8,7 @@
 
 //: COMMAND
 // Remove a post from a bulletin board, remove equipment, remove other things.
-// 
+//
 //  |  ``remove helmet``
 //  |  ``remove all``
 //

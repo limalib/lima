@@ -108,10 +108,10 @@ void remove_annotation()
    for (int i = 0; i < sizeof(ann); i++)
    {
       a = ann[i];
-      add_menu_item(rm_annotations, new_menu_item(sprintf("%-30s (%s on %s)", a.title, capitalize(a.author), a.date),
-                                                  (
-                                                      : rm_it($(i))
-                                                      :)));
+      add_menu_item(rm_annotations,
+                    new_menu_item(sprintf("%-30s (%s on %s)", a.title, capitalize(a.author), a.date), (
+                                                                                                          : rm_it($(i))
+                                                                                                          :)));
    }
    add_menu_item(rm_annotations, goto_main_menu_item);
    add_menu_item(rm_annotations, quit_item);
@@ -161,11 +161,10 @@ void see_annotations()
    for (int i = 0; i < sizeof(ann); i++)
    {
       a = ann[i];
-      add_menu_item(
-          view_annotations,
-          new_menu_item(sprintf("%-30s (%s on %s)", a.title, capitalize(a.author), a.date), (
-                                                                                                   : see_it($(i))
-                                                                                                   :)));
+      add_menu_item(view_annotations,
+                    new_menu_item(sprintf("%-30s (%s on %s)", a.title, capitalize(a.author), a.date), (
+                                                                                                          : see_it($(i))
+                                                                                                          :)));
    }
 
    add_menu_item(view_annotations, goto_main_menu_item);

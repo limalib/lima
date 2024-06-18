@@ -27,14 +27,14 @@ int rechargable = 0;
 // Always returns 1 if this module is inherited.
 int is_power_source()
 {
-    return 1;
+   return 1;
 }
 
 //: FUNCTION set_rechargable
 // Set if power source can be recharged or not.
 void set_rechargable(int r)
 {
-    rechargable = r;
+   rechargable = r;
 }
 
 //: FUNCTION use_charge
@@ -42,17 +42,17 @@ void set_rechargable(int r)
 // Returns 1 if successful, otherwise 0 - we're out of power.
 int use_charge(int ma)
 {
-    mAh_capacity -= ma;
-    if (mAh_capacity > 0)
-        return 1;
-    return 0;
+   mAh_capacity -= ma;
+   if (mAh_capacity > 0)
+      return 1;
+   return 0;
 }
 
 //: FUNCTION query_rechargable
 // Returns 1 if rechargable, otherwise 0.
 int query_rechargable()
 {
-    return rechargable;
+   return rechargable;
 }
 
 //: FUNCTION set_max_mah
@@ -60,14 +60,14 @@ int query_rechargable()
 // either set_random_mah() or set_mah(number) after this.
 void set_max_mah(int c)
 {
-    max_mAh = c;
+   max_mAh = c;
 }
 
 //: FUNCTION query_max_mah
 // Returns the max mah of the power source.
 int query_max_mah()
 {
-    return max_mAh;
+   return max_mAh;
 }
 
 //: FUNCTION set_mah
@@ -75,7 +75,7 @@ int query_max_mah()
 // between 0-max mah always.
 void set_mah(int c)
 {
-    mAh_capacity = clamp(c, 0, max_mAh);
+   mAh_capacity = clamp(c, 0, max_mAh);
 }
 
 //: FUNCTION set_random_mah
@@ -83,12 +83,12 @@ void set_mah(int c)
 // The chance to be 100% is >25%.
 void set_random_mah()
 {
-    set_mah((max_mAh / 4) + random(max_mAh));
+   set_mah((max_mAh / 4) + random(max_mAh));
 }
 
 //: FUNCTION query_mah
 // Returns the current charge of the power source.
 int query_mah()
 {
-    return mAh_capacity;
+   return mAh_capacity;
 }

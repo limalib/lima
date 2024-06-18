@@ -1,7 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: 
+// USAGE:
 //     ``dbxwhere [<who>]``
 //
 // Dump error stack for yourself or ``who``. See 'help dbx'.

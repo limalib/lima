@@ -4,7 +4,7 @@
 
 //: COMMAND
 //$$ see: wizz, trans
-// USAGE: 
+// USAGE:
 //
 //     |``goto <player>``
 //     |  ``goto <room>

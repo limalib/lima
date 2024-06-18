@@ -2,7 +2,7 @@
 
 //: PLAYERCOMMAND
 //$$see: mode, palette
-// USAGE 
+// USAGE
 //   |   ``colours``
 //   |   ``colours <name> <value>``
 //   |   ``colours remove <value>``

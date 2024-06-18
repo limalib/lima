@@ -534,7 +534,7 @@ string frame_demo_string(string theme, int w)
           styles[style][TH] + styles[style][TLD];
 }
 
-//:FUNCTION frame_colour_demo
+//: FUNCTION frame_colour_demo
 // Do a frame colour demo using ``style`` using ``colour`` in width ``w``.
 string frame_colour_demo(string style, string colour, int w)
 {

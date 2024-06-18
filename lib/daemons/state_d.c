@@ -136,7 +136,7 @@ void process_queue()
                   queue[update_time] += ({({o, target[1]})});
                continue;
             }
-            //If we only have one, handle it now.
+            // If we only have one, handle it now.
             target[0] = t_ar[0];
          }
 
@@ -204,7 +204,6 @@ string stat_me()
       }
    }
 
-   return sprintf("%-55s%-25s%-10s\n", "Object", "Arguments", "Delay") +
-          sprintf("%92'-'s\n", "") +
-          squeue + "\nThere are " + sizeof(flatten_array(values(STATE_D->queue()))) / 2 + " statefuls in queue.";
+   return sprintf("%-55s%-25s%-10s\n", "Object", "Arguments", "Delay") + sprintf("%92'-'s\n", "") + squeue +
+          "\nThere are " + sizeof(flatten_array(values(STATE_D->queue()))) / 2 + " statefuls in queue.";
 }

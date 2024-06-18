@@ -39,8 +39,7 @@ string long()
 
    contrib = GUILD_D->query_favour_contribution(guild);
    long_desc += simple_divider();
-   long_desc += "    %^YELLOW%^" + upper_case(guild) + " - Favour Board Top " +
-                MAX_ON_BOARD + "%^RESET%^.\n\n";
+   long_desc += "    %^YELLOW%^" + upper_case(guild) + " - Favour Board Top " + MAX_ON_BOARD + "%^RESET%^.\n\n";
 
    foreach (string p in contributors())
    {

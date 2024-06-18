@@ -9,7 +9,7 @@
 
 //: COMMAND
 // Mainly used to switch which group a board is set to
-// 
+//
 // .. TAGS: RST
 
 inherit VERB_OB;

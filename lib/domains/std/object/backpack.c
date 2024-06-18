@@ -15,7 +15,6 @@ void setup()
    set_max_capacity(3 * MEDIUM);
    set_weight(2);
    set_slot("back");
-
 }
 
 mixed ob_state()

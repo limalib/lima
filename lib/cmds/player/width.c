@@ -53,7 +53,7 @@ void main(mixed width)
 
    if (width < MIN_WIDTH)
    {
-      out("Screen width must be "+MIN_WIDTH+" or greater.\n");
+      out("Screen width must be " + MIN_WIDTH + " or greater.\n");
       return;
    }
    this_user()->set_screen_width(width);

@@ -19,7 +19,7 @@
 // Ohara would like you to note that "possible" and "a good idea"
 // are two separate things.
 //
-// WARNING  
+// WARNING
 // -------
 //
 // The admin of this mud will not tolerate any type of toying with players.

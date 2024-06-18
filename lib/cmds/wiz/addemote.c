@@ -3,7 +3,7 @@
 
 //: COMMAND
 //$$see: feelings, m_messages, rmemote, showemote, stupidemote, targetemote
-// USAGE:  
+// USAGE:
 //    ``addemote <verb>``
 //
 // This command allows you to add new souls.  (verb) being the soul.

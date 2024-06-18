@@ -42,7 +42,6 @@ string call_trace()
    return res;
 }
 
-
 // There should be an | operator for this.
 
 //: FUNCTION clean_array

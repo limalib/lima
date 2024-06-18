@@ -140,8 +140,8 @@ void main(string who)
                "Email Address: %s\n"
                "%s",
                first_line, info.nickname, info.level, info.real_name, info.position, info.spouse,
-               info.idle == -1 ? "Left at" : "On since", info.last_login ? ctime(info.last_login) : "<unknown>",
-               idle, info.connect_from, mailstring, info.email, info.home_page);
+               info.idle == -1 ? "Left at" : "On since", info.last_login ? ctime(info.last_login) : "<unknown>", idle,
+               info.connect_from, mailstring, info.email, info.home_page);
 
    if (info.plan)
       s += "Plan:\n" + info.plan + "\n";

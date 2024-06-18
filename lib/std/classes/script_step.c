@@ -12,12 +12,12 @@
 */
 class script_step
 {
-    int type;
-    int wait;
-    string action;
-    string location;
-    string in_room_desc;
-    string trigger;
-    function func;
-    string *multiple;
+   int type;
+   int wait;
+   string action;
+   string location;
+   string in_room_desc;
+   string trigger;
+   function func;
+   string *multiple;
 }

@@ -40,13 +40,12 @@ void main(string arg)
    {
       string simplestate;
       set_frame_title("Frame settings");
-      set_frame_header("<bld>Frame style is:<res> " + (usertheme || "ascii") + ".\n" +
-                                    "<bld>Frame theme is:<res> " + (usercoltheme || "none") + ".\n" +
-                                    (i_simplify() ? "Frames are off, since you have simplify on.\n" : ""));
+      set_frame_header("<bld>Frame style is:<res> " + (usertheme || "ascii") + ".\n" + "<bld>Frame theme is:<res> " +
+                       (usercoltheme || "none") + ".\n" +
+                       (i_simplify() ? "Frames are off, since you have simplify on.\n" : ""));
 
       set_frame_content(frames_help());
-      set_frame_footer("<bld>These settings will change most UI on " + mud_name() +
-                                    " to this style.<res>");
+      set_frame_footer("<bld>These settings will change most UI on " + mud_name() + " to this style.<res>");
       out(frame_render());
       return;
    }
@@ -97,7 +96,7 @@ void main(string arg)
 
       foreach (string t in styles)
       {
-         printf("\t%-15.15s %s\n", t, frame_demo_string(t,20));
+         printf("\t%-15.15s %s\n", t, frame_demo_string(t, 20));
       }
       printf("\n\n");
    }

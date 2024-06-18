@@ -33,5 +33,4 @@ void setup()
    set_sibling_ident("dock wall");
    set_door_direction("north");
    set_door_destination("/domains/std/room/caves/Small_Dock");
-
 }

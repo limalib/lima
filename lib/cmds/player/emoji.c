@@ -12,7 +12,7 @@
 // Typing ``emoji`` will show if your character is set to ascii like graphics
 // from the mud (used for small charts etc). These can be hard to use on
 // screen readers, so if you are using a screen reader it can be recommended
-// to be ``emoji off`` - ``simplify on`` will set  alot of these settings 
+// to be ``emoji off`` - ``simplify on`` will set  alot of these settings
 // correct for your screen reader.
 //
 // Use ``emoji list`` for a list of supported emojis.
@@ -61,7 +61,7 @@ void main(string arg)
          printf("%%^BOLD%%^%-30s %10|s %-10s%%^RESET%%^", "Emoji", "Unicode", "Replacement\n");
          foreach (string key, string * arr in emojis)
          {
-            printf("%-30s %10|s %-10s\n", key, arr[0], implode(explode(arr[1],""),"<res>"));
+            printf("%-30s %10|s %-10s\n", key, arr[0], implode(explode(arr[1], ""), "<res>"));
          }
          printf("\n");
       }

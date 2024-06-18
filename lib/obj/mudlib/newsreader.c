@@ -694,8 +694,7 @@ nomask void followup_with_message()
       write("You may not post to " + current_group + ".\n");
       return;
    }
-   lines = ({sprintf("On %s %s wrote post %s:", intp(msg.time) ? ctime(msg.time) : msg.time, msg.poster,
-                     msg.subject)});
+   lines = ({sprintf("On %s %s wrote post %s:", intp(msg.time) ? ctime(msg.time) : msg.time, msg.poster, msg.subject)});
 
    lines += map_array(explode(msg.body, "\n"), ( : "> " + $1:));
 

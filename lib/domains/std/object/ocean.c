@@ -39,7 +39,7 @@ void setup()
 void award_points(string direction)
 {
    if (evaluate(direction) == "the ocean")
-      QUEST_D->grant_points(this_body(),"std", "Pirate", "foundCave", "begin");
+      QUEST_D->grant_points(this_body(), "std", "Pirate", "foundCave", "begin");
 }
 
 void on_clone(mixed args...)

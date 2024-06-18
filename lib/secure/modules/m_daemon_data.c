@@ -17,7 +17,7 @@ int lima_save = 0;
 
 nomask string create_file_name()
 {
-   string ret = (lima_save && mud_name()=="LIMA" ? "/data/lima" : "/data") + file_name();
+   string ret = (lima_save && mud_name() == "LIMA" ? "/data/lima" : "/data") + file_name();
 
    if (ret[ < 2..] == "_d")
       ret = ret[0.. < 3];

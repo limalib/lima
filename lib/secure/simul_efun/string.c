@@ -297,15 +297,15 @@ string title_capitalize(string instring)
 /* There are more in parse_command_prepos_list() than is necessary, but
  * they are all two word preps, so they will never be matched, thus this
  * works */
-#define UNCAPPED \
-   ({            \
-       "a",      \
-       "an",     \
-       "the",    \
-       "is",     \
-       "and",    \
-       "but",    \
-       "or",     \
+#define UNCAPPED                                                                                                       \
+   ({                                                                                                                  \
+       "a",                                                                                                            \
+       "an",                                                                                                           \
+       "the",                                                                                                          \
+       "is",                                                                                                           \
+       "and",                                                                                                          \
+       "but",                                                                                                          \
+       "or",                                                                                                           \
    }) + master()->parse_command_prepos_list()
 
    foreach (string word in inarr)
@@ -395,7 +395,8 @@ varargs string weight_to_string(float w, int imperial)
 // Shortens a filename by introducing ^ as /domains/ and ~ as /wiz/.
 string shorten_filename(mixed ob)
 {
-   return replace_string(replace_string(explode(stringp(ob) ? ob : sprintf("%O", ob), " ")[0], "/domains/", "^"), WIZ_DIR + "/", "~");
+   return replace_string(replace_string(explode(stringp(ob) ? ob : sprintf("%O", ob), " ")[0], "/domains/", "^"),
+                         WIZ_DIR + "/", "~");
 }
 
 //: FUNCTION filename_ellipsis

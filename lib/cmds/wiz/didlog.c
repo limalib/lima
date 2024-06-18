@@ -9,7 +9,7 @@
 
 //: COMMAND
 //$$ see: I, lima
-// USAGE: 
+// USAGE:
 //
 //    |  ``didlog``
 //    |  ``didlog -a|-all``                   - Show entire didlog.
@@ -56,14 +56,13 @@ void print_help()
        "  didlog -v 1.0 -a                 - Show entire version 1.0 didlog.\n"
        "  didlog -v 1.0 -a -p limb         - Find all places in version 1.0 with 'limb'.\n"
        "  didlog -v 1.0 200 -p limb        - Find places in version 1.0 days 200 back with 'limb'.\n\n"
-       "Arguments can be given in any order.\n"
-       );
+       "Arguments can be given in any order.\n");
 }
 
 private
 void main(string str)
 {
-   int ndays=1;
+   int ndays = 1;
    string days;
    string header;
    string pattern;

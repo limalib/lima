@@ -20,8 +20,8 @@
 //
 // .. TAGS: RST
 
-#include <localtime.h>
 #include <config/time.h>
+#include <localtime.h>
 
 inherit CMD;
 inherit M_FRAME;

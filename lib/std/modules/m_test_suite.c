@@ -1,8 +1,8 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: MODULE
-// This module should be inherited by test suites, typically all located in */std/tests/*. It provides a lot of functions
-// for queueing up tests, running them and various functions for cloning and testing the results.
+// This module should be inherited by test suites, typically all located in */std/tests/*. It provides a lot of
+// functions for queueing up tests, running them and various functions for cloning and testing the results.
 //
 // To write a test inherit this file, and write a function:
 // .. code-block:: c

@@ -12,8 +12,8 @@
 //$$see: mail
 //
 // USAGE
-// 
-//    |  ``biff`` 
+//
+//    |  ``biff``
 //    |  ``biff on``
 //    |  ``biff off``
 //

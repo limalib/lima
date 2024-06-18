@@ -16,7 +16,6 @@
 //
 // .. TAGS: RST
 
-
 inherit CMD;
 inherit M_GRAMMAR;
 

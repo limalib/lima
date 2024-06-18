@@ -9,7 +9,7 @@
 */
 
 //: ADMINCOMMAND
-// USAGE: 
+// USAGE:
 //
 //    |  ``shutdown -t<time> <reason>``
 //    |  ``shutdown -c <reason>``

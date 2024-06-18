@@ -209,8 +209,7 @@ varargs private void handle_ack(mapping ack_list, int flag)
 private *prep_message(int id, class outgoing_info info)
 {
    class mail_msg msg = internal_queue[info.msgId];
-   return (
-       {"mail", id, msg.sender, msg.to_list, msg.cc_list, ({}), msg.date, msg.subject, implode(msg.body, "\n")});
+   return ({"mail", id, msg.sender, msg.to_list, msg.cc_list, ({}), msg.date, msg.subject, implode(msg.body, "\n")});
 }
 
 private

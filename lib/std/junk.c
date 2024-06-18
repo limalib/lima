@@ -2,7 +2,6 @@ inherit OBJ;
 inherit M_GETTABLE;
 inherit M_SALVAGEABLE;
 
-
 int junk_level = 1;
 
 varargs void mudlib_setup(string material)

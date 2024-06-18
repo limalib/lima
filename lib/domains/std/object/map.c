@@ -14,8 +14,8 @@ void setup()
             "                   |        /                                          \n" +
             "                   |       /  QUIET ROOM                               \n" +
             "     LAVA CAVE     |      /  /                                         \n" +
-           "              \\    |     /  /       PLAINS                             \n" +
-           "               \\   |   U/  /           |                               \n" +
+            "              \\    |     /  /       PLAINS                             \n" +
+            "               \\   |   U/  /           |                               \n" +
             "  ELEVATOR --  WIZARD HALL  ---- EXAMPLE ROOM -- CAR WASH              \n" +
             "              /D   |                   |                               \n" +
             "             /     |                   |                               \n" +

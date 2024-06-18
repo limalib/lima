@@ -5,7 +5,7 @@
 
 //: COMMAND
 //$$ see: m_messages, msg
-// USAGE:  
+// USAGE:
 //
 //    |  ``review``
 //    |  ``review < playername >``

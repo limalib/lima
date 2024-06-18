@@ -73,7 +73,6 @@ nomask private void main()
                             capitalize(domain), sizeof(quests) == 1 ? "is only" : "are", sizeof(quests),
                             sizeof(quests) == 1 ? "" : "s", ));
 
-
    foreach (string quest in keys(quests))
    {
       c += sprintf(" %31-s  %6d   %s\n", capitalize(quests[quest]["name"]), sizeof(quests[quest]["parts"]),

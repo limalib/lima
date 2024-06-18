@@ -3,7 +3,7 @@
 //: PLAYERCOMMAND
 //
 // USAGE
-// 
+//
 //   |  ``tell <player> <message>``
 //   |  ``tell <player>@<mudname> <message>``
 //   |  ``tell /last``

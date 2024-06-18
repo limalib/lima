@@ -3,8 +3,8 @@
 
 //: PLAYERCOMMAND
 //$$ see: skills, score, equip
-// USAGE 
-// 
+// USAGE
+//
 //     ``hp``
 //
 // Prints your current HP on all your limbs with AC stats and types.

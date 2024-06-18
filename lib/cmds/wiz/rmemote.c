@@ -2,7 +2,7 @@
 
 //: COMMAND
 //$$ see: feelings, m_messages, addemote, showemote, stupidemote, targetemote
-// USAGE:  
+// USAGE:
 //
 //   |  ``rmemote <emote>``
 //   |  ``rmemote <emote>  <rule>``

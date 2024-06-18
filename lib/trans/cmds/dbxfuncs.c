@@ -1,12 +1,12 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: COMMAND
-// USAGE: 
+// USAGE:
 //     ``dbxfuncs <ob> <funcs>``
 //
 // Finds functions in an objects, e.g.:
 //
-//  |   ``dbxfuncs /secure/simul_efun arr`` 
+//  |   ``dbxfuncs /secure/simul_efun arr``
 //  |   Matches:
 //  |   mixed * clean_array(x)        (defined in /secure/simul_efun/misc)
 //  |   mixed array_sum(x)            (defined in /secure/simul_efun/misc)
@@ -55,7 +55,7 @@ void main(string str)
    write("Matches:\n");
    foreach (result in funcs)
    {
-      line = result[2]+" ";
+      line = result[2] + " ";
       line += (result[0] + "(");
       while (result[1]--)
       {

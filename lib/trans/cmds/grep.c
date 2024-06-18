@@ -9,7 +9,7 @@
 // Locates and displays lines matching specified pattern within specified files.
 //
 // Flags:
-// 
+//
 //   | -i for case insensitive comparison
 //   | -n to display line numbers
 //   | -v to invert slection - ie display lines NOT matching.

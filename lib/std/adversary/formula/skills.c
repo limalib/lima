@@ -7,8 +7,8 @@
 
 #include <classes.h>
 #include <combat_modules.h>
-#include <log.h>
 #include <config/skills.h>
+#include <log.h>
 
 #define DAMAGE_STAT_IMPACT 5
 #define DEFEND_STAT_IMPACT 5
@@ -160,7 +160,7 @@ int disarm_chance(object target)
 
    // TBUG("Chance_to_hit: "+chance_to_hit+" Defend_disarm: "+(defend_disarm_value/100.0)+" Res: "+res+
    //" Disarm prev:"+disarm_prevention+" To hit bonus: "+(weapon ? weapon->query_to_hit_bonus(target) :
-   //query_to_hit_bonus(target))+" Disarm bonus "+query_disarm_bonus(target)); Subtract to_hit bonus and add disarm
+   // query_to_hit_bonus(target))+" Disarm bonus "+query_disarm_bonus(target)); Subtract to_hit bonus and add disarm
    // bonus.
    return to_int((res - (weapon ? weapon->query_to_hit_bonus(target) : query_to_hit_bonus(target)) +
                   query_disarm_bonus(target) - disarm_prevention) /

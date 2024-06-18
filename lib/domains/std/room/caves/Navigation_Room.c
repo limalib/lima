@@ -19,8 +19,8 @@ void setup()
    set_objects((["/domains/std/object/navigation_table":1,
                 "/domains/std/object/navigation_button":1,
                         "/domains/std/object/rock_wall":({
-                                                             "north",
-                                                             "/domains/std/room/caves/Small_Dock",
-                                                         }),
+                                                            "north",
+                                                            "/domains/std/room/caves/Small_Dock",
+                                                        }),
                              "/domains/std/object/maps":1, ]));
 }

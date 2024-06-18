@@ -41,7 +41,7 @@ int check_drink_fluid()
    for (int i = 1; i < 11; i++)
    {
       cmd(troll, "drink from bottle");
-      if (i<10 && present("ale", present("bottle", troll))->query_num_drinks() + i != 10)
+      if (i < 10 && present("ale", present("bottle", troll))->query_num_drinks() + i != 10)
          return 0;
    }
    return check_bottle_empty();

@@ -20,7 +20,7 @@ void main(mixed *arg)
    ob = arg[0];
    ob->stop_actions();
    ob->set_actions(100, 0);
-   outf("%s has been quieted.",ob->short());
+   outf("%s has been quieted.", ob->short());
 
    return;
 }

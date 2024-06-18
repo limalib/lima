@@ -5,7 +5,6 @@
 inherit OBJ;
 inherit M_GETTABLE;
 
-
 string *gem_size = ({"fine", "tiny", "small", "medium", "large", "giant"});
 string *gem_shape = ({"unworked", "round", "oval", "heart-shaped", "drop-shaped", "pentagon"});
 string *gem_cut = ({"cabochon", "point", "table", "single", "rose", "brilliant"});

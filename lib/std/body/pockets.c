@@ -23,7 +23,7 @@ mapping query_materials()
 
 void empty_materials()
 {
-    materials = ([]);
+   materials = ([]);
 }
 
 private

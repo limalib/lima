@@ -10,7 +10,7 @@
 
 //: COMMAND
 //$$ see: objdump, objfind
-// USAGE: 
+// USAGE:
 //
 //    |  ``objcount
 //    |  ``objcount <minimum>

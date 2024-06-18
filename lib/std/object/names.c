@@ -93,7 +93,7 @@ private
 void resync()
 {
 #ifdef USE_DURABILITY
-   //We use DAMAGED_EQ_NAME internally as ad adverb
+   // We use DAMAGED_EQ_NAME internally as ad adverb
    int damaged = member_array(DAMAGED_EQ_NAME, adjs) != -1;
 #endif
 

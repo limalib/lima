@@ -12,7 +12,7 @@
 //$$see: channels, gossip, newbie
 // The chan command is the central command for all channel
 // communication.  Below are the various forms the command takes:
-// 
+//
 //   |  ``chan``                    - list channels being listened to
 //   |  ``chan gossip``             - find out whether the 'gossip' channel is being listened to
 //   |  ``chan gossip /on``         - turn listening on for the 'gossip' channel

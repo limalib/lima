@@ -155,10 +155,10 @@ nomask void open_socket(class connection this_con)
    string session = this_con.session_name;
 
    this_con.socket = new (SOCKET, SKT_STYLE_CONNECT, this_con.address,
-                           (
-                               : recv_input_from, session:),
-                           (
-                               : close_session, session:));
+                          (
+                              : recv_input_from, session:),
+                          (
+                              : close_session, session:));
 }
 
 private

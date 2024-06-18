@@ -99,7 +99,7 @@ string green_bar(int value, int max, int width)
 
    if (value > max)
       value = max;
-   green = (value * 1.00 / max) * (width-1);
+   green = (value * 1.00 / max) * (width - 1);
    white = width - 1 - green;
 
    // TBUG("green: "+green+" white: "+white+ " value: "+value+" max: "+max);

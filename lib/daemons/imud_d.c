@@ -262,7 +262,7 @@ void create()
 
    mudlist_reset_entries();
 
-   reconn_func = (: reconnect :);
+   reconn_func = ( : reconnect:);
 
    oob_startup();
    chan_startup();
@@ -271,14 +271,15 @@ void create()
 
    trigger_reconnect("router");
    set_privilege("Mudlib:daemons");
-   
+
    call_out("imud_socket_keepalive", 120);
 }
 
-private void imud_socket_keepalive()
+private
+void imud_socket_keepalive()
 {
-  router_socket->send_telnet_nop();
-  call_out("imud_socket_keepalive", 120);
+   router_socket->send_telnet_nop();
+   call_out("imud_socket_keepalive", 120);
 }
 
 void remove(int coming_back_soon)

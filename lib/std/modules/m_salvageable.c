@@ -64,7 +64,7 @@ mapping query_direct_salvage()
 void set_damaged()
 {
    damaged = 1;
-   //add_adj(DAMAGED_EQ_NAME);
+   // add_adj(DAMAGED_EQ_NAME);
    this_object()->set_damaged_durability();
 }
 
@@ -113,7 +113,7 @@ int set_salvageable(mapping s)
          sum += p;
       }
       else
-         error("Invalid salvage type: "+key);
+         error("Invalid salvage type: " + key);
    }
    if (sum != 100)
       return 0;

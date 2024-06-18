@@ -3,7 +3,7 @@
 // Rust
 
 //: COMMAND
-// USAGE:  
+// USAGE:
 //
 //    |  ``start``
 //    |  ``start <path>``

@@ -140,7 +140,7 @@ object get_object(string arg)
          if (!(ob = find_body(arg)))
             if (!(ob = load_object(evaluate_path(arg))))
                return 0;
-               
+
    return ob;
 }
 

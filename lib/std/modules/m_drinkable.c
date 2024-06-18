@@ -177,8 +177,8 @@ varargs void drink_it(object drinkee)
          drinkee->my_action(action, this_object());
    };
 
-   //These two are call_others to avoid a hard dependency between
-   //M_DRINKABLE and M_HEALING.
+   // These two are call_others to avoid a hard dependency between
+   // M_DRINKABLE and M_HEALING.
    if (this_object()->query_heal_value())
    {
       this_object()->heal_from_drink();

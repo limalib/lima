@@ -7,7 +7,7 @@
 // Prints out the top few lines of a file (or multiple files).
 // Use the -n flag to specify different value for number of lines displayed -
 // default = 10.
-// 
+//
 // .. TAGS: RST
 
 inherit CMD;

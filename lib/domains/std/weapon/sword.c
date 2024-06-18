@@ -2,7 +2,6 @@
 
 inherit SWORD;
 
-
 void setup()
 {
    set_adj("dull");
@@ -15,4 +14,3 @@ void setup()
    add_combat_message("miss", "$N $vtake a clumsy swipe at $t, but only $vsucceed in making a fool of $r.");
    set_can_dual_wield(1);
 }
-

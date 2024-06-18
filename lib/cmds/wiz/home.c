@@ -3,7 +3,7 @@
 /* Megaboz's attempt at a home cmd  4-23-94 */
 
 //: COMMAND
-// USAGE:  
+// USAGE:
 //
 //      |  ``home``
 //      |  ``home <wizard name>``

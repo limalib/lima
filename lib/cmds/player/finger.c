@@ -19,7 +19,7 @@
 // The mud name doesn't have to be the complete name, and can be a
 // partial match, as long as you provide enough information so that the
 // game can figure out which mud you're talking about.
-// 
+//
 // .. TAGS: RST
 
 #include <commands.h>

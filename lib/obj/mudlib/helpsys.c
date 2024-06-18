@@ -189,8 +189,8 @@ nomask void parse_file(string fname, string topic)
 **
 ** Present a topic to the user
 */
-private varargs
-nomask void present_topic(string fname, string topic)
+private
+varargs nomask void present_topic(string fname, string topic)
 {
    switch (file_size(fname))
    {

@@ -80,31 +80,26 @@ void main(string arg)
       if (sizeof(arglist) < 3)
          out(SYNTAX);
 
-      arglist =
-          filter_array(
-              arglist[2..],
-              function(string x, string this_group, string * grp_members) {
-                 if (arrayp(grp_members) && member_array(grp_members, x) != -1)
-                 {
-                    outf("%s is already in group %s.\n", x, this_group);
-                    return;
-                 }
-                 else
-                 {
-                    outf("%s added to group %s.\n", x, this_group);
-                    return 1;
-                 }
-              },
-              this_group);
+      arglist = filter_array(
+          arglist[2..],
+          function(string x, string this_group, string * grp_members) {
+             if (arrayp(grp_members) && member_array(grp_members, x) != -1)
+             {
+                outf("%s is already in group %s.\n", x, this_group);
+                return;
+             }
+             else
+             {
+                outf("%s added to group %s.\n", x, this_group);
+                return 1;
+             }
+          },
+          this_group);
 
       arglist = clean_array(arglist);
 
-      this_body()->set_perm(
-          "groups",
-          groups +
-              ([this_group:
-                      arglist ? (mixed)arglist : (mixed)(([]) + groups[this_group]),
-      ]));
+      this_body()->set_perm("groups",
+                            groups + ([this_group:arglist ? (mixed)arglist : (mixed)(([]) + groups[this_group]), ]));
       return;
    }
 
@@ -125,8 +120,7 @@ void main(string arg)
       outf("Group %s does not exist.\n", this_group);
       return;
    }
-   valid =
-       filter_array(arglist, ( : member_array($1, $(groups[this_group])) != -1 :));
+   valid = filter_array(arglist, ( : member_array($1, $(groups[this_group])) != -1 :));
    not = clean_array(arglist - valid);
    valid = clean_array(valid);
 
@@ -135,7 +129,7 @@ void main(string arg)
 
    if (sizeof(valid))
    {
-      out(sprintf("Removed: %s from %s.\n", implode(valid, ", "),this_group));
+      out(sprintf("Removed: %s from %s.\n", implode(valid, ", "), this_group));
       groups[this_group] -= valid;
       if (!sizeof(groups[this_group]))
          map_delete(groups, this_group);
@@ -153,10 +147,7 @@ nomask string *print_groups(mapping groups)
    foreach (string k, string * members in groups)
    {
       header += sprintf("%s\n", k);
-      content +=
-          sprintf(
-              "%s\n",
-              implode(map_array(sort_array(members, 1), ( : capitalize:)), ", "));
+      content += sprintf("%s\n", implode(map_array(sort_array(members, 1), ( : capitalize:)), ", "));
    }
 
    return ({header, content});

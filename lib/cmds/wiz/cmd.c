@@ -21,7 +21,7 @@ void main(mixed *arg)
 {
    if (arg[0]->is_body())
    {
-      tell(arg[0],this_body()->short()+ " tried to make you '"+implode(arg[1]," ")+"' via 'cmd' command.");
+      tell(arg[0], this_body()->short() + " tried to make you '" + implode(arg[1], " ") + "' via 'cmd' command.");
       write("Cannot be used on players, use 'force' cmd.");
       return;
    }

@@ -8,14 +8,13 @@ inherit "/std/classes/config";
 #define TYPE_PREAMBLE "// Type:"
 #define CONFIG_STAMP "// Automatically generated file, do not edit by hand. Use admtool."
 
-private string *
-create_header(mapping config)
+private
+string *create_header(mapping config)
 {
    string *out = ({});
    string include_name = upper_case(replace_string(depath(config["config"]), ".", "_"));
 
-   out += ({"/* Do not remove the headers from this file! see /USAGE for more info. */", "",
-            CONFIG_STAMP});
+   out += ({"/* Do not remove the headers from this file! see /USAGE for more info. */", "", CONFIG_STAMP});
 
    out += ({"#ifndef __" + include_name + "__", "#define __" + include_name + "__"});
 
@@ -42,10 +41,10 @@ string *create_config(mapping config)
       class config c = config[key];
       if (key == "config")
          continue;
-      out += ({"", "// " + c.text, DEFAULT_PREAMBLE+" " + c.default_value});
+      out += ({"", "// " + c.text, DEFAULT_PREAMBLE + " " + c.default_value});
       if (c.range)
-         out += ({RANGE_PREAMBLE+" " + c.range});
-      out += ({TYPE_PREAMBLE+" " + c.type});
+         out += ({RANGE_PREAMBLE + " " + c.range});
+      out += ({TYPE_PREAMBLE + " " + c.type});
       out += ({"#" + (c.define == 1 ? "define " : "undef ") + c.name +
                (c.type == "boolean" ? "" : " " + c.current_value)});
    }
@@ -91,7 +90,8 @@ mapping read_config(string f)
             c.text = helptext;
             c.range = range;
             c.default_value = default_value;
-            c.type = (default_value == "yes" || default_value == "no" ? "boolean" : (strsrch(value,"\"")!=-1 ? "string" : type));
+            c.type = (default_value == "yes" || default_value == "no" ? "boolean"
+                                                                      : (strsrch(value, "\"") != -1 ? "string" : type));
 
             helptext = default_value = range = type = 0;
             config["" + sprintf("%3.3d", count)] = c;

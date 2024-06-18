@@ -94,8 +94,8 @@ void handle_message(mixed mess, object target, object weapon, string limb)
    mixed *combat_who, messages;
    string omess = mess;
 
-  if (arrayp(mess))
-    mess=choice(mess);
+   if (arrayp(mess))
+      mess = choice(mess);
 
    if (mess[0] == '!')
    {

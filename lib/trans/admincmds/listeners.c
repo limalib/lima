@@ -1,7 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
 //: ADMINCOMMAND
-// USAGE: 
+// USAGE:
 //
 //    |  ``listeners``
 //    |  ``listeners <channel name>``

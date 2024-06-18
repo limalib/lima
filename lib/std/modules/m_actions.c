@@ -195,7 +195,7 @@ void action_movement()
 
 void start_actions()
 {
-   //If we have no actions, stop here.
+   // If we have no actions, stop here.
    if (!arrayp(my_actions))
       return;
 
