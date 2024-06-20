@@ -196,14 +196,32 @@ mapping queue()
 string stat_me()
 {
    string squeue = "";
-   foreach (int update_time, object * targets in queue)
+   mapping q_out = ([]), q_args = ([]);
+
+   foreach (int update_time in sort_array(keys(queue), 1))
    {
+      object *targets = queue[update_time];
       foreach (mixed *t in targets)
       {
-         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(t[0]), t[1], time_to_string(update_time - time(), 1));
+         if (!arrayp(q_out[t[0]]))
+            q_out[t[0]] = ({});
+         q_out[t[0]] += ({update_time});
+         q_args[t[0]] = t[1];
+
+         //         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(t[0]), t[1], time_to_string(update_time -
+         //         time(), 1));
       }
    }
 
-   return sprintf("%-55s%-25s%-10s\n", "Object", "Arguments", "Delay") + sprintf("%92'-'s\n", "") + squeue +
+   foreach (object ob, int *times in q_out)
+   {
+      if (sizeof(times) == 1)
+         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(ob), q_args[ob], time_to_string(times[0] - time(), 1));
+      else
+         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(ob), q_args[ob] + " x " + sizeof(times),
+                           time_to_string(times[0] - time(), 1));
+   }
+
+   return sprintf("%-55s%-25s%-10s\n", "Object", "Arguments", "Next") + sprintf("%92'-'s\n", "") + squeue +
           "\nThere are " + sizeof(flatten_array(values(STATE_D->queue()))) / 2 + " statefuls in queue.";
 }
