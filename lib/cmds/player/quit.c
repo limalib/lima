@@ -6,7 +6,7 @@
 // USAGE
 //   ``quit``
 //
-// Quit the game.
+// Quit the game. See you later, perhaps?
 //
 // .. TAGS: RST
 

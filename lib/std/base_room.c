@@ -325,7 +325,7 @@ void departure(object who)
 
 void arrival(object who)
 {
-   if (!listeners() && find_call_out("room_chat") == -1)
+   if (listeners() && find_call_out("room_chat") == -1)
       tag = call_out("room_chat", chat_period, chat_msg);
 }
 
