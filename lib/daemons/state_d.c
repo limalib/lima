@@ -227,5 +227,5 @@ string stat_me()
    }
 
    return sprintf("%-55s%-25s%-10s\n", "Object", "Arguments", "Next") + sprintf("%92'-'s\n", "") + squeue +
-          "\nThere are " + sizeof(flatten_array(values(STATE_D->queue()))) / 2 + " statefuls in queue.";
+          "\nThere are " + sizeof(flatten_array(values(STATE_D->queue()))) / 2 + " items in queue.";
 }
