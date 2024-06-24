@@ -50,6 +50,23 @@ void create_script(string name)
    scripts[name] = ({});
 }
 
+string step_type(int t)
+{
+   switch (t)
+   {
+   case 1:
+      return "action";
+   case 2:
+      return "trigger";
+   case 3:
+      return "wait";
+   case 4:
+      return "desc";
+   default:
+      return "unknown";
+   }
+}
+
 //: FUNCTION query_recovery_time
 // Returns the time in minutes before recover() is called
 // and the script is aborted.
@@ -173,9 +190,9 @@ int state_update(string state)
    {
       if (running_script)
       {
-         CHANNEL_D->deliver_channel("domains", this_object()->short() + "(" + sprintf("%O", this_object()) +
-                                                   ") has been recovered at step " + running_step + " started at " +
-                                                   ctime(started_at) + ".");
+         CHANNEL_D->deliver_channel("domains", sprintf("%O", this_object()) + " has been recovered at " +
+                                                   add_article(step_type(scripts[running_script][running_step].type)) +
+                                                   " step " + running_step + " started at " + ctime(started_at) + ".");
          recover();
          running_script = 0;
          running_step = 0;
