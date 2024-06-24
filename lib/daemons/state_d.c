@@ -205,8 +205,10 @@ string stat_me()
       {
          if (!arrayp(q_out[t[0]]))
             q_out[t[0]] = ({});
+         if (!arrayp(q_args[t[0]]))
+            q_args[t[0]] = ({});
          q_out[t[0]] += ({update_time});
-         q_args[t[0]] = t[1];
+         q_args[t[0]] += ({t[1]});
 
          //         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(t[0]), t[1], time_to_string(update_time -
          //         time(), 1));
@@ -216,9 +218,11 @@ string stat_me()
    foreach (object ob, int *times in q_out)
    {
       if (sizeof(times) == 1)
-         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(ob), q_args[ob], time_to_string(times[0] - time(), 1));
+         squeue +=
+             sprintf("%-55s%-25s%-10s\n", shorten_filename(ob), q_args[ob][0], time_to_string(times[0] - time(), 1));
       else
-         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(ob), q_args[ob] + " x " + sizeof(times),
+         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(ob),
+                           implode(clean_array(q_args[ob]), "/") + " (" + sizeof(times) + ")",
                            time_to_string(times[0] - time(), 1));
    }
 
