@@ -220,7 +220,6 @@ void next_step()
 
    if (running_step >= sizeof(scripts[running_script]))
    {
-      STATE_D->remove_from_queue(this_object(), "recovery");
       running_script = 0;
       running_step = 0;
       return;
@@ -270,7 +269,6 @@ void next_step()
    if (running_step >= sizeof(scripts[running_script]))
    {
       // Reset script tracking.
-      STATE_D->remove_from_queue(this_object(), "recovery");
       running_script = 0;
       running_step = 0;
       started_at = 0;
@@ -293,6 +291,16 @@ void next_step()
       // Triggers are added immediately.
       next_step();
    }
+}
+
+int *status()
+{
+   return running_script ? ({running_step, sizeof(scripts[running_script])}) : 0;
+}
+
+string query_running_script()
+{
+   return running_script;
 }
 
 void triggered(string pattern)
