@@ -220,6 +220,7 @@ void next_step()
 
    if (running_step >= sizeof(scripts[running_script]))
    {
+      STATE_D->remove_from_queue(this_object(), "recovery");
       running_script = 0;
       running_step = 0;
       return;
@@ -269,6 +270,7 @@ void next_step()
    if (running_step >= sizeof(scripts[running_script]))
    {
       // Reset script tracking.
+      STATE_D->remove_from_queue(this_object(), "recovery");
       running_script = 0;
       running_step = 0;
       started_at = 0;

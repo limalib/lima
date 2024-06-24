@@ -87,7 +87,7 @@ varargs void add_to_queue_at_time(mixed ob, int update_time, mixed extra)
 
 //: FUNCTION remove_from_queue
 // Removes ob from the queue nomatter when scheduled.
-varargs void remove_from_queue(object ob)
+varargs void remove_from_queue(object ob, mixed extra)
 {
    foreach (int update_time, object * targets in queue)
    {
@@ -95,6 +95,8 @@ varargs void remove_from_queue(object ob)
       {
          if (target[0] == ob)
          {
+            if (extra && target[1] != extra)
+               continue;
             queue[update_time] -= ({target});
          }
       }
@@ -198,6 +200,8 @@ string stat_me()
    string squeue = "";
    mapping q_out = ([]), q_args = ([]);
 
+   // Need to use some muscle first to get the mappings into a shape where we can print them.
+   // Fairly simple transformations thanksfully.
    foreach (int update_time in sort_array(keys(queue), 1))
    {
       object *targets = queue[update_time];
@@ -209,12 +213,10 @@ string stat_me()
             q_args[t[0]] = ({});
          q_out[t[0]] += ({update_time});
          q_args[t[0]] += ({t[1]});
-
-         //         squeue += sprintf("%-55s%-25s%-10s\n", shorten_filename(t[0]), t[1], time_to_string(update_time -
-         //         time(), 1));
       }
    }
 
+   // Now we're ready to iterate over objects instead of timestamps.
    foreach (object ob, int *times in q_out)
    {
       if (sizeof(times) == 1)

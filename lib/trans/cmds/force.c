@@ -8,6 +8,7 @@
 */
 
 //: COMMAND
+//$$ see: cmd
 // USAGE
 //     ``force <living> <command>``
 //

@@ -3,6 +3,7 @@
 // Tsath@Lima, 2023
 
 //: COMMAND
+//$$ see: force
 // USAGE:  ``cmd <monster> <command>``
 //
 // This command will tell a monster to do something.
