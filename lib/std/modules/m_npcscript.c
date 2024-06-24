@@ -192,7 +192,8 @@ int state_update(string state)
       {
          CHANNEL_D->deliver_channel("domains", sprintf("%O", this_object()) + " has been recovered at " +
                                                    add_article(step_type(scripts[running_script][running_step].type)) +
-                                                   " step " + running_step + " started at " + ctime(started_at) + ".");
+                                                   " step (#" + running_step + ") started at " + ctime(started_at) +
+                                                   ".");
          recover();
          running_script = 0;
          running_step = 0;
