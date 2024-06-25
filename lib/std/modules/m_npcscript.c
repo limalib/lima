@@ -241,6 +241,17 @@ void next_step()
    switch (step.type)
    {
    case SCRIPT_ACTION:
+      // Parse multiples if they are there
+      if (!step.multiple && stringp(step.action) && strsrch(step.action, "@@") != -1)
+      {
+         string *more = explode(step.action, "@@");
+         if (sizeof(more) > 1)
+         {
+            step.multiple = more;
+            scripts[running_script][running_step] = step;
+         }
+      }
+
       if (step.multiple && sizeof(step.multiple))
       {
          this_object()->do_game_command(step.multiple[0]);
