@@ -16,19 +16,28 @@ void main(string str)
 
    object *scripted = filter(objects(), ( : $1->query_running_script() && clonep($1) :));
 
-   printf("<bld>%-20.20s %-20.20s %-14.14s %s<res>", "Who", "Env", "Script", "Status");
+   if (!sizeof(scripted))
+   {
+      printf("Currently, there are no scripts running.");
+      return;
+   }
+
+   printf("<bld>%-20.20s %-30.30s %-14.14s %-8.8s %s<res>", "Who", "Env", "Script", "Type", "Status");
    foreach (object s in scripted)
    {
       string name = s->short();
       string env = environment(s) ? environment(s)->short() : "Nowhere";
-      string bar = repeat_string(" ", 50);
+      string bar = repeat_string(" ", 30);
       string script = "";
+      string type;
       int *status = s->status();
       if (status)
       {
-         bar = green_bar(status[0], status[1], 50);
          script = s->query_running_script();
-         printf("%-20.20s %-20.20s %-14.14s %s %s", name, env, script, bar, "[" + status[0] + "/" + status[1] + "]");
+         type = s->current_step();
+         bar = green_bar(status[0], status[1], 30);
+         printf("%-20.20s %-30.30s %-14.14s %-8.8s %s %s", name, env, script, type, bar,
+                "[" + status[0] + "/" + status[1] + "]");
       }
    }
 }

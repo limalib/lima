@@ -180,6 +180,11 @@ string step_type(int t)
    }
 }
 
+string current_step()
+{
+   return running_script ? step_type(scripts[running_script][running_step].type) : "-";
+}
+
 int state_update(string state)
 {
    // If this is a recovery update, then check that a script is running, and call
