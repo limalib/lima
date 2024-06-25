@@ -50,23 +50,6 @@ void create_script(string name)
    scripts[name] = ({});
 }
 
-string step_type(int t)
-{
-   switch (t)
-   {
-   case 1:
-      return "action";
-   case 2:
-      return "trigger";
-   case 3:
-      return "wait";
-   case 4:
-      return "desc";
-   default:
-      return "unknown";
-   }
-}
-
 //: FUNCTION query_recovery_time
 // Returns the time in minutes before recover() is called
 // and the script is aborted.
@@ -182,6 +165,25 @@ void execute_script(string name)
    call_out("next_step", step_pause);
 }
 
+// This function matches /include/npcscript.h - make sure to change this if you edit the include file.
+private
+string step_type(int t)
+{
+   switch (t)
+   {
+   case 1:
+      return "action";
+   case 2:
+      return "trigger";
+   case 3:
+      return "wait";
+   case 4:
+      return "desc";
+   default:
+      return "unknown";
+   }
+}
+
 int state_update(string state)
 {
    // If this is a recovery update, then check that a script is running, and call
@@ -293,21 +295,28 @@ void next_step()
    }
 }
 
-int *status()
-{
-   return running_script ? ({running_step, sizeof(scripts[running_script])}) : 0;
-}
-
-string query_running_script()
-{
-   return running_script;
-}
-
 void triggered(string pattern)
 {
    this_object()->remove_pattern(pattern);
    running_step++;
    call_out("next_step", step_pause);
+}
+
+//: FUNCTION status
+// Returns 0 if no scripts are running, or an array of 2 integers ({x,y}),
+// where x is the current step in the script, and y is the max number of steps.
+// See also ``query_running_script()``.
+int *status()
+{
+   return running_script ? ({running_step, sizeof(scripts[running_script])}) : 0;
+}
+
+//: FUNCTION query_running_script
+// Returns the current running script if any.
+// See also ``status()`` for description on how far the NPC is into the script.
+string query_running_script()
+{
+   return running_script;
 }
 
 //: FUNCTION query_scripts

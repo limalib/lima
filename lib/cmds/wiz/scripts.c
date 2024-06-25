@@ -14,7 +14,7 @@ private
 void main(string str)
 {
 
-   object *scripted = filter(objects(), ( : $1->query_scripts() && clonep($1) :));
+   object *scripted = filter(objects(), ( : $1->query_running_script() && clonep($1) :));
 
    printf("<bld>%-20.20s %-20.20s %-14.14s %s<res>", "Who", "Env", "Script", "Status");
    foreach (object s in scripted)
