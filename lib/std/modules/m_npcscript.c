@@ -114,11 +114,7 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    case SCRIPT_ACTION:
       if (stringp(payload))
       {
-         string *more = explode(payload, "@@");
-         if (sizeof(more) > 1)
-            ss.multiple = more;
-         else
-            ss.action = (string)payload;
+         ss.action = (string)payload;
       }
       else if (functionp(payload))
          ss.func = (function)payload;
@@ -261,9 +257,13 @@ void next_step()
             step.multiple = step.multiple[1..];
             running_step--;
          }
+         else
+            step.multiple = 0;
       }
       else if (step.action)
+      {
          this_object()->do_game_command(step.action);
+      }
       else
          evaluate(step.func);
       break;
