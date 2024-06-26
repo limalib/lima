@@ -9,8 +9,7 @@
 // This modules inherits M_ACTIONS by itself. If triggers are used, inherit M_TRIGGERS in your mob as well.
 // Only 1 trigger is supported at a time. Example of script:
 //
-//   |       create_script("lunch");
-//   |       add_steps(
+//   |       create_script(
 //   |           "lunch",
 //   |           ({
 //   |               step(SCRIPT_ACTION, (: set_for_sale, 0:)),
@@ -27,6 +26,16 @@
 //
 // Note, ``set_for_sale(0)`` above closes up shop, so a vendor temporarily sells nothing.
 //
+// Alternatively, the ``create_script_from_file("lunch","scripts/lunch.npcs")`` function can be used.
+// These scripts should follow this format:
+//
+//   |    # My lunch script (this is a comment)
+//   |    ACTION:hungry
+//   |    WAIT:30
+//   |    ACTION:(: set_for_sale, 0 :)
+//   |    ACTION:emote stands up.@@say Well:I guess it's time for some lunch.
+//   |    DESC:Harry looks hungry.
+//
 // .. TAGS: RST
 
 #include <npcscript.h>
@@ -42,13 +51,7 @@ private
 int recovery_time = 30;
 private
 int started_at;
-
-//: FUNCTION create_script
-// Creates a new script with 'name'.
-void create_script(string name)
-{
-   scripts[name] = ({});
-}
+object debug;
 
 //: FUNCTION query_recovery_time
 // Returns the time in minutes before recover() is called
@@ -85,10 +88,10 @@ void recover()
 // Adds a series of steps (an array of class script_step) to a specific script.
 // This is typically used in conjuction with the step() function that returns
 // script_step classes for easier class creation.
-int add_steps(string name, class script_step *steps)
+int create_script(string name, class script_step *steps)
 {
    if (!arrayp(scripts[name]))
-      return 0;
+      scripts[name] = ({});
 
    scripts[name] += steps;
 
@@ -134,6 +137,72 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    }
 
    return ss;
+}
+
+// Private function to parse an array of strings into
+// string and integers as appropriate. Used for parsing functions
+// in NPC-script style files correctly.
+private
+mixed *parse_to_types(string *args)
+{
+   mixed *ret = ({trim(args[0])});
+   args = args[1..];
+
+   foreach (string a in args)
+   {
+      a = trim(a);
+      if (a[0] == '"')
+         ret += ({a[1.. < 2]});
+      else
+         ret += ({to_int(a)});
+   }
+   return ret;
+}
+
+//: FUNCTION create_script_from_file
+// Use this function to parse in an NPC-script style file
+// and read the script from there using ``name``.
+int create_script_from_file(string name, string file)
+{
+   string *contents;
+   string *trigger_parts;
+
+   if (!arrayp(scripts[name]))
+      scripts[name] = ({});
+   file = absolute_path(file, this_object());
+   contents = explode(read_file(file), "\n");
+   foreach (string l in contents)
+   {
+      string type, content;
+      if (l[0] == '#')
+         continue;
+      if (sscanf(l, "%s:%s", type, content) != 2)
+         continue;
+      switch (type)
+      {
+      case "ACTION":
+         if (content[0..1] == "(:")
+         {
+            mixed *args = parse_to_types(explode(content[2.. < 3], ","));
+            scripts[name] += ({step(SCRIPT_ACTION, ( : call_other, this_object(), args:))});
+         }
+         else
+            scripts[name] += ({step(SCRIPT_ACTION, content)});
+         break;
+      case "WAIT":
+         scripts[name] += ({step(SCRIPT_WAIT, to_int(content))});
+         break;
+      case "TRIGGER":
+         trigger_parts = explode(content, "->");
+         scripts[name] += ({step(SCRIPT_TRIGGER, trigger_parts[0], trigger_parts[1])});
+         break;
+      case "DESC":
+         scripts[name] += ({step(SCRIPT_DESC, content)});
+         break;
+      default:
+         error("Unknown type in " + file + " '" + type + "'.");
+      }
+   }
 }
 
 //: FUNCTION started_at
@@ -240,6 +309,14 @@ void next_step()
       }
    }
 
+   if (debug)
+      tell(debug, "<050>Debug for <res>" + this_object() + "\n" + "Step <190>" + running_step + "<050> in <190>" +
+                      running_script + "<050> is <190>" + step_type(step.type) +
+                      (step.action ? "\n<050>Action: <res>" + step.action : "") +
+                      (step.multiple ? "\n<050>Multiple: <res>" + sprintf("%O", step.multiple) : "") +
+                      (step.trigger ? "\n<050>Trigger: <res>" + sprintf("%O", step.trigger) : "") +
+                      (step.wait ? "\n<050>Wait: <res>" + step.wait + "<res>" : ""));
+
    switch (step.type)
    {
    case SCRIPT_ACTION:
@@ -335,6 +412,17 @@ int *status()
 string query_running_script()
 {
    return running_script;
+}
+
+//: FUNCTION debug
+// Call debug() with your body object to receive debug information
+// while the script is running. Pass it 0 again to stop the debug output.
+// This can be useful for not having to chase NPCs around the MUD to debug
+// them.
+object debug(object ob)
+{
+   debug = ob;
+   return debug;
 }
 
 //: FUNCTION query_scripts
