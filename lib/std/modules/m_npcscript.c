@@ -358,6 +358,7 @@ void next_step()
       break;
    case SCRIPT_DESC:
       this_object()->set_in_room_desc(step.in_room_desc);
+      next_call_out = 0;
       break;
    }
 
