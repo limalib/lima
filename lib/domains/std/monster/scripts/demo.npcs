@@ -1,0 +1,8 @@
+# This is an example NPC script
+ACTION:smile@@go west@@open door@@go northeast
+WAIT:10
+ACTION:close door@@open door@@go southwest@@laugh@@emote sits on the floor.
+DESC:Robert sits on the floor here.
+ACTION:emote stand up.@@push button
+DESC:Robert is standing here.
+ACTION:wave@@go east

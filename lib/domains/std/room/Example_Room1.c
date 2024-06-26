@@ -103,5 +103,5 @@ void setup()
     * room, if the safe no longer exists in this room it will be cloned and
     * moved into the room.
     */
-   set_objects(([]));
+   set_objects((["^std/monster/robert":1]));
 }
