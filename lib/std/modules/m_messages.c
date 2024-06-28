@@ -19,7 +19,7 @@ nosave private string vowels = "aeiouAEIOU";
 #define A_SHORT(x) (objectp(x) ? x->a_short() : (member_array(x[0], vowels) == -1 ? "a " : "an ") + x)
 #define SHORT(x) (objectp(x) ? x->short() : x)
 mapping messages = ([]);
-string def_message_type;
+string def_message_type = "living-default";
 
 string _a_short(mixed x)
 {
