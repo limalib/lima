@@ -3,6 +3,9 @@
 inherit LIVING;
 inherit M_CONVERSATION;
 inherit M_VENDOR;
+inherit M_TRIGGERS;
+inherit M_SMARTMOVE;
+inherit M_NPCSCRIPT;
 
 int ive_talked = 0;
 int days_since_arrival = 28 + random(20);
@@ -33,7 +36,7 @@ void handle_card()
    if (list)
    {
       list->remove_synonym("landing terminal");
-      list->add_synonym("landing terminal (DONE)","2");
+      list->add_synonym("landing terminal (DONE)", "2");
    }
    this_object()->do_game_command("laugh " + this_body()->query_name());
    card->add_signer("Freddy");
@@ -54,6 +57,8 @@ void begin_conversation()
 
 string gender_nick()
 {
+   if (!this_body())
+      return "someone";
    switch (this_body()->query_gender())
    {
    case 0:
@@ -63,6 +68,13 @@ string gender_nick()
    case 2:
       return "person";
    }
+}
+
+private
+void summon_muffin()
+{
+   object muffin = new ("/domains/common/consumable/chocolate_muffin");
+   muffin->move(this_object());
 }
 
 void setup()
@@ -85,18 +97,35 @@ void setup()
               "whatsell":"So what do you sell?", "card":"Hello, Dr. Green asked me to get you to sign this birthday "
                                                         "card for your colleague Dr. Ellin ...",
             "giveithere":"Here you go (hand over the card)."]));
-   set_responses(
-       (["hello":({"I am Dr. Fred. Pleased to meet you. Let me know if you want to buy medical supplies.@@whatsell"}),
-             "whatsell":({"Bandages, pain killers and other things. Check my list above.",
-                          "!point to the list on the wall."}),
-                 "card":"Ah, yes! Give it to me and I'll sign it.@@giveithere",
-           "giveithere":({"!emote accepts the card and signs it.",
-                          "Thanks for being Gerald's errand " + gender_nick() + ".",
-                          (
-                              : handle_card:)})]));
+   set_responses((["hello":({"I am Dr. Fred, you may call me Freddy. Pleased to meet you. Let me know if you want to "
+                             "buy medical supplies.@@whatsell"}),
+                "whatsell":({"Bandages, pain killers and other things. Check my list above.",
+                             "!point to the list on the wall."}),
+                    "card":"Ah, yes! Give it to me and I'll sign it.@@giveithere",
+              "giveithere":({"!emote accepts the card and signs it.",
+                             "Thanks for being Gerald's errand " + gender_nick() + ".",
+                             (
+                                 : handle_card:)})]));
+   create_script_from_file("lunch", "scripts/doc_williams_lunch.npcs");
+   create_script_from_file("snack", "scripts/doc_williams_snack.npcs");
+   EVENT_D->schedule_event("08 12 *", this_object(), "lunch");
+   EVENT_D->schedule_event("30 10,14 *", this_object(), "snack");
+   set_recovery_time(10);
+}
+
+void recover()
+{
+   object clinic_room = load_object("/domains/omega/room/floor8/w_clinic");
+   if (environment(this_object()) == clinic_room)
+      return;
+   tell_from_outside(environment(this_object()), "Dr. Williams hurries back to the clinic.");
+   this_object()->move(clinic_room);
+   tell_from_outside(environment(this_object()), "Dr. Williams hurries into the room.");
+   do_game_command("say Sorry, my lunch took a bit longer than normally.");
+   set_for_sale(1);
 }
 
 string query_hint(int level)
 {
-   return "This doctor sells medical supplies 'list'.";
+   return query_for_sale() ? "This doctor sells medical supplies 'list'." : 0;
 }

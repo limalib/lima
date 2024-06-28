@@ -2,6 +2,7 @@
 
 inherit LIVING;
 inherit M_VENDOR;
+inherit M_ACTIONS;
 
 mapping employee_names = (["girls":({"Emma",   "Olivia",   "Sophia", "Ava",     "Isabella", "Mia",       "Charlotte",
                                      "Amelia", "Harper",   "Evelyn", "Abigail", "Emily",    "Elizabeth", "Sofia",
@@ -16,10 +17,10 @@ void setup()
    string name = choice(employee_names[gender ? "girls" : "boys"]);
    set_gender(gender);
    set_name(name);
-   add_id("employee");
+   add_id("employee","barista");
    set_proper_name(name);
    set_in_room_desc(name + " the Stellar Bites employee is smiling at you from behind the counter.");
-   set_long(name + " wears that typically fake smile today.");
+   set_long(name + " wears that typically fake smile today, just for you.");
 
    /* Determines what type of currency we'll use */
    set_currency_type("credit");

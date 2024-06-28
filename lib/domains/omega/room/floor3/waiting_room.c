@@ -19,7 +19,7 @@ void setup()
    set_state_description("electronic_door_off", "closed");
    set_state_description("electronic_door_on", "open");
    set_exits((["north":"canteen_hall1"]));
-   set_objects((["/std/elevator_call_button":({"2/cafeteria", "^omega/room/elevator_center"}),
+   set_objects((["/std/elevator_call_button":({"2/Cafeteria", "^omega/room/elevator_center"}),
                         "/std/elevator_door":({"northwest", "^omega/room/elevator_center"}), ]));
    add_item("floor", "The surface has a subtle texture that provides traction and minimizes the risk of slipping, "
                      "ensuring safe passage for the station's inhabitants.");

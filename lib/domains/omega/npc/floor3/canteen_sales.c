@@ -74,35 +74,37 @@ void setup()
                 "catering":"What?@@catering2",
                "catering2":"Here's your tray. Now what would you like to order, Jeff Vader?"]));
 
-   create_script("lunch");
-   add_steps(
+   create_script(
        "lunch",
        ({
+           step(SCRIPT_ACTION, "hungry"),
+           step(SCRIPT_WAIT, 30),
            step(SCRIPT_ACTION, (
                                    : set_for_sale, 0
                                    :)),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
-           step(SCRIPT_ACTION, "say Well, time for some lunch."),
+           step(SCRIPT_ACTION, "say Time to get a quick sandwich before the lunch rush."),
            step(SCRIPT_ACTION, "go south@@go south@@go south@@hum"),
            step(SCRIPT_WAIT, 5),
            step(SCRIPT_ACTION, "push button"),
            step(SCRIPT_TRIGGER, "The elevator door opens.|The lamp briefly blinks.", "go northwest"),
            step(SCRIPT_DESC, "Liam Johnson, leaning against the elevator panel."),
-           step(SCRIPT_TRIGGER, "The elevator door closes.", "push 8"),
+           step(SCRIPT_TRIGGER, "The elevator door closes.", "push 3"),
            step(SCRIPT_TRIGGER, "Elevator speaker says, \"You have arrived at Landing Terminal\".", "go southeast"),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
            step(SCRIPT_ACTION, "go east@@go north@@hum"),
-           step(SCRIPT_WAIT, 10),
+           step(SCRIPT_WAIT, 1),
            step(SCRIPT_ACTION, "say I'd like to order the Stellar Sandwich with extra mayo, please.@@emote sits down."),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is sitting here."),
-           step(SCRIPT_WAIT, 20),
+           step(SCRIPT_WAIT, 60),
            step(SCRIPT_ACTION, "emote eats a sandwich.@@emote stands up."),
+           step(SCRIPT_WAIT, 10),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
            step(SCRIPT_ACTION, "say That was delicious! Back to the work!@@go south@@go west@@push button"),
            step(SCRIPT_TRIGGER, "The elevator door opens.|The lamp briefly blinks.", "go northwest"),
            step(SCRIPT_DESC, "Liam Johnson, leaning against the elevator panel."),
-           step(SCRIPT_TRIGGER, "The elevator door closes.", "push 3"),
-           step(SCRIPT_TRIGGER, "Elevator speaker says, \"You have arrived at cafeteria\".", "go southeast"),
+           step(SCRIPT_TRIGGER, "The elevator door closes.", "push 2"),
+           step(SCRIPT_TRIGGER, "Elevator speaker says, \"You have arrived at Cafeteria\".", "go southeast"),
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier is standing here."),
            step(SCRIPT_WAIT, 10),
            step(SCRIPT_ACTION, "go north@@go north@@go north@@hum"),
@@ -113,7 +115,7 @@ void setup()
            step(SCRIPT_DESC, "Liam Johnson, the canteen cashier looks bored behind the counter."),
            step(SCRIPT_ACTION, "grin@@emote sits down behind the counter."),
        }));
-   EVENT_D->schedule_event("45 11 *", this_object(), "lunch");
+   EVENT_D->schedule_event("30 11 *", this_object(), "lunch");
    set_recovery_time(10);
 }
 

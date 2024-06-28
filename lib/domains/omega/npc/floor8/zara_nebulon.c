@@ -3,6 +3,7 @@
 inherit LIVING;
 inherit M_ACTIONS;
 inherit M_VENDOR;
+inherit M_ACTIONS;
 
 string query_hint(int level)
 {

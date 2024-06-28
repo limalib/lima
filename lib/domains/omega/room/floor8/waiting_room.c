@@ -19,7 +19,7 @@ void setup()
                                      "individuals to their desired destinations amidst the stars");
    set_state_description("lamp_on", "is flashing");
    set_exits((["south":"s_hall3", "north":"n_hall3", "west":"w_hall3", "east":"e_hall3"]));
-   set_objects((["/std/elevator_call_button":({"8/Landing Terminal", "^omega/room/elevator_center"}),
+   set_objects((["/std/elevator_call_button":({"3/Landing Terminal", "^omega/room/elevator_center"}),
                         "/std/elevator_door":({"northwest", "^omega/room/elevator_center"}), ]));
 
    set_room_chat(

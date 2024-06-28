@@ -16,5 +16,7 @@ void setup(string dir, string room)
    set_id("door");
    set_adj("metal", "simple");
    set_long("It's a normal looking metal simple metal door.");
-   setup_door("simple metal door", dir, room);
+   set_sibling_ident("simple metal door");
+   set_door_direction(dir);
+   set_door_destination(room);
 }

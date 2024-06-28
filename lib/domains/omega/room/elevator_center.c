@@ -22,7 +22,7 @@ void setup()
             "responding to a gentle press with a soft glow.");
    // Set destinations with filenames of where we can go and shorthands.
    set_destinations((["1/Maintenance":"^omega/room/floor1/waiting_room",
-                        "2/cafeteria":"^omega/room/floor3/waiting_room",
+                        "2/Cafeteria":"^omega/room/floor3/waiting_room",
                  "3/Landing Terminal":"^omega/room/floor8/waiting_room",
                 "4/Stargate Terminal":"^omega/room/floor9/stargate_term",
        /*
@@ -45,10 +45,12 @@ void setup()
          ELV "\"Emergency procedures reminder. In the event of a power outage or "
              "system malfunction, emergency lighting will activate, and communication channels will remain open. "
              "Please remain calm and await further instructions.\"",
-         ELV "\"Attention, passengers. The station's research labs on Level 4 have "
+         ELV "\"This is a service announcement ...\"", ELV "\" ... functional code E-781\"",
+         ELV "\"Warning! We are currently experiencing ...\", then a small pop, and then silence.",
+         ELV "\"Attention all passengers. The station's research labs on Level 5 have "
              "recently achieved a major breakthrough. Come explore the forefront of scientific discovery and "
              "witness innovation in action.\""}),
-       60, 10);
+       300, 10);
 
    // Set start position for elevator
    move_to("3/Landing Terminal");
