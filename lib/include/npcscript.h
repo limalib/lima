@@ -7,5 +7,6 @@
 #define SCRIPT_TRIGGER 2
 #define SCRIPT_WAIT 3
 #define SCRIPT_DESC 4
+#define SCRIPT_NPCACTION 5
 
 #endif /* __NPCSCRIPT_H__ */

@@ -21,6 +21,7 @@
 //   |               step(SCRIPT_TRIGGER, "The elevator door opens.", "go northwest"),
 //   |               step(SCRIPT_DESC, "Harry, leaning against the elevator panel."),
 //   |               step(SCRIPT_TRIGGER, "The elevator door closes.", "push 8"),
+//   |               step(SCRIPT_NPCACTION, "wave harry", "greeter"),
 //   |               ...
 //   |           }));
 //
@@ -35,6 +36,10 @@
 //   |    ACTION:(: set_for_sale, 0 :)
 //   |    ACTION:emote stands up.@@say Well:I guess it's time for some lunch.
 //   |    DESC:Harry looks hungry.
+//   |    TRIGGER:Troll enters.->go east
+//   |    NPCACTION:greeter->wave harry
+//
+// Notice, the TRIGGER syntax ``->`` which tells us what to do when something happens.
 //
 // .. TAGS: RST
 
@@ -134,6 +139,9 @@ varargs class script_step step(int type, mixed payload, mixed extra)
    case SCRIPT_DESC:
       ss.in_room_desc = (string)payload;
       break;
+   case SCRIPT_NPCACTION:
+      ss.action = extra + "->" + payload;
+      break;
    }
 
    return ss;
@@ -199,6 +207,10 @@ int create_script_from_file(string name, string file)
       case "DESC":
          scripts[name] += ({step(SCRIPT_DESC, content)});
          break;
+      case "NPCACTION":
+         trigger_parts = explode(content, "->");
+         scripts[name] += ({step(SCRIPT_NPCACTION, trigger_parts[1], trigger_parts[0])});
+         break;
       default:
          error("Unknown type in " + file + " '" + type + "'.");
       }
@@ -244,6 +256,8 @@ string step_type(int t)
       return "wait";
    case 4:
       return "desc";
+   case 5:
+      return "npc action";
    default:
       return "unknown";
    }
@@ -288,6 +302,8 @@ int state_update(string state)
 void next_step()
 {
    int next_call_out = step_pause;
+   string *parts;
+   object npc;
    class script_step step;
 
    if (running_step >= sizeof(scripts[running_script]))
@@ -315,7 +331,8 @@ void next_step()
                       (step.action ? "\n<050>Action: <res>" + step.action : "") +
                       (step.multiple ? "\n<050>Multiple: <res>" + sprintf("%O", step.multiple) : "") +
                       (step.trigger ? "\n<050>Trigger: <res>" + sprintf("%O", step.trigger) : "") +
-                      (step.wait ? "\n<050>Wait: <res>" + step.wait + "<res>" : ""));
+                      (step.in_room_desc ? "\n<050>Desc: <res>" + sprintf("%O", step.trigger) : "") +
+                      (step.wait ? "\n<050>Wait: <res>" + step.wait : "") + "<res>");
 
    switch (step.type)
    {
@@ -349,6 +366,15 @@ void next_step()
       }
       else
          evaluate(step.func);
+      break;
+   case SCRIPT_NPCACTION:
+      parts = explode(step.action, "->");
+      npc = present(parts[0], environment(this_object()));
+      if (npc && !npc->is_body())
+      {
+         npc->do_game_command(parts[1]);
+      }
+      npc = 0;
       break;
    case SCRIPT_TRIGGER:
       return;
