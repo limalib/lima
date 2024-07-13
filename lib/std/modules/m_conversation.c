@@ -334,6 +334,8 @@ void bye(object ob)
 
 //: FUNCTION exit_conversation
 // Exit the conversation if the NPC needs to leave.
+// Default is to say "Sorry, I have to go", but this can
+// be changed using ``set_goodbye(action)``.
 void exit_conversations()
 {
    foreach (object body in keys(current))
