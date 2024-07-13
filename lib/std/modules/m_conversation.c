@@ -342,7 +342,7 @@ void exit_conversations()
       {
          body->modal_pop();
          map_delete(current, body);
-         do_action(body, goodbye_action || "say Sorry, I have to go.");
+         do_action(body, goodbye_action || "Sorry, I have to go.");
       }
    }
 }
