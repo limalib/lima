@@ -232,8 +232,7 @@ private
 string reformat_see(string line)
 {
    // ## Ack! My deepest apoligies for this one. Let me know if you figure out what it does, I might have a job for you.
-   return "<227>See<res>: " +
-          implode(map(filter_array(explode(replace_string(line, "Command: ", ""), " "), (
+   return implode(map(filter_array(explode(replace_string(line, "Command: ", ""), " "), (
                                                                                             : $1[0] != '<'
                                                                                             :)),
                       (
@@ -246,9 +245,9 @@ string reformat_see(string line)
 private
 string mark_bad_reference(string line)
 {
-   string *cmds = explode(trim(line[15..]), ", ");
+   string *cmds = explode(trim(line), ", ");
    string *existing_cmds = CMD_D->query_cmds();
-   string out = line[0..12] + ": ";
+   string out = "";
 
    foreach (string cmd in cmds)
    {
@@ -281,8 +280,9 @@ string rst_format(string *file, string searchtext)
 
       if (strlen(line) > 5 && line[0..3] == "See:")
       {
-         line = reformat_see(line);
+         line = reformat_see(line[5..]);
          line = mark_bad_reference(line);
+         line = "<227>See<res>: " + line;
       }
 
       // Code blocks
