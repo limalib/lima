@@ -246,20 +246,18 @@ string reformat_see(string line)
 private
 string mark_bad_reference(string line)
 {
-   string *cmds = explode(line, ", ");
+   string *cmds = explode(trim(line[15..]), ", ");
    string *existing_cmds = CMD_D->query_cmds();
-   string out = line[0..4];
+   string out = line[0..12] + ": ";
+
    foreach (string cmd in cmds)
    {
-      if (strlen(cmd) > 6 && cmd[6..10] == "See: ")
-         cmd = cmd[10..];
-
       if (member_array(cmd, existing_cmds) == -1)
          out += "<009>" + cmd + "<res>, ";
       else
          out += cmd + ", ";
    }
-   return out[0.. < 9] + "<res>.";
+   return out[0.. < 3] + "<res>.";
 }
 
 //: FUNCTION rst_format
