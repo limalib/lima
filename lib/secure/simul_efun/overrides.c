@@ -177,10 +177,3 @@ void printf(string format, mixed *rest...)
    else
       debug_message("]" + sprintf(format, rest...));
 }
-
-/*
-varargs int memory_info(object ob)
-{
-    error("memory_info() is disabled for now, pending a bugfix.\n");
-}
-*/

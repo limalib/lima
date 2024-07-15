@@ -327,12 +327,16 @@ string title_capitalize(string instring)
 //   time_to_string(500)   -> "8 minutes, 20 seconds"
 //   time_to_string(500,1) -> "8m 20s"
 //
-// Days, hours, minutes and seconds are supported.
+// Months, Days, hours, minutes and seconds are supported.
+// A month is calculated as 30 days.
 string time_to_string(int num, int short)
 {
    string timestr = "";
-   int days, hours, minutes;
+   int months, days, hours, minutes;
 
+   if (num > 2591999)
+      months = num / 2592000;
+   num -= months * 2592000;
    if (num > 86399)
       days = num / 86400;
    num -= days * 86400;
@@ -344,10 +348,11 @@ string time_to_string(int num, int short)
    num -= minutes * 60;
 
    if (short)
-      timestr = (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") +
-                (num > 0 ? num + "s" : "");
+      timestr = (months > 0 ? months + "M " : "") + (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") +
+                (minutes > 0 ? minutes + "m " : "") + (num > 0 ? num + "s" : "");
    else
-      timestr = (days > 0 ? (days == 1 ? days + " day" : days + " days") + ", " : "") +
+      timestr = (months > 0 ? (months == 1 ? months + " month" : days + " months") + ", " : "") +
+                (days > 0 ? (days == 1 ? days + " day" : days + " days") + ", " : "") +
                 (hours > 0 ? (hours == 1 ? hours + " hour" : hours + " hours") + ", " : "") +
                 (minutes > 0 ? (minutes == 1 ? minutes + " minute" : minutes + " minutes") + ", " : "") +
                 (num > 0 ? (num == 1 ? num + " second" : num + " seconds") : "");
