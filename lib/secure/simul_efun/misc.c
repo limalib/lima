@@ -391,11 +391,11 @@ mixed choice(mixed f)
 
    switch (typeof(f))
    {
-   case STRING:
+   case T_STRING:
       return f[random(strlen(f))];
-   case ARRAY:
+   case T_ARRAY:
       return f[random(sizeof(f))];
-   case MAPPING:
+   case T_MAPPING:
       k = keys(f);
       return f[k[random(sizeof(k))]];
    default:
@@ -410,10 +410,10 @@ mixed sum(mixed *numbers...)
    {
       switch (typeof(number))
       {
-      case INT:
+      case T_INT:
          result += number;
          break;
-      case FLOAT:
+      case T_FLOAT:
          result = to_float(result) + number;
          break;
       default:

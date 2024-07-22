@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# Original file contributed by Gesslar, adapted by Tsath 2024 for LIMA
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Set up some colors for use in the script
+reset='\e[0m'
+green='\e[38;5;78m'
+gold='\e[38;5;214m'
+red='\e[38;5;124m'
+
+# Change to the directory containing the script
+cd "$(dirname "$0")"
+
+# Check if config.mud exists
+config_file="$(pwd)/config.mud"
+if [[ ! -f "$config_file" ]]; then
+    echo -e "${red}[ERROR]${reset} ${config_file} does not exist."
+    exit 1
+fi
+
+# Record the top of the repository directory
+repo_root=$(cd ../.. && pwd)
+
+# Absolute path to the driver executable
+driver="${repo_root}/adm/dist/bin/driver"
+
+# Ensure the FluffOS driver submodule is up to date
+git submodule update --init --recursive > /dev/null
+cd fluffos
+git checkout master > /dev/null 2>&1
+git pull origin master > /dev/null
+
+# Copy our custom local_options to the driver for compilation
+cp -v ../local_options src/local_options
+
+# Compile the driver
+rm -rf build
+mkdir build
+cd build
+ cmake .. \
+     -DPACKAGE_UIDS=OFF
+
+make -j "$(nproc)" install
+
+# Copy the compiled binaries to the target directory
+cp -vf bin/driver ${repo_root}/adm/dist/bin/
+cp -vf bin/lpcc ${repo_root}/adm/dist/bin/
+cp -vf bin/o2json ${repo_root}/adm/dist/bin/
+cp -vf bin/json2o ${repo_root}/adm/dist/bin/
+
+# Copy the driver headers to the target include directory
+cp -avf bin/include/*.h ${repo_root}/lib/include/driver/
+
+# Restore the original source back to the original state
+cd ..
+git reset --hard HEAD > /dev/null
+
+# Update config.mud with the correct absolute paths
+mudlib_path="${repo_root}/lib"
+log_path="${repo_root}/lib/log"
+
+# Copy driver documentation
+rm -rf ${mudlib_path}/help/fluffos
+mkdir ${mudlib_path}/help/fluffos
+echo -e "Installing driver documentation into lib"
+cd docs
+cp -r apply efun concepts driver lpc ${mudlib_path}/help/fluffos/
+find ${mudlib_path}/help/fluffos -name 'index.md' -exec rm {} \;
+
+# Escape slashes for sed
+escaped_mudlib_path=$(echo $mudlib_path | sed 's/\//\\\//g')
+escaped_log_path=$(echo $log_path | sed 's/\//\\\//g')
+
+# Update the config.mud file
+sed -i "s|^mudlib directory.*|mudlib directory : $escaped_mudlib_path|" $config_file
+sed -i "s|^log directory.*|log directory : $escaped_log_path|" $config_file
+
+echo -e ""
+echo -e "${green}[SUCCESS]${reset} FluffOS Driver has been compiled and is ready."
+echo -e ""
+echo -e "${green}[SUCCESS]${reset} You can execute ${green}${repo_root}/adm/dist/run${reset} to start the driver and game."

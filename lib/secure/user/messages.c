@@ -212,22 +212,22 @@ void do_receive(string msg, int msg_type) {
 }
 */
 
-void receive_inside_msg(string msg, object *exclude, int message_type, mixed other)
+varargs void receive_inside_msg(string msg, object *exclude, int message_type, mixed other)
 {
    do_receive(msg, message_type);
 }
 
-void receive_outside_msg(string msg, object *exclude, int message_type, mixed other)
+varargs void receive_outside_msg(string msg, object *exclude, int message_type, mixed other)
 {
    do_receive(msg, message_type);
 }
 
-void receive_remote_msg(string msg, object *exclude, int message_type, mixed other)
+varargs void receive_remote_msg(string msg, object *exclude, int message_type, mixed other)
 {
    do_receive(msg, message_type);
 }
 
-void receive_private_msg(string msg, int message_type, mixed other)
+varargs void receive_private_msg(string msg, int message_type, mixed other)
 {
    do_receive(msg, message_type);
 }

@@ -280,7 +280,7 @@ string rst_format(string *file, string searchtext)
 
       if (strlen(line) > 5 && line[0..3] == "See:")
       {
-         line = reformat_see(line[5..]);
+         line = reformat_see(line);
          line = mark_bad_reference(line);
          line = "<227>See<res>: " + line;
       }

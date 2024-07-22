@@ -10,6 +10,8 @@
 
 inherit VERB_OB;
 
+#include <driver/type.h>
+
 void do_unwield_obj(object ob)
 {
    if (ob->is_weapon())
@@ -20,7 +22,7 @@ void do_unwield_obs(object *obs)
 {
    foreach (object ob in obs)
    {
-      if (typeof(ob) == "string")
+      if (typeof(ob) == T_STRING)
          continue;
       // Do not attempt to unwield things not in inventory.
       if (environment(ob) != this_body())

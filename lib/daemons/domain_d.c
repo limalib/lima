@@ -46,7 +46,7 @@ void remove_currency(string domain)
    save_me();
 }
 
-string query_currency(string domain)
+varargs string query_currency(string domain)
 {
    string body_d = this_body() ? file_domain(environment(this_body())) : "std";
    if (domain)

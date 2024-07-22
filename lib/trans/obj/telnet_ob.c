@@ -31,6 +31,7 @@
 
 #include <mudlib.h>
 #include <socket.h>
+#include <driver/type.h>
 
 inherit M_ACCESS;
 inherit M_REGEX;
@@ -319,7 +320,7 @@ nomask void handle_command(string cmd)
       write("Active sessions:\n================\n");
       for (i = 0; i < sizeof(sessions); i++)
       {
-         if (typeof(sessions[i]) != "class")
+         if (typeof(sessions[i]) != T_CLASS)
             continue;
          printf("%i:  %s\n", i + 1, sessions[i].session_name);
       }

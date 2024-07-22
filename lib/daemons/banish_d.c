@@ -100,7 +100,7 @@ int check_name(string name)
    return sizeof(filter(bad_names, ( : regexp($(name), ((class banish_data)$1)->item) :)));
 }
 
-int check_site(string *check)
+varargs int check_site(string *check)
 {
    /* allow check to be passed in for debugging purposes */
    if (!check)

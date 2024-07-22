@@ -16,6 +16,8 @@
 
 inherit VERB_OB;
 
+#include <driver/type.h>
+
 mixed can_remove_wrd(string wrd)
 {
    object brd = 0;
@@ -56,7 +58,7 @@ void do_remove_obs(object *obs)
    foreach (object ob in obs)
    {
       //        TBUG("Remove: "+ob);
-      if (typeof(ob) == "string")
+      if (typeof(ob) == T_STRING)
          continue;
       // Do not attempt to remove things not in inventory.
       if (environment(ob) != this_body())

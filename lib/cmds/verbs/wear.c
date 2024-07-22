@@ -2,6 +2,8 @@
 
 inherit VERB_OB;
 
+#include <driver/type.h>
+
 void do_wear_obj(object ob)
 {
    if (!try_to_acquire(ob))
@@ -15,7 +17,7 @@ void do_wear_obs(object *obs)
    foreach (object ob in obs)
    {
       // TBUG("Wear: "+ob);
-      if (typeof(ob) == "string")
+      if (typeof(ob) == T_STRING)
          continue;
 
       // Do not try to wear living things or things not in inventory.

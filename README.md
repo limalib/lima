@@ -7,3 +7,6 @@ It works on 3 layers of interaction.
 - Person (classic MUD) - you walk around, pick up things, upgrade and explore. Buy spacecrafts!
 - Spacecraft - you fly ships, pick up good, sell goods, dock and navigate space to get to specific planets.
 - Planet management - you extend your corporations on planets and manage the flow of goods on and off planets.
+
+# License
+Same as original Lima Lib.

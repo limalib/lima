@@ -251,7 +251,7 @@ nomask string user_channel_name(string channel_name)
 **
 ** Register previous_object() with a specific set of channels.
 */
-nomask void register_channels(string *names)
+varargs nomask void register_channels(string *names)
 {
    /* First filter out the channels that don't exist, otherwise the channel
     * will be created.  If the channel's not created, we don't want it to be
@@ -266,7 +266,7 @@ nomask void register_channels(string *names)
 ** Un-register previous_object() from a specific set of channels.  If
 ** the list is 0, then unregister from all channels.
 */
-nomask void unregister_channels(string *names)
+varargs nomask void unregister_channels(string *names)
 {
    if (!names)
       names = keys(info);

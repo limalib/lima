@@ -148,7 +148,7 @@ nomask void initialize_user()
    display_didlog();
 }
 
-void enter_game(string name)
+void enter_game(string name, string fname)
 {
    USER_D->register_body(name, name);
    if (!arrayp(LAST_LOGIN_D->query_last(name)))
