@@ -240,7 +240,7 @@
 #define MAX_FILE_SIZE 1000000
 
 /* The status of your game */
-#define lib_status () "mudlib development"
+#define lib_status() "mudlib development"
 
 /* What's the IP of your game */
 #define __HOST__ "localhost"
