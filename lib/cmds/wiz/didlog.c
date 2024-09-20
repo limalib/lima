@@ -93,7 +93,7 @@ void main(string str)
             DID_D->set_version(0);
             return;
          }
-         DID_D->set_version(pattern);
+         DID_D->set_version(newversion);
          out("Version set to '" + newversion + "'.");
          return;
       case "on":
