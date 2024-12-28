@@ -4,14 +4,6 @@
 // Companion module for things that can be companions.
 // Primarily interaction with verbs, skill checks, chiping and put and get from the companion creature.
 
-/*
-** Taming module by Tsath 2020
-**
-** TODO:
-**
-**
-*/
-
 #include <hooks.h>
 #include <move.h>
 
@@ -22,16 +14,26 @@
 int taming_resistance = -1;
 
 void add_hook(string tag, function hook);
-int query_level();
 string the_short();
 object master;
 string master_name;
 object chip;
 void start_fight(object);
-
+void failed_tame(object);
 mixed direct_tame_liv(object ob)
 {
    return 1;
+}
+
+void set_tamed_by(object body)
+{
+   master = body;
+   master_name = body->query_name();
+}
+
+void no_chip()
+{
+   chip = this_object();
 }
 
 object query_tamed_by()
@@ -42,15 +44,15 @@ object query_tamed_by()
 int query_taming_resistance()
 {
    if (taming_resistance == -1)
-      taming_resistance = query_level() * RESISTANCE_PER_LEVEL;
+      taming_resistance = this_object()->query_level() * RESISTANCE_PER_LEVEL;
    return taming_resistance;
 }
 
 void resist_on_fail()
 {
-   taming_resistance += query_level() * RESISTANCE_GAIN_ON_FAIL;
-   if (taming_resistance > query_level() * RESISTANCE_PER_LEVEL)
-      taming_resistance = query_level() * RESISTANCE_PER_LEVEL;
+   taming_resistance += this_object()->query_level() * RESISTANCE_GAIN_ON_FAIL;
+   if (taming_resistance > this_object()->query_level() * RESISTANCE_PER_LEVEL)
+      taming_resistance = this_object()->query_level() * RESISTANCE_PER_LEVEL;
 }
 
 int is_tameable()
@@ -61,7 +63,7 @@ int is_tameable()
 int skill_check(object body)
 {
    int challenge_rating = 10;
-   challenge_rating += 5 * query_level() + query_taming_resistance();
+   challenge_rating += 5 * this_object()->query_level() + query_taming_resistance();
 
    return body->test_skill("misc/life/taming", challenge_rating);
 }
@@ -80,7 +82,7 @@ void call_out_follow(object body)
 {
    // The higher level, the slower.
    if (find_call_out("follow") == -1 && chip)
-      call_out("follow", 1 + random(query_level()), master);
+      call_out("follow", 1 + random(this_object()->query_level()), master);
 }
 
 void person_attacked_person(object attacker, object target)
@@ -117,7 +119,7 @@ int modify_name_by_chip()
 
 int query_reflex_cost()
 {
-   return (1 + query_level()) * CONC_FACTOR;
+   return (1 + this_object()->query_level()) * CONC_FACTOR;
 }
 
 void tamed_by(object body)
@@ -201,13 +203,13 @@ void put_wrd_tameable(string p, object ob)
    if (ob->is_taming_chip() && !chip)
    {
       // Does the chip fit?
-      if (ob->max_tameable_level() >= query_level())
+      if (ob->max_tameable_level() >= this_object()->query_level())
       {
          chip = ob;
          this_object()->set_adj(chip->chip_type());
          this_object()->add_relation("in");
          this_object()->set_default_relation("in");
-         this_object()->set_max_capacity(query_level());
+         this_object()->set_max_capacity(this_object()->query_level());
          chip->move(this_object());
          master->targetted_action("$N $vchip the $t with the $o.", this_object(), chip);
          modify_name_by_chip();
@@ -340,7 +342,7 @@ void something_appeared(object ob)
    if (!ob)
       return;
    if (taming_resistance == -1)
-      taming_resistance = query_level() * RESISTANCE_PER_LEVEL;
+      taming_resistance = this_object()->query_level() * RESISTANCE_PER_LEVEL;
    if (ob->is_pet_treat())
       call_out("eat_snacks", random(2) + 1, ob);
 }
