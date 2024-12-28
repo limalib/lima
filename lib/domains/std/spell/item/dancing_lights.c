@@ -18,9 +18,7 @@ int state_update()
    if (!duration)
    {
       tell_from_inside(this_object(), "The lights flicker and fade away.");
-
-      // Delay this a little bit, so STATE_D can clean up.
-      call_out("remove", 2);
+      remove();
    }
 
    return duration > 0;
