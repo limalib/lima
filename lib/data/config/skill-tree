@@ -36,6 +36,8 @@ magic/arcane:1
 magic/arcane/knowledge:1
 magic/abjuration:1
 magic/abjuration/shield:1
+magic/divination:1
+magic/divination/true strike:1
 magic/evocation:1
 magic/evocation/acid arrow:1
 magic/evocation/dancing lights:1
@@ -43,9 +45,7 @@ magic/evocation/fireball:1
 magic/evocation/fire beam:1
 magic/conjuration:1
 magic/conjuration/conjure ale:1
-magic/conjuration/light:1
 magic/healing:1
-magic/healing/cure poison:1
 magic/transmutation:1
 magic/transmutation/unlock:1
 
