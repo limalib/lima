@@ -254,9 +254,10 @@ private
 string reformat_see(string line)
 {
    // ## Ack! My deepest apoligies for this one. Let me know if you figure out what it does, I might have a job for you.
-   return implode(map(filter_array(explode(replace_string(line, "Command: ", ""), " "), (
-                                                                                            : $1[0] != '<'
-                                                                                            :)),
+   return implode(map(filter_array(explode(replace_string(line, ":doc:", ""), " "), //
+                                   (
+                                       : $1[0] != '<'
+                                       :)),
                       (
                           : $1[1..]
                           :))[1..],
