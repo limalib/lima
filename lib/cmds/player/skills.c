@@ -6,15 +6,18 @@
 //$$ see: hp, stats, score, spells
 // USAGE
 //    ``skills``
+//    ``skills magic``
+//    ``skills combat``
+//    ``skills misc``
+//    ``skills <enemy>`` (for wizards)
 //
 // Prints out a list of your skills and skill ranks.
 //
-// - Skill ranks are shown at the end of the skills (the higher the better from 0-20)
-// - Training points, if used, are shown at the end of the skill bars (in yellow)
+// - Skill ranks are shown at the end of the skill names (the higher the better from 0-20)
+// - Training points, if used, are shown before the bars.
 //
 // The more you use your skills, the better you get. So things get better all
 // the time! Talk to a trainer to learn more about skills.
-//
 // .. TAGS: RST
 
 #include <classes.h>
@@ -25,8 +28,8 @@ inherit CLASS_SKILL;
 inherit M_WIDGETS;
 inherit M_FRAME;
 
-//Sometimes training down the tree has not managed to propagate to level 2.
-//This function manually adds in the level 2 skills if needed.
+// Sometimes training down the tree has not managed to propagate to level 2.
+// This function manually adds in the level 2 skills if needed.
 mapping introduce_level_twos(mapping skills)
 {
    foreach (string name, class skill skill in skills)
@@ -51,26 +54,22 @@ void main(string arg)
    string content = "";
    string *names;
    object target;
-   int self_view;
 #ifdef SKILL_CONFIG_USES_TRAINING_PTS
    width -= 4;
 #endif
    width -= 2;
-   skill_bar = width - 37;
+   skill_bar = width - 34;
 
    if (strlen(arg) > 0 && wizardp(this_user()))
    {
       target = present(arg, environment(this_body()));
       if (!target)
          target = find_body(arg);
-      if (!target)
+      if (target)
       {
-         out("Cannot find '" + arg + "'.\n");
-         return;
+         out("Skills for " + target->short() + ":\n");
+         arg = 0;
       }
-      out("Skills for " + target->short() + ":\n");
-      self_view = 0;
-      arg = 0;
    }
 
    if (!target)
@@ -110,7 +109,10 @@ void main(string arg)
 
          frame_init_user();
          if (strlen(arg) && strsrch(name, arg) != 0)
+         {
+            i++;
             continue;
+         }
 
          if (level == 1)
          {
@@ -125,15 +127,14 @@ void main(string arg)
          // Screen width > 50
          else if ((percentage || target->is_body()) && width > 50)
             content += sprintf("%-25s " + (bonus > 0 ? "<010>+<res>" : (bonus < 0 ? "<009>-<res>" : " ")) +
-                                   "%4s [<040>%s<238>%s<res>] %-7s\n",
+                                   " %3.3s [<040>%s<238>%s<res>]\n",
                                repeat_string(" " + (level == next_level ? contbend : bend), level - 2) + pretty_name,
-                               percentage + "%", repeat_string(barchar, green), repeat_string(nobarchar, red),
 #ifdef SKILL_CONFIG_USES_TRAINING_PTS
-                               target->is_body() ? accent(skill.training_points) : ""
+                               target->is_body() ? "" + (skill.training_points ? skill.training_points : "") : "",
 #else
-                               ""
+                               "",
 #endif
-            );
+                               repeat_string(barchar, green), repeat_string(nobarchar, red));
          // Screen width < 50
          else if ((percentage || target->is_body()) && width <= 50)
             content += sprintf(
