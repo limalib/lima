@@ -310,7 +310,9 @@ mixed indirect_get_obs_from_obj(object ob1, object ob2)
 
 string get_extra_long()
 {
-   if (this_body() == master)
+   // If no_chip(), we do not show inventory. This is typically used by spell objects.
+   // They should not show inventory.
+   if (this_body() == master && chip != this_object())
       return capitalize(the_short()) + " is carrying:\n" + inv_list(all_inventory(this_object())) +
              "\nCapacity: " + weight_to_string(this_object()->query_capacity(), get_user_variable("metric") != 1) +
              " / " + weight_to_string(this_object()->query_max_capacity(), get_user_variable("metric") != 1);
