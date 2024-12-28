@@ -177,7 +177,7 @@ mixed valid_target(object target)
 
    // If living targets are valid, and the target is a living
    // we can cast the spell.
-   if (valid_targets & TARGET_LIVING && target->is_living())
+   if (valid_targets & TARGET_LIVING && target->is_living() && target != this_body())
       return 1;
 
    // If item targets are valid, and the target is an item
@@ -256,6 +256,7 @@ nomask void set_targets(int targets)
 nomask mixed check_valid_target(object target, mixed has_sc)
 {
    mixed result;
+   TBUG("check_valid_target");
 
    result = valid_circumstances(target, has_sc);
    if (!result)
@@ -434,6 +435,12 @@ int cast_action(mixed *args)
    if (!valid_targets & TARGET_ROOM && !present(target, environment(this_body())) && !present(target, this_body()))
    {
       channel_failure("Your target seems to have disappeared.");
+      return;
+   }
+
+   if (valid_targets & TARGET_LIVING && target==this_body())
+   {
+      channel_failure("You cannot cast the spell on yourself.");
       return;
    }
 

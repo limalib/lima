@@ -128,11 +128,14 @@ class event_info effect_modify_event(class event_info evt)
 
 varargs mixed move(object dest, string where)
 {
-   //No magic things, the objects cannot be collapsed into one.
+   // No magic things, the objects cannot be collapsed into one.
+   if (!dest)
+      return 0;
+
    if (!can_extend)
       return ::move(dest, where);
-   
-   //Collapse more effects into a stronger effect
+
+   // Collapse more effects into a stronger effect
    foreach (object ob in all_inventory(dest))
    {
       if (!ob->is_transient_effect())
