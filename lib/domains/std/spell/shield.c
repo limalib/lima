@@ -8,7 +8,7 @@ void setup()
 {
    set_name("shield");
    set_category("abjuration");
-   set_targets(TARGET_ROOM);
+   set_targets(TARGET_SELF);
    extra_reflex_cost(1);
    set_description("This spell creates a semi-transparent blue shield in front of the caster protecting against "
                    "incoming bludgeoning attacks.");
