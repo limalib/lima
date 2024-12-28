@@ -27,6 +27,8 @@
 #include <assert.h>
 #include <spells.h>
 
+#define CANTRIP_SKILL_CHALLENGE 50
+
 private
 nosave string spell_name;
 private
@@ -389,7 +391,8 @@ void continue_channeling(object target, object sc)
    }
 
    // Safe to test this one, we already tested for it existing when loading the spell via SPELL_D.
-   success = caster->test_skill("magic/" + spell_category + "/" + spell_name, SKILL_D->pts_for_rank(level));
+   success = caster->test_skill("magic/" + spell_category + "/" + spell_name,
+                                SKILL_D->pts_for_rank(level) || CANTRIP_SKILL_CHALLENGE);
 
    caster->busy_with(this_object(), (channeling_interval > 0 ? "channeling " : "casting ") + query_name(),
                      "cast_action", ({target, sc, success}), channeling_interval);
@@ -421,16 +424,16 @@ int cast_action(mixed *args)
    sc = args[1];
    success = args[2];
 
-   if (!target)
+   if (!target && !valid_targets & TARGET_ROOM)
    {
       channel_failure("Your target has disappeared.");
       return;
    }
 
    // If we have a target, but it's not present in inventory or room, we can't cast the spell.
-   if (!present(target, environment(this_body())) && !present(target, this_body()))
+   if (!valid_targets & TARGET_ROOM && !present(target, environment(this_body())) && !present(target, this_body()))
    {
-      channel_failure("Your target has disappeared.");
+      channel_failure("Your target seems to have disappeared.");
       return;
    }
 
@@ -497,7 +500,8 @@ void internal_cast_spell(object target, object sc)
 
    // Safe to test this one, we already tested for it existing when loading the spell via SPELL_D.
    // Do not make skill checks against target here, as target may change on cast_spell() call.
-   success = caster->test_skill("magic/" + spell_category + "/" + spell_name, SKILL_D->pts_for_rank(level));
+   success = caster->test_skill("magic/" + spell_category + "/" + spell_name,
+                                SKILL_D->pts_for_rank(level) || CANTRIP_SKILL_CHALLENGE);
 
    if (cast_time > 0)
       delayed_cast_spell(target, sc, success);
