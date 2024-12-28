@@ -195,6 +195,18 @@ mapping queue()
    return queue;
 }
 
+object *owned(object body)
+{
+   if (!body)
+      body = this_body();
+   return filter_array(flatten_array(values(queue)), ( : objectp($1) && clonep($1) && $1->query_owner() == $(body) :));
+}
+
+int unique(string bname, object body)
+{
+   return !sizeof(filter_array(owned(body), ( : base_name($1) == $(bname) :)));
+}
+
 string stat_me()
 {
    string squeue = "";

@@ -2,6 +2,21 @@
 
 private
 nosave int interval = 1;
+private nosave object owner;
+
+//:FUNCTION set_owner
+// Set the owner of the stateful object.
+void set_owner(object ob)
+{
+   owner = ob;
+}
+
+//:FUNCTION query_owner
+// Return the owner of the stateful object.
+object query_owner()
+{
+   return owner;
+}
 
 //: FUNCTION is_stateful
 // Override this to make the object stateful depending on what happens.
