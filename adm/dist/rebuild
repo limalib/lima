@@ -14,6 +14,44 @@ red='\e[38;5;124m'
 # Change to the directory containing the script
 cd "$(dirname "$0")"
 
+#Default values
+DATABASE="OFF"
+REBUILD="yes"
+
+#Argument parsing
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -d|--database)
+      DATABASE="ON"
+      echo -e "${green}[NOTICE]${reset} Database support enabled. This will require a database server - this is not part of the LIMA project."
+      sleep 1 # Sleep for 1 second to allow the user to see the message
+      shift # past argument
+      ;;
+    -r|--rebuild)
+      REBUILD="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+    -h|--help)
+      echo "Usage: $0 [-d|--database]"
+      echo "  -d|--database         Enable database support"
+      echo "  -r|--rebuild yes|no   Rebuild the driver, default is yes"
+      exit 1
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1") # save positional arg
+      shift # past argument
+      ;;
+  esac
+done
+
 # Check if config.mud exists
 config_file="$(pwd)/config.mud"
 if [[ ! -f "$config_file" ]]; then
@@ -37,13 +75,17 @@ git pull origin master > /dev/null
 cp -v ../local_options src/local_options
 
 # Compile the driver
-rm -rf build
-mkdir build
+if [ ${REBUILD} = "yes" ]; then
+   rm -rf build
+   mkdir build
+else
+   echo -e "${gold}[NOTICE]${reset} Skipping driver rebuild."
+fi
 cd build
  cmake .. \
      -DPACKAGE_UIDS=OFF \
-     -DPACKAGE_MUDLIB_STATS=OFF \
-     -DPACKAGE_DATABASE=ON
+     -DPACKAGE_DATABASE=${DATABASE} \
+     -DPACKAGE_MUDLIB_STATS=OFF
 
 make -j "$(nproc)" install
 
@@ -58,7 +100,11 @@ cp -vf bin/include/*.h ${repo_root}/lib/include/driver/
 
 # Restore the original source back to the original state
 cd ..
-git reset --hard HEAD > /dev/null
+if [ ${REBUILD} = "yes" ]; then
+   git reset --hard HEAD > /dev/null
+else
+   echo -e "${gold}[NOTICE]${reset} Skipping driver source reset."
+fi
 
 # Update config.mud with the correct absolute paths
 mudlib_path="${repo_root}/lib"
