@@ -29,16 +29,9 @@ while [[ $# -gt 0 ]]; do
       sleep 1 # Sleep for 1 second to allow the user to see the message
       shift # past argument
       ;;
-    -r|--rebuild)
-      REBUILD="$2"
-      shift # past argument
-      shift # past value
-      ;;
-
     -h|--help)
       echo "Usage: $0 [-d|--database]"
       echo "  -d|--database         Enable database support"
-      echo "  -r|--rebuild yes|no   Rebuild the driver, default is yes"
       exit 1
       ;;
     -*|--*)
@@ -74,13 +67,8 @@ git pull origin master > /dev/null
 # Copy our custom local_options to the driver for compilation
 cp -v ../local_options src/local_options
 
-# Compile the driver
-if [ ${REBUILD} = "yes" ]; then
-   rm -rf build
-   mkdir build
-else
-   echo -e "${gold}[NOTICE]${reset} Skipping driver rebuild."
-fi
+rm -rf build
+mkdir build
 cd build
  cmake .. \
      -DPACKAGE_UIDS=OFF \
@@ -100,11 +88,7 @@ cp -vf bin/include/*.h ${repo_root}/lib/include/driver/
 
 # Restore the original source back to the original state
 cd ..
-if [ ${REBUILD} = "yes" ]; then
-   git reset --hard HEAD > /dev/null
-else
-   echo -e "${gold}[NOTICE]${reset} Skipping driver source reset."
-fi
+git reset --hard HEAD > /dev/null
 
 # Update config.mud with the correct absolute paths
 mudlib_path="${repo_root}/lib"
