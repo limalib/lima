@@ -47,10 +47,12 @@
 /* Players start where they log off */
 #define PLAYERS_START_WHERE_THEY_QUIT
 
-/* Body stats modules -  do not these  */
+/* Do not edit */
+/* Body stats modules -  do not remove these, but edit in the next section.  */
 #define BODY_STATS_LIMA 1
 #define BODY_STATS_DND 2
 #define BODY_STATS_RIFTS 3
+/* End of no edit */
 
 /* But edit here:
 ** Edit body stats module to use. Only one option can be picked below. */
