@@ -10,25 +10,9 @@
 
 inherit M_DAEMON_DATA;
 
-mapping quests = (["std":(["pirate:secretPsg":({
-                                                  "/domains/std/object/dock_wall",
-                                                  5,
-                                                  0,
-                                                  0,
-                                              }),
-                                "pirate:treasure":({
-                                                      "/domains/std/object/sand_with_treasure",
-                                                      10,
-                                                      0,
-                                                      "Congratulations! You completed the sample Pirate quest.",
-                                                  }),
-                             " pirate:foundCave ":({
-                                                      "/domains/std/room/beach/Sandy_Beach ",
-                                                      10,
-                                                      0,
-                                                      0,
-                                                  }),
-]),
+mapping quests = (["std":(["pirate:secretPsg":({"/domains/std/object/dock_wall", 5, 0, 0}),
+                               "pirate:begin":({"/domains/std/object/ocean", 10, 0, 0}),
+                                 "pirate:end":({"/domains/std/object/sand_with_treasure", 10, 0, 0}), ]),
 ]);
 mapping quest_names = ([]);
 nosave mapping d_quests = ([]); // Temp storage

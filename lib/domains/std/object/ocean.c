@@ -36,10 +36,12 @@ void setup()
                 "$N $vwander in from the west", "$N $vwade over to you."}));
 }
 
-void award_points(string direction)
+void award_points(function direction)
 {
    if (evaluate(direction) == "the ocean")
-      QUEST_D->grant_points(this_body(), "std", "Pirate", "foundCave", "begin");
+   {
+      QUEST_D->begin_quest(this_body(), "std", "pirate");
+   }
 }
 
 void on_clone(mixed args...)
