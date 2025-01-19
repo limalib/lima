@@ -21,7 +21,7 @@ mixed direct_close_obj()
 
 void trigger()
 {
-   QUEST_D->grant_points(this_body(), "pirate:secretPsg");
+   QUEST_D->grant_points(this_body(), "std", "pirate", "secretPsg", "begin");
    call_out("open_with", 1);
    call_out("do_close", 8);
 }

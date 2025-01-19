@@ -53,7 +53,7 @@ void dig(object o)
    case 7:
       this_body()->simple_action("$N $vdig at the hole some more and $vuncover "
                                  "a treasure chest!");
-      QUEST_D->grant_points(this_body(), "pirate");
+      QUEST_D->grant_points(this_body(), "std", "pirate", "end", "secretPsg");
       break;
    case 8:
       this_body()->simple_action("$N $vdig the hole a bit deeper.");
