@@ -28,7 +28,8 @@ nomask void list_missions()
    result += ({sprintf("%-20.20s %-30.30s %-30.30s %s", "Mission", "Giver", "Controller", "Level Range")});
    foreach (string mission, class mission_info m in missions)
    {
-      result += ({sprintf("%-20.20s %-30.30s %-30.30s %d-%d", m.name, m.giver, m.controller, m.rec_level_min, m.rec_level_max)});
+      result += ({sprintf("%-20.20s %-30.30s %-30.30s %d-%d", m.name, m.giver, m.controller, m.rec_level_min,
+                          m.rec_level_max)});
    }
 
    more(result);
@@ -140,11 +141,11 @@ nomask void rcv_remove_mission(string mission_name)
 
    mission_name = lower_case(trim(mission_name));
 
-   result = MISSION_D->remove_mission(mission_name);
+   result = MISSION_D->unregister_mission(mission_name);
    if (!result)
-      write("ERROR: no such mission exists.\n");
+      write("ERROR: '" + mission_name + "' no such mission exists.\n");
    else
-      printf("Removed: %s.\n", format_list(result));
+      printf("Removed mission '%s'.\n", mission_name);
 }
 
 nomask class command_info *module_commands()

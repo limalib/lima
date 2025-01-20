@@ -23,10 +23,13 @@ int is_file(string file)
    return file_length(file) != -1;
 }
 
-void unregister_mission(string name)
+int unregister_mission(string name)
 {
+   if (!missions[name])
+      return 0;
    map_delete(missions, name);
    save_me();
+   return 1;
 }
 
 void register_mission(string name, string giver, string controller, int rec_level_min, int rec_level_max)
