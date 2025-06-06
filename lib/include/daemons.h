@@ -20,6 +20,7 @@
 #define DOMAIN_D      "/daemons/domain_d"
 #define EMOJI_D       "/daemons/emoji_d"
 #define EVENT_D       "/daemons/event_d"
+#define GIT_D         "/daemons/git_d"
 #define GOVERNANCE_D  "/daemons/governance_d"
 #define GROUP_D       "/daemons/group_d"
 #define GUEST_D       "/daemons/guest_d"

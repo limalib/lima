@@ -17,7 +17,7 @@ void main()
    // Do not return output with emojis and ANSI
    set_output_flags(NO_ANSI);
 
-   sockets = children(SOCKET);
+   sockets = children(OLD_SOCKET)+children(SOCKET);
    if (!sockets || sockets == ({}))
    {
       out("No sockets active.\n");

@@ -21,6 +21,13 @@
 #define mud_name()		MUD_NAME
 #define driver_version()	__VERSION__
 
+/* Reasonable definitions that will make code easier to read. Still in all caps to clearly
+** indicate that they are precompiler defined constants.
+*/
+#define TRUE 1
+#define FALSE 0
+#define NULL 0
+
 #define TELL_BUG(p,x) (tell_user(p,sprintf("%s: %O\n",__FILE__,(x))))
 
 /* LIMA mudlib maintainers. Add your own in mudlib.h to avoid merge conflicts with this file. */
@@ -31,7 +38,7 @@
 #define ZABUG(x) TELL_BUG("zakk", (x))
 #define TBUG(x) TELL_BUG("tsath",(x))
 #define ABUG(x) TELL_BUG("asmerian",(x))
-#define KBUG(x) TELL_BUG("kobol",(x))
+#define ZEBUG(x) TELL_BUG("zeb",(x))
 #define LBUG(x) TELL_BUG("loriel",(x))
 
 #endif // __GLOBAL_H__

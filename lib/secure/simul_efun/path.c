@@ -21,21 +21,30 @@ string cannonical_form(mixed fname)
    return fname;
 }
 
+//: FUNCTION path_exists
+// Returns true if the path exists, false otherwise.
 int path_exists(string x)
 {
    return file_size(x) != -1;
 }
 
+//: FUNCTION is_directory
+// Returns true if the path is a directory, false otherwise.
 int is_directory(string x)
 {
    return x != "" && file_size(x) == -2;
 }
 
+//: FUNCTION is_file
+// Returns true if the path is a file, false otherwise.
 int is_file(string x)
 {
    return file_size(x) > -1;
 }
 
+//: FUNCTION split_path
+// Given a path, returns an array of two strings, the first being the
+// directory part of the path, and the second being the file part.
 string *split_path(string p)
 {
    int pos;
@@ -45,16 +54,22 @@ string *split_path(string p)
    return ({p[0..pos], p[pos + 1..]});
 }
 
+//: FUNCTION base_path
+// Given a path, returns the directory part of the path.
 string base_path(string p)
 {
    return split_path(p)[0];
 }
 
+//:FUNCTION depath
+// Given a path, returns the file part of the path.
 string depath(string p)
 {
    return split_path(p)[1];
 }
 
+//:FUNCTION walk_dir
+// Walks a directory tree, calling a function for each directory it finds.
 varargs void walk_dir(string path, function func, mixed arg)
 {
    mixed tmp, names, res;
@@ -172,6 +187,8 @@ varargs string evaluate_path(string path, string prepend, int no_interactive)
    return "/" + implode(tree, "/");
 }
 
+//: FUNCTION join_path
+// Given a directory and a file, return the full path.
 string join_path(string dir, string file)
 {
    if (dir[ < 1] != '/')
@@ -179,6 +196,8 @@ string join_path(string dir, string file)
    return dir + file;
 }
 
+//: FUNCTION map_paths
+// Given an array of paths, return a mapping of the form ([dir: ({files})]).
 mapping map_paths(mixed paths)
 {
    mapping res;
@@ -197,6 +216,8 @@ mapping map_paths(mixed paths)
    return res;
 }
 
+//: FUNCTION absolute_path
+// Given a relative path and an object, return the absolute path.
 varargs string absolute_path(string relative_path, mixed relative_to)
 {
    if (!relative_to)
@@ -213,6 +234,8 @@ varargs string absolute_path(string relative_path, mixed relative_to)
    return relative_path;
 }
 
+//: FUNCTION wiz_dir
+// Given a wizard name or object, return the wizard's directory.
 nomask string wiz_dir(mixed what)
 {
    if (stringp(what))
@@ -234,6 +257,8 @@ nomask string wiz_dir(mixed what)
    }
 }
 
+//: FUNCTION domain_dir
+// Given a domain name or object, return the domain's directory.
 string file_domain(mixed file)
 {
    string *parts;

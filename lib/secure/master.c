@@ -76,8 +76,7 @@ nomask string get_player_fname()
 #ifdef DEBUG_CONNECTIONS
 void debug_connections(object ob)
 {
-   tell(filter(bodies(), (
-                             : wizardp:)),
+   tell(filter(bodies(), ( : wizardp:)),
         sprintf("Debugger tells you: There's a new connection from %s.\n", query_ip_name(ob)));
 }
 #endif
@@ -576,7 +575,7 @@ int valid_socket(object ob, string what, mixed *info)
    string fname;
 
    sscanf(file_name(ob), "%s#%*s", fname);
-   return fname == SOCKET;
+   return fname == OLD_SOCKET || fname == SOCKET;
 }
 
 void remove()

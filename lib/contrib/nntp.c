@@ -253,7 +253,7 @@ varargs void create(function callback, string host, mixed port)
    }
    news_host = host;
    news_port = port;
-   news_socket = new (SOCKET, SKT_STYLE_CONNECT, host + " " + port,
+   news_socket = new (OLD_SOCKET, SKT_STYLE_CONNECT, host + " " + port,
                       (
                           : nntp_read_callback:),
                       (
