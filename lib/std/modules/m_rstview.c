@@ -7,13 +7,10 @@
 //
 // This module requires M_COLOURS.
 
-private
-string *keywords = ({"void ", "mixed ", "string ", "int ", "object ", "function "});
-private
-string *decls = ({"inherit ", "static ", "private ", "nosave ", "varargs "});
+private string *keywords = ({"void ", "mixed ", "string ", "int ", "object ", "function "});
+private string *decls = ({"inherit ", "static ", "private ", "nosave ", "varargs "});
 
-private
-string replace_decl(string s, string replace, string with)
+private string replace_decl(string s, string replace, string with)
 {
    if (strsrch(s, replace) == 0)
       s = with + s[strlen(replace)..];
@@ -21,8 +18,7 @@ string replace_decl(string s, string replace, string with)
    return s;
 }
 
-private
-int is_fun(string l)
+private int is_fun(string l)
 {
    string tmp1, tmp2, tmp3;
    int result = sscanf(l, "%s %s(%s)", tmp1, tmp2, tmp3);
@@ -31,8 +27,7 @@ int is_fun(string l)
    return 0;
 }
 
-private
-string replace_types(string s, string replace, string with)
+private string replace_types(string s, string replace, string with)
 {
    string out;
    string *pieces = explode(s, replace);
@@ -44,8 +39,7 @@ string replace_types(string s, string replace, string with)
    return out;
 }
 
-private
-string header_type(string line)
+private string header_type(string line)
 {
    string part = strlen(line) > 3 ? line[0..2] : 0;
    if (!part)
@@ -68,8 +62,7 @@ string header_type(string line)
    }
 }
 
-private
-string replace_inv(string s)
+private string replace_inv(string s)
 {
    string *parts = explode(s, "``");
    string out = "";
@@ -90,8 +83,7 @@ string replace_inv(string s)
    return out;
 }
 
-private
-string replace_backslash(string s)
+private string replace_backslash(string s)
 {
    string *parts = explode(s, "\\");
    string out = "";
@@ -112,8 +104,7 @@ string replace_backslash(string s)
    return out;
 }
 
-private
-string replace_quote(string s)
+private string replace_quote(string s)
 {
    string *parts = explode(s, "\"");
    string out = "";
@@ -134,8 +125,7 @@ string replace_quote(string s)
    return out;
 }
 
-private
-string replace_italic(string s)
+private string replace_italic(string s)
 {
    string *parts;
    string out = "";
@@ -165,8 +155,7 @@ string replace_italic(string s)
    return out;
 }
 
-private
-string replace_curly_begin(string s)
+private string replace_curly_begin(string s)
 {
    if (XTERM256_D->colourp(s))
       return s;
@@ -175,8 +164,7 @@ string replace_curly_begin(string s)
    return implode(explode(s, "{"), "<132>{<res>");
 }
 
-private
-string replace_curly_end(string s)
+private string replace_curly_end(string s)
 {
    if (XTERM256_D->colourp(s))
       return s;
@@ -185,8 +173,7 @@ string replace_curly_end(string s)
    return implode(explode(s, "}"), "<132>}<res>");
 }
 
-private
-string replace_comments(string s)
+private string replace_comments(string s)
 {
    string out;
    out = implode(explode(s, "//"), "<034>//") + "<res>";
@@ -201,8 +188,7 @@ string replace_comments(string s)
 }
 
 // Main replace function for string
-private
-string replace_function(string line)
+private string replace_function(string line)
 {
    if (strlen(line) > 20 && line[0..15] == ".. c:function:: ")
    {
@@ -221,8 +207,7 @@ string replace_function(string line)
    return line;
 }
 
-private
-string *replace_code(string *lines, string searchtext)
+private string *replace_code(string *lines, string searchtext)
 {
    for (int i = 0; i < sizeof(lines); i++)
    {
@@ -250,23 +235,16 @@ string *replace_code(string *lines, string searchtext)
    return lines;
 }
 
-private
-string reformat_see(string line)
+private string reformat_see(string line)
 {
    // ## Ack! My deepest apoligies for this one. Let me know if you figure out what it does, I might have a job for you.
-   return implode(map(filter_array(explode(replace_string(line, ":doc:", ""), " "), //
-                                   (
-                                       : $1[0] != '<'
-                                       :)),
-                      (
-                          : $1[1..]
-                          :))[1..],
+   return implode(filter_array(explode(replace_string(line, ":doc:", ""), " "), //
+                               ( : $1[0] != '<' && $1 != "`Command:" :))[1..],
                   ", ") +
           "\n";
 }
 
-private
-string mark_bad_reference(string line)
+private string mark_bad_reference(string line)
 {
    string *cmds = explode(trim(line), ", ");
    string *existing_cmds = CMD_D->query_cmds();
