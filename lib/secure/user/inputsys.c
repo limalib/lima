@@ -35,20 +35,14 @@ class input_info
 }
 
 private nosave class input_info *modal_stack = ({});
-private
-nosave int dispatching_to;
-private
-nomask void dispatch_modal_input(string str);
-private
-nosave string *suboptions = ({});
-private
-nosave int utf8 = 0;
-private
-nosave string terminal_type;
-private
+private nosave int dispatching_to;
+private nomask void dispatch_modal_input(string str);
+private nosave string *suboptions = ({});
+private nosave int utf8 = 0;
+private nosave string terminal_type;
+private nosave mapping environ = ([]);
 
-private
-nosave int width, height;
+private nosave int width, height;
 
 void terminal_type(string term)
 {
@@ -66,11 +60,17 @@ void terminal_type(string term)
    terminal_type = explode(lower_case(term), " ")[0];
 }
 
-// ### Not used for anything yet. Being considered.
-// ### Might be useful for more automatic input detection.
+mixed environ(string var)
+{
+   if (!var || var == "")
+      return copy(environ);
+
+   return environ[var];
+}
+
 void receive_environ(string var, string value)
 {
-   TBUG("receive_environ(" + var + "," + value + ");");
+   environ[var] = value;
 }
 
 void window_size(int w, int h)
@@ -107,8 +107,7 @@ void telnet_suboption(string buff)
    }
 }
 
-private
-nomask int create_handler()
+private nomask int create_handler()
 {
    /*
    ** Attempt to create a handler (the user has none!)
@@ -127,8 +126,7 @@ nomask int create_handler()
    return 0;
 }
 
-private
-nomask class input_info get_top_handler(int require_handler)
+private nomask class input_info get_top_handler(int require_handler)
 {
    int some_popped = 0;
 
@@ -157,8 +155,7 @@ nomask class input_info get_top_handler(int require_handler)
    return modal_stack[ < 1];
 }
 
-private
-nomask class input_info get_bottom_handler()
+private nomask class input_info get_bottom_handler()
 {
    while (sizeof(modal_stack))
    {
@@ -186,13 +183,12 @@ nomask class input_info get_bottom_handler()
 ** Push a handler onto the modal stack.  The stack is grown as
 ** necessary to accomodate the new element.
 */
-private
-nomask void push_handler(function input_func, mixed prompt, int secure, function return_to_func, int input_type,
-                         int lock)
+private nomask void push_handler(function input_func, mixed prompt, int secure, function return_to_func, int input_type,
+                                 int lock)
 {
    class input_info info;
 
-   info = new (class input_info);
+   info = new(class input_info);
    info.input_func = input_func;
    info.prompt = prompt;
    info.secure = secure;
@@ -262,8 +258,7 @@ varargs nomask void modal_func(function input_func, mixed prompt, int secure, in
    modal_stack[ < 1].lock = lock;
 }
 
-protected
-nomask void modal_recapture()
+protected nomask void modal_recapture()
 {
    class input_info info;
    string prompt;
@@ -333,8 +328,7 @@ nomask void modal_pass(string str)
 /*
 ** Send a command to the 'shell'.  (The bottom handler)
 */
-private
-nomask void dispatch_to_bottom(mixed str)
+private nomask void dispatch_to_bottom(mixed str)
 {
    class input_info info;
 
@@ -351,8 +345,7 @@ nomask void dispatch_to_bottom(mixed str)
 **
 ** Dispatch the command as appropriate.
 */
-private
-nomask void dispatch_modal_input(mixed str)
+private nomask void dispatch_modal_input(mixed str)
 {
    class input_info info;
    if (str[0] == '!' && !modal_stack[ < 1].lock)
@@ -375,7 +368,7 @@ nomask void dispatch_modal_input(mixed str)
 
       dispatching_to = sizeof(modal_stack);
 
-      error = catch (evaluate(info.input_func, str));
+      error = catch(evaluate(info.input_func, str));
       if (error)
       {
          modal_recapture();
@@ -405,8 +398,7 @@ nomask void modal_push_char(function input_func)
 **
 ** maybe we should only use input_to if we need it now.  -Beek
 */
-private
-nomask string process_input(string str)
+private nomask string process_input(string str)
 {
    dispatch_modal_input(str);
 }
@@ -445,8 +437,7 @@ string stat_me()
    return "";
 }
 
-protected
-nomask void clear_input_stack()
+protected nomask void clear_input_stack()
 {
    class input_info top;
 
