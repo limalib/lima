@@ -17,6 +17,9 @@ void main()
    // Do not return output with emojis and ANSI
    set_output_flags(NO_ANSI);
 
+   // Remove OLD_SOCKET when it is no longer used.
+   // OLD_SOCKET is deprecated and should not be used in new code.
+   // It is kept here for compatibility with existing code.
    sockets = children(OLD_SOCKET)+children(SOCKET);
    if (!sockets || sockets == ({}))
    {
