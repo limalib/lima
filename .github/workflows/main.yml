@@ -1,2 +1,0 @@
-- name: Conventional Commits Action
-  uses: webiny/action-conventional-commits@v1.3.0
