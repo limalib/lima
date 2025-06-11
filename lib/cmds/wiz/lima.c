@@ -4,10 +4,9 @@
 //$$ see: I, didlog
 // USAGE:
 //
-//     |  ``lima``
-//     |  ``lima /versions``
-//     |  ``lima <version>``
-//     |  ``lima <version> <pattern>``
+//     |  ``lima ``                    (Show versions of the LIMA mudlib)
+//     |  ``lima <version>``           (Show changes in a specific version)
+//     |  ``lima <version> <pattern>`` (Show changes in a specific version that matches a pattern)
 //
 // Shows you the versions of the LIMA mudlib that you have change
 // information about. Use the /versions to see a version list, and
