@@ -9,9 +9,10 @@
 //     |  ``lima <version> <pattern>`` (Show changes in a specific version that matches a pattern)
 //
 // Shows you the versions of the LIMA mudlib that you have change
-// information about. Use the /versions to see a version list, and
-// add a version number to get a dump of all the changes in that
-// verison.
+// information about. If you specify a version, it will show you
+// the changes in that version. If you specify a version and a
+// pattern, it will show you the changes in that version that
+// match the pattern.
 //
 // .. TAGS: RST
 
