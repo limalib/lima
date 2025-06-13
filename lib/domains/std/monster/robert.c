@@ -15,8 +15,8 @@ void setup()
    set_proper_name("Robert");
    set_in_room_desc("Robert (Example NPC Script - look at me)");
    set_long("An example of an NPC using NPC script. To start a demo script "
-            "use:\n<011>@.here:bob->execute_script(\"demo\")<res>\nin your cmd shell." +
-            "The demo script can be found and edited under ^std/monster/scripts/demo.npcs");
+            "use:\n<011>@.here:bob->execute_script(\"demo\")<res>\nin your cmd shell. " +
+            "The demo script can be read by doing 'more ^std/monster/scripts/demo.npcs'.");
    create_script_from_file("demo", "scripts/demo.npcs");
    set_recovery_time(10);
 }
