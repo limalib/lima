@@ -26,8 +26,7 @@ inherit CLASS_MAILMSG;
 // ### make it private so it can't be changed?
 nosave object mailbox_ob;
 
-private
-string expand_range(string str)
+private string expand_range(string str)
 {
    string ret;
    mixed tmp;
@@ -54,8 +53,7 @@ string expand_range(string str)
 **
 ** Return a temporary filename for editing mail messages
 */
-protected
-nomask string tmp_fname()
+protected nomask string tmp_fname()
 {
    return "/tmp/tmail." + this_user()->query_userid();
 }
@@ -66,8 +64,7 @@ nomask string tmp_fname()
 ** Get a message key from a user's message number.
 ** 0 is returned if the user number is out of bounds.
 */
-protected
-nomask int get_message_key(int user_num)
+protected nomask int get_message_key(int user_num)
 {
    int *mail_keys;
 
@@ -91,8 +88,7 @@ nomask int get_message_key(int user_num)
 **
 ** Format a list of names (as in To: or CC:).  Returns an array of lines.
 */
-protected
-nomask string *format_name_list(string prompt, string *names)
+protected nomask string *format_name_list(string prompt, string *names)
 {
    if (!names || !sizeof(names))
       return ({});
@@ -105,8 +101,7 @@ nomask string *format_name_list(string prompt, string *names)
 **
 ** Build an array of strings containing a mail message.
 */
-protected
-nomask string *build_message(int mail_key, int supress_header)
+protected nomask string *build_message(int mail_key, int supress_header)
 {
    string *output;
    class mail_msg msg;
@@ -138,13 +133,12 @@ nomask string *build_message(int mail_key, int supress_header)
 ** Write the array of lines to the wizard's dead.letter.  Does nothing
 ** if the player is not a wizard or no home dir exists.
 */
-protected
-nomask void write_dead_letter(string *buf)
+protected nomask void write_dead_letter(string *buf)
 {
-   if (wizardp(this_user()) && file_size(WIZ_DIR+"/" + this_user()->query_userid()) == -2)
+   if (wizardp(this_user()) && file_size(WIZ_DIR + "/" + this_user()->query_userid()) == -2)
    {
       write("Appending to ~/dead.letter\n");
-      write_file(sprintf(WIZ_DIR+"/%s/dead.letter", this_user()->query_userid()), implode(buf, "\n") + "\n");
+      write_file(sprintf(WIZ_DIR + "/%s/dead.letter", this_user()->query_userid()), implode(buf, "\n") + "\n");
    }
 }
 
@@ -154,8 +148,7 @@ nomask void write_dead_letter(string *buf)
 ** Build an array of lines for the body of a message to be included into
 ** another message (prefixed with "> ")
 */
-protected
-nomask string *build_body_inclusion(string *body)
+protected nomask string *build_body_inclusion(string *body)
 {
    return map_array(body, ( : "> " + $1:));
 }
@@ -165,18 +158,17 @@ nomask string *build_body_inclusion(string *body)
 **
 ** Send a mail message to the given people.
 */
-private
-nomask void send_mail_message(string subject, string *buf, mixed to_list, mixed cc_list, int use_dead_letter)
+private nomask void send_mail_message(string subject, string *buf, mixed to_list, mixed cc_list, int use_dead_letter)
 {
    string *name_list;
 
    if (stringp(to_list))
-      to_list = map(explode(to_list, ","), ( : trim_spaces:));
+      to_list = map(explode(to_list, ","), ( : trim:));
    else if (!arrayp(to_list))
       to_list = ({});
 
    if (stringp(cc_list))
-      cc_list = map(explode(cc_list, ","), ( : trim_spaces:));
+      cc_list = map(explode(cc_list, ","), ( : trim:));
    else if (!arrayp(cc_list))
       cc_list = ({});
 
@@ -205,8 +197,7 @@ nomask void send_mail_message(string subject, string *buf, mixed to_list, mixed 
 ** entry -- usage information cannot be printed from these commands.
 */
 
-protected
-nomask void cmd_read(int user_num, string outputfile, int supress_header)
+protected nomask void cmd_read(int user_num, string outputfile, int supress_header)
 {
    int timestamp;
    string *output;
@@ -238,8 +229,7 @@ nomask void cmd_read(int user_num, string outputfile, int supress_header)
    more(output);
 }
 
-protected
-nomask void cmd_headers(string rangestr)
+protected nomask void cmd_headers(string rangestr)
 {
    int i;
    string *output;
@@ -287,8 +277,7 @@ nomask void cmd_headers(string rangestr)
 }
 
 /* to_list is a string * or a string */
-private
-nomask void mailer_get_cc_list(mixed to_list, string subject, string cc_list)
+private nomask void mailer_get_cc_list(mixed to_list, string subject, string cc_list)
 {
    string *buf;
    string file;
@@ -300,8 +289,7 @@ nomask void mailer_get_cc_list(mixed to_list, string subject, string cc_list)
    rm(file);
 }
 
-private
-nomask void mailer_done_edit(string to_list, string subject, string fname)
+private nomask void mailer_done_edit(string to_list, string subject, string fname)
 {
    /*
    ** Just return if they cancelled the edit
@@ -313,16 +301,14 @@ nomask void mailer_done_edit(string to_list, string subject, string fname)
    modal_simple(( : mailer_get_cc_list, to_list, subject:));
 }
 
-private
-nomask void mailer_get_subject(string to_list, string arg)
+private nomask void mailer_get_subject(string to_list, string arg)
 {
    string subject = arg ? arg : "<none>";
 
-   new (EDIT_OB, EDIT_FILE, tmp_fname(), ( : mailer_done_edit, to_list, subject:));
+   new(EDIT_OB, EDIT_FILE, tmp_fname(), ( : mailer_done_edit, to_list, subject:));
 }
 
-protected
-nomask void cmd_mail(string to_list)
+protected nomask void cmd_mail(string to_list)
 {
    // Until a new maskable editor is in place, don't allow a null
    //  to line.
@@ -336,8 +322,7 @@ nomask void cmd_mail(string to_list)
    modal_simple(( : mailer_get_subject, to_list:));
 }
 
-protected
-nomask void cmd_reply(int user_num, int reply_all)
+protected nomask void cmd_reply(int user_num, int reply_all)
 {
    int key;
    class mail_msg msg;
@@ -370,11 +355,10 @@ nomask void cmd_reply(int user_num, int reply_all)
    file = tmp_fname();
    write_file(file, body);
 
-   new (EDIT_OB, EDIT_FILE, tmp_fname(), ( : mailer_done_edit, to_list, subject:));
+   new(EDIT_OB, EDIT_FILE, tmp_fname(), ( : mailer_done_edit, to_list, subject:));
 }
 
-protected
-nomask void cmd_delete(string arg)
+protected nomask void cmd_delete(string arg)
 {
    int *mail_keys;
    int i;
@@ -396,8 +380,7 @@ nomask void cmd_delete(string arg)
       }
 }
 
-protected
-nomask void cmd_setcurrent(mixed arg)
+protected nomask void cmd_setcurrent(mixed arg)
 {
    int count;
 
@@ -418,8 +401,7 @@ nomask void cmd_setcurrent(mixed arg)
    printf("Current message now set to: %d\n", arg);
 }
 
-protected
-nomask void cmd_forward(int user_num, string newto)
+protected nomask void cmd_forward(int user_num, string newto)
 {
    int key;
    string *body;
