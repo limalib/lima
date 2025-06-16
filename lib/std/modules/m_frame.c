@@ -32,46 +32,34 @@
 // Frame themes are defined in here, and can be edited using 'admtool'.
 #include <frame_themes.h>
 
-private
-nosave mapping styles = (["single":({"┌", "─", "┬", "┐", "│", "├", "┼", "┤", "└", "┴", "┘"}),
-                          "double":({"╔", "═", "╦", "╗", "║", "╠", "╬", "╣", "╚", "╩", "╝"}),
-                           "ascii":({"+", "-", "-", "+", "|", "|", "|", "|", "+", "-", "+"}),
-                           "lines":({"-", "-", "-", "-", " ", " ", "-", " ", "-", "-", "-"}),
-                            "none":({" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "})]);
+private nosave mapping styles = (["single":({"┌", "─", "┬", "┐", "│", "├", "┼", "┤", "└", "┴", "┘"}),
+                                  "double":({"╔", "═", "╦", "╗", "║", "╠", "╬", "╣", "╚", "╩", "╝"}),
+                                   "ascii":({"+", "-", "-", "+", "|", "|", "|", "|", "+", "-", "+"}),
+                                   "lines":({"-", "-", "-", "-", " ", " ", "-", " ", "-", "-", "-"}),
+                                    "none":({" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "})]);
 
-private
-nosave string *bits;
+private nosave string *bits;
 
 /* Strings */
-private
-string title, header_content, footer_content, *content, style;
+private string title, header_content, footer_content, *content, style;
 /* Ints */
-private
-nosave int width,  // Width of the frame, default user screen width
-    title_margin,  // Margin the header takes from left side, default 2
-    text_margin,   // Margin around header text
-    section_width; // Width of sections in menus.
+private nosave int width, // Width of the frame, default user screen width
+    title_margin,         // Margin the header takes from left side, default 2
+    text_margin,          // Margin around header text
+    section_width;        // Width of sections in menus.
 /* Booleans*/
-private
-nosave int add_header, add_footer, left_header;
+private nosave int add_header, add_footer, left_header;
 
 // Colour configuration storage.
-private
-nosave string *hcolours;
+private nosave string *hcolours;
 
-private
-nosave string *sections;
+private nosave string *sections;
 
-private
-mapping columns = ([]);
-private
-mapping column_functions = ([]);
-private
-string *column_order = ({});
-private
-mapping column_width = ([]);
-private
-int max_column_length;
+private mapping columns = ([]);
+private mapping column_functions = ([]);
+private string *column_order = ({});
+private mapping column_width = ([]);
+private int max_column_length;
 
 int debug;
 
@@ -155,8 +143,7 @@ nomask int frame_simplify()
    return get_user_variable("simplify") != 0;
 }
 
-private
-string colour_str(string t, string col)
+private string colour_str(string t, string col)
 {
    if (!col || strlen(col) != 3)
       return t;
@@ -340,8 +327,7 @@ void set_theme(string t)
    set_frame_hcolours(colours[t]);
 }
 
-private
-string simple_header()
+private string simple_header()
 {
    string out = "";
    out += bits[TRD] + repeat_string(bits[TH], width - 2) + bits[TLD] + "\n";
@@ -354,8 +340,7 @@ void set_frame_sections(string *s, int width)
    section_width = width;
 }
 
-private
-string *create_section_header()
+private string *create_section_header()
 {
    string *headers = ({});
    string out;
@@ -398,8 +383,7 @@ string *create_section_header()
    return headers;
 }
 
-private
-string create_menu_header()
+private string create_menu_header()
 {
    string out = "";
    string h_title = colour_strlen(title) > (width - 8) ? title[0..width - 8] : title;
@@ -433,8 +417,7 @@ string create_menu_header()
    return out;
 }
 
-private
-string create_header()
+private string create_header()
 {
    string out = "";
    int i = 0;
@@ -498,8 +481,7 @@ string create_header()
    return out;
 }
 
-private
-string create_footer()
+private string create_footer()
 {
    string out = "";
    int i = 0;
@@ -521,8 +503,7 @@ string create_footer()
    return out;
 }
 
-private
-string *create_menu_content()
+private string *create_menu_content()
 {
    string *lines = ({});
    string out;
@@ -546,8 +527,7 @@ string *create_menu_content()
    return lines;
 }
 
-private
-string create_left_header()
+private string create_left_header()
 {
    string out = "";
    string *headers = explode(header_content || "", "\n");
@@ -629,8 +609,7 @@ string create_left_header()
    return out;
 }
 
-private
-string create_content()
+private string create_content()
 {
    string out = "";
    string *contents = explode(content[0] || "", "\n");
@@ -644,8 +623,7 @@ string create_content()
    return out;
 }
 
-private
-string end_frame()
+private string end_frame()
 {
    string out = "";
    out += bits[TRU] + repeat_string(bits[TH], width - 2) + bits[TLU] + "\n"; // End of Title box section
@@ -805,6 +783,9 @@ string frame_render()
 // not be called as they are calculated automatically.
 varargs void frame_add_column(string name, mixed *data, function colour_function)
 {
+   // Refuse to add a column if the name is not an array or is empty.
+   if (!data || !sizeof(data))
+      return;
    column_order += ({name});
    columns[name] = data;
    column_functions[name] = colour_function || ( : "<res>" :);
