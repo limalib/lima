@@ -102,6 +102,11 @@ string find_real_user(string body)
    // Try to find the user by name or nickname.
    online_bodies = bodies();
    online_bodies -= ({0});
+
+   //Don't give away invisible bodies.
+   //This is to prevent people from using this function to find out if a body exists.
+   online_bodies = filter(online_bodies, ( : $1->is_visible() :));
+
    foreach (object ob in online_bodies)
    {
       if (lower_case(ob->query_name()) == body)
