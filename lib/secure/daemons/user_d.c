@@ -38,8 +38,7 @@
 
 inherit M_DAEMON_DATA;
 
-private
-mapping user_names = ([]);
+private mapping user_names = ([]);
 
 nosave private string *legal_user_query = ({
     "failures",
@@ -70,8 +69,7 @@ class var_info
    string *lines;
 }
 
-nomask void
-register_body(string user, string body)
+nomask void register_body(string user, string body)
 {
    if (!body)
       body = user;
@@ -93,12 +91,27 @@ nomask void remove_body(string user, string body)
 
 string find_real_user(string body)
 {
-   foreach (string user, string * bodies in user_names)
+   object *online_bodies;
+
+   foreach (string user, string * sbodies in user_names)
    {
-      if (member_array(body, bodies) != -1)
+      if (member_array(body, sbodies) != -1)
          return user;
    }
-   return 0;
+
+   // Try to find the user by name or nickname.
+   online_bodies = bodies();
+   online_bodies -= ({0});
+   foreach (object ob in online_bodies)
+   {
+      if (lower_case(ob->query_name()) == body)
+         return ob->query_userid();
+      if (ob->query_nickname() && ob->query_nickname() == body)
+         return ob->query_userid();
+   }
+
+   // If we didn't find a user now, return the body name, and give up.
+   return body;
 }
 
 void create()
@@ -108,27 +121,23 @@ void create()
    call_out("user_keepalive", 45);
 }
 
-private
-void user_keepalive()
+private void user_keepalive()
 {
    users()->send_telnet_nop();
    call_out("user_keepalive", 45);
 }
 
-private
-nomask mixed query_online_object(object ob, string varname)
+private nomask mixed query_online_object(object ob, string varname)
 {
    return evaluate(bind(( : fetch_variable, varname:), ob));
 }
 
-private
-nomask mixed set_online_object(object ob, string varname, mixed value)
+private nomask mixed set_online_object(object ob, string varname, mixed value)
 {
    evaluate(bind(( : store_variable, varname, value:), ob));
 }
 
-private
-nomask mixed query_filed_object(string *lines, string varname)
+private nomask mixed query_filed_object(string *lines, string varname)
 {
    lines = regexp(lines, "^" + varname + " ");
    if (!sizeof(lines))
@@ -159,7 +168,7 @@ nomask mixed *query_variable(string userid, string *vlist)
       {
          if (!user)
          {
-            user = new (class var_info);
+            user = new(class var_info);
             user.ob = find_user(userid);
             user.fname = LINK_PATH(userid) + __SAVE_EXTENSION__;
          }
@@ -170,7 +179,7 @@ nomask mixed *query_variable(string userid, string *vlist)
       {
          if (!body)
          {
-            body = new (class var_info);
+            body = new(class var_info);
             body.ob = find_body(userid);
             body.fname = USER_PATH(userid) + __SAVE_EXTENSION__;
          }
