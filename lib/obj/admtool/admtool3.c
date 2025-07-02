@@ -46,30 +46,6 @@ class command_info *module_commands()
    return ret;
 }
 
-protected
-void heading()
-{
-   write("\n%^ADMTOOL_HEADING%^"
-         "--- Administration Tool ---\n"
-         "%^RESET%^\n");
-}
-
-class command_info *defaults()
-{
-   return ({new (class command_info), // blank line
-            new (class command_info, key
-                 : "q", desc
-                 : "quit", action
-                 : (
-                     : modal_pop(), destruct()
-                     :)),
-            new (class command_info, key
-                 : "?", desc
-                 : "help", action
-                 : (
-                     : do_help:))});
-}
-
 void create()
 {
    if (clonep())

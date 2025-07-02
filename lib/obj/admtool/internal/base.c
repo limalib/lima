@@ -26,6 +26,7 @@ class command_info
 class menu toplevel;
 // submenus of the toplevel (main) menu
 class menu_item quit_item;
+class menu_item help_item;
 class menu_item goto_main_menu_item;
 class section main;
 class section other;
@@ -34,6 +35,9 @@ class section other;
 string module_name();
 string module_key();
 class command_info *module_commands();
+// setup
+void begin_menu();
+
 
 mixed module_priv()
 {
@@ -65,52 +69,6 @@ private nomask string parent_name()
    return path;
 }
 
-protected void heading()
-{
-   write("%^ADMTOOL_HEADING%^Administration Tool: " + module_name() + " administration%^RESET%^\n\n");
-}
-
-void write_menu()
-{
-   int maxlen = 0;    /* max length of "proto" field */
-   int maxkeylen = 1; /* max length of the key field */
-   int line = 0;      /* line count for colors */
-
-   heading();
-
-   foreach (class command_info comm in commands)
-      if (comm.proto && sizeof(comm.proto) > maxlen)
-      {
-         maxlen = sizeof(comm.proto);
-         maxkeylen = sizeof(comm.key);
-      }
-
-   foreach (class command_info comm in commands)
-   {
-      string desc = comm.desc;
-
-      if (comm.who)
-         desc = desc + repeat_string(" ", 65 - maxkeylen - maxlen - strlen(desc) - strlen(comm.who)) + comm.who;
-
-      if (comm.key)
-      {
-         string color = "";
-
-         if (line % 2 == 0)
-            color = "%^ADMTOOL_HI%^";
-         else
-            color = "%^ADMTOOL_LO%^";
-
-         printf("  %s%3s %-*s - %s%%^RESET%%^\n", color, comm.key, maxlen, comm.proto || "", desc);
-
-         line++;
-      }
-      else
-         write("\n");
-   }
-   write("\n");
-}
-
 private nomask void do_main_menu()
 {
    modal_pop();
@@ -126,11 +84,6 @@ nomask void do_quit()
    destruct();
 }
 
-protected nomask void do_help()
-{
-   write_menu();
-}
-
 protected nomask int write_error(string err)
 {
    if (err)
@@ -141,8 +94,10 @@ protected nomask int write_error(string err)
    return 0;
 }
 
-// setup
-void begin_menu();
+protected nomask void do_help()
+{
+   display_current_menu();
+}
 
 void create()
 {
@@ -155,6 +110,7 @@ void create()
 
    toplevel = new_menu(mud_name() + " Administration Tool");
    quit_item = new_menu_item("Quit", ( : do_quit:), "q");
+   help_item = new_menu_item("Help", ( : do_help:), "?");
    goto_main_menu_item = new_menu_item("Return to main menu", ( : do_main_menu:), "m");
 
    main = new_section("Main", "accent");
@@ -162,6 +118,8 @@ void create()
    add_section_item(toplevel, main);
    add_section_item(toplevel, other);
    add_menu_item(other, quit_item);
+   add_menu_item(other, help_item);
+
    if (module_name != "main")
       add_menu_item(other, goto_main_menu_item);
 
