@@ -3,7 +3,6 @@
 #include <commands.h>
 
 inherit ADMTOOL_BASE;
-inherit M_FRAME;
 
 mapping colours;
 

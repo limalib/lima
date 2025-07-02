@@ -10,8 +10,7 @@
 
 inherit CMD;
 
-private
-void main(string arg)
+private void main(string arg)
 {
-   new ("/obj/admtool/admtool2");
+   new("/obj/admtool/admtool3");
 }

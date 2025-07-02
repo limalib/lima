@@ -1,7 +1,7 @@
 /* Do not remove the headers from this file! see /USAGE for more info. */
 
+inherit MENUS;
 inherit M_ACCESS;
-inherit M_INPUT;
 
 // Most of these fields can be left blank (i.e. 0) if irrelevant or unwanted.
 // key == 0 means "leave a blank line"
@@ -23,9 +23,15 @@ class command_info
    function action; // The function to be called.
 }
 
+class menu toplevel;
+// submenus of the toplevel (main) menu
+class menu_item quit_item;
+class menu_item goto_main_menu_item;
+class section main;
+class section other;
+
 // Overload these
-string
-module_name();
+string module_name();
 string module_key();
 class command_info *module_commands();
 
@@ -35,22 +41,18 @@ mixed module_priv()
 }
 
 // our variables
-private
-string prompt;
-private
-class command_info *commands;
-private
-object parent;
+private string prompt;
+private class command_info *commands;
+private object parent;
 
-private
-nomask string parent_name()
+private nomask string parent_name()
 {
    string path = base_name();
    int idx;
 
    // ### should be OB_ADMTOOL or something...
    //  the top level object has no parent
-   if (path == "/obj/admtool/admtool2")
+   if (path == "/obj/admtool/admtool3")
       return 0;
 
    idx = strsrch(path, "/", -1);
@@ -58,13 +60,12 @@ nomask string parent_name()
 
    // anything in /obj/admtool should have admtool2 as the parent
    if (path == "/obj/admtool")
-      return "/obj/admtool/admtool2";
+      return "/obj/admtool/admtool3";
 
    return path;
 }
 
-protected
-void heading()
+protected void heading()
 {
    write("%^ADMTOOL_HEADING%^Administration Tool: " + module_name() + " administration%^RESET%^\n\n");
 }
@@ -110,11 +111,10 @@ void write_menu()
    write("\n");
 }
 
-private
-nomask void do_main_menu()
+private nomask void do_main_menu()
 {
    modal_pop();
-   parent->write_menu();
+   parent->display_current_menu();
    destruct();
 }
 
@@ -126,14 +126,12 @@ nomask void do_quit()
    destruct();
 }
 
-protected
-nomask void do_help()
+protected nomask void do_help()
 {
    write_menu();
 }
 
-protected
-nomask int write_error(string err)
+protected nomask int write_error(string err)
 {
    if (err)
    {
@@ -143,38 +141,36 @@ nomask int write_error(string err)
    return 0;
 }
 
-protected
-class command_info *defaults()
-{
-   return ({new (class command_info), // blank line
-            new (class command_info, key
-                 : "m", desc
-                 : "previous menu", action
-                 : (
-                     : do_main_menu:)),
-            new (class command_info, key
-                 : "q", desc
-                 : "quit", action
-                 : (
-                     : do_quit:)),
-            new (class command_info, key
-                 : "?", desc
-                 : "help", action
-                 : (
-                     : do_help:))});
-}
-
 // setup
 void begin_menu();
 
 void create()
 {
+   string module_name = this_object()->module_name();
    set_privilege(1);
 
    // abstract class
    if (strsrch(base_name(), "internal") != -1)
       return;
 
+   toplevel = new_menu(mud_name() + " Administration Tool");
+   quit_item = new_menu_item("Quit", ( : do_quit:), "q");
+   goto_main_menu_item = new_menu_item("Return to main menu", ( : do_main_menu:), "m");
+
+   main = new_section("Main", "accent");
+   other = new_section("Other", "warning");
+   add_section_item(toplevel, main);
+   add_section_item(toplevel, other);
+   add_menu_item(other, quit_item);
+   if (module_name != "main")
+      add_menu_item(other, goto_main_menu_item);
+
+   foreach (class command_info mc in module_commands())
+   {
+      add_menu_item(main, new_menu_item(mc.desc + (mc.who ? " " + mc.who : ""), mc.action, mc.key));
+   }
+
+   /*
    commands = module_commands() + defaults();
 
    prompt = "(AdmTool:" + module_name() + ") [" +
@@ -183,7 +179,7 @@ void create()
                         : ((class command_info)$2)->key ? $1 + ((class command_info)$2)->key : $1:),
                     "") +
             "] > ";
-
+*/
    if (clonep())
    {
       if (module_priv() && !check_privilege(module_priv()))
@@ -196,8 +192,7 @@ void create()
    }
 }
 
-private
-void handle_input(string str)
+private void handle_input(string str)
 {
    string *parts = ({});
    string arg;
@@ -255,8 +250,7 @@ void handle_input(string str)
    write("** Unknown option (? for help)\n");
 }
 
-protected
-nomask void do_modal_func()
+protected nomask void do_modal_func()
 {
    modal_func(( : handle_input:), prompt);
 }
@@ -271,7 +265,9 @@ void begin_menu()
          error("Illegal call to begin_menu()\n");
    }
 
-   write_menu();
+   frame_init_user();
+   if (query_style() == "ascii")
+      set_style("none");
 
-   modal_push(( : handle_input:), prompt);
+   init_menu_application(toplevel);
 }
