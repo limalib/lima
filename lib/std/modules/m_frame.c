@@ -51,8 +51,7 @@ private nosave int width, // Width of the frame, default user screen width
 private nosave int add_header, add_footer, left_header;
 
 // Colour configuration storage.
-private nosave string *hcolours;
-
+private nosave string *hcolours = colours["none"];
 private nosave string *sections;
 
 private mapping columns = ([]);
