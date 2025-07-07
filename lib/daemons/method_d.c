@@ -10,8 +10,9 @@ inherit M_DAEMON_DATA;
 
 #define METHOD_CONFIG_FILE "/data/config/methods"
 
-private
-mapping methods = ([]);
+private mapping methods = ([]);
+
+void load_config_from_file();
 
 //: FUNCTION add_method
 // Add a method and a set of equivalents
@@ -137,7 +138,7 @@ void load_config_from_file()
       string mthd, equiv, *tmpar;
 
       // Skip comments
-      if (line[0..0] == "#")
+      if (line[0] == '#')
       {
          continue;
       }
@@ -163,7 +164,8 @@ void load_config_from_file()
 void create()
 {
    ::create();
-   restore_me();
-   if (!sizeof(keys(methods)))
+   if (sizeof(keys(methods)) == 0)
+   {
       load_config_from_file();
+   }
 }
