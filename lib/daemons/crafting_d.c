@@ -799,11 +799,12 @@ void stat_me()
 void create()
 {
    ::create();
-   load_crafting_recipes();
-   if (materials == ([]))
+   restore_me();
+   if (sizeof(keys(materials)) == 0)
    {
       load_config_from_file();
    }
+   load_crafting_recipes();
    refresh_cache();
 }
 

@@ -114,9 +114,9 @@ string *list_method_equivalents(string method)
    return methods[method];
 }
 
-mapping debug()
+mapping stat_me()
 {
-   return methods;
+   return copy(methods);
 }
 
 void load_config_from_file()
@@ -163,6 +163,7 @@ void load_config_from_file()
 void create()
 {
    ::create();
+   restore_me();
    if (!sizeof(keys(methods)))
       load_config_from_file();
 }
