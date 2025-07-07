@@ -115,8 +115,8 @@ string find_real_user(string body)
          return ob->query_userid();
    }
 
-   // If we didn't find a user now, return the body name, and give up.
-   return body;
+   // If we didn't find a user now, return 0, and give up.
+   return 0;
 }
 
 void create()
@@ -160,6 +160,8 @@ nomask mixed *query_variable(string userid, string *vlist)
 
 #ifdef USE_USER_MENU
    userid = find_real_user(userid);
+   if (!userid)
+      return 0;
 #endif
 
    if (!check_privilege(1))
