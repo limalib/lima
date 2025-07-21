@@ -776,11 +776,12 @@ string frame_render()
 
 //: FUNCTION frame_add_column
 // Adds a column with a name, and an array of strings or integers to be shown.
-// This can only be renderes if all contents are columns. Use ``frame_render_columns()`` to render.
+// This can only be rendered if all contents are columns. Use ``frame_render_columns()`` to render.
 // Call ``frame_init_user()`` before adding columns.
+// If max_width is not specified, it will be calculated based on the longest string in the column.
 // Important: Frame header and frame content should
 // not be called as they are calculated automatically.
-varargs void frame_add_column(string name, mixed *data, function colour_function)
+varargs void frame_add_column(string name, mixed *data, function colour_function, int max_width)
 {
    // Refuse to add a column if the name is not an array or is empty.
    if (!data || !sizeof(data))
@@ -788,9 +789,16 @@ varargs void frame_add_column(string name, mixed *data, function colour_function
    column_order += ({name});
    columns[name] = data;
    column_functions[name] = colour_function || ( : "<res>" :);
-   column_width[name] = 2 + max(map(data, ( : colour_strlen("" + $1) :)));
-   if (column_width[name] < strlen(name) + 5)
-      column_width[name] = strlen(name) + 5;
+
+   // If max_width is set, skip using the expensive max(map()) combo below.
+   if (max_width > 0)
+      column_width[name] = max_width;
+   else
+   {
+      column_width[name] = 2 + max(map(data, ( : colour_strlen("" + $1) :)));
+      if (column_width[name] < strlen(name) + 5)
+         column_width[name] = strlen(name) + 5;
+   }
 
    if (sizeof(data) > max_column_length)
       max_column_length = sizeof(data);

@@ -1,2 +1,2 @@
-mudlist -dats:		[str]
+mudlist -a		[str]
 score  -t [str] str
