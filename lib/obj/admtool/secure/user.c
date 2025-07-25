@@ -314,7 +314,6 @@ nomask class command_info *module_commands()
                   : receive_name_for_reset:),
               desc
             : "reset password for offline user"),
-       new (class command_info),
        new (class command_info, key
             : "P", proto
             : "[days]", args

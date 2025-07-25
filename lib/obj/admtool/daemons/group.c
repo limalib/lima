@@ -137,7 +137,6 @@ nomask class command_info *module_commands()
                  : ({"Show members of which group? "}), action
                  : (
                      : show_group_members:)),
-            new (class command_info),
             new (class command_info, key
                  : "c", proto
                  : "[group]", desc
@@ -154,7 +153,6 @@ nomask class command_info *module_commands()
                  : "[Mudlib:]", action
                  : (
                      : delete_group:)),
-            new (class command_info),
             new (class command_info, key
                  : "u", proto
                  : "[user]", desc

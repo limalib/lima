@@ -170,7 +170,6 @@ nomask class command_info *module_commands()
             : ({"Show information on which domain? "}), action
             : (
                 : show_domain_info:)),
-       new (class command_info),
        new (class command_info, key
             : "c", desc
             : "create a domain", proto
@@ -197,7 +196,6 @@ nomask class command_info *module_commands()
             : ({"Delete which domain? "}), action
             : (
                 : delete_domain:)),
-       new (class command_info),
        new (class command_info, key
             : "u", desc
             : "show user's domains", proto

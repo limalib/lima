@@ -22,18 +22,6 @@ nomask class command_info *module_commands()
                 : HELP_D->rebuild_data()
                 :)),
        new (class command_info, key
-            : "s", desc
-            : "Autodoc Update (scan-mudlib) [lots of output spam]", action
-            : (
-                : DOC_D->scan_mudlib()
-                :)),
-       new (class command_info, key
-            : "c", desc
-            : "Autodoc Update (complete-rebuild) [lots of ouput spam]", action
-            : (
-                : DOC_D->complete_rebuild()
-                :)),
-       new (class command_info, key
             : "r", desc
             : "RST Update (scan-mudlib) [lots of output spam]", action
             : (

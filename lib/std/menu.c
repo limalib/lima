@@ -29,6 +29,9 @@ class menu_item
    mixed choice_name; // should be a string if the user sets it.
    int prompt_after_action;
    function constraint;
+   string priv;
+   string *args; // An *of prompts to use to ask for arguments not
+   // given on the line.  Max == 2.
 }
 
 class section
@@ -57,19 +60,14 @@ class menu
 }
 
 protected void goto_menu(class menu);
-protected
-void display_current_menu();
-protected
-void prompt_then_return();
+protected void display_current_menu();
+protected void prompt_then_return();
 
 class menu current_menu, previous_menu;
-private
-int need_refreshing;
-private
-mapping section_layout;
+private int need_refreshing;
+private mapping section_layout;
 
-protected
-void remove()
+protected void remove()
 {
    destruct();
 }
@@ -89,7 +87,7 @@ varargs protected class menu new_menu(string title, string prompt, int allow_ent
 {
    class menu new_menu;
 
-   new_menu = new (class menu);
+   new_menu = new(class menu);
    new_menu.items = ({});
    new_menu.title = title;
    new_menu.prompt = prompt;
@@ -103,7 +101,7 @@ varargs protected class section new_section(string title, string colour, int sor
 {
    class section new_section;
 
-   new_section = new (class section);
+   new_section = new(class section);
    new_section.items = ({});
    new_section.title = title;
    new_section.colour = colour;
@@ -116,7 +114,7 @@ varargs protected class menu new_prompt(string prompt, function callback, string
 {
    class menu new_menu;
 
-   new_menu = new (class menu);
+   new_menu = new(class menu);
    new_menu.prompt = prompt;
    new_menu.no_match_function = callback;
    new_menu.items = completions ? completions : ({});
@@ -125,54 +123,50 @@ varargs protected class menu new_prompt(string prompt, function callback, string
 }
 
 varargs protected class menu_item new_menu_item(string description, mixed action, string choice_name, int prompt,
-                                                function constraint)
+                                                function constraint, mixed args, string priv)
 {
    class menu_item new_menu_item;
 
-   new_menu_item = new (class menu_item);
+   new_menu_item = new(class menu_item);
    new_menu_item.description = description;
    new_menu_item.action = action;
    new_menu_item.choice_name = choice_name;
    new_menu_item.prompt_after_action = prompt;
    new_menu_item.constraint = constraint;
+   new_menu_item.args = args ? args : ({});
+   new_menu_item.priv = priv;
 
    return new_menu_item;
 }
 
-protected
-void add_section_item(class menu menu, class section section)
+protected void add_section_item(class menu menu, class section section)
 {
    if (!menu)
       error("Trying to add '" + section.title + "' section to undefined menu.");
    menu.items += ({section});
 }
 
-protected
-void remove_section_item(class menu menu, class section section)
+protected void remove_section_item(class menu menu, class section section)
 {
    menu.items -= ({section});
 }
 
-protected
-void add_menu_item(class section section, class menu_item menu_item)
+protected void add_menu_item(class section section, class menu_item menu_item)
 {
    section.items += ({menu_item});
 }
 
-protected
-void set_menu_items(class menu menu, class section *sections)
+protected void set_menu_items(class menu menu, class section *sections)
 {
    menu.items = sections;
 }
 
-protected
-void set_menu_title(class menu menu, string title)
+protected void set_menu_title(class menu menu, string title)
 {
    menu.title = title;
 }
 
-protected
-void set_menu_prompt(class menu menu, mixed prompt)
+protected void set_menu_prompt(class menu menu, mixed prompt)
 {
    if (!(stringp(prompt) || functionp(prompt)))
    {
@@ -183,58 +177,49 @@ void set_menu_prompt(class menu menu, mixed prompt)
    menu.prompt = prompt;
 }
 
-protected
-void allow_empty_selection(class menu menu)
+protected void allow_empty_selection(class menu menu)
 {
    menu.allow_enter = 1;
 }
 
-protected
-void disallow_empty_selection(class menu menu)
+protected void disallow_empty_selection(class menu menu)
 {
    menu.allow_enter = 0;
 }
 
-protected
-void set_no_match_function(class menu menu, function f)
+protected void set_no_match_function(class menu menu, function f)
 {
    menu.no_match_function = f;
 }
 
-protected
-void set_number_of_columns(class menu menu, int n)
+protected void set_number_of_columns(class menu menu, int n)
 {
    menu.num_columns = n;
 }
 
-protected
-void disable_menu_item(class menu_item item)
+protected void disable_menu_item(class menu_item item)
 {
    item.disabled = 1;
 }
 
-protected
-void enable_menu_item(class menu_item item)
+protected void enable_menu_item(class menu_item item)
 {
    item.disabled = 0;
 }
 
-protected
-void set_menu_item_description(class menu_item item, string description)
+protected void set_menu_item_description(class menu_item item, string description)
 {
    item.description = description;
 }
 
-protected
-void set_menu_item_action(class menu_item item, mixed action)
+protected void set_menu_item_action(class menu_item item, mixed action)
 {
    //  Should type check here, but I can't figure out how
    //  to typecheck the class.
    item.action = action;
 }
 
-protected
-void set_menu_item_choice_name(class menu_item item, string choice_name)
+protected void set_menu_item_choice_name(class menu_item item, string choice_name)
 {
    item.choice_name = choice_name;
 }
@@ -247,8 +232,7 @@ void user_is_active()
    // Override me
 }
 
-protected
-void constrain_menu_item(class menu_item item, function f)
+protected void constrain_menu_item(class menu_item item, function f)
 {
    item.constraint = f;
 }
@@ -258,11 +242,9 @@ void constrain_menu_item(class menu_item item, function f)
 // current menu.  This was done so that I could integrate completion
 // menus as a real menu without having to go through and modify
 // every single action
-private
-class menu menu_after_selection;
+private class menu menu_after_selection;
 
-protected
-void new_parse_menu_input(string input)
+protected void new_parse_menu_input(string input)
 {
    string *matches;
    int i;
@@ -316,10 +298,9 @@ void new_parse_menu_input(string input)
          return;
       }
       matched_item = filter_array(current_menu.items,
-                                  (
-                                      : intp(((class menu_item)$1)->choice_name)
-                                            ? sprintf("%d", ((class menu_item)$1)->choice_name) == $2
-                                            : ((class menu_item)$1)->choice_name == $2:),
+                                  ( : intp(((class menu_item)$1)->choice_name)
+                                        ? sprintf("%d", ((class menu_item)$1)->choice_name) == $2
+                                        : ((class menu_item)$1)->choice_name == $2:),
                                   matches[0])[0];
       if (functionp(matched_item.action))
       {
@@ -355,11 +336,12 @@ void new_parse_menu_input(string input)
    }
 }
 
-protected
-void parse_menu_input(mixed input)
+protected void parse_menu_input(mixed input)
 {
    int counter;
    class menu_item item;
+   string *tmp;
+   string arg;
    mixed action;
 
    user_is_active();
@@ -370,6 +352,12 @@ void parse_menu_input(mixed input)
       return;
    }
    input = trim(input);
+   tmp=explode(input, " ");
+   if (sizeof(tmp) > 1)
+   {
+      input = tmp[0];
+      arg = implode(tmp[1..], " ");
+   }
 
    if (input == "" && !current_menu.allow_enter)
       return;
@@ -394,6 +382,34 @@ void parse_menu_input(mixed input)
             action = item.action;
             if (functionp(action))
             {
+               // Inserted code begin
+               if (item.priv && !check_previous_privilege(item.priv))
+               {
+                  printf("Permission denied; need privilege '%O'.\n", item.priv);
+                  return;
+               }
+               switch (sizeof(item.args))
+               {
+               case 0:
+                  if (arg)
+                  {
+                     write("** No argument required.\n");
+                     return;
+                  }
+
+                  evaluate(item.action);
+                  return;
+               case 1:
+                  input_one_arg(item.args[0], item.action, arg);
+                  return;
+               case 2:
+                  input_two_args(item.args[0], item.args[1], item.action, arg);
+                  return;
+               default:
+                  error("No support for >2 args\n");
+               }
+               // Inserted code end
+
                evaluate(action, input);
                need_refreshing = 0;
                if (item.prompt_after_action)
@@ -411,8 +427,7 @@ void parse_menu_input(mixed input)
       write("Invalid selection...\n");
 }
 
-protected
-string get_current_prompt()
+protected string get_current_prompt()
 {
    mixed prompt;
    if (frame_simplify())
@@ -462,38 +477,33 @@ string get_current_prompt()
    return stringp(prompt) ? prompt : evaluate(prompt);
 }
 
-protected
-void init_menu_application(class menu toplevel)
+protected void init_menu_application(class menu toplevel)
 {
    modal_push(( : parse_menu_input:), ( : get_current_prompt:));
    current_menu = toplevel;
    goto_menu(toplevel);
 }
 
-protected
-void quit_menu_application()
+protected void quit_menu_application()
 {
    modal_pop();
    destruct(this_object());
 }
 
-protected
-void goto_menu(class menu m)
+protected void goto_menu(class menu m)
 {
    previous_menu = current_menu;
    current_menu = m;
    display_current_menu();
 }
 
-protected
-void goto_menu_silently(class menu m)
+protected void goto_menu_silently(class menu m)
 {
    previous_menu = current_menu;
    current_menu = m;
 }
 
-protected
-void goto_previous_menu()
+protected void goto_previous_menu()
 {
    class menu swap;
    swap = current_menu;
@@ -582,8 +592,7 @@ string generate_section_output(class section *sections, int largest_section, int
    return output + repeat_string(" ", (columns * (leftwidth + rightwidth + 4))) + "\n";
 }
 
-private
-int section_sort(class section s, class section t)
+private int section_sort(class section s, class section t)
 {
    if (s.sort > t.sort)
       return 1;
@@ -593,8 +602,7 @@ int section_sort(class section s, class section t)
       return -1;
 }
 
-private
-void reorder_sections(class menu menu)
+private void reorder_sections(class menu menu)
 {
    menu.items = sort_array(menu.items, ( : section_sort:), 1);
 }
@@ -677,8 +685,7 @@ void display_current_menu()
    write(menu_render());
 }
 
-private
-void finish_completion(function completion_callback, string *cur_choices, string input)
+private void finish_completion(function completion_callback, string *cur_choices, string input)
 {
    int i;
 
@@ -735,14 +742,12 @@ varargs protected void complete_choice(string input, string *choices, function f
    }
 }
 
-protected
-void get_input_then_call(function thencall, string prompt)
+protected void get_input_then_call(function thencall, string prompt)
 {
    input_one_arg(prompt, thencall);
 }
 
-protected
-void prompt_then_return()
+protected void prompt_then_return()
 {
    /* just ignore the input... */
    modal_simple(( : 0 :), "[Hit enter to return to menu] ");

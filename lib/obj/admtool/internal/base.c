@@ -119,14 +119,16 @@ void create()
    add_menu_item(other, quit_item);
    add_menu_item(other, help_item);
 
-   //If the module name is not "main", add a menu item to return to the main menu.
+   // If the module name is not "main", add a menu item to return to the main menu.
    if (module_name != "main")
       add_menu_item(other, goto_main_menu_item);
 
-   //For each of the commands in the module, add a menu item.
+   // For each of the commands in the module, add a menu item.
    foreach (class command_info mc in module_commands())
    {
-      add_menu_item(main, new_menu_item(mc.desc + (mc.who ? " " + mc.who : ""), mc.action, mc.key));
+      add_menu_item(
+          main, new_menu_item(mc.desc + (mc.proto ? " " + mc.proto : "") + (mc.who ? " (" + mc.who[1.. < 2] + ")" : ""),
+                              mc.action, mc.key, 0, 0, mc.args, mc.priv));
    }
 
    if (clonep())

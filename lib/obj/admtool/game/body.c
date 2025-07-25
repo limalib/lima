@@ -194,7 +194,6 @@ nomask class command_info *module_commands()
                  : "list body types", action
                  : (
                      : list_body_types:)),
-            new (class command_info),
             new (class command_info, key
                  : "a", proto
                  : "[bodytype] [limb]", args

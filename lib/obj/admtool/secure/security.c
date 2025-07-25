@@ -228,7 +228,6 @@ nomask class command_info *module_commands()
             : ({"Undefine which privilege? "}), action
             : (
                 : receive_privilege_for_undefine:)),
-       new (class command_info), // blank line
        new (class command_info, key
             : "a", proto
             : "[priv [priv]]", desc
@@ -245,7 +244,6 @@ nomask class command_info *module_commands()
             : ({"Remove which user (from a priv) ? ", "Remove '%s' from which privilege? "}), action
             : (
                 : receive_privilege_for_remove:)),
-       new (class command_info), // blank line
        new (class command_info, key
             : "l", proto
             : "[dir]", desc
