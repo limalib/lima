@@ -9,8 +9,7 @@ nosave private string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 nosave private string _lower, _upper, _swapcase;
 
-protected
-void create()
+protected void create()
 {
    int i;
 
@@ -23,7 +22,7 @@ void create()
 
    _lower = ascii[0..('A' - 1)] + lowercase + ascii[('Z' + 1)..];
    _upper = ascii[0..('a' - 1)] + uppercase + ascii[('z' + 1)..];
-  _swapcase = _upper[0..'A'-1] + lowercase + _upper['Z'+1..];
+   _swapcase = _upper[0.. 'A' - 1] + lowercase + _upper['Z' + 1..];
 }
 
 //: FUNCTION add_article
@@ -77,8 +76,7 @@ string punctuate(string str)
    return str;
 }
 
-private
-int strstr(string s, string lookfor, int start)
+private int strstr(string s, string lookfor, int start)
 {
    int x;
 
@@ -402,6 +400,26 @@ string shorten_filename(mixed ob)
 {
    return replace_string(replace_string(explode(stringp(ob) ? ob : sprintf("%O", ob), " ")[0], "/domains/", "^"),
                          WIZ_DIR + "/", "~");
+}
+
+//: FUNCTION obname
+// Returns the object name without the path.
+// Example:
+//    obname(.me)   -> "coder#5453"
+//    obname(.me,1) -> "coder"
+varargs string obname(mixed ob, int no_instance)
+{
+   string file;
+   string *parts;
+   if (objectp(ob))
+      file = no_instance ? base_name(ob) : file_name(ob);
+   else if (stringp(ob))
+      file = ob;
+
+   parts = explode(file, "/");
+   if (sizeof(parts) == 0)
+      return "";
+   return no_instance ? explode(parts[ < 1], "#")[0] : parts[ < 1];
 }
 
 //: FUNCTION filename_ellipsis
