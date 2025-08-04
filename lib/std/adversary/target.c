@@ -29,6 +29,16 @@ object *query_targets()
    return ({target}) + other_targets;
 }
 
+//: FUNCTION is_attacking_me
+// Check if the object is attacking us
+// Returns 1 if the object is attacking us, 0 otherwise.
+int is_attacking_me(object ob)
+{
+   if (!ob || !objectp(ob))
+      return 0;
+   return (ob == target || member_array(ob, other_targets) != -1);
+}
+
 /* Find someone to attack.  Return zero if we're dead or asleep or
  * have no one to attack.
  */

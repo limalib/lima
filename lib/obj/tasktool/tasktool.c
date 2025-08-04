@@ -117,8 +117,6 @@ class command_info *module_commands()
    }
 
    ret += ({
-       new (class command_info),
-
        new (class command_info, key
             : "a", proto
             : "[title]", args

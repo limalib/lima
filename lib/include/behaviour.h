@@ -5,20 +5,23 @@
 ** to act. Feel free to add your own.
 */
 
-//Have relations to other beings
+// Have relations to other beings
 #define CLUSTER_ASSOCIATION
 
-//Ability to move and navigate 
+// Ability to move and navigate
 #define CLUSTER_NAVIGATION
 
-//Ability to find, and replace equipment with better equipment
-//Ability to use healing items in case of need.
+// Ability to find, and replace equipment with better equipment
+// Ability to use healing items in case of need.
 #define CLUSTER_EQUIPMENT
 
-//Ability to fight and flee
-#undef CLUSTER_COMBAT
+#define CLUSTER_HUNGER
+// Ability to be hungry, and eat food.
 
-//The pause when handling a leaf node. Recommended between 2-5.
+// Ability to fight and flee
+#define CLUSTER_COMBAT
+
+// The pause when handling a leaf node. Recommended between 2-5.
 #define LEAF_NODE_PAUSE 2
 
 /* Do not touch anything below this point*/
@@ -57,16 +60,14 @@
 #define LOATHING 5
 #define RAGE 6
 #define VIGILANCE 7
-#define EMOTION_NAMES ([0:({"serenity","joy","ecstacy"}),\
-                        1:({"acceptance","trust","admiration"}),\
-                        2:({"apprehension","fear","terror"}),\
-                        3:({"distraction","surprise","amazement"}),\
-                        4:({"pensiveness","sadness","grief"}),\
-                        5:({"boredom","disgust","loathing"}),\
-                        6:({"annoyance","anger","rage"}),\
-                        7:({"interest","anticipation","vigilance"})])
+#define EMOTION_NAMES                                                                                                  \
+   ([ECSTASY:({"grief", "sadness", "pensiveness", "", "serenity", "joy", "ecstacy"}),                                  \
+       ADMIRATION:({"loathing", "disgust", "boredom", "", "acceptance", "trust", "admiration"}),                       \
+           TERROR:({"rage", "anger", "annoyance", "", "apprehension", "fear", "terror"}),                              \
+        AMAZEMENT:({"vigilance", "anticipation", "interest", "", "distraction", "surprise", "amazement"})])
+#define EMOTION_STRINGS ({"ecstasy", "admiration", "terror", "amazement", "grief", "loathing", "rage", "vigilance"})
 
-//Attitudes towards other
+// Attitudes towards other
 #define FRIENDLY 2
 #define POSITIVE 1
 #define INDIFFERENT 0

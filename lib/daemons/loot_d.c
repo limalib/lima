@@ -101,7 +101,7 @@ object coins_treasure(int level, string currency)
    }
 
    TBUG(currency);
-   return new (COINS, coins, currency);
+   return new(COINS, coins, currency);
 }
 
 void drop_corpse(object adversary)
@@ -118,7 +118,7 @@ void drop_corpse(object adversary)
    {
       string player_domain = explode(base_name(environment(adversary)), "/")[1];
       object stone_room = DOMAIN_D->find_soul_stone_in_domain(player_domain, adversary);
-      object corpse = new (corpse_filename, adversary->query_name(), corpse_long);
+      object corpse = new(corpse_filename, adversary->query_name(), corpse_long);
 
       // If we do not have a stone room, we give up and move to void.
       if (!objectp(stone_room))
@@ -136,12 +136,18 @@ void drop_corpse(object adversary)
    }
    else // everybody else
    {
-      object corpse = new (corpse_filename, adversary->query_name(), corpse_long);
+      object corpse = new(corpse_filename, adversary->query_name(), corpse_long);
       object death_location = environment(adversary);
+      string pelty = adversary->query_drops_pelt();
+      string meaty = adversary->query_drops_meat();
       adversary->move(HEAVEN);
       corpse->override_room_desc(in_room_singular, in_room_plural);
 
       filter_array(all_inventory(adversary), ( : $1->is_transient_effect() :))->remove();
+
+      // Drop either, but not both.
+      if (meaty && pelty)
+         random(2) ? meaty = 0 : pelty = 0;
 
       if (sizeof(all_inventory(adversary)))
       {
@@ -151,13 +157,17 @@ void drop_corpse(object adversary)
          all_inventory(adversary)->move(corpse);
          coins_treasure(adversary->query_level(), cur)->move(corpse);
       }
-      if (adversary->query_drops_pelt())
+      if (pelty)
       {
-         object pelt = new (PELT);
-         pelt->set_pelt_size(adversary->query_level());
-         pelt->set_pelt_type(adversary->query_drops_pelt());
+         object pelt = new(PELT, pelty, adversary->query_level());
          pelt->move(corpse);
       }
+      if (meaty)
+      {
+         object meat = new(MEAT, meaty, adversary->query_level());
+         meat->move(corpse);
+      }
+
       corpse->move(death_location);
    }
 }
@@ -168,7 +178,7 @@ object *create_gems(int num, int cap)
    int c = 0;
    while (c < num)
    {
-      gems += ({new (GEM, cap)});
+      gems += ({new(GEM, cap)});
       c++;
    }
    return gems;
@@ -180,7 +190,7 @@ object *create_art(int num, int value)
    int c = 0;
    while (c < num)
    {
-      art += ({new (ART_OBJECT, value)});
+      art += ({new(ART_OBJECT, value)});
       c++;
    }
    return art;
@@ -206,7 +216,7 @@ object *loot_chest(int level, object env)
       coins += (x_dice(2, 6) * 10 * (level / 16.0));
 
       if (coins > 0)
-         loot += ({new (COINS, coins, cur)});
+         loot += ({new(COINS, coins, cur)});
       // Gems
 
       switch (roll)
@@ -305,7 +315,7 @@ void drop_chest(object slayer, int level)
    object *loot = loot_chest(level, environment(slayer));
    if (!slayer || !slayer->is_body())
       slayer = this_body();
-   chest = new ("/std/loot_chest", slayer);
+   chest = new("/std/loot_chest", slayer);
    loot->move(chest);
 }
 

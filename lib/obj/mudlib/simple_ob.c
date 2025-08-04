@@ -100,3 +100,8 @@ mixed direct_search_obj(object ob)
    else
       return ::direct_search_obj(ob);
 }
+
+int is_simple_ob()
+{
+   return 1;
+}

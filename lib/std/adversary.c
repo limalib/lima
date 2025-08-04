@@ -28,7 +28,6 @@ inherit SUBDIR "stats/dnd";
 inherit SUBDIR "stats/rifts";
 #endif
 
-
 #ifdef USE_SKILLS
 inherit SUBDIR "skills";
 #endif
@@ -70,6 +69,14 @@ int start_fight(object who)
    if (!(who->attackable()))
       return 0;
    attacked_by(who, 1);
+
+   // Tell people in environment that a fight started.
+   if (environment())
+   {
+      object *people = all_inventory(environment());
+      people->person_attacked_person(this_object(), who);
+   }
+
    return 1;
 }
 
@@ -179,21 +186,13 @@ nomask int *query_transformation_matrix()
       return base_name()->query_transformation_matrix();
 
    return ({
-       map(({CON_STR_FACTOR, CON_AGI_FACTOR, 0, CON_WIL_FACTOR}), (
-                                                                      : $1 * $(100 - racial_con_bonus())
-                                                                      :)),
+       map(({CON_STR_FACTOR, CON_AGI_FACTOR, 0, CON_WIL_FACTOR}), ( : $1 * $(100 - racial_con_bonus()) :)),
        map(({WIS_STR_FACTOR, WIS_AGI_FACTOR, WIS_INT_FACTOR, WIS_WIL_FACTOR}),
-           (
-               : $1 * $(100 - racial_wis_bonus() - WIS_SKILL_FACTOR)
-               :)),
+           ( : $1 * $(100 - racial_wis_bonus() - WIS_SKILL_FACTOR) :)),
        map(({CHA_STR_FACTOR, CHA_AGI_FACTOR, CHA_INT_FACTOR, CHA_WIL_FACTOR}),
-           (
-               : $1 * $(100 - racial_cha_bonus() - CHA_SKILL_FACTOR)
-               :)),
+           ( : $1 * $(100 - racial_cha_bonus() - CHA_SKILL_FACTOR) :)),
        map(({CHA_STR_FACTOR, 0, CHA_INT_FACTOR, CHA_WIL_FACTOR}),
-           (
-               : $1 * $(100 - racial_man_bonus() - MAN_SKILL_FACTOR)
-               :)),
+           ( : $1 * $(100 - racial_man_bonus() - MAN_SKILL_FACTOR) :)),
    });
 }
 
@@ -206,8 +205,7 @@ nomask int *query_constant_vector()
 }
 
 #ifdef USE_SKILLS
-private
-string defend_skill_used = "combat/defense/dodge";
+private string defend_skill_used = "combat/defense/dodge";
 
 string query_defend_skill_used()
 {

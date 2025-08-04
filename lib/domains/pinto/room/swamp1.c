@@ -1,8 +1,12 @@
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
 inherit OUTDOOR_ROOM;
 
 void setup()
 {
    set_brief("Murky Swamp");
+   set_area("behaviour_area", "wiz_area");
+
    set_long("You find yourself in a murky, dank swamp. The air is thick with humidity "
             "and the smell of decaying vegetation. Twisted trees rise from the muddy "
             "water, their gnarled branches reaching towards the dim sky. Patches of "
@@ -32,6 +36,8 @@ void setup()
                           "get":"Your stick your hands in the mud, look at them, "
                                 "then decide there are better MUDs.",
                        "search":"You found some dirty hands."]));
+   set_exits((["south":"swamp2.c"]));
+   set_objects((["/domains/pinto/obj/sign.c":1, "/domains/pinto/mob/badger.c":1, "/domains/std/monster/goblin.c":1, ]));
 }
 
 void do_listen()
