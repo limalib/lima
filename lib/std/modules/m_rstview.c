@@ -7,8 +7,8 @@
 //
 // This module requires M_COLOURS.
 
-private string *keywords = ({"void ", "mixed ", "string ", "int ", "object ", "function "});
-private string *decls = ({"inherit ", "static ", "private ", "nosave ", "varargs "});
+private string *keywords = ({"void ", "mixed ", "string ", "int ", "object ", "function ", "mapping "});
+private string *decls = ({"inherit ", "static ", "private ", "nosave ", "varargs ","nomask ","protected "});
 
 private string replace_decl(string s, string replace, string with)
 {
