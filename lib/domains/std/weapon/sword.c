@@ -4,6 +4,7 @@ inherit WEAPON;
 
 void setup()
 {
+   set_id("sword");
    set_adj("dull");
    set_weapon_class(5);
    set_weight(1.1);

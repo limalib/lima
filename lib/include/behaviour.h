@@ -36,6 +36,7 @@
 #define EVAL_SUCCESS 1
 #define EVAL_RUNNING 2
 #define EVAL_FAILURE 0
+#define EVAL_NEVER_RAN -2
 
 // Composite nodes
 #define NODE_ROOT 1
