@@ -5,12 +5,12 @@ support mud, Lima Bean, and ask questions (or type news and post
 them there).
 
 LIMA is located at:
-limalib.dev 7878
-limalib.dev 7882 (encrypted connection)
+limamudlib.dev 7878
+limamudlib.dev 7882 (encrypted connection)
 (20.223.238.107:7878)
 
 You can find the mud's web page at:
-https://limalib.dev/
+https://limamudlib.dev/
 
 Mudlib Features:
  o Centralized natural language parsing (Zork like commands for players).
