@@ -16,6 +16,12 @@ inherit CLUSTERS "navigation";
 #ifdef CLUSTER_EQUIPMENT
 inherit CLUSTERS "equipment";
 #endif
+#ifdef CLUSTER_HUNGER
+inherit CLUSTERS "hunger";
+#endif
+#ifdef CLUSTER_COMBAT
+inherit CLUSTERS "combat";
+#endif
 
 int *q = ({});
 /*
@@ -27,10 +33,21 @@ void debug(mixed s);
 int debugging();
 int query_observers();
 int parses = 0;
+string *last_failed_leaves = ({});
 
 string get_extra_long()
 {
    return this_object()->short() + " radiates " + emotion_string() + ".\n";
+}
+
+string *query_last_failed_leaves()
+{
+   return last_failed_leaves;
+}
+
+void reset_last_failed_leaves()
+{
+   last_failed_leaves = ({});
 }
 
 varargs int evaluate_node()
@@ -46,7 +63,7 @@ varargs int evaluate_node()
       return;
    }
 
-   debug("<214>Evaluating node: <043>" + node.name + "<res> <214>Queue: <043>" + print_queue() + "<res>");
+   debug("<214>Evaluating node: <043>" + node.name + "<res>"); // <214>Queue: <043>" + print_queue() + "<res>");
    switch (node.type)
    {
    case NODE_ROOT:
@@ -80,7 +97,14 @@ varargs int evaluate_node()
       break;
    case NODE_LEAF:
       debug("<154>LEAF <043>" + node.name + "<res>");
+      node.status = EVAL_RUNNING;
       parent.status = call_other(this_object(), node.name);
+      if (parent.status == EVAL_FAILURE)
+      {
+         last_failed_leaves += ({node.name});
+         debug("<161>LEAF <043>" + node.name + "<161> failed<res>");
+      }
+      node.status = parent.status;
       pop();
       break;
    case NODE_SELECTOR:
@@ -177,4 +201,35 @@ void start_behaviour()
    base::start_behaviour();
    if (find_call_out("evaluate_node") == -1)
       evaluate_node();
+}
+
+string stat_me()
+{
+   string out = "<045>Behaviour tree: <res>" + obname(this_object()) + "\n";
+   out += "<045>Parses made: <res>" + parses_made() + "\n";
+   out += "<045>Emotions: <res>" + emotion_string() + "\n";
+   out += "<045>Queue: <res>" + print_queue() + "\n";
+   out += "<045>Blackboard: <res>" + sprintf("%O", blackboard) + "\n";
+   out += "<045>Hunger: <res>" + sprintf("%O", this_object()->query_hunger_level()) + "\n";
+   out += "<045>Associations: <res>\n";
+   foreach (object ob, mapping assoc in query_assoc())
+   {
+      if (!ob)
+         continue;
+      out += sprintf("%s\n", obname(ob) + " (" + ob->query_id()[0] + ")");
+      foreach (string key, mixed value in assoc)
+      {
+         if (key == "attitude")
+            out += sprintf("\t%s: %s\n", key, value + " - " + attitude_to_string(value));
+         else if (key == "threat_level")
+            out +=
+                sprintf("\t%s: %s\n", key, value + " - " + (value < 0 ? "<190>Threat<res>" : "<190>Non-threat<res>"));
+         // General catches
+         else if (intp(value))
+            out += sprintf("\t%s: %d\n", key, value);
+         else if (stringp(value))
+            out += sprintf("\t%s: %s\n", key, value);
+      }
+   }
+   return out;
 }

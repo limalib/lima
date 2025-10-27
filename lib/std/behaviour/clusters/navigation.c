@@ -12,6 +12,7 @@ void set_blackboard(string key, mixed value);
 mixed blackboard(string key);
 void do_game_command(string str);
 int has_room_changed();
+int im_bored();
 void room_checked();
 void do_wander();
 int player_did_arrive(string dir);
@@ -20,17 +21,18 @@ int query_emotion(mixed emotion);
 void mod_emotion(mixed emotion, int mod);
 object *worst_threats_present();
 
-private
-string *wander_area = ({});
-private
-int move_allowed = 0;
+private string *wander_area = ({});
+private int move_allowed = 0;
 
 void init_navigation_cluster()
 {
    // If any of these ones return true we stop here, and navigate somewhere else
-   create_node(NODE_SELECTOR, "navigation_seq", ({"wimpy", "bored"}));
-   add_child("root_sequence", "navigation_seq");
+   create_node(NODE_SUCCEEDER, "navigation_true");
+   add_child("root_sequence", "navigation_true");
+   create_node(NODE_SEQUENCE, "navigation_seq", ({"wimpy", "move_since_hungry", "bored"}));
+   add_child("navigation_true", "navigation_seq");
    create_node(NODE_LEAF, "wimpy");
+   create_node(NODE_LEAF, "move_since_hungry");
    create_node(NODE_LEAF, "bored");
 }
 
@@ -150,18 +152,31 @@ int wimpy()
 {
    string badly_wounded = this_object()->badly_wounded();
    int threats = sizeof(worst_threats_present());
-   int result = EVAL_FAILURE;
+   int result = EVAL_SUCCESS;
 
    if (threats && badly_wounded)
    {
+      do_game_command("peer");
       result = do_wander();
       // Two attempts to find an exit.
       if (result == EVAL_FAILURE)
+      {
+         do_game_command("eek");
          result = do_wander();
+      }
       if (result == EVAL_SUCCESS)
          this_object()->try_heal();
    }
    return result;
+}
+
+int move_since_hungry()
+{
+   // Not done obviously, but this is a placeholder.
+   int hunger = this_object()->hungry();
+   if (!hunger)
+      return EVAL_SUCCESS;
+   return EVAL_SUCCESS;
 }
 
 int bored()
@@ -172,12 +187,16 @@ int bored()
    if (!threats && random(4) == 0)
       this_object()->try_heal();
 
-   if (!wounded && query_emotion(LOATHING))
+   if (!wounded && im_bored())
+   {
+      do_game_command("yawn");
       if (do_wander() == EVAL_SUCCESS)
       {
-         mod_emotion(LOATHING, -1);
+         // Exciting to see new places!
+         mod_emotion(LOATHING, -3);
          return EVAL_SUCCESS;
       }
+   }
    return EVAL_SUCCESS;
 }
 

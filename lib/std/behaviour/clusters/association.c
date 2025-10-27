@@ -8,17 +8,20 @@ void add_child(string node, string child);
 varargs void create_node(int type, string name, mixed offspring);
 void set_blackboard(string key, mixed value);
 void del_blackboard(string key);
+int is_on_blackboard(string key, mixed value);
+void add_to_blackboard(string key, mixed value);
 mixed blackboard(string key);
 void do_game_command(string str);
 int has_room_changed();
 void room_checked();
 void mod_emotion(mixed emotion, int mod);
+void neutralize_emotion(mixed emotion);
 void set_emotion(mixed emotion, int mod);
-object *arrived();
+object *living_arrived();
 object *left();
 
-private
-mapping assoc = ([]);
+private mapping assoc = ([]);
+private int will_attack_friendly = 0;
 
 // The init function *must* create a node that is adds to the root sequence,
 // e.g.
@@ -29,11 +32,18 @@ mapping assoc = ([]);
 void init_association_cluster()
 {
    // Add nodes
-   create_node(NODE_SEQUENCE, "association_seq", ({"look_around", "own_status", "study_beings"}));
+   create_node(NODE_SEQUENCE, "association_seq", ({"cool_down", "look_around", "own_status", "study_beings"}));
    add_child("root_sequence", "association_seq");
+   create_node(NODE_LEAF, "cool_down");
    create_node(NODE_LEAF, "look_around");
    create_node(NODE_LEAF, "study_beings");
    create_node(NODE_LEAF, "own_status");
+}
+
+void set_will_attack_friendly(int value)
+{
+   will_attack_friendly = value;
+   TBUG(will_attack_friendly);
 }
 
 string attitude_to_string(int a)
@@ -41,15 +51,15 @@ string attitude_to_string(int a)
    switch (a)
    {
    case 2:
-      return "<190>Friendly<res";
+      return "<190>Friendly<res>";
    case 1:
-      return "<190>Positive<res";
+      return "<190>Positive<res>";
    case 0:
-      return "<190>Indifferent<res";
+      return "<190>Indifferent<res>";
    case -1:
-      return "<190>Suspicious<res";
+      return "<190>Suspicious<res>";
    case -2:
-      return "<190>Hostile<res";
+      return "<190>Hostile<res>";
    }
 }
 
@@ -72,70 +82,104 @@ object *worst_threats()
 {
    if (!sizeof(keys(assoc)))
       return ({});
+   map_delete(assoc, 0);
    return sort_array(keys(assoc), ( : assoc[$1]["threat_level"] :));
 }
 
 object *worst_threats_present()
 {
-   return filter(worst_threats(), ( : present($1, environment()) :));
+   return filter(worst_threats(), ( : $1 && present($1, environment()) :));
 }
 
 void register_beings(object *obs)
 {
    foreach (object ob in obs)
    {
+      string id = ob->query_id()[0];
       // Things we only evaluate first time we meet.
       if (!assoc[ob])
       {
          assoc[ob] = ([]);
+
          assoc[ob]["attitude"] = this_object()->association_for(ob);
          assoc[ob]["level"] = ob->query_level();
          recalc_threat_level(ob);
+
+         // Check if know something about this kind of being.
+         // If we have previously been surprised attacked by this being/id,
+         // set our attitude to suspicious. If it is attacking me again right now,
+         // then we set it to hostile.
+         if (blackboard(id))
+         {
+            if (is_on_blackboard(id, "hostile"))
+               assoc[ob]["attitude"] = HOSTILE;
+            else if (is_on_blackboard(id, "surprise attacks"))
+            {
+               assoc[ob]["attitude"] = SUSPICIOUS;
+               if (this_object()->is_attacking_me(ob))
+               {
+                  // A few sample commands to use when surprised attacked.
+                  do_game_command(choice(({"scream", "yell " + id, "snapout " + id})));
+                  add_to_blackboard(id, "hostile");
+               }
+            }
+         }
       }
 
       // Things we evaluate every time.
 
       // Are we being attacked by this person?
-      if (sizeof(this_object()->query_targets()) && this_object()->query_targets()[0] != 0 &&
-          member_array(ob, this_object()->query_targets()) != -1)
+      if (this_object()->is_attacking_me(ob))
       {
-         // We were on good terms??
+         int surprise_attack = 0;
+         // If we were not expecting this person to attack us, we are surprised.
          if (assoc[ob]["attitude"] >= 0)
-            mod_emotion(AMAZEMENT, assoc[ob]["attitude"]);
-         // I knew he would attack...
-         else if (assoc[ob]["attitude"] < 0)
          {
-            mod_emotion(VIGILANCE, abs(assoc[ob]["attitude"]));
-            mod_emotion(RAGE, 1);
+            surprise_attack = 1;
+            do_game_command("surprised");
+            add_to_blackboard(id, "surprise attacks");
          }
 
-         if (abs(assoc[ob]["threat_level"]) < -20)
+         switch (assoc[ob]["threat_level"])
          {
-            mod_emotion(TERROR, 3);
-         }
-         else if (abs(assoc[ob]["threat_level"]) < -10)
-         {
+         case -20.. - 5:
             mod_emotion(TERROR, 2);
-         }
-         else if (abs(assoc[ob]["threat_level"]) < -5)
-         {
+            break;
+         case -4.. - 1:
             mod_emotion(TERROR, 1);
-         }
-         else if (abs(assoc[ob]["threat_level"]) > 10)
-         {
-            mod_emotion(VIGILANCE, 2);
-         }
-         else if (abs(assoc[ob]["threat_level"]) > 20)
-         {
-            mod_emotion(VIGILANCE, 3);
-            mod_emotion(ECSTASY, 2);
-         }
+            break;
+         case 0..5:
+            mod_emotion(RAGE, 1);
+            break;
 
-         // Reevaluate threat_level
+         case 6..10:
+            mod_emotion(RAGE, 2);
+            break;
+         case 11..1000:
+            mod_emotion(RAGE, 3);
+            break;
+         }
          assoc[ob]["attitude"] = HOSTILE;
-         recalc_threat_level(ob);
       }
+
+      recalc_threat_level(ob);
    }
+}
+
+void get_all_from_corpse()
+{
+   do_game_command("get all from corpse");
+}
+
+void register_kill(object mykill, int xp)
+{
+   string id = mykill->query_id()[0];
+   add_to_blackboard(id, "killed");
+   neutralize_emotion(TERROR);
+   neutralize_emotion(RAGE);
+   mod_emotion(ECSTASY, 1);
+   mod_emotion(ADMIRATION, 1);
+   call_out("get_all_from_corpse", 1 + random(2));
 }
 
 void i_met(object who)
@@ -170,6 +214,8 @@ varargs void threat_emotions(object *people, int left)
    int total_threat = 0;
    foreach (object p in people)
    {
+      if (p && !p->is_visible())
+         continue;
       if (assoc[p])
          total_threat += assoc[p]["threat_level"];
    }
@@ -202,6 +248,36 @@ varargs void threat_emotions(object *people, int left)
    }
 }
 
+private evaluate_targets(object ob1, object ob2)
+{
+   if (assoc[ob1]["threat_level"] > assoc[ob2]["threat_level"])
+      return -1;
+   return 1;
+}
+
+object *potential_targets()
+{
+   object *potentials = ({});
+   object *easy_targets = ({});
+   if (!sizeof(keys(assoc)))
+      return ({});
+   map_delete(assoc, 0);
+   potentials = keys(assoc);
+   potentials = filter(potentials, ( : $1 && present($1, environment()) :));
+   potentials = sort_array(keys(assoc), ( : evaluate_targets:), -1);
+   easy_targets = filter(potentials, ( : assoc[$1]["attitude"] < 0 && assoc[$1]["threat_level"] > 0 :));
+   if (sizeof(easy_targets))
+   {
+      return easy_targets;
+   }
+   if (will_attack_friendly && sizeof(potentials))
+   {
+      potentials = filter(potentials, ( : assoc[$1]["attitude"] >= 0 :));
+      return potentials;
+   }
+   return ({});
+}
+
 int own_status()
 {
 #ifdef HEALTH_USES_LIMBS
@@ -228,7 +304,8 @@ int own_status()
 
 int study_beings()
 {
-   object *things = all_inventory(environment()) - ({this_object()});
+   object *things = filter_array(all_inventory(environment()) - ({this_object()}),
+                                 ( : !$1->is_simple_ob() && $1->is_living() && $1->is_visible() :));
    object *beings, *new_people, *leavers;
 
    if (!environment())
@@ -241,7 +318,7 @@ int study_beings()
       return EVAL_SUCCESS;
 
    beings = filter_array(things, ( : $1->is_living() && environment($1) == environment() :));
-   new_people = arrived();
+   new_people = living_arrived();
    leavers = left();
 
    // Do we have new people?
@@ -263,11 +340,12 @@ int study_beings()
    else
    {
       mod_emotion(LOATHING, 0);
+      mod_emotion(GRIEF, 1);
    }
 
    // Tell them that we noticed that they arrived.
-   if (sizeof(new_people) == 1)
-      do_game_command("look at " + new_people[0]->query_id()[0]);
+   if (sizeof(new_people))
+      do_game_command("look at " + choice(new_people)->query_id()[0]);
 
    register_beings(beings);
    set_blackboard("environment", things - blackboard("exits") - blackboard("gettable") - beings);
@@ -276,9 +354,29 @@ int study_beings()
    return EVAL_SUCCESS;
 }
 
+int cool_down()
+{
+   // If we are in combat, we don't want to cool down.
+   if (this_object()->is_attacking())
+      return EVAL_FAILURE;
+
+   // If we are not in combat, we can cool down.
+   if (random(2))
+      this_object()->neutralize_emotion(ECSTASY);
+   if (random(2))
+      this_object()->neutralize_emotion(ADMIRATION);
+   if (random(2))
+      this_object()->neutralize_emotion(TERROR);
+   if (random(2))
+      this_object()->neutralize_emotion(AMAZEMENT);
+
+   return EVAL_SUCCESS;
+}
+
 int look_around()
 {
-   object *things = all_inventory(environment()) - ({this_object()});
+   object *things =
+       filter_array(all_inventory(environment()) - ({this_object()}), ( : !$1->is_simple_ob() && $1->is_visible() :));
    if (!environment())
       return EVAL_FAILURE;
    if (!has_room_changed())
@@ -287,8 +385,12 @@ int look_around()
       set_blackboard("beings", ({}));
 
    set_blackboard("gettable", filter_array(things, ( : $1->is_gettable() :)));
-   set_blackboard("exits", filter_array(things, ( : $1->id("door") :)));
-   set_blackboard("environment", things - blackboard("exits") - blackboard("gettable") - blackboard("beings"));
+   set_blackboard("doors", filter_array(things, ( : $1->id("door") :)));
+   set_blackboard("exits", environment()->query_exit_directions(0));
+   set_blackboard("hidden_exits", environment()->query_exit_directions(1) - blackboard("exits"));
+   set_blackboard("beings",
+                  filter_array(things, ( : $1->is_living() && $1->is_visible() && environment($1) == environment() :)));
+   set_blackboard("environment", things - blackboard("doors") - blackboard("gettable") - blackboard("beings"));
    return EVAL_SUCCESS;
 }
 

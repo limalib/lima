@@ -21,6 +21,14 @@ string navigation_features();
 void init_equipment_cluster();
 string equipment_features();
 #endif
+#ifdef CLUSTER_HUNGER
+void init_hunger_cluster();
+string hunger_features();
+#endif
+#ifdef CLUSTER_COMBAT
+void init_combat_cluster();
+string combat_features();
+#endif
 
 void add_hook(string, function);
 void remove_hook(string, function);
@@ -28,41 +36,33 @@ object query_target();
 object query_link();
 varargs int evaluate_node();
 void calm_emotions();
+string *query_last_failed_leaves();
+void reset_last_failed_leaves();
 
 void action_arrival(object);
 void action_departure(object);
+void register_beings(object *obs);
 
-mapping emotions = ([0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0]);
+mapping emotions = ([ECSTASY:0, ADMIRATION:0, TERROR:0, AMAZEMENT:0]);
 mapping blackboard = ([]);
 mapping node_list, parents;
 
-private
-function arrival_fn = ( : action_arrival:);
-private
-function departure_fn = ( : action_departure:);
+private function arrival_fn = ( : action_arrival:);
+private function departure_fn = ( : action_departure:);
 
-private
-function my_hook;
+private function my_hook;
 
-private
-object env;
+private object env;
 
-private
-int delay_time = 5; // Default delay time for leaves.
-private
-object debugee = 0; // The body of the person debugging us.
-private
-string *queue = ({}); // Queue of nodes that must be processed.
+private int delay_time = 5;   // Default delay time for leaves.
+private object debugee = 0;   // The body of the person debugging us.
+private string *queue = ({}); // Queue of nodes that must be processed.
 
-private
-object *arrived = ({});
-private
-object *left = ({});
-private
-int behaviour_call_out;
+private object *arrived = ({});
+private object *left = ({});
+private int behaviour_call_out;
 
-private
-int room_has_changed = 1;
+private int room_has_changed = 1;
 
 int has_room_changed()
 {
@@ -93,14 +93,18 @@ string status(int s)
 {
    switch (s)
    {
+   case -2:
+      return "<226>NEVER RUN<res>";
    case -1:
       return "<135>NONE<res>";
    case 0:
-      return "<135>FAILURE<res>";
+      return "<165>FAILURE<res>";
    case 1:
-      return "<135>SUCCESS<res>";
+      return "<046>SUCCESS<res>";
    case 2:
-      return "<135>RUNNING<res>";
+      return "<118>RUNNING<res>";
+   case 5:
+      return "<009>LAST FAILED<res>";
    }
 }
 
@@ -139,10 +143,12 @@ void reset_tree()
 {
    foreach (string name, class node node in node_list)
    {
-      node.status = EVAL_NONE;
+      if (node.status != EVAL_NEVER_RAN)
+         node.status = EVAL_NONE;
       node.node_num = 0;
    }
    queue = ({});
+   reset_last_failed_leaves();
 }
 
 class node front()
@@ -180,14 +186,11 @@ string discover_parent(string node)
 // If offspring is 0, the array is set to ({}).
 varargs void create_node(int type, string name, mixed offspring)
 {
-   node_list[name] = new (class node, type
-                          : type, name
-                          : name, children
-                          : arrayp(offspring) ? offspring
-                            : offspring       ? ({offspring})
-                                              : ({}),
-                            delay
-                          : type == NODE_LEAF ? LEAF_NODE_PAUSE : 0);
+   node_list[name] = new(class node, type : type, name : name,
+                         children : arrayp(offspring) ? offspring
+                         : offspring                  ? ({offspring})
+                                                      : ({}),
+                         delay : type == NODE_LEAF ? LEAF_NODE_PAUSE : 0, status : -2);
    parents[name] = discover_parent(name);
 }
 
@@ -237,14 +240,20 @@ void behaviour_call()
    behaviour_call_out = 0;
 }
 
-object *arrived()
+object *living_arrived()
 {
-   return arrived;
+   return filter_array(arrived, ( : $1 && $1->is_living() :));
 }
 
 object *left()
 {
    return left;
+}
+
+void person_attacked_person(object attacker, object target)
+{
+   if (target == this_object())
+      register_beings(({attacker}));
 }
 
 void something_arrived(object ob)
@@ -309,7 +318,7 @@ int debugging()
 void debug(mixed s)
 {
    if (debugee && debugee->is_body())
-      tell(debugee, sprintf("%s: %O\n", __FILE__, (s)));
+      tell(debugee, sprintf("%s: %O\n", obname(this_object()), (s)));
 }
 
 void debug_me(int i)
@@ -320,6 +329,33 @@ void debug_me(int i)
 void set_blackboard(string key, mixed value)
 {
    blackboard[key] = value;
+}
+
+void add_to_blackboard(string key, mixed value)
+{
+   if (blackboard[key])
+   {
+      if (arrayp(blackboard[key]))
+      {
+         if (member_array(value, blackboard[key]) == -1)
+            blackboard[key] += ({value});
+      }
+      else
+         blackboard[key] = ({value});
+   }
+   else
+   {
+      blackboard[key] = ({value});
+   }
+}
+
+int is_on_blackboard(string key, mixed value)
+{
+   if (!blackboard[key])
+      return 0;
+   if (arrayp(blackboard[key]))
+      return member_array(value, blackboard[key]) != -1;
+   return blackboard[key] == value;
 }
 
 void del_blackboard(string key)
@@ -347,9 +383,13 @@ string emotion_string()
    string *ems = ({});
    foreach (int emotion, int level in emotions)
    {
-      if (level > 0)
-         ems += ({EMOTION_NAMES[emotion][level - 1]});
+      if (!level)
+         continue; // Don't show emotions that are not present.
+      // "boredom","disgust","loathing","","acceptance","trust","admiration"
+      //   0          1           2      3     4          5        6
+      ems += ({EMOTION_NAMES[emotion][level + 3]});
    }
+
    if (!sizeof(ems))
       ems = ({"indifference"});
    return (sizeof(ems) > 1 ? "a mixture of " : "") + format_list(ems);
@@ -360,36 +400,26 @@ mapping emotion_names()
    return EMOTION_NAMES;
 }
 
-private
-void raw_mod_emotion(int emotion, int mod)
+private void raw_mod_emotion(int emotion, int mod)
 {
-   emotions[emotion] = clamp(emotions[emotion] + mod, 0, 3);
+   emotions[emotion] = clamp(emotions[emotion] + mod, -3, 3); // ## Correct now?
 }
 
-int emotion_to_int(string s)
+//: FUNCTION neutralize_emotion
+// Neutralize an emotion by one point. This is useful for
+// calming down an NPC.
+void neutralize_emotion(int emotion)
 {
-   s = lower_case(s)[0..2];
-   switch (s)
-   {
-   case "ecs":
-      return 0;
-   case "adm":
-      return 1;
-   case "ter":
-      return 2;
-   case "amu":
-      return 3;
-   case "gri":
-      return 4;
-   case "loa":
-      return 5;
-   case "rag":
-      return 6;
-   case "vig":
-      return 7;
-   default:
-      return -1;
-   }
+   if (emotion < 0 || emotion > 7)
+      error("Unknown emotion state '" + emotion + "'. States defined in /include/behaviour.h.\n" +
+            format_list(EMOTION_STRINGS));
+   if (emotion > 3)
+      emotion -= 4;
+
+   if (emotions[emotion] > 0)
+      emotions[emotion] -= 1;
+   else
+      emotions[emotion] += 1;
 }
 
 //: FUNCTION mod_emotion
@@ -400,31 +430,21 @@ int emotion_to_int(string s)
 //
 // Are valid examples. Emotion names can be abbreviated to first 3 letters, or you
 // can use integers as per defined in behaviour.h.
-void mod_emotion(mixed emotion, int mod)
+void mod_emotion(int emotion, int mod)
 {
-   if (stringp(emotion))
-      emotion = emotion_to_int(emotion);
-   // Just a block.
+   // Some guard rails
+   if (emotion < 0 || emotion > 7)
+      error("Unknown emotion state '" + emotion + "'. States defined in /include/behaviour.h.\n" +
+            format_list(EMOTION_STRINGS));
+   if (emotion > 3)
    {
-      int opposite_emotion = (emotion + 4) % 8;
-      int opposite_left = (opposite_emotion + 9) % 8;
-      int opposite_right = (opposite_emotion + 7) % 8;
-      // Some guard rails
-      if (emotion < 0 || emotion > 7)
-         error("Unknown emotion state '" + emotion + "'. States defined in /include/behaviour.h.\n" +
-               "ecstasy 0, admiration 1, terror 2, amuzement 3, grief 4, loathing 5, rage 6, vigilance 7");
-      if (mod < -3 || mod > 3)
-         error("Can only modify emotions -3 - 3 points.");
-
-      raw_mod_emotion(emotion, mod);
-      raw_mod_emotion(opposite_emotion, -mod);
-
-      if (mod > 1 || mod < -1)
-      {
-         raw_mod_emotion(opposite_right, -1 * (mod - 1));
-         raw_mod_emotion(opposite_left, -1 * (mod - 1));
-      }
+      emotion -= 4;
+      mod = -mod;
    }
+   if (mod < -3 || mod > 3)
+      error("Can only modify emotions -3 - 3 points.");
+
+   raw_mod_emotion(emotion, mod);
 }
 
 //: FUNCTION set_emotion
@@ -436,21 +456,20 @@ void mod_emotion(mixed emotion, int mod)
 //
 // Are valid examples. Emotion names can be abbreviated to first 3 letters, or you
 // can use integers as per defined in behaviour.h.
-void set_emotion(mixed emotion, int value)
+void set_emotion(int emotion, int value)
 {
-   if (stringp(emotion))
-      emotion = emotion_to_int(emotion);
-   {
-      int current_val = emotions[emotion];
-      value = value - current_val;
-      mod_emotion(emotion, value);
-   }
+   int current_val = emotions[emotion];
+   value = value - current_val;
+   mod_emotion(emotion, value);
 }
 
-int query_emotion(mixed emotion)
+int im_bored()
 {
-   if (stringp(emotion))
-      emotion = emotion_to_int(emotion);
+   return array_sum(values(emotions)) <= 2;
+}
+
+int query_emotion(int emotion)
+{
    return emotions[emotion];
 }
 
@@ -471,21 +490,30 @@ void add_child(string node, string child)
    parents[child] = node;
 }
 
-private
-void init_tree()
+private void init_tree()
 {
    node_list = ([]);
    parents = ([]);
+
+   // Mandatory root node
    create_node(NODE_ROOT, "root", "root_sequence");
    create_node(NODE_SEQUENCE, "root_sequence");
+
+   // The order of these matters.
 #ifdef CLUSTER_ASSOCIATION
    init_association_cluster();
 #endif
-#ifdef CLUSTER_NAVIGATION
-   init_navigation_cluster();
-#endif
 #ifdef CLUSTER_EQUIPMENT
    init_equipment_cluster();
+#endif
+#ifdef CLUSTER_HUNGER
+   init_hunger_cluster();
+#endif
+#ifdef CLUSTER_COMBAT
+   init_combat_cluster();
+#endif
+#ifdef CLUSTER_NAVIGATION
+   init_navigation_cluster();
 #endif
 }
 
@@ -527,5 +555,76 @@ string features()
 #ifdef CLUSTER_EQUIPMENT
           equipment_features() +
 #endif
+#ifdef CLUSTER_HUNGER
+          hunger_features() +
+#endif
+#ifdef CLUSTER_COMBAT
+          combat_features() +
+#endif
           "";
+}
+
+string node_type(int type)
+{
+   switch (type)
+   {
+   case NODE_ROOT:
+      return "<190>ROOT<res>";
+   case NODE_SEQUENCE:
+      return "<214>SEQUENCE<res>";
+   case NODE_SELECTOR:
+      return "<206>SELECTOR<res>";
+   case NODE_LEAF:
+      return "<118>LEAF<res>";
+   case NODE_SUCCEEDER:
+      return "<070>SUCCEEDER<res>";
+   case NODE_INVERTER:
+      return "<015>INVERTER<res>";
+   case NODE_REPEAT_UNTIL_FAIL:
+      return "<134>REPEAT UNTIL FAIL<res>";
+   default:
+      return "<171>UNKNOWN<res>";
+   }
+}
+
+private varargs string print_children(class node node, int level, int has_siblings)
+{
+   string out = "";
+   int last_child = 0;
+   int i = 0;
+   foreach (string name in node.children)
+   {
+      class node child = node_list[name];
+      string bend;
+      i++;
+      if (i == sizeof(node.children))
+         last_child = 1;
+      bend = last_child ? "└" : "├";
+      if (classp(child) && sizeof(child.children))
+         bend = "└";
+      else if (!classp(child))
+      {
+         out += "\n<161>Node <043>" + name + "<161> not correctly in tree<res>";
+         continue;
+      }
+
+      out += sprintf("\n%-20.20s %s%s %s", node_type(child.type),
+                     repeat_string(" ", level * 2) + "<050>" + bend + "─ <res>", name,
+                     member_array(child.name, query_last_failed_leaves()) != -1 ? status(5) : status(child.status));
+
+      if (sizeof(child.children))
+         out += print_children(child, level + 1, sizeof(node.children) > 1);
+   }
+   return out;
+}
+
+void print_tree()
+{
+   string out = "";
+
+   out = node_type(NODE_ROOT) + "       <res>root";
+
+   out += print_children(node_list["root"]);
+
+   printf("%s\n", out);
 }
