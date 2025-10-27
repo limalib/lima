@@ -38,7 +38,8 @@ string main(mixed data)
       userid = data["name"];
    if (strlen(userid) && userid[0] == '=')
       userid = userid[1..];
-   userid = lower_case(trim(userid));
+   if (strlen(userid))
+      userid = lower_case(trim(userid));
    if (userid == "")
       return FINGER_D->show_big_html_finger();
 
