@@ -314,7 +314,7 @@ mixed *list_exit_msgs(string direction)
 
 /* eval_dest() returns the full pathname of the destination of the exit, or an
  * error. */
-private
+protected
 string eval_dest(mixed arg)
 {
    mixed tmp;
