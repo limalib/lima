@@ -115,7 +115,7 @@ string query_dropmsg()
 // g == 1 makes an object droppable, while g == 0 makes
 // it not droppable.  If a function or string is passed, this has the
 // same effect as calling set_dropmsg().
-void set_droppable(int g)
+void set_droppable(mixed g)
 {
    if (g == -1 || g == 0)
       drop_response = 0;
