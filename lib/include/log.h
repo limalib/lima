@@ -18,6 +18,8 @@
 #define LOG_BANISH         "banish"
 #define LOG_BUG            "bug"
 #define LOG_CHANNEL        "channel"
+#define LOG_CLAN           "clan"
+#define LOG_CLAN_ERROR     "clan_error"
 #define LOG_FEEDBACK       "feedback"
 #define LOG_FORCE          "force"
 #define LOG_FTP            "ftp"

@@ -17,15 +17,17 @@ void setup()
    set_max_health(30);
    set_wielding("/domains/std/weapon/sword");
    set_level(3);
-   set_wander_area("wiz_area");
    start_behaviour();
+   set_wander_area(({"behaviour_area","wiz_area"}));
    set_objects((["^std/consumable/peanuts":1, "^std/consumable/bandage":1]));
+   set_will_attack_friendly(1);
 }
 
 int association_for(object liv)
 {
+   string met_race = liv->query_race();
    // George really likes other goblins
-   if (liv->query_race() == "goblin")
+   if (met_race == "goblin" || met_race == "badger")
       return FRIENDLY;
    // But is suspicious about everyone else.
    return SUSPICIOUS;
