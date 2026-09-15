@@ -15,3 +15,5 @@ tmp_*
 !/open/README
 !/lib/data/config
 !/lib/log/README
+skills-lock.json
+.agents/
