@@ -58,70 +58,25 @@ repo_root=$(cd ../.. && pwd)
 # Absolute path to the driver executable
 driver="${repo_root}/adm/dist/bin/driver"
 
-# --- PCRE (legacy 8.x) dependency ------------------------------------------
-# FluffOS's pcre package links against the classic PCRE1 API (pcre_compile),
-# which recent distros (e.g. Ubuntu 24.04+) no longer ship as a package.
-pcre_required_version="8.45"
-pcre_prefix="${repo_root}/adm/dist/pcre"
-cmake_extra_args=()
-
-pcre_version_ge() {
-  # Success if $1 >= $2 (dotted version compare)
-  [[ "$(printf '%s\n%s\n' "$2" "$1" | sort -V | head -n1)" == "$2" ]]
-}
-
-have_system_pcre() {
-  if command -v pcre-config >/dev/null 2>&1; then
-    local found_version
-    found_version="$(pcre-config --version 2>/dev/null || true)"
-    if [[ -n "$found_version" ]] && pcre_version_ge "$found_version" "$pcre_required_version"; then
-      return 0
-    fi
+# --- PCRE2 dependency -------------------------------------------------------
+# FluffOS's pcre package links against PCRE2 (pcre2_compile, 8-bit build).
+have_pcre2() {
+  if command -v pkg-config >/dev/null 2>&1 && pkg-config --exists libpcre2-8 2>/dev/null; then
+    return 0
+  fi
+  # No pkg-config file; fall back to a direct compile+link check
+  if command -v "${CC:-cc}" >/dev/null 2>&1; then
+    printf '#define PCRE2_CODE_UNIT_WIDTH 8\n#include <pcre2.h>\nint main(void){return 0;}\n' \
+      | "${CC:-cc}" -xc -o /dev/null - -lpcre2-8 >/dev/null 2>&1
+    return $?
   fi
   return 1
 }
 
-have_bundled_pcre() {
-  [[ -f "${pcre_prefix}/include/pcre.h" ]] && \
-    { [[ -f "${pcre_prefix}/lib/libpcre.a" ]] || [[ -f "${pcre_prefix}/lib/libpcre.so" ]]; }
-}
-
-build_bundled_pcre() {
-  echo -e "${gold}[NOTICE]${reset} PCRE ${pcre_required_version}+ not found on system. Building bundled copy in ${pcre_prefix}..."
-  local pcre_src_dir
-  pcre_src_dir=$(mktemp -d)
-  local tarball="${pcre_src_dir}/pcre-${pcre_required_version}.tar.gz"
-
-  if command -v curl >/dev/null 2>&1; then
-    curl -fsSL "https://sourceforge.net/projects/pcre/files/pcre/${pcre_required_version}/pcre-${pcre_required_version}.tar.gz/download" -o "$tarball"
-  elif command -v wget >/dev/null 2>&1; then
-    wget -q "https://sourceforge.net/projects/pcre/files/pcre/${pcre_required_version}/pcre-${pcre_required_version}.tar.gz/download" -O "$tarball"
-  else
-    echo -e "${red}[ERROR]${reset} Neither curl nor wget is available to download PCRE."
-    exit 1
-  fi
-
-  tar xzf "$tarball" -C "$pcre_src_dir"
-
-  (
-    cd "${pcre_src_dir}/pcre-${pcre_required_version}"
-    ./configure --prefix="${pcre_prefix}" --disable-shared --enable-static --with-pic
-    make -j "$(nproc)"
-    make install
-  )
-
-  rm -rf "$pcre_src_dir"
-  echo -e "${green}[SUCCESS]${reset} PCRE ${pcre_required_version} built and installed to ${pcre_prefix}."
-}
-
-if have_system_pcre; then
-  echo -e "${green}[NOTICE]${reset} Using system PCRE ($(pcre-config --version))."
-elif have_bundled_pcre; then
-  echo -e "${green}[NOTICE]${reset} Using previously built bundled PCRE in ${pcre_prefix}."
-  cmake_extra_args+=("-DCMAKE_PREFIX_PATH=${pcre_prefix}")
-else
-  build_bundled_pcre
-  cmake_extra_args+=("-DCMAKE_PREFIX_PATH=${pcre_prefix}")
+if ! have_pcre2; then
+  echo -e "${red}[ERROR]${reset} PCRE2 development files not found (need pcre2.h and libpcre2-8)."
+  echo -e "${red}[ERROR]${reset} Install it first, e.g.: sudo apt-get install libpcre2-dev"
+  exit 1
 fi
 
 # Ensure the FluffOS driver submodule is up to date
@@ -139,8 +94,7 @@ cd build
  cmake .. \
      -DPACKAGE_UIDS=OFF \
      -DPACKAGE_DATABASE=${DATABASE} \
-     -DPACKAGE_MUDLIB_STATS=OFF \
-     "${cmake_extra_args[@]}"
+     -DPACKAGE_MUDLIB_STATS=OFF
 
 make -j "$(nproc)" install
 
