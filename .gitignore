@@ -15,5 +15,7 @@ tmp_*
 !/open/README
 !/lib/data/config
 !/lib/log/README
+# Local runtime config (instance-specific name/paths/port); template is config.mud.dist
+/adm/dist/config.mud
 skills-lock.json
 .agents/

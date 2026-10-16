@@ -22,7 +22,8 @@ string *compatibility()
  */
 string short_description()
 {
-   return @LONG Trolls are extremely strong and powerful creatures; probably the toughest
+   return @LONG
+Trolls are extremely strong and powerful creatures; probably the toughest
 race available. Their skin is extremely thick and conventional means of
 damage do not help much in killing them. Trolls aren't very intelligent
 or quick on their feet, but have an amazingly high willpower and just
@@ -34,7 +35,8 @@ live in dark, wet areas (such as under bridges!) where they can keep
 their skin moist. Trolls do not band together in tribes or form communities
 and so they can come from any part of the land. Their chief deities are
 those related to water and nature.
-LONG;
+LONG
+   ;
 }
 
 /*

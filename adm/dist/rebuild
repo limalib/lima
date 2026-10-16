@@ -45,11 +45,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Check if config.mud exists
+# Check if config.mud exists; if not, provision it from the committed template
 config_file="$(pwd)/config.mud"
+config_template="$(pwd)/config.mud.dist"
 if [[ ! -f "$config_file" ]]; then
-    echo -e "${red}[ERROR]${reset} ${config_file} does not exist."
-    exit 1
+    if [[ ! -f "$config_template" ]]; then
+        echo -e "${red}[ERROR]${reset} Neither ${config_file} nor ${config_template} exist."
+        exit 1
+    fi
+    cp "$config_template" "$config_file"
+    echo -e "${gold}[NOTICE]${reset} Created ${config_file} from config.mud.dist. Review 'name' and other settings before running in production."
 fi
 
 # Record the top of the repository directory
