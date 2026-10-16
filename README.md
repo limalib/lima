@@ -1,7 +1,6 @@
 LIMA Mudlib that work with latest FluffOS driver.
 
 # Get involved
-- Visit us at limamudlib.dev 7878 !
 - #LIMA Channel on LPC Discord - https://discord.gg/wzUbBgs3AQ
 
 # Documentation
