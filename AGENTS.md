@@ -33,6 +33,23 @@ include paths ever change.
 
 LPC source in this tree uses the `.c` extension exclusively (no `.lpc` files).
 
+## Branching / contribution workflow
+
+This repo follows [git-flow](https://skoch.github.io/Git-Workflow/) (`git flow init` is
+already configured: production branch = `main`, integration branch = `develop`,
+prefixes `feature/`, `release/`, `hotfix/`, `support/`).
+
+- `main` — production-grade releases only; reached via `git flow release finish` /
+  `git flow hotfix finish`, never direct feature commits.
+- `develop` — base for ongoing work; branch `feature/<name>` off it
+  (`git flow feature start <name>`) and open a PR back into `develop` when done.
+- Both `main` and `develop` are GitHub-protected: PR + 1 approval required, no force
+  pushes, no deletions. `enforce_admins` is **off** on both so the maintainer's direct
+  `git flow release|hotfix|feature finish` pushes still work as git-flow expects;
+  everyone else must go through a PR.
+- Do not push directly to `main` or `develop` outside of a `git flow ... finish` or a
+  merged PR.
+
 ## How to boot
 
 Driver binaries are prebuilt at [adm/dist/bin/driver](adm/dist/bin/driver) and [bin/driver](bin/driver).
