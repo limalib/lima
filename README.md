@@ -9,10 +9,6 @@ Please see https://docs.limamudlib.dev/
 
 # How to test and contribute
 ```
-#Stable version
-#git clone --recurse-submodules https://github.com/limalib/lima -b stable
-
-#For a more stable experience, try:
 git clone --recurse-submodules https://github.com/limalib/lima
 
 cd lima/adm/dist
