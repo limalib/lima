@@ -31,8 +31,7 @@ void setup()
                                "free to read my code, its in " +
                                __FILE__ + ". It includes dynamic chats that check stats and more.",
                    "where":"You can find the best current sources for the LIMA mudlib in GitHub on "
-                           "https://github.com/limalib/lima.git or see a demo on the Lima "
-                           "MUD itself (limamudlib.dev 7878).",
+                           "https://github.com/limalib/lima.git",
                 "problems":({"!ponder", "See https://www.fluffos.info/build.html, or get your MUD on the intermud "
                                         "network.@@intermud,compilation"}),
 
