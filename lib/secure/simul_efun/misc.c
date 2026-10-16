@@ -762,7 +762,7 @@ mixed *sort_by_value(mixed arr, function value_func)
 
 string lima_version()
 {
-   return "Lima 1.1a4";
+   return "Lima 1.1a5";
 }
 
 varargs string identify(mixed a)
